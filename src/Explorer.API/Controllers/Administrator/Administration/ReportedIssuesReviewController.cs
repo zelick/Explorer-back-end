@@ -9,11 +9,11 @@ namespace Explorer.API.Controllers.Administrator.Administration
 {
         [Authorize(Policy = "administratorPolicy")]
         [Route("api/administration/reportedIssues")]
-        public class ReportedIssueAdministratorController : BaseApiController
+        public class ReportedIssuesReviewController : BaseApiController
         {
-            private readonly IReportedIssueReviewService _reportedIssueAdministratorService;
+            private readonly IReportedIssuesReviewService _reportedIssueAdministratorService;
 
-            public ReportedIssueAdministratorController(IReportedIssueReviewService reportedIssueAdministratorService)
+            public ReportedIssuesReviewController(IReportedIssuesReviewService reportedIssueAdministratorService)
             {
                 _reportedIssueAdministratorService = reportedIssueAdministratorService;
             }

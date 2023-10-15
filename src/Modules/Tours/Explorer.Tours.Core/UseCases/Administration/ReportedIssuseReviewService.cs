@@ -11,8 +11,8 @@ using System.Threading.Tasks;
 
 namespace Explorer.Tours.Core.UseCases.Administration
 {
-    public class ReportedIssueReviewService : CrudService<ReportedIssueDto, ReportedIssue>, IReportedIssueReviewService
+    public class ReportedIssuseReviewService : CrudService<ReportedIssueDto, ReportedIssue>, IReportedIssuesReviewService
     {
-        public ReportedIssueReviewService(ICrudRepository<ReportedIssue> repository, IMapper mapper) : base(repository, mapper) { }
+        public ReportedIssuseReviewService(ICrudRepository<ReportedIssue> repository, IMapper mapper) : base(repository, mapper) { }
     }
 }
