@@ -8,7 +8,6 @@ namespace Explorer.Stakeholders.Core.Domain.RepositoryInterfaces
 {
     public interface IClubRequestRepository
     {
-        ClubRequest Create(ClubRequest request);
-        void Delete(int requestId);
+        
     }
 }

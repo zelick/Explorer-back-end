@@ -1,6 +1,10 @@
 ﻿using Explorer.Stakeholders.API.Dtos;
 using Explorer.Stakeholders.API.Public;
+using Explorer.Stakeholders.Core.Domain.RepositoryInterfaces;
+using Explorer.Stakeholders.Core.Domain;
 using Microsoft.AspNetCore.Mvc;
+using Explorer.BuildingBlocks.Core.UseCases;
+using Explorer.Tours.API.Dtos;
 
 namespace Explorer.API.Controllers
 {
@@ -13,12 +17,52 @@ namespace Explorer.API.Controllers
             _clubRequestService = clubRequestService;
         }
 
-        [HttpPost]
-        public ClubRequestDto RegisterTourist([FromBody] ClubRequestDto request)
+        [HttpGet]
+        public ActionResult<PagedResult<ClubRequestDto>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
         {
-            var result = _clubRequestService.RequestToJoinClub(request.ClubId, request.TouristId);
-            //return CreateResponse(result); 
-            return result;
+            var result = _clubRequestService.GetPaged(page, pageSize);
+            return CreateResponse(result);
+        }
+
+        [HttpPost]
+        public ActionResult<ClubRequestDto> Create([FromBody] ClubRequestDto request)
+        {
+            var result = _clubRequestService.Create(request);
+            return CreateResponse(result);
+        }
+
+        [HttpPut("{id:int}/approve")]
+        public ActionResult<ClubRequestDto> UpdateIfApproved([FromBody] ClubRequestDto request)
+        {
+            // request.Status = ClubRequestStatus.Accepted;
+
+            if (Enum.TryParse(request.Status, out ClubRequestStatus status))
+            {
+               // request.Status = status;
+
+                // Pozovi servis za ažuriranje
+                var result = _clubRequestService.Update(request);
+                return CreateResponse(result);
+            }
+            else
+            {
+                return BadRequest("Invalid ClubRequestStatus value");
+            }
+        }
+
+        [HttpPut("{id:int}/reject")]
+        public ActionResult<ClubRequestDto> UpdateIfRejected([FromBody] ClubRequestDto request)
+        {
+            //promeni status?
+            var result = _clubRequestService.Update(request);
+            return CreateResponse(result);
+        }
+
+        [HttpDelete("{id:int}")]
+        public ActionResult Delete(int id)
+        {
+            var result = _clubRequestService.Delete(id);
+            return CreateResponse(result);
         }
 
     }

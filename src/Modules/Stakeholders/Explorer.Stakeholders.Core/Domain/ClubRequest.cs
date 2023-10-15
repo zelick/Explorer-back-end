@@ -12,26 +12,26 @@ namespace Explorer.Stakeholders.Core.Domain
     {
         public int ClubId { get; private set; }
         public int TouristId { get; private set; }
-        public ClubRequestStatus Status { get; private set; } 
+        public ClubRequestStatus Status { get; init; }
 
         public ClubRequest(int clubId, int touristId, ClubRequestStatus status)
         {
             ClubId = clubId;
             TouristId = touristId;
-            Status = status;
+            Status = ClubRequestStatus.Processing;
             Validate();
         }
 
         private void Validate()
         {
-            
+
         }
     }
+}
 
-    public enum ClubRequestStatus
-    {
-        Processing,
-        Rejected,
-        Accepted
-    }
+public enum ClubRequestStatus
+{
+    Processing,
+    Rejected,
+    Accepted
 }

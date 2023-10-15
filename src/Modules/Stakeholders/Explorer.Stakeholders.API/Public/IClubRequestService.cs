@@ -1,4 +1,5 @@
-﻿using Explorer.Stakeholders.API.Dtos;
+﻿using Explorer.BuildingBlocks.Core.UseCases;
+using Explorer.Stakeholders.API.Dtos;
 using FluentResults;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,9 @@ namespace Explorer.Stakeholders.API.Public
 {
     public interface IClubRequestService
     {
-        public ClubRequestDto RequestToJoinClub(int touristId, int clubId);
+        Result<PagedResult<ClubRequestDto>> GetPaged(int page, int pageSize);
+        Result<ClubRequestDto> Create(ClubRequestDto request);
+        Result<ClubRequestDto> Update(ClubRequestDto request);
+        Result Delete(int id);
     }
 }
