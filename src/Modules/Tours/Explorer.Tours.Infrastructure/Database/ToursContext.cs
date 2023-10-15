@@ -1,4 +1,5 @@
-﻿using Explorer.Tours.Core.Domain;
+﻿using Explorer.BuildingBlocks.Core.Domain;
+using Explorer.Tours.Core.Domain;
 using Microsoft.EntityFrameworkCore;
 
 namespace Explorer.Tours.Infrastructure.Database;
