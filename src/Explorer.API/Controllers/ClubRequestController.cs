@@ -31,6 +31,16 @@ namespace Explorer.API.Controllers
             return CreateResponse(result);
         }
 
+
+        [HttpPut("{id:int}")]
+        public ActionResult<ClubRequestDto> Update([FromBody] ClubRequestDto request)
+        {
+            
+                var result = _clubRequestService.Update(request);
+                return CreateResponse(result);
+           
+        }
+/*
         [HttpPut("{id:int}/approve")]
         public ActionResult<ClubRequestDto> UpdateIfApproved([FromBody] ClubRequestDto request)
         {
@@ -56,7 +66,7 @@ namespace Explorer.API.Controllers
             //promeni status?
             var result = _clubRequestService.Update(request);
             return CreateResponse(result);
-        }
+        }*/
 
         [HttpDelete("{id:int}")]
         public ActionResult Delete(int id)

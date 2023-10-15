@@ -12,13 +12,14 @@ namespace Explorer.Stakeholders.Core.Domain
     {
         public int ClubId { get; private set; }
         public int TouristId { get; private set; }
-        public ClubRequestStatus Status { get; init; }
+        //public ClubRequestStatus Status { get; init; }
+        public String Status { get; init; }
 
-        public ClubRequest(int clubId, int touristId, ClubRequestStatus status)
+        public ClubRequest(int clubId, int touristId, String status)
         {
             ClubId = clubId;
             TouristId = touristId;
-            Status = ClubRequestStatus.Processing;
+            Status = "Processing";
             Validate();
         }
 
@@ -29,9 +30,9 @@ namespace Explorer.Stakeholders.Core.Domain
     }
 }
 
-public enum ClubRequestStatus
+/*public enum ClubRequestStatus
 {
     Processing,
     Rejected,
     Accepted
-}
+}*/
