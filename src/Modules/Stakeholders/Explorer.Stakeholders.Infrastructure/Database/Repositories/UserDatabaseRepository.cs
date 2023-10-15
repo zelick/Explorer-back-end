@@ -35,4 +35,11 @@ public class UserDatabaseRepository : IUserRepository
         if (person == null) throw new KeyNotFoundException("Not found.");
         return person.Id;
     }
+
+    public User Edit(User user)
+    {
+        _dbContext.Users.Add(user);
+        _dbContext.SaveChanges();
+        return user;
+    }
 }
