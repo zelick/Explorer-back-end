@@ -15,15 +15,17 @@ namespace Explorer.Tours.Core.Domain
         public int Priority { get; init; }
         public DateTime Time { get; init; }
         public int TourId { get; init; }
+        public int TouristId { get; init; }
 
-        public ReportedIssue(string category, string? description, int priority, DateTime time, int tourId)
+        public ReportedIssue(string category, string? description, int priority, DateTime time, int tourId, int touristId)
         {
-            if (string.IsNullOrWhiteSpace(category) || priority == 0 || tourId==0) throw new ArgumentException("Invalid reported issue.");
+            if (string.IsNullOrWhiteSpace(category) || priority == 0 || tourId == 0) throw new ArgumentException("Invalid reported issue.");
             Category = category;
             Description = description;
             Priority = priority;
             Time = time;
             TourId = tourId;
+            TouristId = touristId;
         }
 
     }

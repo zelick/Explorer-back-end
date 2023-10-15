@@ -11,9 +11,9 @@ namespace Explorer.API.Controllers.Administrator.Administration
         [Route("api/administration/reportedIssues")]
         public class ReportedIssueAdministratorController : BaseApiController
         {
-            private readonly IReportedIssueAdministratorService _reportedIssueAdministratorService;
+            private readonly IReportedIssueReviewService _reportedIssueAdministratorService;
 
-            public ReportedIssueAdministratorController(IReportedIssueAdministratorService reportedIssueAdministratorService)
+            public ReportedIssueAdministratorController(IReportedIssueReviewService reportedIssueAdministratorService)
             {
                 _reportedIssueAdministratorService = reportedIssueAdministratorService;
             }

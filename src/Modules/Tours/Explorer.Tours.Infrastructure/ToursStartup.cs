@@ -24,7 +24,7 @@ public static class ToursStartup
     private static void SetupCore(IServiceCollection services)
     {
         services.AddScoped<IEquipmentService, EquipmentService>();
-        services.AddScoped<IReportedIssueAdministratorService, ReportedIssueAdministratorService>();
+        services.AddScoped<IReportedIssueReviewService, ReportedIssueReviewService>();
     }
 
     private static void SetupInfrastructure(IServiceCollection services)

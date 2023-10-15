@@ -9,11 +9,8 @@ using System.Threading.Tasks;
 
 namespace Explorer.Tours.API.Public.Administration
 {
-    public interface IReportedIssueAdministratorService
+    public interface IReportedIssueReviewService
     {
         Result<PagedResult<ReportedIssueDto>> GetPaged(int page, int pageSize);
-        Result<ReportedIssueDto> Create(ReportedIssueDto reportedIssue);
-        Result<ReportedIssueDto> Update(ReportedIssueDto reportedIssue);
-        Result Delete(int id);
     }
 }
