@@ -1,4 +1,5 @@
-﻿using Explorer.Tours.API.Dtos;
+﻿using Explorer.BuildingBlocks.Core.UseCases;
+using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
 using Explorer.Tours.Core.UseCases.Administration;
 using Microsoft.AspNetCore.Authorization;
@@ -35,6 +36,13 @@ namespace Explorer.API.Controllers.Author.Administration
         public ActionResult Delete(int id)
         {
             var result = _tourService.Delete(id);
+            return CreateResponse(result);
+        }
+
+        [HttpGet("{id:int}")]
+        public ActionResult<List<TourDto>> GetToursByAuthor([FromQuery] int page, [FromQuery] int pageSize,int id)
+        {
+            var result = _tourService.GetToursByAuthor(page, pageSize,id);
             return CreateResponse(result);
         }
 

@@ -13,13 +13,13 @@ namespace Explorer.Tours.Core.Domain
         public int AuthorId { get; init; }
         public string Name { get; init; }
         public string? Description { get; init; }
-        public int? DemandignessLevel { get; init; }
+        public Demandigness? DemandignessLevel { get; init; }
         public TourStatus Status { get; init; }
         public double Price { get; init; }
         public List<string>? Tags { get; init; }
        
 
-        public Tour(int authorId, string name, string? description,int? demandignessLevel,List<string>? tags, TourStatus status = TourStatus.Draft,double price=0)
+        public Tour(int authorId, string name, string? description, Demandigness? demandignessLevel,List<string>? tags, TourStatus status = TourStatus.Draft,double price=0)
         {
             if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("Invalid Name.");
             if (authorId == 0) throw new ArgumentException("Inavlid author");
@@ -39,4 +39,11 @@ namespace Explorer.Tours.Core.Domain
 public enum TourStatus
 {
     Draft
+}
+
+public enum Demandigness
+{
+    Easy,
+    Medium,
+    Hard
 }
