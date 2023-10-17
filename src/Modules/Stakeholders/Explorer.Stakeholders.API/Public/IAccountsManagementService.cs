@@ -11,6 +11,7 @@ namespace Explorer.Stakeholders.API.Public
 {
     public interface IAccountsManagementService
     {
-        Result<PagedResult<PersonDto>> GetPaged(int page, int pageSize);
+        Result<PagedResult<UserDto>> GetPaged(int page, int pageSize);
+        Result<UserDto> Block(int id);
     }
 }

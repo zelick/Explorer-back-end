@@ -1,8 +1,10 @@
 ﻿using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Stakeholders.API.Dtos;
 using Explorer.Stakeholders.API.Public;
+using Explorer.Tours.API.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Explorer.API.Controllers.Administrator.Administration
 {
@@ -18,10 +20,18 @@ namespace Explorer.API.Controllers.Administrator.Administration
         }
 
         [HttpGet]
-        public ActionResult<PagedResult<PersonDto>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
+        public ActionResult<PagedResult<UserDto>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
         {
             var result = _accountsManagementService.GetPaged(page, pageSize);
             return CreateResponse(result);
         }
+
+        [HttpPut("{id:int}")]
+        public ActionResult<UserDto> Block(int id)
+        {
+            var result = _accountsManagementService.Block(id);
+            return CreateResponse(result);
+        }
+
     }
 }

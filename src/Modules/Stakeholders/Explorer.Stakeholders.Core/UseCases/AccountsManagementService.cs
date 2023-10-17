@@ -13,8 +13,27 @@ using System.Threading.Tasks;
 
 namespace Explorer.Stakeholders.Core.UseCases
 {
-    public class AccountsManagementService : CrudService<PersonDto, Person>, IAccountsManagementService
+    public class AccountsManagementService : CrudService<UserDto, User>, IAccountsManagementService
     {
-        public AccountsManagementService(ICrudRepository<Person> repository, IMapper mapper): base(repository, mapper) { }
+        public AccountsManagementService(ICrudRepository<User> repository, IMapper mapper): base(repository, mapper) { }
+
+        public Result<UserDto> Block(int id)
+        {
+            try
+            {
+                UserDto entity = MapToDto(CrudRepository.Get(id));
+                entity.IsActive = false;
+                var result = CrudRepository.Update(MapToDomain(entity));
+                return MapToDto(result);
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+            catch (ArgumentException e)
+            {
+                return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+            }
+        }
     }
 }
