@@ -46,5 +46,12 @@ namespace Explorer.API.Controllers.Author.Administration
             return CreateResponse(result);
         }
 
+        [HttpGet]
+        public ActionResult<PagedResult<TourDto>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
+        {
+            var result = _tourService.GetPaged(page, pageSize);
+            return CreateResponse(result);
+        }
+
     }
 }
