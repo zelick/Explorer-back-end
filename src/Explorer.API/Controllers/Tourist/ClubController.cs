@@ -1,10 +1,11 @@
 ﻿using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Stakeholders.API.Dtos;
 using Explorer.Stakeholders.API.Public;
-using Explorer.Tours.API.Dtos;
-using Explorer.Tours.API.Public.Administration;
+using Explorer.Stakeholders.Core.Domain.RepositoryInterfaces;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Explorer.API.Controllers.Tourist
 {
@@ -32,10 +33,19 @@ namespace Explorer.API.Controllers.Tourist
             var result = _clubService.Create(club);
             return CreateResponse(result);
         }
-
+        
         [HttpPut("{id:int}")]
         public ActionResult<ClubDto> Update([FromBody] ClubDto club)
         {
+            //string userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            //long loggedUser = long.Parse(userId);
+
+            //Console.WriteLine(loggedUser);
+
+            //var loggedInUserId = _userManager.GetUserId(User);
+
+
             var result = _clubService.Update(club);
             return CreateResponse(result);
         }
