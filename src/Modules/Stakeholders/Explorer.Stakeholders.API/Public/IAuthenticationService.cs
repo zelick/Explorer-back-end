@@ -5,7 +5,7 @@ namespace Explorer.Stakeholders.API.Public;
 
 public interface IAuthenticationService
 {
-    Result EditProfile(AccountEditingDto account);
+   // Result EditProfile(AccountEditingDto account);
     Result<AuthenticationTokensDto> Login(CredentialsDto credentials);
     Result<AuthenticationTokensDto> RegisterTourist(AccountRegistrationDto account);
 }

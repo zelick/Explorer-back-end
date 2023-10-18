@@ -6,16 +6,15 @@ using System.Threading.Tasks;
 
 namespace Explorer.Stakeholders.API.Dtos
 {
-    public class AccountEditingDto
+    public class PersonDto
     {
-        public string Username { get; set; }
-        public string Password { get; set; }
-        public string Email { get; set; }
+        public int Id { get; set; }
+        public long UserId { get; set; }
         public string Name { get; set; }
+        public string Surname { get; set; }
         public string ProfilePictureUrl { get; set; }
         public string Biography { get; set; }
         public string Motto { get; set; }
-        public string Surname { get; set; }
-        public string AccessToken { get; set; }
+        public string Email { get; set; }
     }
 }

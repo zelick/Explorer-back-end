@@ -27,12 +27,4 @@ public class AuthenticationController : BaseApiController
         var result = _authenticationService.Login(credentials);
         return CreateResponse(result);
     }
-
-    [HttpPost("edit")]
-
-    public ActionResult<AuthenticationTokensDto> EditProfile([FromBody] AccountEditingDto account)
-    {
-        var result = _authenticationService.EditProfile(account);
-        return CreateResponse(result);
-    }
 }

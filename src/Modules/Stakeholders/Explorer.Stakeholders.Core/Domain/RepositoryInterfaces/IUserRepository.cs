@@ -6,5 +6,6 @@ public interface IUserRepository
     User? GetActiveByName(string username);
     User Create(User user);
     long GetPersonId(long userId);
-    User Edit(User user);
+    User Update(User user);
+    User GetUserById(long id);
 }
