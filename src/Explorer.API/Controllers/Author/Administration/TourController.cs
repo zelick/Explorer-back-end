@@ -53,8 +53,8 @@ namespace Explorer.API.Controllers.Author.Administration
             return CreateResponse(result);
         }
 
-        [HttpPut]
-        public ActionResult AddEquipment([FromQuery] int tourId, [FromQuery] int equipmentId)
+        [HttpPut("{tourId:int}/{equipmentId:int}")]
+        public ActionResult AddEquipment(int tourId, int equipmentId)
         {
             var result = _tourService.AddEquipment(tourId, equipmentId);
             return CreateResponse(result);
