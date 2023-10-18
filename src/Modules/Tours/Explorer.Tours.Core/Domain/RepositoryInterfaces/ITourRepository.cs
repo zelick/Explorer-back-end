@@ -8,6 +8,7 @@ namespace Explorer.Tours.Core.Domain.RepositoryInterfaces
 {
     public interface ITourRepository
     {
+        bool Exists(int id);
         List<Tour> GetToursByAuthor(int id);
     }
 }

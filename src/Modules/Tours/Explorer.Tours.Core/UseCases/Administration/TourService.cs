@@ -37,9 +37,13 @@ namespace Explorer.Tours.Core.UseCases.Administration
 
         public Result AddEquipment(int tourId, int equipmentId)
         {
-            var isExists = _tourEquipmentRepository.Exists(tourId);
+            var isTourExists = _tourRepository.Exists(tourId);
+            if (!isTourExists) return Result.Fail(FailureCode.NotFound);
 
-            if (!isExists) return Result.Fail(FailureCode.NotFound);
+            //-TO DO make check with equipment repository
+            var isEquipmentExists = _tourEquipmentRepository.IsEquipmentExists(equipmentId);
+            if (!isEquipmentExists) return Result.Fail(FailureCode.NotFound);
+
 
             _tourEquipmentRepository.AddEquipment(tourId, equipmentId);
 
@@ -48,6 +52,16 @@ namespace Explorer.Tours.Core.UseCases.Administration
 
         }
 
+        public Result RemoveEquipment(int tourId, int equipmentId)
+        {
+            var isRelationshipExists = _tourEquipmentRepository.Exists(tourId, equipmentId);
+
+            if (!isRelationshipExists) return Result.Fail(FailureCode.NotFound);
+
+            _tourEquipmentRepository.RemoveEquipment(tourId, equipmentId);
+
+            return Result.Ok();
+        }
 
     }
 }

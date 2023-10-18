@@ -18,6 +18,11 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
             _dbContext = dbContext;
         }
 
+        public bool Exists(int id)
+        {
+            return _dbContext.Tours.Any(t => t.Id == id);
+        }
+
         public List<Tour> GetToursByAuthor(int id)
         {
             return _dbContext.Tours

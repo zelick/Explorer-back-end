@@ -17,9 +17,14 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
             _dbContext = dbContext;
         }
 
-        public bool Exists(int tourId)
+        public bool Exists(int tourId, int equipmentId)
         {
-            return _dbContext.Tours.Any(t => t.Id == tourId);
+            return _dbContext.TourEquipment.Any(te => te.TourId == tourId && te.EquipmentId == equipmentId);
+        }
+
+        public bool IsEquipmentExists(int id)
+        {
+            return _dbContext.Equipment.Any(e => e.Id == id);
         }
 
         public TourEquipment AddEquipment(int tourId, int equipmentId)
@@ -31,5 +36,16 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
 
             return tourEquipment;
         }
+
+        public TourEquipment RemoveEquipment(int tourId, int equipmentId)
+        {
+            var tourEquipment = new TourEquipment(tourId, equipmentId);
+
+            _dbContext.TourEquipment.Remove(tourEquipment);
+            _dbContext.SaveChanges();
+
+            return tourEquipment;
+        }
+
     }
 }
