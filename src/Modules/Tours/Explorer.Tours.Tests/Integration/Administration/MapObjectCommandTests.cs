@@ -2,6 +2,7 @@
 using Explorer.API.Controllers.Author.Administration;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
+using Explorer.Tours.Core.Domain;
 using Explorer.Tours.Infrastructure.Database;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,7 +27,7 @@ public class MapObjectCommandTests : BaseToursIntegrationTest
             Name = "Example MapObject",
             Description = "A description for the map object",
             PictureURL = "https://example.com/image.jpg",
-            Category = "Example Category",
+            Category = "Other",
             Longitude = (float?)123.4,
             Latitude = (float?)78.9
         };
@@ -105,7 +106,7 @@ public class MapObjectCommandTests : BaseToursIntegrationTest
             Name = "Example MapObject",
             Description = "A description for the map object",
             PictureURL = "https://example.com/image.jpg",
-            Category = "Example Category",
+            Category = "WC",
             Longitude = (float?)123.4,
             Latitude = (float?)78.9
         };
