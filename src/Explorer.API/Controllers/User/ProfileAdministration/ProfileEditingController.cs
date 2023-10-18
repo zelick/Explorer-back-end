@@ -3,6 +3,7 @@ using Explorer.Stakeholders.API.Dtos;
 using Explorer.Stakeholders.API.Public;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Explorer.API.Controllers.User.ProfileAdministration
 {
@@ -22,6 +23,14 @@ namespace Explorer.API.Controllers.User.ProfileAdministration
         public ActionResult<PersonDto> Edit([FromBody] PersonDto person)
         {
             var result = _personEditingService.Update(person);
+            return CreateResponse(result);
+        }
+
+        [HttpGet]
+
+        public ActionResult<PersonDto> GetUserInfo([FromQuery] int id)
+        {
+            var result = _personEditingService.Get(id);
             return CreateResponse(result);
         }
     }

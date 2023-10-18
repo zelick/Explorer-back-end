@@ -40,12 +40,12 @@ namespace Explorer.Stakeholders.Tests.Integration.ProfileAdministration
 
             // Assert - Response
             authenticationResponse.ShouldNotBeNull();
-            authenticationResponse.Email.ShouldBe(authenticationResponse.Email);
-            authenticationResponse.Name.ShouldBe(authenticationResponse.Name);
-            authenticationResponse.Surname.ShouldBe(authenticationResponse.Surname);
-            authenticationResponse.Biography.ShouldBe(authenticationResponse.Biography);
-            authenticationResponse.ProfilePictureUrl.ShouldBe(authenticationResponse.ProfilePictureUrl);
-            authenticationResponse.Motto.ShouldBe(authenticationResponse.Motto);
+            authenticationResponse.Email.ShouldBe(accountForUpdate.Email);
+            authenticationResponse.Name.ShouldBe(accountForUpdate.Name);
+            authenticationResponse.Surname.ShouldBe(accountForUpdate.Surname);
+            authenticationResponse.Biography.ShouldBe(accountForUpdate.Biography);
+            authenticationResponse.ProfilePictureUrl.ShouldBe(accountForUpdate.ProfilePictureUrl);
+            authenticationResponse.Motto.ShouldBe(accountForUpdate.Motto);
 
             //Assert - Database
             var storedEntity = dbContext.People.FirstOrDefault(i => i.ProfilePictureUrl == "editovanaslika.jpg");

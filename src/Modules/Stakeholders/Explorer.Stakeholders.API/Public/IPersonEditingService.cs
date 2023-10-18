@@ -12,6 +12,7 @@ public interface IPersonEditingService
 {
         Result<PersonDto> Create(PersonDto personDto);
         Result<PersonDto> Update(PersonDto personDto);
+        Result<PersonDto> Get(int id);
         Result Delete(int id);
 }
 
