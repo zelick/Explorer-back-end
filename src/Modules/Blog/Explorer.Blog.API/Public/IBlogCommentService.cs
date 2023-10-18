@@ -7,5 +7,7 @@ namespace Explorer.Blog.API.Public;
 public interface IBlogCommentService
 {
     Result<PagedResult<BlogCommentDto>> GetPaged(int page, int pageSize);
-    Result<BlogCommentDto> Create(BlogCommentDto comment);
+    Result<BlogCommentDto> Create(BlogCommentDto blogComment);
+    Result<BlogCommentDto> Update(BlogCommentDto blogComment);
+    Result Delete(int id);
 }

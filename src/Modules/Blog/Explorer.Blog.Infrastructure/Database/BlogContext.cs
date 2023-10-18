@@ -16,8 +16,6 @@ public class BlogContext : DbContext
         modelBuilder.HasDefaultSchema("blog");
 
         ConfigureBlogComment(modelBuilder);
-
-        modelBuilder.Entity<User>().ToTable("Users", schema: "stakeholders", t => t.ExcludeFromMigrations());
     }
 
     private static void ConfigureBlogComment(ModelBuilder modelBuilder)
@@ -26,10 +24,5 @@ public class BlogContext : DbContext
             .HasOne<BlogPost>()
             .WithMany()
             .HasForeignKey(bc => bc.BlogPostId);
-
-        modelBuilder.Entity<BlogComment>()
-            .HasOne<User>()
-            .WithMany()
-            .HasForeignKey(bp => bp.UserId);
     }
 }
