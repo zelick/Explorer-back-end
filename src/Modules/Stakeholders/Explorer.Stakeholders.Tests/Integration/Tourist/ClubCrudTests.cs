@@ -47,7 +47,6 @@ namespace Explorer.Tours.Tests.Integration.Tourist
             var dbContext = scope.ServiceProvider.GetRequiredService<StakeholdersContext>();
             var newEntity = new ClubDto
             {
-                Id = 1,
                 Name = "Klub Test Create",
                 Description = "Klub Test Create description",
                 Image = "Slika",
