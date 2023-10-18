@@ -13,20 +13,24 @@ using System.Threading.Tasks;
 
 namespace Explorer.Stakeholders.Core.UseCases
 {
-    public class ApplicationGradeService : BaseService<ApplicationGradeDto, ApplicationGrade>, IApplicationGradeService
+    public class ApplicationGradeService : CrudService<ApplicationGradeDto, ApplicationGrade>, IApplicationGradeService
     {
-        public ApplicationGradeService(IMapper mapper) : base(mapper)
-        {
+        public ApplicationGradeService(ICrudRepository<ApplicationGrade> repository, IMapper mapper) : base(repository, mapper) 
+        { 
+        
         }
 
         public Result<ApplicationGradeDto> EvaluateApplication(ApplicationGradeDto applicationGrade)
         {
-            throw new NotImplementedException();
+            ApplicationGrade newGrade = new ApplicationGrade(applicationGrade.Rating, applicationGrade.Comment);
+            CrudRepository.Create(newGrade);
+            return MapToDto(newGrade);
         }
 
-        public Result<List<ApplicationGradeDto>> ReviewGrades()
+        public Result<List<ApplicationGradeDto>> ReviewGrades(int page, int pageSize)
         {
-            throw new NotImplementedException();
+            var grades = CrudRepository.GetPaged(page, pageSize).Results.ToList();
+            return MapToDto(grades);
         }
     }
 }

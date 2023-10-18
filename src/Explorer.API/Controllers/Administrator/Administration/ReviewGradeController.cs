@@ -21,9 +21,9 @@ namespace Explorer.API.Controllers.Administrator.Administration
         }
 
         [HttpGet]
-        public ActionResult<List<ApplicationGradeDto>> ReviewGrades()
+        public ActionResult<List<ApplicationGradeDto>> ReviewGrades(int page, int pageSize)
         {
-            var result = _applicationGradeService.ReviewGrades();
+            var result = _applicationGradeService.ReviewGrades(page, pageSize);
             return CreateResponse(result);
         }
     }

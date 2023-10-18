@@ -15,7 +15,8 @@ namespace Explorer.Stakeholders.Core.Domain
 
         public ApplicationGrade(int rating, string? comment)
         {
-            Rating = rating;
+            if (rating < 1 || rating > 5) throw new ArgumentException("Invalid rating"); 
+            else Rating = rating;
             if (string.IsNullOrWhiteSpace(comment)) Comment = "No comment added.";
             else Comment = comment;
         }

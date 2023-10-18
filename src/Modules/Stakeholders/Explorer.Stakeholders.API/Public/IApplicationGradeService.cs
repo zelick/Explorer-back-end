@@ -13,6 +13,6 @@ namespace Explorer.Stakeholders.API.Public
     public interface IApplicationGradeService 
     {
         Result<ApplicationGradeDto> EvaluateApplication(ApplicationGradeDto applicationGrade);
-        Result<List<ApplicationGradeDto>> ReviewGrades();
+        Result<List<ApplicationGradeDto>> ReviewGrades(int page, int pageSize);
     }
 }
