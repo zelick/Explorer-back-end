@@ -68,7 +68,7 @@ namespace Explorer.API.Controllers
             return CreateResponse(result);
         }*/
 
-        [HttpDelete("{id:int}")]
+        [HttpDelete("deleteRequest/{id:int}")]
         public ActionResult Delete(int id)
         {
             var result = _clubRequestService.Delete(id);
