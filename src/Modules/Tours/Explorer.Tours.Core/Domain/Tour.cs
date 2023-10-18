@@ -17,12 +17,13 @@ namespace Explorer.Tours.Core.Domain
         public TourStatus Status { get; init; }
         public double Price { get; init; }
         public List<string>? Tags { get; init; }
-       
+
+        public List<Equipment> Equipment { get; init; }
 
         public Tour(int authorId, string name, string? description, Demandigness? demandignessLevel,List<string>? tags, TourStatus status = TourStatus.Draft,double price=0)
         {
             if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("Invalid Name.");
-            if (authorId == 0) throw new ArgumentException("Inavlid author");
+            if (authorId == 0) throw new ArgumentException("Invalid author");
             if (price < 0) throw new ArgumentException("Invalid price");
 
             Name = name;
@@ -32,7 +33,15 @@ namespace Explorer.Tours.Core.Domain
             Price = price;
             AuthorId = authorId;
             Tags = tags;
+            Equipment = new List<Equipment>();
         }
+
+        public bool AddEquipment(Equipment equipment)
+        {
+            Equipment.Add(equipment);
+            return true;
+        }
+
     }
 }
 

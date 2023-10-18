@@ -21,8 +21,16 @@ namespace Explorer.Tours.Core.UseCases.Administration
             var allTours = CrudRepository.GetPaged(page, pageSize);
             List<Tour> toursByAuthor= allTours.Results.Where(t=>t.AuthorId == id).ToList();
             return MapToDto(toursByAuthor);
+        }
+
+        public Result AddEquipment(int tourId, int equipmentId)
+        {
+            var tour = CrudRepository.Get(tourId);
+
+            return null;
 
         }
+
 
     }
 }
