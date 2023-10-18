@@ -1,4 +1,5 @@
-﻿using Explorer.Tours.API.Dtos;
+﻿using Explorer.BuildingBlocks.Core.UseCases;
+using Explorer.Tours.API.Dtos;
 using FluentResults;
 
 namespace Explorer.Tours.API.Public.Administration
@@ -7,7 +8,7 @@ namespace Explorer.Tours.API.Public.Administration
     {
 
         Result<TourPreferenceDto> GetPreferenceByCreator(int page, int pageSize, int id);
-        Result<TourPreferenceDto> GetPaged(int page, int pageSize);
+        Result<PagedResult<TourPreferenceDto>> GetPaged(int page, int pageSize);
         Result<TourPreferenceDto> Create(TourPreferenceDto preference);
         Result<TourPreferenceDto> Update(TourPreferenceDto preference);
         Result Delete(int id);

@@ -4,19 +4,21 @@ namespace Explorer.Tours.Core.Domain
 {
     public class TourPreference : Entity
     {
-        public int Id { get; init; }
         public int CreatorId { get; init; }
         public TourDifficulty? Difficulty { get; init; }
-        public int Walk { get; init; } = 0;
-        public int Bike { get; init; } = 0;
-        public int Car { get; init; } = 0;
-        public int Boat { get; init; } = 0;
+        public int Walk { get; init; }
+        public int Bike { get; init; }
+        public int Car { get; init; }
+        public int Boat { get; init; }
         public List<string>? Tags { get; init; }
 
-        public TourPreference(int id, int creatorId, TourDifficulty? difficulty, int walk, int bike, int car, int boat, List<string>? tags)
+        public TourPreference(int creatorId, TourDifficulty? difficulty, int walk, int bike, int car, int boat, List<string>? tags)
         {
-            if (id == 0) throw new ArgumentException("Invalid preference");
-            if (creatorId == 0) throw new ArgumentException("Inavlid creator");
+            if (walk < 0 || walk > 3) throw new ArgumentException("Invalid value for Walk. It should be between 0 and 3.");
+            if (bike < 0 || bike > 3) throw new ArgumentException("Invalid value for Bike. It should be between 0 and 3.");
+            if (car < 0 || car > 3) throw new ArgumentException("Invalid value for Car. It should be between 0 and 3.");
+            if (boat < 0 || boat > 3) throw new ArgumentException("Invalid value for Boat. It should be between 0 and 3.");
+
             CreatorId = creatorId;
             Difficulty = difficulty;
             Walk = walk;
