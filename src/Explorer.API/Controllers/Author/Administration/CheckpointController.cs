@@ -25,6 +25,13 @@ namespace Explorer.API.Controllers.Author.Administration
             return CreateResponse(result);
         }
 
+        [HttpGet("{id:int}")]
+        public ActionResult<List<CheckpointDto>> GetAllByTour([FromQuery] int page, [FromQuery] int pageSize, int id)
+        {
+            var result = _checkpointService.GetPagedByTour(page, pageSize, id);
+            return CreateResponse(result);
+        }
+
         [HttpPost]
         public ActionResult<CheckpointDto> Create([FromBody] CheckpointDto checkpoint)
         {

@@ -11,13 +11,13 @@ namespace Explorer.Tours.Core.Domain
     {
         public int TourID { get; init; }
         public int OrderNumber { get; init; }
-        public int Longitude { get; init; }
-        public int Latitude { get; init; }
+        public double Longitude { get; init; }
+        public double Latitude { get; init; }
         public string Name { get; init; }
         public string? Description { get; init; }
         public string Picture { get; init; }
 
-        public Checkpoint(int tourID, int orderNumber, int longitude, int latitude, string name, string description, string picture)
+        public Checkpoint(int tourID, int orderNumber, double longitude, double latitude, string name, string description, string picture)
         {
             if (tourID < 0) throw new ArgumentException("Invalid Tour ID");
             if (longitude < 0 || latitude < 0) throw new ArgumentException("Invalid location coordinates");

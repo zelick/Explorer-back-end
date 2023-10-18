@@ -15,5 +15,6 @@ namespace Explorer.Tours.API.Public.Administration
         Result<CheckpointDto> Create(CheckpointDto checkpoint);
         Result<CheckpointDto> Update(CheckpointDto checkpoint);
         Result Delete(int id);
+        Result<List<CheckpointDto>> GetPagedByTour(int page, int pageSize, int id);
     }
 }
