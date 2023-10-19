@@ -1,10 +1,14 @@
 using AutoMapper;
+using Explorer.BuildingBlocks.Core.Domain;
+using Explorer.Stakeholders.API.Dtos;
+using Explorer.Stakeholders.Core.Domain;
 
 namespace Explorer.Stakeholders.Core.Mappers;
 
 public class StakeholderProfile : Profile
 {
-    public StakeholderProfile()
+	public StakeholderProfile()
     {
-    }
+		CreateMap<ClubInvitationDto, ClubInvitation>().ReverseMap();
+	}
 }
