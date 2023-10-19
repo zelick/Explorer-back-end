@@ -8,7 +8,6 @@ namespace Explorer.Tours.API.Public.Administration
     {
         Result<PagedResult<TourRatingDto>> GetPaged(int page, int pageSize);
         Result<TourRatingDto> Create(TourRatingDto tourRating);
-        //Result<TourRatingDto> Update(TourRatingDto tourRating);
-        //Result Delete(int id);
+        Result Delete(int id);
     }
 }
