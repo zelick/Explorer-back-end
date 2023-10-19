@@ -13,6 +13,7 @@ namespace Explorer.Stakeholders.API.Dtos
         public string Password { get; private set; }
         public RoleUser Role { get; private set; }
         public bool IsActive { get; set; }
+        public string Email { get; set; }
     }
     public enum RoleUser
     {
