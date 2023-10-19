@@ -5,6 +5,7 @@ using Explorer.Stakeholders.Core.Domain;
 using Explorer.Stakeholders.Core.Domain.RepositoryInterfaces;
 using FluentResults;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net.Mail;
 
 namespace Explorer.Stakeholders.Core.UseCases;
 
@@ -44,6 +45,12 @@ public class AuthenticationService : IAuthenticationService
 
         try
         {
+            if (!IsValidName(account.Name) || !IsValidName(account.Surname))
+                return Result.Fail("Name and Surname must not be empty and must start with an uppercase letter");
+
+            if (!IsValidEmail(account.Email))
+                return Result.Fail("Invalid email format");
+
             Domain.UserRole userRole;
 
             if (account.Role.Equals("Administrator"))
@@ -68,5 +75,21 @@ public class AuthenticationService : IAuthenticationService
         }
     }
 
+    private bool IsValidName(string name)
+    {
+        return !string.IsNullOrWhiteSpace(name) && char.IsUpper(name[0]);
+    }
 
+    private bool IsValidEmail(string email)
+    {
+        try
+        {
+            var mailAddress = new MailAddress(email);
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
+    }
 }
