@@ -21,9 +21,8 @@ namespace Explorer.Stakeholders.Tests.Integration.Administration
 
         }
 
-
         [Fact]
-        public void GiveHigherRating()
+        public void Give_higher_rating()
         {
             //Arrange
             using var scope = Factory.Services.CreateScope();
@@ -33,10 +32,27 @@ namespace Explorer.Stakeholders.Tests.Integration.Administration
             dto.Comment = "This is the best app I have ever used";
 
             //Act
+            var ex = Assert.Throws<ArgumentException>(() => controller.EvaluateApplication(dto));
+
+            //Assert
+            Assert.Equal("Invalid rating", ex.Message);
+        }
+
+        [Fact]
+        public void Add_empty_comment()
+        {
+            //Arrange
+            using var scope = Factory.Services.CreateScope();
+            var controller = CreateController(scope);
+            var dto = new ApplicationGradeDto();
+            dto.Rating = 4;
+            dto.Comment = "";
+
+            //Act
             var result = (ObjectResult)controller.EvaluateApplication(dto).Result;
 
             //Assert
-            result.StatusCode.ShouldBe(500);
+            result.StatusCode.ShouldBe(200);
         }
 
         private static ApplicationGradeController CreateController(IServiceScope scope)
