@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Explorer.BuildingBlocks.Core.UseCases;
 
 namespace Explorer.Tours.Core.Domain.RepositoryInterfaces
 {
-    public interface ITourRepository
+    public interface ITourRepository : ICrudRepository<Tour>
     {
         bool Exists(int id);
         List<Tour> GetToursByAuthor(int id);

@@ -18,9 +18,9 @@ namespace Explorer.Tours.Core.Domain
         public double Price { get; init; }
         public List<string>? Tags { get; init; }
 
-        public List<Equipment> Equipment { get; } = new List<Equipment>();
+        public List<Equipment> Equipment { get; init; }
 
-        public Tour(int authorId, string name, string? description, Demandigness? demandignessLevel,List<string>? tags, TourStatus status = TourStatus.Draft,double price=0)
+        public Tour(int authorId, string name, string? description, Demandigness? demandignessLevel, List<string>? tags, TourStatus status = TourStatus.Draft,double price=0)
         {
             if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("Invalid Name.");
             if (authorId == 0) throw new ArgumentException("Invalid author");
@@ -35,13 +35,6 @@ namespace Explorer.Tours.Core.Domain
             Tags = tags;
             Equipment = new List<Equipment>();
         }
-
-        public bool AddEquipment(Equipment equipment)
-        {
-            Equipment.Add(equipment);
-            return true;
-        }
-
     }
 }
 

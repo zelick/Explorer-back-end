@@ -3,13 +3,8 @@ using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
 using Explorer.Tours.Core.Domain;
-using FluentResults;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Explorer.Tours.Core.Domain.RepositoryInterfaces;
+using FluentResults;
 
 namespace Explorer.Tours.Core.UseCases.Administration
 {
@@ -18,7 +13,7 @@ namespace Explorer.Tours.Core.UseCases.Administration
         private readonly ITourEquipmentRepository _tourEquipmentRepository;
         private readonly ITourRepository _tourRepository;
 
-        public TourService(ICrudRepository<Tour> repository, IMapper mapper, ITourEquipmentRepository tourEquipmentRepository, ITourRepository tourRepository) : base(repository, mapper)
+        public TourService(ITourRepository tourRepository, IMapper mapper, ITourEquipmentRepository tourEquipmentRepository) : base(tourRepository, mapper)
         {
             _tourEquipmentRepository = tourEquipmentRepository;
             _tourRepository = tourRepository;
@@ -26,13 +21,16 @@ namespace Explorer.Tours.Core.UseCases.Administration
 
         public Result<List<TourDto>> GetToursByAuthor(int page, int pageSize, int id) 
         { 
-            /*
-            var allTours = CrudRepository.GetPaged(page, pageSize);
-            List<Tour> toursByAuthor= allTours.Results.Where(t=>t.AuthorId == id).ToList();
-            return MapToDto(toursByAuthor);
-            */
-            List<Tour> toursByAuthor = _tourRepository.GetToursByAuthor(id);
-            return MapToDto(toursByAuthor);
+            try
+            {
+                var result = _tourRepository.GetToursByAuthor(id);
+                return MapToDto(result);
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+
         }
 
         public Result AddEquipment(int tourId, int equipmentId)
@@ -44,6 +42,8 @@ namespace Explorer.Tours.Core.UseCases.Administration
             var isEquipmentExists = _tourEquipmentRepository.IsEquipmentExists(equipmentId);
             if (!isEquipmentExists) return Result.Fail(FailureCode.NotFound);
 
+            var isRelationshipExists = _tourEquipmentRepository.Exists(tourId, equipmentId);
+            if (isRelationshipExists) return Result.Fail(FailureCode.NotFound);
 
             _tourEquipmentRepository.AddEquipment(tourId, equipmentId);
 
