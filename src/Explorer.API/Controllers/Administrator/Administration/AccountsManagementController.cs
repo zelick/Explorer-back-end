@@ -26,7 +26,7 @@ namespace Explorer.API.Controllers.Administrator.Administration
             return CreateResponse(result);
         }
 
-        [HttpPut("{id:int}")]
+        [HttpPut("block/{id:int}")]
         public ActionResult<UserDto> Block(int id)
         {
             var result = _accountsManagementService.Block(id);

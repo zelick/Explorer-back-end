@@ -23,7 +23,8 @@ namespace Explorer.Stakeholders.Core.UseCases
             {
                 UserDto entity = MapToDto(CrudRepository.Get(id));
                 entity.IsActive = false;
-                var result = CrudRepository.Update(MapToDomain(entity));
+                CrudRepository.Delete(id);
+                var result = CrudRepository.Create(MapToDomain(entity));
                 return MapToDto(result);
             }
             catch (KeyNotFoundException e)
