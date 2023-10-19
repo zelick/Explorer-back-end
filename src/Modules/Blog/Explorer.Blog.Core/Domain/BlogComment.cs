@@ -6,11 +6,11 @@ public class BlogComment : Entity
 {
     public long UserId { get; init; }
     public long BlogPostId { get; init; }
-    public TimeOnly CreationTime { get; init; }
-    public TimeOnly ModificationTime { get; set; }
+    public DateTime CreationTime { get; init; }
+    public DateTime? ModificationTime { get; set; }
     public string Text { get; set; }
 
-    public BlogComment(long userId, long blogPostId, TimeOnly creationTime, TimeOnly modificationTime, string text)
+    public BlogComment(long userId, long blogPostId, DateTime creationTime, DateTime? modificationTime, string text)
     {
         UserId = userId;
         BlogPostId = blogPostId;

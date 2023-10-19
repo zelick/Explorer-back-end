@@ -3,8 +3,6 @@ using Explorer.Blog.API.Dtos;
 using Explorer.Blog.API.Public;
 using Microsoft.AspNetCore.Authorization;
 using Explorer.BuildingBlocks.Core.UseCases;
-using Explorer.Stakeholders.Core.Domain;
-using System.Security.Claims;
 
 namespace Explorer.API.Controllers.User.Blogging;
 
@@ -35,9 +33,9 @@ public class BlogCommentController : BaseApiController
     }
 
     [HttpPut("{id:int}")]
-    public ActionResult<BlogCommentDto> Update([FromBody] BlogCommentDto equipment)
+    public ActionResult<BlogCommentDto> Update([FromBody] BlogCommentDto blogComment)
     {
-        var result = _blogCommentService.Update(equipment);
+        var result = _blogCommentService.Update(blogComment);
         return CreateResponse(result);
     }
 

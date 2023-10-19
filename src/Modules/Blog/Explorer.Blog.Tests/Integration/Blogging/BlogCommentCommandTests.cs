@@ -25,8 +25,8 @@ public class BlogCommentCommandTests : BaseBlogIntegrationTest
         {
             UserId = 1, 
             BlogPostId = 1,
-            CreationTime = new TimeOnly(14, 30, 0),
-            ModificationTime = new TimeOnly(15, 15, 0),
+            CreationTime = new DateTime(),
+            ModificationTime = new DateTime(),
             Text = "Blog comment text."
         };
 
@@ -77,8 +77,8 @@ public class BlogCommentCommandTests : BaseBlogIntegrationTest
             Id = -1,
             UserId = 0,
             BlogPostId = 1,
-            CreationTime = new TimeOnly(14, 30, 0),
-            ModificationTime = new TimeOnly(20, 15, 0),
+            CreationTime = new DateTime(),
+            ModificationTime = new DateTime(),
             Text = "Updated blog comment text."
         };
 
