@@ -30,4 +30,27 @@ public class BlogPostController : BaseApiController
         var result = _blogPostService.Create(blogPost);
         return CreateResponse(result);
     }
+
+    // TODO authorization
+    [HttpGet("user/{id:int}")]
+    public ActionResult<PagedResult<BlogPostDto>> GetByUser([FromQuery] int page, [FromQuery] int pageSize, int id)
+    {
+
+        var result = _blogPostService.GetByUser(page, pageSize, id);
+        return CreateResponse(result);
+    }
+
+    [HttpPut("{id:int}")]
+    public ActionResult<BlogPostDto> Update([FromBody] BlogPostDto blogPost)
+    {
+        var result = _blogPostService.Update(blogPost);
+        return CreateResponse(result);
+    }
+
+    [HttpDelete("{id:int}")]
+    public ActionResult Delete(int id)
+    {
+        var result = _blogPostService.Delete(id);
+        return CreateResponse(result);
+    }
 }
