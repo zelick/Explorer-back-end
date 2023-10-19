@@ -4,15 +4,15 @@ using Explorer.Tours.API.Public.Administration;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Explorer.API.Controllers.Administrator.Tourist
+namespace Explorer.API.Controllers.Tourist
 {
     [Authorize(Policy = "touristPolicy")]
-    [Route("api/administration/tourRating")]
-    public class TourRatingController : BaseApiController
+    [Route("api/tourist/tourRating")]
+    public class TourRatingTouristController : BaseApiController
     {
         private readonly ITourRatingService _tourRatingService;
 
-        public TourRatingController(ITourRatingService tourRatingService)
+        public TourRatingTouristController(ITourRatingService tourRatingService)
         {
             _tourRatingService = tourRatingService;
         }
