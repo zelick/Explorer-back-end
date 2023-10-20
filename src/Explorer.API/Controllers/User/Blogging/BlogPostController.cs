@@ -47,6 +47,13 @@ public class BlogPostController : BaseApiController
         return CreateResponse(result);
     }
 
+    [HttpPatch("{id:int}/close")]
+    public ActionResult<BlogPostDto> Close(int id)
+    {
+        var result = _blogPostService.Close(id);
+        return CreateResponse(result);
+    }
+
     [HttpDelete("{id:int}")]
     public ActionResult Delete(int id)
     {
