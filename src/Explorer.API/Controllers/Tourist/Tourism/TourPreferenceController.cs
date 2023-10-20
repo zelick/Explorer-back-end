@@ -1,12 +1,13 @@
 ﻿using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Explorer.API.Controllers.Tourist.Tourism
 {
 
-    //[Authorize(Policy = "touristPolicy")]
+    [Authorize(Policy = "touristPolicy")]
     [Route("api/tourism/preference")]
     public class TourPreferenceController : BaseApiController
     {
