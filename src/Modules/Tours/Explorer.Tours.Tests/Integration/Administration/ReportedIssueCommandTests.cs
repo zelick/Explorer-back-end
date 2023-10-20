@@ -52,25 +52,29 @@ namespace Explorer.Tours.Tests.Integration.Administration
         }
 
         [Fact]
-        public void Create_fails_invalid_data()
+        public void Create_fails_missing_category()
         {
             // Arrange
             using var scope = Factory.Services.CreateScope();
             var controller = CreateController(scope);
             var updatedEntity = new ReportedIssueDto
             {
-                TourId = 9
+                Description = "Description",
+                Priority = 1,
+                TourId = -1,
+                TouristId = -1,
+                Time = DateTime.Now.ToUniversalTime()
             };
 
             // Act
             var result = (ObjectResult)controller.Create(updatedEntity).Result;
 
             // Assert
-            result.ShouldNotBeNull();
             result.StatusCode.ShouldBe(400);
         }
 
-        
+
+
 
         private static ReportingIssueController CreateController(IServiceScope scope)
         {

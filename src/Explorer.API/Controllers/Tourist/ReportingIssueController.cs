@@ -5,6 +5,7 @@ using Explorer.Tours.API.Public.Administration;
 using Explorer.Tours.Core.UseCases.Administration;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Explorer.API.Controllers.Tourist
 {
@@ -22,6 +23,10 @@ namespace Explorer.API.Controllers.Tourist
         [HttpPost]
         public ActionResult<EquipmentDto> Create([FromBody] ReportedIssueDto equipment)
         {
+            if(equipment.Category.IsNullOrEmpty() || equipment.Priority==0 ||equipment.TourId==0 || equipment.TouristId == 0)
+            {
+                return BadRequest("Fill all the fields.");
+            }
             var result = _reportingIssueService.Create(equipment);
             return CreateResponse(result);
         }
