@@ -46,5 +46,6 @@ namespace Explorer.API.Controllers.Tourist
 			var result = _clubInvitationService.Delete(id);
 			return CreateResponse(result);
 		}
+
 	}
 }
