@@ -1,8 +1,7 @@
 ﻿using Explorer.API.Controllers.Author.Administration;
-using Explorer.BuildingBlocks.Core.UseCases;
+using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
 using Explorer.Tours.Infrastructure.Database;
-using FluentResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
@@ -19,15 +18,23 @@ namespace Explorer.Tours.Tests.Integration.Administration
         {
             using var scope = Factory.Services.CreateScope();
             var controller = CreateController(scope);
+            var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
             var tourId = -2;
             var equipmentId = -1;
 
             // Act
-            var result = (OkResult)controller.AddEquipment(tourId, equipmentId);
+            var result = ((ObjectResult)controller.AddEquipment(tourId, equipmentId).Result)?.Value as TourDto;
 
             // Assert - Response
-            result.StatusCode.ShouldBe(200);
+            result.ShouldNotBeNull();
+            result.Id.ShouldBe(tourId);
 
+            // Assert - Database
+            var addedRelationship =
+                dbContext.TourEquipment.FirstOrDefault(te => te.TourId == tourId && te.EquipmentId == equipmentId);
+            addedRelationship.ShouldNotBeNull();
+            addedRelationship.TourId.ShouldBe(tourId);
+            addedRelationship.EquipmentId.ShouldBe(equipmentId);
         }
 
         [Fact]
@@ -35,15 +42,21 @@ namespace Explorer.Tours.Tests.Integration.Administration
         {
             using var scope = Factory.Services.CreateScope();
             var controller = CreateController(scope);
-            var tourId = -1;
-            var equipmentId = -1;
+            var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
+            var tourId = -2;
+            var equipmentId = -2;
 
             // Act
-            var result = (OkResult)controller.RemoveEquipment(tourId, equipmentId);
+            var result = ((ObjectResult)controller.RemoveEquipment(tourId, equipmentId).Result)?.Value as TourDto;
 
             // Assert - Response
-            result.StatusCode.ShouldBe(200);
+            result.ShouldNotBeNull();
+            result.Id.ShouldBe(tourId);
 
+            // Assert - Database
+            var addedRelationship =
+                dbContext.TourEquipment.FirstOrDefault(te => te.TourId == tourId && te.EquipmentId == equipmentId);
+            addedRelationship.ShouldBeNull();
         }
 
         [Fact]
@@ -55,11 +68,11 @@ namespace Explorer.Tours.Tests.Integration.Administration
             var equipmentId = -2;
 
             // Act
-            var result = controller.AddEquipment(tourId, equipmentId);
+            var response = (ObjectResult)controller.AddEquipment(tourId, equipmentId).Result;
 
             // Assert - Response
-            var statusCode = (result as ObjectResult)?.StatusCode;
-            statusCode.ShouldBe(404);
+            response.ShouldNotBeNull();
+            response.StatusCode.ShouldBe(404);
 
         }
 
@@ -72,11 +85,11 @@ namespace Explorer.Tours.Tests.Integration.Administration
             var equipmentId = -1;
 
             // Act
-            var result = controller.RemoveEquipment(tourId, equipmentId);
+            var response = (ObjectResult)controller.RemoveEquipment(tourId, equipmentId).Result;
 
             // Assert - Response
-            var statusCode = (result as ObjectResult)?.StatusCode;
-            statusCode.ShouldBe(404);
+            response.ShouldNotBeNull();
+            response.StatusCode.ShouldBe(404);
 
         }
 
@@ -89,11 +102,11 @@ namespace Explorer.Tours.Tests.Integration.Administration
             var equipmentId = -21;
 
             // Act
-            var result = controller.AddEquipment(tourId, equipmentId);
+            var response = (ObjectResult)controller.AddEquipment(tourId, equipmentId).Result;
 
             // Assert - Response
-            var statusCode = (result as ObjectResult)?.StatusCode;
-            statusCode.ShouldBe(404);
+            response.ShouldNotBeNull();
+            response.StatusCode.ShouldBe(404);
 
         }
 
@@ -106,11 +119,11 @@ namespace Explorer.Tours.Tests.Integration.Administration
             var equipmentId = -10;
 
             // Act
-            var result = controller.RemoveEquipment(tourId, equipmentId);
+            var response = (ObjectResult)controller.RemoveEquipment(tourId, equipmentId).Result;
 
             // Assert - Response
-            var statusCode = (result as ObjectResult)?.StatusCode;
-            statusCode.ShouldBe(404);
+            response.ShouldNotBeNull();
+            response.StatusCode.ShouldBe(404);
 
         }
 
@@ -123,11 +136,11 @@ namespace Explorer.Tours.Tests.Integration.Administration
             var equipmentId = -1;
 
             // Act
-            var result = controller.AddEquipment(tourId, equipmentId);
+            var response = (ObjectResult)controller.AddEquipment(tourId, equipmentId).Result;
 
             // Assert - Response
-            var statusCode = (result as ObjectResult)?.StatusCode;
-            statusCode.ShouldBe(404);
+            response.ShouldNotBeNull();
+            response.StatusCode.ShouldBe(404);
 
         }
 
