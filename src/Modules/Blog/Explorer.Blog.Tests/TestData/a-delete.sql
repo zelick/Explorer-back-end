@@ -1,2 +1,2 @@
-DELETE FROM blog."BlogPosts";
 DELETE FROM blog."BlogComments";
+DELETE FROM blog."BlogPosts";

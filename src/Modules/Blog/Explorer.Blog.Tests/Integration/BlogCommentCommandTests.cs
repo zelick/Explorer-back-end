@@ -24,7 +24,7 @@ public class BlogCommentCommandTests : BaseBlogIntegrationTest
         var newBlogComment = new BlogCommentDto()
         {
             UserId = 1,
-            BlogPostId = 1,
+            BlogPostId = -12,
             CreationTime = new DateTime(),
             ModificationTime = new DateTime(),
             Text = "Blog comment text."
@@ -76,7 +76,7 @@ public class BlogCommentCommandTests : BaseBlogIntegrationTest
         {
             Id = -1,
             UserId = 0,
-            BlogPostId = 1,
+            BlogPostId = -1,
             CreationTime = new DateTime(),
             ModificationTime = new DateTime(),
             Text = "Updated blog comment text."
