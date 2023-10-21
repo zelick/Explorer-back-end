@@ -1,4 +1,4 @@
-﻿namespace Explorer.Blog.API.Dtos;
+namespace Explorer.Blog.API.Dtos;
 
 public class BlogPostDto
 {

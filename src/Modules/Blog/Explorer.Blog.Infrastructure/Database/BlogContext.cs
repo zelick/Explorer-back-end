@@ -6,11 +6,22 @@ namespace Explorer.Blog.Infrastructure.Database;
 public class BlogContext : DbContext
 {
     public DbSet<BlogPost> BlogPosts { get; set; }
+    public DbSet<BlogComment> BlogComments { get; set; }
 
     public BlogContext(DbContextOptions<BlogContext> options) : base(options) {}
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasDefaultSchema("blog");
+
+        ConfigureBlogComment(modelBuilder);
+    }
+
+    private static void ConfigureBlogComment(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<BlogComment>()
+            .HasOne<BlogPost>()
+            .WithMany()
+            .HasForeignKey(bc => bc.BlogPostId);
     }
 }

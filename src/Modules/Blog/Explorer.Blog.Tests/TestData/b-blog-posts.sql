@@ -1,4 +1,4 @@
-﻿INSERT INTO blog."BlogPosts"(
+INSERT INTO blog."BlogPosts"(
     "Id", "UserId", "Title", "Description", "CreationDate", "ImageUrls", "Status")
 VALUES (-1, -1, 'Title 1', 'Description 1', '2023-10-01 10:00:00', ARRAY['image1.jpg', 'image2.jpg'], 0);
 

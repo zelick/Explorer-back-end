@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Explorer.Blog.API.Dtos;
 using Explorer.Blog.Core.Domain;
 
@@ -9,5 +9,6 @@ public class BlogProfile : Profile
     public BlogProfile()
     {
         CreateMap<BlogPostDto, BlogPost>().ReverseMap();
+        CreateMap<BlogCommentDto, BlogComment>().ReverseMap();
     }
 }
