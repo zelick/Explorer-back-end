@@ -35,10 +35,8 @@ public class BlogPost : Entity
 
     public void Close()
     {
-        if (Status != BlogPostStatus.Published)
-        {
-            throw new ArgumentException("Invalid Status");
-        }
+        if (Status != BlogPostStatus.Published) throw new ArgumentException("Invalid Status");
+
         Status = BlogPostStatus.Closed;
     }
 
