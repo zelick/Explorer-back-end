@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 
-namespace Explorer.Blog.Tests.Integration.Blogging;
+namespace Explorer.Blog.Tests.Integration;
 
 [Collection("Sequential")]
 public class BlogCommentCommandTests : BaseBlogIntegrationTest
@@ -23,7 +23,7 @@ public class BlogCommentCommandTests : BaseBlogIntegrationTest
 
         var newBlogComment = new BlogCommentDto()
         {
-            UserId = 1, 
+            UserId = 1,
             BlogPostId = 1,
             CreationTime = new DateTime(),
             ModificationTime = new DateTime(),

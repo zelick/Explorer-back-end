@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 
-namespace Explorer.Blog.Tests.Integration.Blogging;
+namespace Explorer.Blog.Tests.Integration;
 
 [Collection("Sequential")]
 public class BlogCommentQueryTests : BaseBlogIntegrationTest
