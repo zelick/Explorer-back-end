@@ -1,2 +1,15 @@
-INSERT INTO blog."BlogPosts"("Id") 
-VALUES(1);
+INSERT INTO blog."BlogPosts"(
+    "Id", "UserId", "Title", "Description", "CreationDate", "ImageUrls", "Status")
+VALUES (-1, -1, 'Title 1', 'Description 1', '2023-10-01 10:00:00', ARRAY['image1.jpg', 'image2.jpg'], 0);
+
+INSERT INTO blog."BlogPosts"(
+    "Id", "UserId", "Title", "Description", "CreationDate", "ImageUrls", "Status")
+VALUES (-11, -1, 'Title 2', 'Description 2', '2023-10-02 12:30:00', ARRAY['image11.jpg', 'image12.jpg'], 1);
+
+INSERT INTO blog."BlogPosts"(
+    "Id", "UserId", "Title", "Description", "CreationDate", "ImageUrls", "Status")
+VALUES (-12, -1, 'Title 3', 'Description 3', '2023-10-03 12:30:00', ARRAY['image21.jpg', 'image22.jpg'], 2);
+
+INSERT INTO blog."BlogPosts"(
+    "Id", "UserId", "Title", "Description", "CreationDate", "ImageUrls", "Status")
+VALUES (-2, -2, 'Title 4', 'Description 4', '2023-10-04 15:15:00', ARRAY['image31.jpg', 'image32.jpg'], 2);
