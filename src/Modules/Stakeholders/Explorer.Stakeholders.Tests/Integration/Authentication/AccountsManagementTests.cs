@@ -68,6 +68,20 @@ namespace Explorer.Stakeholders.Tests.Integration.Authentication
             var userBlockResponse = ((ObjectResult)controller.Block(userDto.Id).Result).Value as UserDto;
 
             // Assert - Response
+            userBlockResponse.ShouldBeNull(); //because that user doesn't have his corresponding person
+
+
+            userDto = new UserDto
+            {
+                Id = -11,
+                IsActive = true,
+                Role = RoleUser.Author,
+                Email = "autor1@gmail.com",
+                Password = "autor1",
+                Username = "autor1@gmail.com" // like as in b-users.sql
+            };
+
+            userBlockResponse = ((ObjectResult)controller.Block(userDto.Id).Result).Value as UserDto;
             userBlockResponse.ShouldNotBeNull();
             userBlockResponse.Id.ShouldBe(userDto.Id);
             userBlockResponse.IsActive.ShouldBe(false);
@@ -77,7 +91,7 @@ namespace Explorer.Stakeholders.Tests.Integration.Authentication
             var storedAccount = dbContext.Users.FirstOrDefault(u => u.Username == userDto.Username);
 
             storedAccount.ShouldNotBeNull();
-            storedAccount.Role.ShouldBe(UserRole.Administrator);
+            storedAccount.Role.ShouldBe(UserRole.Author);
             storedAccount.Username.ShouldBe(userDto.Username);
         }
 
