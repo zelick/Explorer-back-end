@@ -26,9 +26,9 @@ namespace Explorer.API.Controllers.User.ProfileAdministration
             return CreateResponse(result);
         }
 
-        [HttpGet]
+        [HttpGet("{id:int}")]
 
-        public ActionResult<PersonDto> GetUserInfo([FromQuery] int id)
+        public ActionResult<PersonDto> GetUserInfo(int id)
         {
             var result = _personEditingService.Get(id);
             return CreateResponse(result);
