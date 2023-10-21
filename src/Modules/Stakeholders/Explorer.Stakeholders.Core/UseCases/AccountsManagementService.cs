@@ -41,9 +41,9 @@ namespace Explorer.Stakeholders.Core.UseCases
 
                 foreach (var user in userDtos)
                 {
-                    if (user.Id != null)
+                    if (user.Id != null && user.Role != RoleUser.Administrator)
                     {
-                        var person = _personRepository.Get((int)user.Id);
+                        var person = _personRepository.GetByUserId((int)user.Id);
                         if (person != null)
                         {
                             user.Email = person.Email;
@@ -65,10 +65,17 @@ namespace Explorer.Stakeholders.Core.UseCases
             {
                 UserDto entity = MapToDto(_repository.Get(id));
                 entity.IsActive = false;
-                var deletedPerson = _personRepository.Get(id);
+
+                var deletedPerson = _personRepository.GetByUserId(id);
                 _repository.Delete(id);
                 var result = _repository.Create(MapToDomain(entity));
-                _personRepository.Create(deletedPerson);
+
+                if(entity.Role != RoleUser.Administrator)
+                {
+                    
+                    _personRepository.Create(deletedPerson);
+                }
+                
                 return MapToDto(result);
             }
             catch (KeyNotFoundException e)

@@ -22,9 +22,9 @@ namespace Explorer.Stakeholders.Infrastructure.Database.Repositories
             return _dbContext.People.ToList();
         }
 
-        public Person Get(int id)
+        public Person GetByUserId(int id)
         {
-            return _dbContext.People.SingleOrDefault(p => p.Id == id);
+            return _dbContext.People.SingleOrDefault(p => p.UserId == id);
         }
 
         public void Create(Person person)

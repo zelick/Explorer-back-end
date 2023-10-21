@@ -9,7 +9,7 @@ namespace Explorer.Stakeholders.Core.Domain.RepositoryInterfaces
     public interface IPersonRepository
     {
         ICollection<Person> GetAll();
-        Person Get(int id);
+        Person GetByUserId(int id);
         void Create(Person person);
     }
 }

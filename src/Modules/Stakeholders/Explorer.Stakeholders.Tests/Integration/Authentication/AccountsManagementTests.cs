@@ -56,23 +56,6 @@ namespace Explorer.Stakeholders.Tests.Integration.Authentication
             var dbContext = scope.ServiceProvider.GetRequiredService<StakeholdersContext>();
             var userDto = new UserDto
             {
-                Id = -1,
-                IsActive = true,
-                Role = RoleUser.Administrator,
-                Email = "admin@gmail.com",
-                Password = "admin",
-                Username = "admin@gmail.com" // like as in b-users.sql
-            };
-
-            // Act
-            var userBlockResponse = ((ObjectResult)controller.Block(userDto.Id).Result).Value as UserDto;
-
-            // Assert - Response
-            userBlockResponse.ShouldBeNull(); //because that user doesn't have his corresponding person
-
-
-            userDto = new UserDto
-            {
                 Id = -11,
                 IsActive = true,
                 Role = RoleUser.Author,
@@ -81,7 +64,11 @@ namespace Explorer.Stakeholders.Tests.Integration.Authentication
                 Username = "autor1@gmail.com" // like as in b-users.sql
             };
 
-            userBlockResponse = ((ObjectResult)controller.Block(userDto.Id).Result).Value as UserDto;
+            // Act
+            int page = 1, pageSize = 10;
+            var userBlockResponse = ((ObjectResult)controller.Block(userDto.Id).Result).Value as UserDto;
+
+            // Assert - Response
             userBlockResponse.ShouldNotBeNull();
             userBlockResponse.Id.ShouldBe(userDto.Id);
             userBlockResponse.IsActive.ShouldBe(false);
