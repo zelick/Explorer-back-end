@@ -54,14 +54,14 @@ namespace Explorer.API.Controllers.Author.Administration
         }
 
         [HttpPut("add/{tourId:int}/{equipmentId:int}")]
-        public ActionResult AddEquipment(int tourId, int equipmentId)
+        public ActionResult<TourDto> AddEquipment(int tourId, int equipmentId)
         {
             var result = _tourService.AddEquipment(tourId, equipmentId);
             return CreateResponse(result);
         }
 
         [HttpPut("remove/{tourId:int}/{equipmentId:int}")]
-        public ActionResult RemoveEquipment(int tourId, int equipmentId)
+        public ActionResult<TourDto> RemoveEquipment(int tourId, int equipmentId)
         {
             var result = _tourService.RemoveEquipment(tourId, equipmentId);
             return CreateResponse(result);

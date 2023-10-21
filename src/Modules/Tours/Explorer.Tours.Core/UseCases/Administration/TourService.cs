@@ -33,7 +33,7 @@ namespace Explorer.Tours.Core.UseCases.Administration
 
         }
 
-        public Result AddEquipment(int tourId, int equipmentId)
+        public Result<TourDto> AddEquipment(int tourId, int equipmentId)
         {
             var isTourExists = _tourRepository.Exists(tourId);
             if (!isTourExists) return Result.Fail(FailureCode.NotFound);
@@ -45,22 +45,26 @@ namespace Explorer.Tours.Core.UseCases.Administration
             var isRelationshipExists = _tourEquipmentRepository.Exists(tourId, equipmentId);
             if (isRelationshipExists) return Result.Fail(FailureCode.NotFound);
 
-            _tourEquipmentRepository.AddEquipment(tourId, equipmentId);
 
+            var updatedTourId = _tourEquipmentRepository.AddEquipment(tourId, equipmentId).TourId;
 
-            return Result.Ok();
+            var updatedTour = _tourRepository.Get(updatedTourId);
+
+            return MapToDto(updatedTour);
 
         }
 
-        public Result RemoveEquipment(int tourId, int equipmentId)
+        public Result<TourDto> RemoveEquipment(int tourId, int equipmentId)
         {
             var isRelationshipExists = _tourEquipmentRepository.Exists(tourId, equipmentId);
 
             if (!isRelationshipExists) return Result.Fail(FailureCode.NotFound);
 
-            _tourEquipmentRepository.RemoveEquipment(tourId, equipmentId);
+            var updatedTourId = _tourEquipmentRepository.RemoveEquipment(tourId, equipmentId).TourId;
 
-            return Result.Ok();
+            var updatedTour = _tourRepository.Get(updatedTourId);
+
+            return MapToDto(updatedTour);
         }
 
     }

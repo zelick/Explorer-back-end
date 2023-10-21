@@ -11,7 +11,7 @@ namespace Explorer.Tours.API.Public.Administration
         Result<TourDto> Create(TourDto tour);
         Result<TourDto> Update(TourDto tour);
         Result Delete(int id);
-        Result AddEquipment(int tourId, int equipmentId);
-        Result RemoveEquipment(int tourId, int equipmentId);
+        Result<TourDto> AddEquipment(int tourId, int equipmentId);
+        Result<TourDto> RemoveEquipment(int tourId, int equipmentId);
     }
 }
