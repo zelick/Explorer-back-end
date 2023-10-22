@@ -15,5 +15,9 @@ public class ToursContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasDefaultSchema("tours");
+        modelBuilder.Entity<Checkpoint>()
+           .HasOne<Tour>()
+           .WithMany()
+           .HasForeignKey(bc => bc.TourId);
     }
 }
