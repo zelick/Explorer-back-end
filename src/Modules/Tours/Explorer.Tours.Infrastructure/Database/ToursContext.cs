@@ -11,6 +11,7 @@ public class ToursContext : DbContext
     public DbSet<TourEquipment> TourEquipment { get; set; }
     public DbSet<TourPreference> TourPreference { get; set; }
     public DbSet<Checkpoint> Checkpoint { get; set; }
+    public DbSet<ReportedIssue> ReportedIssues { get; set; }
 
     public ToursContext(DbContextOptions<ToursContext> options) : base(options) {}
     
@@ -21,6 +22,11 @@ public class ToursContext : DbContext
             .HasMany(t => t.Equipment)
             .WithMany()
             .UsingEntity<TourEquipment>();
+        ConfigureReportedIssues(modelBuilder);
+    }
+    private static void ConfigureReportedIssues(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<ReportedIssue>().HasOne(t => t.Tour).WithMany().HasForeignKey(t => t.TourId);
     }
     
 }
