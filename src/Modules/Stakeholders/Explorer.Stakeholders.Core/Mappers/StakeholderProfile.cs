@@ -7,9 +7,11 @@ namespace Explorer.Stakeholders.Core.Mappers;
 
 public class StakeholderProfile : Profile
 {
-    public StakeholderProfile()
+	public StakeholderProfile()
     {
         CreateMap<ClubRequestDto, ClubRequest>().ReverseMap();
         CreateMap<ClubDto, Club>().ReverseMap();
+		CreateMap<ClubInvitationDto, ClubInvitation>().ReverseMap();
+		CreateMap<UserClubDto, UserClub>().ReverseMap();
     }
 }

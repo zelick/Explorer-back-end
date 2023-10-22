@@ -28,24 +28,22 @@ public static class StakeholdersStartup
         services.AddScoped<IAuthenticationService, AuthenticationService>();
         services.AddScoped<ITokenGenerator, JwtGenerator>();
         services.AddScoped<IClubRequestService, ClubRequestService>();
+        services.AddScoped<IClubService, ClubService>(); 
+        services.AddScoped<IClubInvitationService, ClubInvitationService>();
+        services.AddScoped<IUserClubService, UserClubService>();
+	}
 
-        services.AddScoped<IClubService, ClubService>(); //
-
-    }
 
     private static void SetupInfrastructure(IServiceCollection services)
     {
         services.AddScoped(typeof(ICrudRepository<Person>), typeof(CrudDatabaseRepository<Person, StakeholdersContext>));
         services.AddScoped<IUserRepository, UserDatabaseRepository>();
-
-        services.AddScoped(typeof(ICrudRepository<ClubRequest>), typeof(CrudDatabaseRepository<ClubRequest, StakeholdersContext>));
-        services.AddScoped(typeof(ICrudRepository<Club>), typeof(CrudDatabaseRepository<Club, StakeholdersContext>)); //
-
+        services.AddScoped(typeof(ICrudRepository<ClubInvitation>), typeof(CrudDatabaseRepository<ClubInvitation, StakeholdersContext>));
+        services.AddScoped(typeof(ICrudRepository<Club>), typeof(CrudDatabaseRepository<Club, StakeholdersContext>));
+        services.AddScoped(typeof(ICrudRepository<UserClub>), typeof(CrudDatabaseRepository<UserClub, StakeholdersContext>));
 
         services.AddDbContext<StakeholdersContext>(opt =>
-            opt.UseNpgsql(DbConnectionStringBuilder.Build("stakeholders"),
-                x => x.MigrationsHistoryTable("__EFMigrationsHistory", "stakeholders")));
-
-       
+        opt.UseNpgsql(DbConnectionStringBuilder.Build("stakeholders"),
+        x => x.MigrationsHistoryTable("__EFMigrationsHistory", "stakeholders")));
     }
 }
