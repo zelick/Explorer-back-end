@@ -1,7 +1,6 @@
 ﻿using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
-using Explorer.Tours.Core.UseCases.Administration;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -52,6 +51,28 @@ namespace Explorer.API.Controllers.Author.Administration
             var result = _tourService.GetPaged(page, pageSize);
             return CreateResponse(result);
         }
+
+        [HttpPut("add/{tourId:int}/{equipmentId:int}")]
+        public ActionResult<TourDto> AddEquipment(int tourId, int equipmentId)
+        {
+            var result = _tourService.AddEquipment(tourId, equipmentId);
+            return CreateResponse(result);
+        }
+
+        [HttpPut("remove/{tourId:int}/{equipmentId:int}")]
+        public ActionResult<TourDto> RemoveEquipment(int tourId, int equipmentId)
+        {
+            var result = _tourService.RemoveEquipment(tourId, equipmentId);
+            return CreateResponse(result);
+        }
+
+        [HttpGet("details/{id:int}")]
+        public ActionResult<TourDto> Get(int id)
+        {
+            var result = _tourService.Get(id);
+            return CreateResponse(result);
+        }
+
 
     }
 }
