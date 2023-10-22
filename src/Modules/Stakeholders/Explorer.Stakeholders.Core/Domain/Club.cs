@@ -14,17 +14,16 @@ namespace Explorer.Stakeholders.Core.Domain
         public string Description { get; private set; }
         public string Image { get; private set; }
         public long TouristId { get; init; } //clubOwner
-        public List<User> Tourists { get; } = new List<User>();
+        public List<User> Users { get; } = new List<User>();
 
         public Club () { }
 
-        public Club (string name, string description, string image, long touristId, List<User> tourists)
+        public Club (string name, string description, string image, long touristId)
         {
             Name = name;
             Description = description;
             Image = image;
             TouristId = touristId;
-            Tourists = tourists;
             Validate();
         }
 

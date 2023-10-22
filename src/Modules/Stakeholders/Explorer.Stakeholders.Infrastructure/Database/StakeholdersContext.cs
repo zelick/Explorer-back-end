@@ -1,6 +1,7 @@
 ﻿using Explorer.BuildingBlocks.Core.Domain;
 using Explorer.Stakeholders.Core.Domain;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 
 namespace Explorer.Stakeholders.Infrastructure.Database;
 
@@ -19,12 +20,17 @@ public class StakeholdersContext : DbContext
         modelBuilder.HasDefaultSchema("stakeholders");
 
         modelBuilder.Entity<User>().HasIndex(u => u.Username).IsUnique();
-		modelBuilder.Entity<User>()
-		.HasMany(u => u.Clubs)
-		.WithMany(c => c.Tourists)
-		.UsingEntity<UserClub>();
-		ConfigureStakeholder(modelBuilder);
-    }
+
+		modelBuilder.Entity<UserClub>()
+			.HasOne<User>()
+			.WithMany()
+			.HasForeignKey(uc => uc.UserId);
+
+		modelBuilder.Entity<UserClub>()
+			.HasOne<Club>()
+			.WithMany()
+			.HasForeignKey(uc => uc.ClubId);
+	}
 
     private static void ConfigureStakeholder(ModelBuilder modelBuilder)
     {
