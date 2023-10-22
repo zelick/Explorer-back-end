@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Explorer.Stakeholders.Core.Domain
 {
-	public class UserClub 
+	public class UserClub : Entity
 	{
 		public long ClubId { get; set; }
 		public long UserId { get; set; }
