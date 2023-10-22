@@ -8,8 +8,8 @@ namespace Explorer.Tours.API.Dtos
 {
     public class CheckpointDto
     {
-        public int Id { get; set; }
-        public int TourId { get; set; }
+        public long Id { get; set; }
+        public long TourId { get; set; }
         public int OrderNumber { get; set; }
         public double Longitude { get; set; }
         public double Latitude { get; set; }

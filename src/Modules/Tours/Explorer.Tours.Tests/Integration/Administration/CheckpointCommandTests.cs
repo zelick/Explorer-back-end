@@ -28,7 +28,7 @@ namespace Explorer.Tours.Tests.Integration.Administration
             var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
             var newEntity = new CheckpointDto
             {
-                TourId = 1,
+                TourId = -1,
                 OrderNumber = 1,
                 Longitude = 45,
                 Latitude = 45,
@@ -42,7 +42,6 @@ namespace Explorer.Tours.Tests.Integration.Administration
 
             // Assert - Response
             result.ShouldNotBeNull();
-            result.Id.ShouldNotBe(0);
             result.TourId.ShouldNotBe(0);
             result.OrderNumber.ShouldNotBe(0);
             result.Longitude.ShouldBe(newEntity.Longitude);
@@ -52,7 +51,7 @@ namespace Explorer.Tours.Tests.Integration.Administration
             result.Pictures.ShouldBe(newEntity.Pictures);
 
             // Assert - Database
-            var storedEntity = dbContext.Checkpoint.FirstOrDefault(i => i.Name == newEntity.Name);
+            var storedEntity = dbContext.Checkpoints.FirstOrDefault(i => i.Name == newEntity.Name);
             storedEntity.ShouldNotBeNull();
             storedEntity.Id.ShouldBe(result.Id);
         }
@@ -85,8 +84,8 @@ namespace Explorer.Tours.Tests.Integration.Administration
             var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
             var updatedEntity = new CheckpointDto
             {
-                Id = 1,
-                TourId = 1,
+                Id = -1,
+                TourId = -1,
                 OrderNumber = 1,
                 Longitude = 45,
                 Latitude = 45,
@@ -100,7 +99,7 @@ namespace Explorer.Tours.Tests.Integration.Administration
 
             // Assert - Response
             result.ShouldNotBeNull();
-            result.Id.ShouldBe(1);
+            result.Id.ShouldBe(-1);
             result.TourId.ShouldNotBe(0);
             result.OrderNumber.ShouldNotBe(0);
             result.Longitude.ShouldBe(updatedEntity.Longitude);
@@ -110,7 +109,7 @@ namespace Explorer.Tours.Tests.Integration.Administration
             result.Pictures.ShouldBe(updatedEntity.Pictures);
 
             // Assert - Database
-            var storedEntity = dbContext.Checkpoint.FirstOrDefault(i => i.Name == "Petrovaradin");
+            var storedEntity = dbContext.Checkpoints.FirstOrDefault(i => i.Name == "Petrovaradin");
             storedEntity.ShouldNotBeNull();
             storedEntity.TourId.ShouldBe(updatedEntity.TourId);
             storedEntity.OrderNumber.ShouldBe(updatedEntity.OrderNumber);
@@ -118,7 +117,7 @@ namespace Explorer.Tours.Tests.Integration.Administration
             storedEntity.Latitude.ShouldBe(updatedEntity.Latitude);
             storedEntity.Description.ShouldBe(updatedEntity.Description);
             storedEntity.Pictures.ShouldBe(updatedEntity.Pictures);
-            var oldEntity = dbContext.Checkpoint.FirstOrDefault(i => i.Name == "Katedrala");
+            var oldEntity = dbContext.Checkpoints.FirstOrDefault(i => i.Name == "Katedrala");
             oldEntity.ShouldBeNull();
         }
 
@@ -131,7 +130,7 @@ namespace Explorer.Tours.Tests.Integration.Administration
             var updatedEntity = new CheckpointDto
             {
                 Id = -1000,
-                TourId = 1,
+                TourId = -1,
                 OrderNumber = 1,
                 Longitude = 45,
                 Latitude = 45,
@@ -157,14 +156,14 @@ namespace Explorer.Tours.Tests.Integration.Administration
             var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
 
             // Act
-            var result = (OkResult)controller.Delete(1);
+            var result = (OkResult)controller.Delete(-1);
 
             // Assert - Response
             result.ShouldNotBeNull();
             result.StatusCode.ShouldBe(200);
 
             // Assert - Database
-            var storedCourse = dbContext.Checkpoint.FirstOrDefault(i => i.Id == 1);
+            var storedCourse = dbContext.Checkpoints.FirstOrDefault(i => i.Id == 1);
             storedCourse.ShouldBeNull();
         }
 

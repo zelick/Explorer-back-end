@@ -18,7 +18,7 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
         {}
         public PagedResult<Checkpoint> GetPagedByTour(int page, int pageSize, int id)
         {
-            var query = DbContext.Checkpoint.Where(n => n.TourId == id);
+            var query = DbContext.Checkpoints.Where(n => n.TourId == id);
             var count = query.Count();
 
             var pagedData = (page != 0 && pageSize != 0)

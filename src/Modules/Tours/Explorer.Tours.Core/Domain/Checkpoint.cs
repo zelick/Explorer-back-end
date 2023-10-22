@@ -9,7 +9,7 @@ namespace Explorer.Tours.Core.Domain
 {
     public class Checkpoint : Entity
     {
-        public int TourId { get; init; }
+        public long TourId { get; init; }
         public int OrderNumber { get; init; }
         public double Longitude { get; init; }
         public double Latitude { get; init; }
@@ -17,9 +17,9 @@ namespace Explorer.Tours.Core.Domain
         public string? Description { get; init; }
         public List<string> Pictures { get; init; }
 
-        public Checkpoint(int tourId, int orderNumber, double longitude, double latitude, string name, string description, List<string> pictures)
+        public Checkpoint(long tourId, int orderNumber, double longitude, double latitude, string name, string description, List<string> pictures)
         {
-            if (tourId < 0) throw new ArgumentException("Invalid Tour ID");
+            if (tourId == 0) throw new ArgumentException("Invalid Tour ID");
             TourId = tourId;
             Longitude = longitude;
             Latitude = latitude;
