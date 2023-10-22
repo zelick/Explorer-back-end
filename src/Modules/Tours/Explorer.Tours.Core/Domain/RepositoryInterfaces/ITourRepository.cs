@@ -9,7 +9,7 @@ namespace Explorer.Tours.Core.Domain.RepositoryInterfaces
 {
     public interface ITourRepository : ICrudRepository<Tour>
     {
-        bool Exists(int id);
-        List<Tour> GetToursByAuthor(int id);
+        bool Exists(long id);
+        List<Tour> GetToursByAuthor(long id);
     }
 }
