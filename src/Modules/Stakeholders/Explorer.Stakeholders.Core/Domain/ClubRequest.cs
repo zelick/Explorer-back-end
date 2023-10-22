@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Explorer.Stakeholders.Core.Domain
 {
@@ -19,13 +20,16 @@ namespace Explorer.Stakeholders.Core.Domain
         {
             ClubId = clubId;
             TouristId = touristId;
-            Status = "Processing";
+            Status = status;
             Validate();
         }
 
         private void Validate()
         {
-
+            if (string.IsNullOrWhiteSpace(Status)) throw new ArgumentException("Invalid Status");
+            if (TouristId == 0) throw new ArgumentException("Invalid TouristId");
+           // if (ClubId == 0) throw new ArgumentException("Invalid ClubId");
+           
         }
     }
 }
