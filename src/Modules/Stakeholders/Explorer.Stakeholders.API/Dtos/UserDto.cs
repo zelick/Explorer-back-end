@@ -13,6 +13,5 @@ namespace Explorer.Stakeholders.API.Dtos
 		public String Role { get; set; }
 		public bool IsActive { get; set; }
 		//public List<ClubDto> Clubs { get; } = new();
-		public List<ClubDto> Clubs { get; } = new();
 	}
 }

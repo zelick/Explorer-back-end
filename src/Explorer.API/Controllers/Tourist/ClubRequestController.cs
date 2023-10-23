@@ -40,6 +40,7 @@ namespace Explorer.API.Controllers.Tourist
             return CreateResponse(result);
 
         }
+
         /*
                 [HttpPut("{id:int}/approve")]
                 public ActionResult<ClubRequestDto> UpdateIfApproved([FromBody] ClubRequestDto request)

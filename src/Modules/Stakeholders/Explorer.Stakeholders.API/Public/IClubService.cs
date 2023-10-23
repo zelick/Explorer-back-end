@@ -14,6 +14,7 @@ namespace Explorer.Stakeholders.API.Public
         Result<PagedResult<ClubDto>> GetPaged(int page, int pageSize);
         Result<ClubDto> Create(ClubDto club);
         Result<ClubDto> Update(ClubDto club);
-        Result Delete(int id); //mozda long ne znam??
+        Result Delete(int id); 
+        Result<ClubDto> GetClubWithUsers(int id);
     }
 }
