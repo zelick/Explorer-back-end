@@ -31,5 +31,11 @@ namespace Explorer.Stakeholders.Infrastructure.Database.Repositories
 			_dbContext.SaveChanges();
 			return userClub;
 		}
+
+		public List<long> GetClubIdsByUser(long userId)
+		{
+			return _dbContext.UserClubs.Where(uc => uc.UserId == userId).Select(uc => uc.ClubId).ToList();
+        }
+		
 	}
 }

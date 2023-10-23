@@ -9,7 +9,7 @@ namespace Explorer.Stakeholders.API.Dtos
 {
     public class ClubRequestDto
     {
-        public int id {  get; set; }    
+        public long Id {  get; set; }    
         public int ClubId { get; set; }
         public int TouristId { get; set; }
        // public ClubRequestStatus Status { get; set; }

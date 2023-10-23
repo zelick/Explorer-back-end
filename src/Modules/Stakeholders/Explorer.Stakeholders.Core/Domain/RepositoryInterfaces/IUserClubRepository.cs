@@ -10,5 +10,7 @@ namespace Explorer.Stakeholders.Core.Domain.RepositoryInterfaces
 	{
 		UserClub RemoveUserFromClub(long userId, long clubId);
 		UserClub AddUserToClub(long userId, long clubId);
-	}
+		public List<long> GetClubIdsByUser(long userId);
+
+    }
 }

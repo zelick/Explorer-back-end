@@ -22,11 +22,11 @@ namespace Explorer.API.Controllers.Tourist
 
         [HttpGet]
         public ActionResult<PagedResult<ClubDto>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
-        {
-            var result = _clubService.GetPaged(page, pageSize);
-            return CreateResponse(result);
-        }
+         {
+             var result = _clubService.GetPaged(page, pageSize);
 
+             return CreateResponse(result);
+         }
 
         [HttpGet("{id:int}")]
         public ActionResult<ClubDto> Get(int id)
