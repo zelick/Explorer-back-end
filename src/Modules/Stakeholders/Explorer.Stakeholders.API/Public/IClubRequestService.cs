@@ -9,12 +9,11 @@ using System.Threading.Tasks;
 
 namespace Explorer.Stakeholders.API.Public
 {
-    public interface IClubService
+    public interface IClubRequestService
     {
-        Result<PagedResult<ClubDto>> GetPaged(int page, int pageSize);
-        Result<ClubDto> Create(ClubDto club);
-        Result<ClubDto> Update(ClubDto club);
-        Result Delete(int id); 
-        Result<ClubDto> GetClubWithUsers(int id);
+        Result<PagedResult<ClubRequestDto>> GetPaged(int page, int pageSize);
+        Result<ClubRequestDto> Create(ClubRequestDto request);
+        Result<ClubRequestDto> Update(ClubRequestDto request);
+        Result Delete(int id);
     }
 }
