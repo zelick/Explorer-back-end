@@ -21,6 +21,11 @@ public class ToursProfile : Profile
             return mapObjectType;
         }
 
+        CreateMap<TourPreferenceDto, TourPreference>().ReverseMap();
+        CreateMap<CheckpointDto, Checkpoint>().ReverseMap();
+        CreateMap<TourDto, Tour>().ReverseMap();
+        CreateMap<ReportedIssueDto, ReportedIssue>().ReverseMap();
+
         return MapObjectType.Other;
     }
 }
