@@ -49,16 +49,9 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
 
         public Tour Create(Tour tour)
         {
-            try
-            {
-                _dbContext.Tours.Add(tour);
-                _dbContext.SaveChanges();
-            }
-            catch (DbUpdateException e)
-            {
-                Console.WriteLine(e);
-                throw new Exception("Failed to create the tour.");
-            }
+            _dbContext.Tours.Add(tour);
+            _dbContext.SaveChanges();
+            
             return tour;
         }
 
@@ -78,17 +71,9 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
 
         public void Delete(long id)
         {
-            var entity = Get(id);
-            try
-            {
-                _dbContext.Tours.Remove(entity);
-                _dbContext.SaveChanges();
-            }
-            catch (DbUpdateException e)
-            {
-                Console.WriteLine(e);
-                throw new KeyNotFoundException(e.Message);
-            }
+            var entity = Get(id); 
+            _dbContext.Tours.Remove(entity);
+            _dbContext.SaveChanges();
         }
     }
 }
