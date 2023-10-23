@@ -16,13 +16,11 @@ namespace Explorer.API.Controllers.Author.Administration
             _equipmentService = equipmentService;
         }
 
-        [HttpPost("get-available")]
-        public ActionResult<List<EquipmentDto>> GetAvailableEquipment([FromBody]List<long> currentEquipmentIds)
+        [HttpPost("get-available/{tourId:int}")]
+        public ActionResult<List<EquipmentDto>> GetAvailableEquipment([FromBody]List<long> currentEquipmentIds, int tourId)
         {
-            var result = _equipmentService.GetAvailable(currentEquipmentIds);
+            var result = _equipmentService.GetAvailable(currentEquipmentIds, tourId);
             return CreateResponse(result);
         }
-
-
     }
 }

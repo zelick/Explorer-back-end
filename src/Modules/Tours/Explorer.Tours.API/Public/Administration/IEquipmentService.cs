@@ -10,5 +10,5 @@ public interface IEquipmentService
     Result<EquipmentDto> Create(EquipmentDto equipment);
     Result<EquipmentDto> Update(EquipmentDto equipment);
     Result Delete(int id);
-    Result<List<EquipmentDto>> GetAvailable(List<long> currentEquipmentIds);
+    Result<List<EquipmentDto>> GetAvailable(List<long> currentEquipmentIds, int tourId);
 }
