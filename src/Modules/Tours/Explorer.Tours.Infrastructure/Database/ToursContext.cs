@@ -7,10 +7,10 @@ namespace Explorer.Tours.Infrastructure.Database;
 public class ToursContext : DbContext
 {
     public DbSet<Equipment> Equipment { get; set; }
-    public DbSet<Tour> Tours { get; set; }
+    public DbSet<Checkpoint> Checkpoints { get; set; }
+    public DbSet<Tour> Tours {  get; set; }
     public DbSet<TourEquipment> TourEquipment { get; set; }
     public DbSet<TourPreference> TourPreference { get; set; }
-    public DbSet<Checkpoint> Checkpoint { get; set; }
     public DbSet<ReportedIssue> ReportedIssues { get; set; }
 
     public ToursContext(DbContextOptions<ToursContext> options) : base(options) {}
@@ -18,6 +18,12 @@ public class ToursContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasDefaultSchema("tours");
+
+        modelBuilder.Entity<Checkpoint>()
+           .HasOne<Tour>()
+           .WithMany()
+           .HasForeignKey(bc => bc.TourId);
+
         modelBuilder.Entity<Tour>()
             .HasMany(t => t.Equipment)
             .WithMany()
@@ -27,6 +33,7 @@ public class ToursContext : DbContext
     private static void ConfigureReportedIssues(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<ReportedIssue>().HasOne(t => t.Tour).WithMany().HasForeignKey(t => t.TourId);
+
     }
     
 }
