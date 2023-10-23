@@ -7,9 +7,9 @@ using Explorer.BuildingBlocks.Core.UseCases;
 
 namespace Explorer.Tours.Core.Domain.RepositoryInterfaces
 {
-    public interface ITourRepository : ICrudRepository<Tour>
+    public interface IEquipmentRepository : ICrudRepository<Equipment>
     {
-        bool Exists(long id);
-        List<Tour> GetToursByAuthor(long id);
+        List<Equipment> GetAvailable(List<long> currentEquipmentIds);
+        bool Exists (long id);
     }
 }

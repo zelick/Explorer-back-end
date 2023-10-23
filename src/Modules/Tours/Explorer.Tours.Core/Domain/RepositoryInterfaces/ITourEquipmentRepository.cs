@@ -9,8 +9,7 @@ namespace Explorer.Tours.Core.Domain.RepositoryInterfaces
     public interface ITourEquipmentRepository
     {
         bool Exists(int tourId, int equipmentId);
-        //-- TO DO: use crud repository to check equipment exist
-        bool IsEquipmentExists(int id);
+        bool IsEquipmentValid(int tourId, List<long>  equipmentIds);
         TourEquipment AddEquipment(int tourId, int equipmentId);
         TourEquipment RemoveEquipment(int tourId, int equipmentId);
     }

@@ -38,10 +38,10 @@ namespace Explorer.API.Controllers.Author.Administration
             return CreateResponse(result);
         }
 
-        [HttpGet("{id:int}")]
-        public ActionResult<List<TourDto>> GetToursByAuthor([FromQuery] int page, [FromQuery] int pageSize,int id)
+        [HttpGet("by-author/{authorId:int}")]
+        public ActionResult<List<TourDto>> GetToursByAuthor([FromQuery] int page, [FromQuery] int pageSize, int authorId)
         {
-            var result = _tourService.GetToursByAuthor(page, pageSize,id);
+            var result = _tourService.GetToursByAuthor(page, pageSize, authorId);
             return CreateResponse(result);
         }
 

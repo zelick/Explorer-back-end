@@ -14,7 +14,7 @@ public class ToursContext : DbContext
     public DbSet<TourPreference> TourPreference { get; set; }
     public DbSet<ReportedIssue> ReportedIssues { get; set; }
 
-    public ToursContext(DbContextOptions<ToursContext> options) : base(options) {}
+    public ToursContext(DbContextOptions<ToursContext> options) : base(options) { }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
