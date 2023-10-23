@@ -44,5 +44,12 @@ namespace Explorer.API.Controllers.Tourist
 			return CreateResponse(result);
 		}
 
+		/*HttpGet("/usersForClub/{id:int}")]
+		public ActionResult<PagedResult<UserClubDto>> GetUsersForClub(int id)
+		{
+			var result = _userClubService.GetPaged(id);
+			return CreateResponse(result);
+		}*/
+
 	}
 }

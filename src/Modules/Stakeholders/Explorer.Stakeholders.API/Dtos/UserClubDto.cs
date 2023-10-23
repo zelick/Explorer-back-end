@@ -8,7 +8,6 @@ namespace Explorer.Stakeholders.API.Dtos
 {
 	public class UserClubDto
 	{
-		public long Id { get; set; }
 		public long ClubId { get; set; }
 		public long UserId { get; set; }
 	}
