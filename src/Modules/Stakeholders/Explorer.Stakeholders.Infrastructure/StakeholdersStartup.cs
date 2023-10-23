@@ -27,9 +27,8 @@ public static class StakeholdersStartup
     {
         services.AddScoped<IAuthenticationService, AuthenticationService>();
         services.AddScoped<ITokenGenerator, JwtGenerator>();
-
-        services.AddScoped<IClubService, ClubService>(); //
-
+        services.AddScoped<IPersonEditingService, PersonEditingService>();
+        services.AddScoped<IClubService, ClubService>(); 
         services.AddScoped<IAccountsManagementService, AccountsManagementService>();
         services.AddScoped<IPersonRepository, PersonDatabaseRepository>();
     }
