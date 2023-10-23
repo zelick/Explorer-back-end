@@ -12,11 +12,13 @@ namespace Explorer.Tours.Core.UseCases.Administration
     {
         private readonly ITourEquipmentRepository _tourEquipmentRepository;
         private readonly ITourRepository _tourRepository;
+        private readonly IEquipmentRepository _equipmentRepository;
 
-        public TourService(ITourRepository tourRepository, IMapper mapper, ITourEquipmentRepository tourEquipmentRepository) : base(tourRepository, mapper)
+        public TourService(ITourRepository tourRepository, IMapper mapper, ITourEquipmentRepository tourEquipmentRepository, IEquipmentRepository equipmentRepository) : base(tourRepository, mapper)
         {
             _tourEquipmentRepository = tourEquipmentRepository;
             _tourRepository = tourRepository;
+            _equipmentRepository = equipmentRepository;
         }
 
         public Result<List<TourDto>> GetToursByAuthor(int page, int pageSize, int id) 
@@ -38,8 +40,7 @@ namespace Explorer.Tours.Core.UseCases.Administration
             var isTourExists = _tourRepository.Exists(tourId);
             if (!isTourExists) return Result.Fail(FailureCode.NotFound);
 
-            //-TO DO make check with equipment repository
-            var isEquipmentExists = _tourEquipmentRepository.IsEquipmentExists(equipmentId);
+            var isEquipmentExists = _equipmentRepository.Exists(equipmentId);
             if (!isEquipmentExists) return Result.Fail(FailureCode.NotFound);
 
             var isRelationshipExists = _tourEquipmentRepository.Exists(tourId, equipmentId);

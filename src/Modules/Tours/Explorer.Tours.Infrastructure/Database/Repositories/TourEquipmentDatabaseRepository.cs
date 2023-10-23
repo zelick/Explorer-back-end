@@ -17,11 +17,6 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
             return _dbContext.TourEquipment.Any(te => te.TourId == tourId && te.EquipmentId == equipmentId);
         }
 
-        public bool IsEquipmentExists(int id)
-        {
-            return _dbContext.Equipment.Any(e => e.Id == id);
-        }
-
         public TourEquipment AddEquipment(int tourId, int equipmentId)
         {
             var tourEquipment = new TourEquipment(tourId, equipmentId);

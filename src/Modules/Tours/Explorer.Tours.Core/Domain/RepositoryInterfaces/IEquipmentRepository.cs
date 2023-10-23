@@ -10,5 +10,6 @@ namespace Explorer.Tours.Core.Domain.RepositoryInterfaces
     public interface IEquipmentRepository : ICrudRepository<Equipment>
     {
         List<Equipment> GetAvailable(List<long> currentEquipmentIds);
+        bool Exists (long id);
     }
 }

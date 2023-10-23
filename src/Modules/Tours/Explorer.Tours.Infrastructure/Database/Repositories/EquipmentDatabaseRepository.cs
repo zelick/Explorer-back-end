@@ -29,6 +29,11 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
             _dbContext.SaveChanges();
         }
 
+        public bool Exists(long id)
+        {
+            return _dbContext.Equipment.Any(e => e.Id == id);
+        }
+
         public Equipment Get(long id)
         {
             var equipment = _dbContext.Equipment.Find(id);
