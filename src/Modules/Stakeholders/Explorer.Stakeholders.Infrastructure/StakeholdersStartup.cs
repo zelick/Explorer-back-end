@@ -30,7 +30,6 @@ public static class StakeholdersStartup
         services.AddScoped<IClubRequestService, ClubRequestService>();
         services.AddScoped<IClubService, ClubService>(); 
         services.AddScoped<IClubInvitationService, ClubInvitationService>();
-        services.AddScoped<IUserClubService, UserClubService>();
 	}
 
 
@@ -38,10 +37,10 @@ public static class StakeholdersStartup
     {
         services.AddScoped(typeof(ICrudRepository<Person>), typeof(CrudDatabaseRepository<Person, StakeholdersContext>));
         services.AddScoped<IUserRepository, UserDatabaseRepository>();
-        services.AddScoped(typeof(ICrudRepository<ClubInvitation>), typeof(CrudDatabaseRepository<ClubInvitation, StakeholdersContext>));
+		services.AddScoped<IUserClubRepository, UserClubDatabaseRepository>();
+		services.AddScoped(typeof(ICrudRepository<ClubInvitation>), typeof(CrudDatabaseRepository<ClubInvitation, StakeholdersContext>));
         services.AddScoped(typeof(ICrudRepository<ClubRequest>), typeof(CrudDatabaseRepository<ClubRequest, StakeholdersContext>));
         services.AddScoped(typeof(ICrudRepository<Club>), typeof(CrudDatabaseRepository<Club, StakeholdersContext>));
-        services.AddScoped(typeof(ICrudRepository<UserClub>), typeof(CrudDatabaseRepository<UserClub, StakeholdersContext>));
         services.AddScoped<IClubRepository, ClubDatabaseRepository>();
 
         services.AddDbContext<StakeholdersContext>(opt =>

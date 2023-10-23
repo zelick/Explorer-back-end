@@ -21,8 +21,10 @@ public class StakeholdersContext : DbContext
         modelBuilder.HasDefaultSchema("stakeholders");
 
         modelBuilder.Entity<User>().HasIndex(u => u.Username).IsUnique();
+		modelBuilder.Entity<UserClub>()
+	        .HasKey(uc => new { uc.UserId, uc.ClubId });
 
-        modelBuilder.Entity<UserClub>()
+		modelBuilder.Entity<UserClub>()
             .HasOne<User>()
             .WithMany()
             .HasForeignKey(uc => uc.UserId);
