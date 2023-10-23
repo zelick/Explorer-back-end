@@ -18,6 +18,8 @@ namespace Explorer.API.Controllers.Administrator.Administration
         }
 
         [HttpGet]
+        //[Authorize(Policy = "administratorPolicy")]
+        //[Authorize(Policy = "authorPolicy")]
         public ActionResult<PagedResult<EquipmentDto>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
         {
             var result = _equipmentService.GetPaged(page, pageSize);
