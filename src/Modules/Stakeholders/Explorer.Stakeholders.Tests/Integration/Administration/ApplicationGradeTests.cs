@@ -45,6 +45,8 @@ namespace Explorer.Stakeholders.Tests.Integration.Administration
             using var scope = Factory.Services.CreateScope();
             var controller = CreateController(scope);
             var dto = new ApplicationGradeDto();
+            dto.UserId = "-1";
+            dto.Created = DateTime.Now;
             dto.Rating = 4;
             dto.Comment = "";
 
