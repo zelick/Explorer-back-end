@@ -3,25 +3,68 @@ using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
 using Explorer.Tours.Core.Domain;
+using Explorer.Tours.Core.Domain.RepositoryInterfaces;
 using FluentResults;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Explorer.Tours.Core.UseCases.Administration
 {
     public class TourService : CrudService<TourDto, Tour>, ITourService
     {
-        public TourService(ICrudRepository<Tour> repository, IMapper mapper) : base(repository, mapper) { }
+        private readonly ITourEquipmentRepository _tourEquipmentRepository;
+        private readonly ITourRepository _tourRepository;
 
-        public Result<List<TourDto>> GetToursByAuthor(int page, int pageSize, int id) { 
+        public TourService(ITourRepository tourRepository, IMapper mapper, ITourEquipmentRepository tourEquipmentRepository) : base(tourRepository, mapper)
+        {
+            _tourEquipmentRepository = tourEquipmentRepository;
+            _tourRepository = tourRepository;
+        }
 
-            var allTours = CrudRepository.GetPaged(page, pageSize);
-            List<Tour> toursByAuthor= allTours.Results.Where(t=>t.AuthorId == id).ToList();
-            return MapToDto(toursByAuthor);
+        public Result<List<TourDto>> GetToursByAuthor(int page, int pageSize, int id) 
+        { 
+            try
+            {
+                var result = _tourRepository.GetToursByAuthor(id);
+                return MapToDto(result);
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
 
+        }
+
+        public Result<TourDto> AddEquipment(int tourId, int equipmentId)
+        {
+            var isTourExists = _tourRepository.Exists(tourId);
+            if (!isTourExists) return Result.Fail(FailureCode.NotFound);
+
+            //-TO DO make check with equipment repository
+            var isEquipmentExists = _tourEquipmentRepository.IsEquipmentExists(equipmentId);
+            if (!isEquipmentExists) return Result.Fail(FailureCode.NotFound);
+
+            var isRelationshipExists = _tourEquipmentRepository.Exists(tourId, equipmentId);
+            if (isRelationshipExists) return Result.Fail(FailureCode.NotFound);
+
+
+            var updatedTourId = _tourEquipmentRepository.AddEquipment(tourId, equipmentId).TourId;
+
+            var updatedTour = _tourRepository.Get(updatedTourId);
+
+            return MapToDto(updatedTour);
+
+        }
+
+        public Result<TourDto> RemoveEquipment(int tourId, int equipmentId)
+        {
+            var isRelationshipExists = _tourEquipmentRepository.Exists(tourId, equipmentId);
+
+            if (!isRelationshipExists) return Result.Fail(FailureCode.NotFound);
+
+            var updatedTourId = _tourEquipmentRepository.RemoveEquipment(tourId, equipmentId).TourId;
+
+            var updatedTour = _tourRepository.Get(updatedTourId);
+
+            return MapToDto(updatedTour);
         }
 
     }
