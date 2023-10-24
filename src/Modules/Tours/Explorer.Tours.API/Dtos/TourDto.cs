@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace Explorer.Tours.API.Dtos
 {
     public class TourDto
@@ -15,7 +16,8 @@ namespace Explorer.Tours.API.Dtos
         public double Price { get; set; }
         public List<string>? Tags { get; set; }
         public int AuthorId { get; set; }
-        public string Status {  get; set; }
+        public string Status { get; set; }
+        public List<EquipmentDto> Equipment { get; set; }
     }
 }
 

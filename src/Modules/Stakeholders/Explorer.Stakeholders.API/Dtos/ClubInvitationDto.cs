@@ -12,6 +12,7 @@ namespace Explorer.Stakeholders.API.Dtos
 		public long Id { get; set; }
 		public int OwnerId { get; set; }
 		public int MemberId { get; set; }
+		public int ClubId { get; set; }
 		public String Status { get; set; }
 	}
 

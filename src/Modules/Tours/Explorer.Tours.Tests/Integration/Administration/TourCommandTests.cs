@@ -74,6 +74,8 @@ public class TourCommandTests: BaseToursIntegrationTest
         using var scope = Factory.Services.CreateScope();
         var controller = CreateController(scope);
         var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
+        var equipmentDto1 = new EquipmentDto { Id = 1, Name = "Kanap", Description = "Dugacak" };
+        var equipmentDto2 = new EquipmentDto { Id = 1, Name = "Jakna", Description = "Vodootporna" };
         var updatedEntity = new TourDto
         {
             Id=-1,
@@ -83,8 +85,8 @@ public class TourCommandTests: BaseToursIntegrationTest
             Price = 100,
             Tags = new List<string> { "priroda", "vojvodina" },
             AuthorId = 2,
-            Status = "Draft"
-
+            Status = "Draft",
+            Equipment = new List<EquipmentDto>()
         };
 
         // Act
@@ -110,6 +112,8 @@ public class TourCommandTests: BaseToursIntegrationTest
         // Arrange
         using var scope = Factory.Services.CreateScope();
         var controller = CreateController(scope);
+        //var equipmentDto1 = new EquipmentDto{Id = 1, Name = "Kanap", Description = "Dugacak"};
+        //var equipmentDto2 = new EquipmentDto{Id = 1, Name = "Jakna", Description = "Vodootporna"};
         var updatedEntity = new TourDto
         {
             Id = -1000,
@@ -119,7 +123,8 @@ public class TourCommandTests: BaseToursIntegrationTest
             Price = 100,
             Tags = new List<string> { "planina", "priroda" },
             AuthorId = 2,
-            Status = "Draft"
+            Status = "Draft",
+            Equipment = new List<EquipmentDto>()
         };
 
         // Act
