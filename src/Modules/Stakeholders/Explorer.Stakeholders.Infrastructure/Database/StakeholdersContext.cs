@@ -13,6 +13,8 @@ public class StakeholdersContext : DbContext
     public DbSet<Club> Clubs { get; set; }
     public DbSet<UserClub> UserClubs { get; set; }
     public DbSet<ClubRequest> Requests { get; set; }
+    public DbSet<ApplicationGrade> ApplicationGrades { get; set; }
+    public DbSet<Club> Clubs { get; set; }
 
     public StakeholdersContext(DbContextOptions<StakeholdersContext> options) : base(options) { }
 

@@ -7,4 +7,6 @@ public interface IUserRepository
     User Create(User user);
     long GetPersonId(long userId);
     List<User> GetAll();
+    User Update(User user);
+    User GetUserById(long id);
 }
