@@ -7,8 +7,8 @@
         public string? Comment { get; set; }
         public int TouristId { get; set; }
         public int TourId { get; set; }
-        //public DateTime TourAppointment { get; set; }
-        public DateTime DateTime { get; set; }
-        public string[]? Pictures { get; set; } // TO DO -> how to save images???
+        public DateTime TourDate { get; set; }
+        public DateTime CreationDate { get; set; }
+        public string[]? Pictures { get; set; }
     }
 }

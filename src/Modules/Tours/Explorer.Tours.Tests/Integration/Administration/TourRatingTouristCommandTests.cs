@@ -26,7 +26,8 @@ public class TourRatingTouristCommandTests : BaseToursIntegrationTest
             Comment = "neki komentar",
             TouristId = 1,
             TourId = 1,
-            DateTime = new DateTime(),
+            TourDate = new DateTime(),
+            CreationDate = new DateTime(),
             Pictures = null
         };
 
@@ -39,11 +40,12 @@ public class TourRatingTouristCommandTests : BaseToursIntegrationTest
         result.Id.ShouldNotBe(0);
         result.TouristId.ShouldNotBe(0);
         result.TourId.ShouldNotBe(0);
+        result.TourDate.ShouldBe(newEntity.TourDate);
         result.TouristId.ShouldBe(newEntity.TouristId);
-        result.DateTime.ShouldBe(newEntity.DateTime); // one tourist can't leave more ratings at the same time
+        result.CreationDate.ShouldBe(newEntity.CreationDate); // one tourist can't leave more ratings at the same time
 
         // Assert - Database
-        var storedEntity = dbContext.TourRating.FirstOrDefault(i => i.DateTime == newEntity.DateTime);
+        var storedEntity = dbContext.TourRating.FirstOrDefault(i => i.CreationDate == newEntity.CreationDate);
         storedEntity.ShouldNotBeNull();
         storedEntity.Id.ShouldBe(result.Id);
     }   

@@ -2,12 +2,11 @@
 using Explorer.Tours.API.Dtos;
 using FluentResults;
 
-namespace Explorer.Tours.API.Public.Administration
+namespace Explorer.Tours.API.Public.Administration;
+
+public interface ITourRatingService
 {
-    public interface ITourRatingService
-    {
-        Result<PagedResult<TourRatingDto>> GetPaged(int page, int pageSize);
-        Result<TourRatingDto> Create(TourRatingDto tourRating);
-        Result Delete(int id);
-    }
+    Result<PagedResult<TourRatingDto>> GetPaged(int page, int pageSize);
+    Result<TourRatingDto> Create(TourRatingDto tourRating);
+    Result Delete(int id);
 }

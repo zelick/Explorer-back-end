@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Explorer.API.Controllers.Author
 {
     [Authorize(Policy = "authorPolicy")]
-    [Route("api/author/tourRating")]
+    [Route("api/author/tour-rating")]
     public class TourRatingAuthorController : BaseApiController
     {
         private readonly ITourRatingService _tourRatingService;
