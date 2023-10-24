@@ -95,6 +95,7 @@ namespace Explorer.Tours.Tests.Integration.Administration
             var result = ((ObjectResult)controller.Update(updatedEntity).Result)?.Value as CheckpointDto;
 
             // Assert - Response
+
             result.ShouldNotBeNull();
             result.Id.ShouldBe(-2);
             result.TourId.ShouldNotBe(0);

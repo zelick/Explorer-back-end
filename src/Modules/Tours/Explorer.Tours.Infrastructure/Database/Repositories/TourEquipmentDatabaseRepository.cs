@@ -1,5 +1,6 @@
 ﻿using Explorer.Tours.Core.Domain;
 using Explorer.Tours.Core.Domain.RepositoryInterfaces;
+using System.Linq;
 
 namespace Explorer.Tours.Infrastructure.Database.Repositories
 {
@@ -15,11 +16,6 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
         public bool Exists(int tourId, int equipmentId)
         {
             return _dbContext.TourEquipment.Any(te => te.TourId == tourId && te.EquipmentId == equipmentId);
-        }
-
-        public bool IsEquipmentExists(int id)
-        {
-            return _dbContext.Equipment.Any(e => e.Id == id);
         }
 
         public TourEquipment AddEquipment(int tourId, int equipmentId)
@@ -42,5 +38,9 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
             return tourEquipment;
         }
 
+        public bool IsEquipmentValid(int tourId, List<long> equipmentIds)
+        {
+            return _dbContext.TourEquipment.Any(te => te.TourId == tourId && equipmentIds.Contains(te.EquipmentId));
+        }
     }
 }
