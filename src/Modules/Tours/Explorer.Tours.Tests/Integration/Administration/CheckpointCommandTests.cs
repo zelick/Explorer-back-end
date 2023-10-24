@@ -29,7 +29,6 @@ namespace Explorer.Tours.Tests.Integration.Administration
             var newEntity = new CheckpointDto
             {
                 TourId = -1,
-                OrderNumber = 1,
                 Longitude = 45,
                 Latitude = 45,
                 Name = "Katedrala",
@@ -43,7 +42,6 @@ namespace Explorer.Tours.Tests.Integration.Administration
             // Assert - Response
             result.ShouldNotBeNull();
             result.TourId.ShouldNotBe(0);
-            result.OrderNumber.ShouldNotBe(0);
             result.Longitude.ShouldBe(newEntity.Longitude);
             result.Latitude.ShouldBe(newEntity.Latitude);
             result.Name.ShouldBe(newEntity.Name);
@@ -84,9 +82,8 @@ namespace Explorer.Tours.Tests.Integration.Administration
             var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
             var updatedEntity = new CheckpointDto
             {
-                Id = -1,
+                Id = -2,
                 TourId = -1,
-                OrderNumber = 1,
                 Longitude = 45,
                 Latitude = 45,
                 Name = "Petrovaradin",
@@ -98,27 +95,26 @@ namespace Explorer.Tours.Tests.Integration.Administration
             var result = ((ObjectResult)controller.Update(updatedEntity).Result)?.Value as CheckpointDto;
 
             // Assert - Response
-            //result.ShouldNotBeNull();
-            //result.Id.ShouldBe(-1);
-            //result.TourId.ShouldNotBe(0);
-            //result.OrderNumber.ShouldNotBe(0);
-            //result.Longitude.ShouldBe(updatedEntity.Longitude);
-            //result.Latitude.ShouldBe(updatedEntity.Latitude);
-            //result.Name.ShouldBe(updatedEntity.Name);
-            //result.Description.ShouldBe(updatedEntity.Description);
-            //result.Pictures.ShouldBe(updatedEntity.Pictures);
+
+            result.ShouldNotBeNull();
+            result.Id.ShouldBe(-2);
+            result.TourId.ShouldNotBe(0);
+            result.Longitude.ShouldBe(updatedEntity.Longitude);
+            result.Latitude.ShouldBe(updatedEntity.Latitude);
+            result.Name.ShouldBe(updatedEntity.Name);
+            result.Description.ShouldBe(updatedEntity.Description);
+            result.Pictures.ShouldBe(updatedEntity.Pictures);
 
             // Assert - Database
-            //var storedEntity = dbContext.Checkpoints.FirstOrDefault(i => i.Name == "Petrovaradin");
-            //storedEntity.ShouldNotBeNull();
-            //storedEntity.TourId.ShouldBe(updatedEntity.TourId);
-            //storedEntity.OrderNumber.ShouldBe(updatedEntity.OrderNumber);
-            //storedEntity.Longitude.ShouldBe(updatedEntity.Longitude);
-            //storedEntity.Latitude.ShouldBe(updatedEntity.Latitude);
-            //storedEntity.Description.ShouldBe(updatedEntity.Description);
-            //storedEntity.Pictures.ShouldBe(updatedEntity.Pictures);
-            //var oldEntity = dbContext.Checkpoints.FirstOrDefault(i => i.Name == "Katedrala");
-            //oldEntity.ShouldBeNull();
+            var storedEntity = dbContext.Checkpoints.FirstOrDefault(i => i.Name == "Petrovaradin");
+            storedEntity.ShouldNotBeNull();
+            storedEntity.TourId.ShouldBe(updatedEntity.TourId);
+            storedEntity.Longitude.ShouldBe(updatedEntity.Longitude);
+            storedEntity.Latitude.ShouldBe(updatedEntity.Latitude);
+            storedEntity.Description.ShouldBe(updatedEntity.Description);
+            storedEntity.Pictures.ShouldBe(updatedEntity.Pictures);
+            var oldEntity = dbContext.Checkpoints.FirstOrDefault(i => i.Name == "Fakultet tehnickih nauka");
+            oldEntity.ShouldBeNull();
         }
 
         [Fact]
@@ -131,7 +127,6 @@ namespace Explorer.Tours.Tests.Integration.Administration
             {
                 Id = -1000,
                 TourId = -1,
-                OrderNumber = 1,
                 Longitude = 45,
                 Latitude = 45,
                 Name = "Test",

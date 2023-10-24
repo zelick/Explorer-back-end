@@ -10,7 +10,6 @@ namespace Explorer.Tours.API.Dtos
     {
         public long Id { get; set; }
         public long TourId { get; set; }
-        public int OrderNumber { get; set; }
         public double Longitude { get; set; }
         public double Latitude { get; set; }
         public string Name { get; set; }
