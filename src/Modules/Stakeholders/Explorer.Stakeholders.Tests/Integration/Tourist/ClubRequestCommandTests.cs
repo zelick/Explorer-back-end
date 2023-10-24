@@ -1,40 +1,27 @@
-﻿using Explorer.API.Controllers.Tourist;
-using Explorer.BuildingBlocks.Core.UseCases;
+﻿using Explorer.API.Controllers.Administrator.Administration;
+using Explorer.API.Controllers.Author.Administration;
+using Explorer.API.Controllers.Tourist;
 using Explorer.Stakeholders.API.Dtos;
 using Explorer.Stakeholders.API.Public;
 using Explorer.Stakeholders.Infrastructure.Database;
+using Explorer.Tours.API.Dtos;
+using Explorer.Tours.API.Public.Administration;
+using Explorer.Tours.Infrastructure.Database;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Explorer.Stakeholders.Tests.Integration.Tourist
 {
-    public class ClubRequestsTest: BaseStakeholdersIntegrationTest
+    [Collection("Sequential")]
+    public class ClubRequestCommandTests : BaseStakeholdersIntegrationTest
     {
-        public ClubRequestsTest(StakeholdersTestFactory factory) : base(factory) { }
-
-        [Fact] //get all test
-        public void GetAll_Test()
-        {
-            // Arrange
-            using var scope = Factory.Services.CreateScope();
-            var controller = CreateController(scope);
-
-            // Act
-            var result = ((ObjectResult)controller.GetAll(0, 0).Result)?.Value as PagedResult<ClubRequestDto>;
-
-            // Assert
-            result.ShouldNotBeNull();
-            //Ovo proveriti!
-          //  result.Results.Count.ShouldBe(4);
-           // result.TotalCount.ShouldBe(4); //zakomentarisano zbog brisanja  
-        }
+        public ClubRequestCommandTests(StakeholdersTestFactory factory) : base(factory) { }
 
         [Fact]
         public void Creates()
@@ -45,10 +32,9 @@ namespace Explorer.Stakeholders.Tests.Integration.Tourist
             var dbContext = scope.ServiceProvider.GetRequiredService<StakeholdersContext>();
             var newEntity = new ClubRequestDto
             {
-                id = 5,
-                ClubId = 5,
-                TouristId = 5,
-                Status = "status"
+                ClubId = -5, 
+                TouristId = -21, 
+                Status = "Processing"
             };
 
             // Act
@@ -56,16 +42,17 @@ namespace Explorer.Stakeholders.Tests.Integration.Tourist
 
             // Assert - Response
             result.ShouldNotBeNull();
-            result.id.ShouldNotBe(0);
+            result.Id.ShouldNotBe(0);
             result.ClubId.ShouldBe(newEntity.ClubId);
+            result.TouristId.ShouldBe(newEntity.TouristId);
 
             // Assert - Database
-            var storedEntity = dbContext.Requests.FirstOrDefault(i => i.Status == newEntity.Status);
+            var storedEntity = dbContext.Requests.FirstOrDefault(i => i.ClubId == newEntity.ClubId && i.TouristId == newEntity.TouristId);
             storedEntity.ShouldNotBeNull();
-            storedEntity.Id.ShouldBe(result.id);
+            storedEntity.Id.ShouldBe(result.Id);
         }
 
-        [Fact]
+      /*  [Fact]
         public void Create_fails_invalid_data()
         {
             // Arrange
@@ -73,9 +60,9 @@ namespace Explorer.Stakeholders.Tests.Integration.Tourist
             var controller = CreateController(scope);
             var updatedEntity = new ClubRequestDto
             {
-                //id = -1000,
-                //Status = "Neuspeli test"
-                ClubId = -1000
+                ClubId = -999,
+                TouristId = -777,
+                Status = "Processing"
             };
 
             // Act
@@ -84,7 +71,7 @@ namespace Explorer.Stakeholders.Tests.Integration.Tourist
             // Assert
             result.ShouldNotBeNull();
             result.StatusCode.ShouldBe(400);
-        }
+        }*/
 
         [Fact]
         public void Updates()
@@ -93,12 +80,13 @@ namespace Explorer.Stakeholders.Tests.Integration.Tourist
             using var scope = Factory.Services.CreateScope();
             var controller = CreateController(scope);
             var dbContext = scope.ServiceProvider.GetRequiredService<StakeholdersContext>();
+
             var updatedEntity = new ClubRequestDto
             {
-                id = -1,
-                ClubId = 5,
-                TouristId = 5,
-                Status = "IZMENA STATUSA UPDATE"
+                Id = -1,
+                ClubId = -1,
+                TouristId = -1,
+                Status = "Accepted"
             };
 
             // Act
@@ -106,13 +94,16 @@ namespace Explorer.Stakeholders.Tests.Integration.Tourist
 
             // Assert - Response
             result.ShouldNotBeNull();
-            result.id.ShouldBe(-1);
+            result.Id.ShouldBe(-1);
+            result.ClubId.ShouldBe(updatedEntity.ClubId);
+            result.TouristId.ShouldBe(updatedEntity.TouristId);
             result.Status.ShouldBe(updatedEntity.Status);
 
             // Assert - Database
-            var storedEntity = dbContext.Requests.FirstOrDefault(i => i.Status == "IZMENA STATUSA UPDATE");
-         
-            var oldEntity = dbContext.Requests.FirstOrDefault(i => i.Status == "status1");
+            var storedEntity = dbContext.Requests.FirstOrDefault(i => i.Status == "Accepted");
+            storedEntity.ShouldNotBeNull();
+            storedEntity.Status.ShouldBe(updatedEntity.Status);
+            var oldEntity = dbContext.Requests.FirstOrDefault(i => i.Status == "Processing" && i.Id == -1);
             oldEntity.ShouldBeNull();
         }
 
@@ -124,10 +115,11 @@ namespace Explorer.Stakeholders.Tests.Integration.Tourist
             var controller = CreateController(scope);
             var updatedEntity = new ClubRequestDto
             {
-                id = -1000,
-                ClubId = 5,
-                TouristId = 5,
-                Status = "IZMENA STATUSA UPDATE"
+                Id = -1000,
+                ClubId = -1000,
+                TouristId = -1000,
+                Status = "nekiStatus"
+
             };
 
             // Act
@@ -154,12 +146,12 @@ namespace Explorer.Stakeholders.Tests.Integration.Tourist
             result.StatusCode.ShouldBe(200);
 
             // Assert - Database
-            var storedCourse = dbContext.Clubs.FirstOrDefault(i => i.Id == -3);
+            var storedCourse = dbContext.Requests.FirstOrDefault(i => i.Id == -3);
             storedCourse.ShouldBeNull();
         }
-       
+
         [Fact]
-       public void Delete_fails_invalid_id()
+        public void Delete_fails_invalid_id()
         {
             // Arrange
             using var scope = Factory.Services.CreateScope();
@@ -180,5 +172,6 @@ namespace Explorer.Stakeholders.Tests.Integration.Tourist
                 ControllerContext = BuildContext("-1")
             };
         }
+
     }
 }

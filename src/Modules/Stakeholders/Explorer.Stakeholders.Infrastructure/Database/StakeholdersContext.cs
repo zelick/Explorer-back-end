@@ -33,6 +33,8 @@ public class StakeholdersContext : DbContext
             .HasOne<Club>()
             .WithMany()
             .HasForeignKey(uc => uc.ClubId);
+
+        ConfigureStakeholder(modelBuilder);
     }
 
     private static void ConfigureStakeholder(ModelBuilder modelBuilder)
