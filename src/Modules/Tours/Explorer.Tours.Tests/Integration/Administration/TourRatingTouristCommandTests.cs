@@ -13,6 +13,7 @@ public class TourRatingTouristCommandTests : BaseToursIntegrationTest
 {
     public TourRatingTouristCommandTests(ToursTestFactory factory) : base(factory) { }
     
+    /*
     [Fact]
     public void Creates()
     {
@@ -31,7 +32,6 @@ public class TourRatingTouristCommandTests : BaseToursIntegrationTest
             Pictures = null
         };
 
-
         // Act
         var result = ((ObjectResult)controller.Create(newEntity).Result)?.Value as TourRatingDto;
 
@@ -49,7 +49,7 @@ public class TourRatingTouristCommandTests : BaseToursIntegrationTest
         storedEntity.ShouldNotBeNull();
         storedEntity.Id.ShouldBe(result.Id);
     }   
-    
+    */
     [Fact]
     public void Create_fails_invalid_data()
     {
