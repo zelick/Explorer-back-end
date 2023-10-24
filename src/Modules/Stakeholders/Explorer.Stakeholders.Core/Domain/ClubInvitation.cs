@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
+using System.Xml.Linq;
 
 namespace Explorer.Stakeholders.Core.Domain
 {
@@ -21,6 +23,15 @@ namespace Explorer.Stakeholders.Core.Domain
 			MemberId = memberId;
 			ClubId = clubId;
 			Status = status;
+			Validate();
+		}
+
+		private void Validate()
+		{
+			if (OwnerId == 0) throw new ArgumentException("Invalid ownerId");
+			if (MemberId == 0) throw new ArgumentException("Invalid memberId");
+			if (ClubId == 0) throw new ArgumentException("Invalid clubId");
+			if (string.IsNullOrWhiteSpace(Status)) throw new ArgumentException("Invalid status");
 		}
 	}
 }

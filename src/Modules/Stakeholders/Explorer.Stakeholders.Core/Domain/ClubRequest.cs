@@ -27,8 +27,8 @@ namespace Explorer.Stakeholders.Core.Domain
         private void Validate()
         {
             //if (string.IsNullOrWhiteSpace(Status)) throw new ArgumentException("Invalid Status");
-          //  if (TouristId == 0) throw new ArgumentException("Invalid TouristId");
-           // if (ClubId == 0) throw new ArgumentException("Invalid ClubId");
+            //if (TouristId == 0) throw new ArgumentException("Invalid TouristId");
+            //if (ClubId == 0) throw new ArgumentException("Invalid ClubId");
            
         }
     }
