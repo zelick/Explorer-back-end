@@ -12,6 +12,6 @@ namespace Explorer.Stakeholders.API.Dtos
         public int Rating { get; set; }
         public string? Comment { get; set; }
         public DateTime Created { get; set; }
-        public int UserId { get; set; }
+        public string UserId { get; set; }
     }
 }
