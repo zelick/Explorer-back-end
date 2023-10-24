@@ -10,20 +10,18 @@ namespace Explorer.Tours.Core.Domain
     public class Checkpoint : Entity
     {
         public long TourId { get; init; }
-        public int OrderNumber { get; init; }
         public double Longitude { get; init; }
         public double Latitude { get; init; }
         public string Name { get; init; }
         public string? Description { get; init; }
         public List<string> Pictures { get; init; }
 
-        public Checkpoint(long tourId, int orderNumber, double longitude, double latitude, string name, string description, List<string> pictures)
+        public Checkpoint(long tourId, double longitude, double latitude, string name, string description, List<string> pictures)
         {
             if (tourId == 0) throw new ArgumentException("Invalid Tour ID");
             TourId = tourId;
             Longitude = longitude;
             Latitude = latitude;
-            OrderNumber = orderNumber;
             Name = name ?? throw new ArgumentNullException(nameof(name));
             Description = description;
             if (pictures.Count() > 0)
