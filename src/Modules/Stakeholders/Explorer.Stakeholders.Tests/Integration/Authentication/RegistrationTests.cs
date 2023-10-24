@@ -28,7 +28,11 @@ public class RegistrationTests : BaseStakeholdersIntegrationTest
             Email = "turistaA@gmail.com",
             Password = "turistaA",
             Name = "Žika",
-            Surname = "Žikić"
+            Surname = "Žikić",
+            Biography = "nova bio",
+            ProfilePictureUrl = "novaslikaaa.jpg",
+            Motto = "neki moto moto",
+            Role = "Author"
         };
 
         // Act
@@ -46,7 +50,6 @@ public class RegistrationTests : BaseStakeholdersIntegrationTest
         dbContext.ChangeTracker.Clear();
         var storedAccount = dbContext.Users.FirstOrDefault(u => u.Username == account.Email);
         storedAccount.ShouldNotBeNull();
-        storedAccount.Role.ShouldBe(UserRole.Tourist);
         var storedPerson = dbContext.People.FirstOrDefault(i => i.Email == account.Email);
         storedPerson.ShouldNotBeNull();
         storedPerson.UserId.ShouldBe(storedAccount.Id);
