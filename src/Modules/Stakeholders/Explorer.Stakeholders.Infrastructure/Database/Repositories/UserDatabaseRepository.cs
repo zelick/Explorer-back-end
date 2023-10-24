@@ -38,6 +38,11 @@ public class UserDatabaseRepository : IUserRepository
         return person.Id;
     }
 
+    public List<User> GetAll()
+    {
+        return _dbContext.Users.ToList();
+    }
+
     public User Update(User user)
     {
         try

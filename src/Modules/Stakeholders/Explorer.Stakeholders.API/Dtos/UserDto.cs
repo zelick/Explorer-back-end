@@ -21,4 +21,5 @@ namespace Explorer.Stakeholders.API.Dtos
         Author,
         Tourist
     }
+
 }
