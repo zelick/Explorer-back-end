@@ -10,15 +10,20 @@ namespace Explorer.Stakeholders.Core.Domain
 {
     public class ApplicationGrade : Entity
     {
+        public int Id { get; init; }
         public int Rating { get; init; }
         public string? Comment { get; init; }
+        public DateTime Created { get; init; }
+        public int UserId { get; init; }
 
-        public ApplicationGrade(int rating, string? comment)
+        public ApplicationGrade(int rating, string? comment, DateTime created, int userId)
         {
             if (rating < 1 || rating > 5) throw new ArgumentException("Invalid rating"); 
             else Rating = rating;
             if (string.IsNullOrWhiteSpace(comment)) Comment = "No comment added.";
             else Comment = comment;
+            Created = created;
+            UserId = userId;
         }
     }
 }

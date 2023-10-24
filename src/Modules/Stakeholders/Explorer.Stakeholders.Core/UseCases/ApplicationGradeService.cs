@@ -22,7 +22,8 @@ namespace Explorer.Stakeholders.Core.UseCases
 
         public Result<ApplicationGradeDto> EvaluateApplication(ApplicationGradeDto applicationGrade)
         {
-            ApplicationGrade newGrade = new ApplicationGrade(applicationGrade.Rating, applicationGrade.Comment);
+            applicationGrade.Created = DateTime.Now.ToUniversalTime();
+            ApplicationGrade newGrade = new ApplicationGrade(applicationGrade.Rating, applicationGrade.Comment, applicationGrade.Created, applicationGrade.UserId);
             CrudRepository.Create(newGrade);
             return MapToDto(newGrade);
         }
