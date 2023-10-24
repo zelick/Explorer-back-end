@@ -5,6 +5,8 @@ using Explorer.Stakeholders.Core.Domain;
 using Microsoft.AspNetCore.Mvc;
 using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Tours.API.Dtos;
+using FluentResults;
+using Microsoft.EntityFrameworkCore;
 
 namespace Explorer.API.Controllers.Tourist
 {
@@ -27,7 +29,9 @@ namespace Explorer.API.Controllers.Tourist
         [HttpPost]
         public ActionResult<ClubRequestDto> Create([FromBody] ClubRequestDto request)
         {
-            var result = _clubRequestService.Create(request);
+ 
+            var  result = _clubRequestService.Create(request);
+       
             return CreateResponse(result);
         }
 

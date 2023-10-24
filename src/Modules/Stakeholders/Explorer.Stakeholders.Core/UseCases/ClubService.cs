@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.Execution;
 using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Stakeholders.API.Dtos;
 using Explorer.Stakeholders.API.Public;
@@ -62,5 +63,25 @@ namespace Explorer.Stakeholders.Core.UseCases
 				return Result.Fail(FailureCode.NotFound).WithError(e.Message);
 			}
 		}
-	}
+
+		public Result<List<ClubDto>> GetClubsByUser(int userId)
+		{
+            try
+            {
+                var clubs = new List<ClubDto>();
+                var clubsIds = _userClubrepository.GetClubIdsByUser(userId);
+                foreach(var clubId in clubsIds)
+                {
+                    var club = _clubRepository.Get(clubId); //ako mi bude trebalo izmeni 
+                    clubs.Add(MapToDto(club));
+
+                }
+                return Result.Ok(clubs);
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+        }
+    }
 }

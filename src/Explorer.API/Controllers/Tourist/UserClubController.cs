@@ -1,4 +1,5 @@
-﻿using Explorer.Stakeholders.API.Dtos;
+﻿using Explorer.BuildingBlocks.Core.UseCases;
+using Explorer.Stakeholders.API.Dtos;
 using Explorer.Stakeholders.API.Public;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -30,7 +31,17 @@ namespace Explorer.API.Controllers.Tourist
 			return CreateResponse(result);
 		}
 
-		/*[HttpGet]
+
+        [HttpGet("user/{userId:int}")]
+		public ActionResult<PagedResult<ClubDto>> GetAll(int userId)
+		{
+			var result = _clubService.GetClubsByUser(userId);
+            return CreateResponse(result);
+		}
+      
+
+
+        /*[HttpGet]
 		public ActionResult<PagedResult<UserClubDto>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
 		{
 			var result = _userClubService.GetPaged(page, pageSize);
@@ -72,5 +83,5 @@ namespace Explorer.API.Controllers.Tourist
 			return CreateResponse(result);
 		}*/
 
-	}
+    }
 }
