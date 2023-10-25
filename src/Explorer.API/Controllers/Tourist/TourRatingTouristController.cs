@@ -1,6 +1,7 @@
 ﻿using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
+using Explorer.Tours.Core.Domain;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -27,6 +28,10 @@ namespace Explorer.API.Controllers.Tourist
         [HttpPost]
         public ActionResult<TourRatingDto> Create([FromBody] TourRatingDto tourRating)
         {
+            if (tourRating.TourId == 0 || tourRating.TouristId == 0 || tourRating.Rating == 0 || tourRating.Rating > 5)
+            {
+                return BadRequest("Fill all the fields properly.");
+            }
             var result = _tourRatingService.Create(tourRating);
             return CreateResponse(result);
         }
