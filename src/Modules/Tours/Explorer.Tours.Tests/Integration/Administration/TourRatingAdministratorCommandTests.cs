@@ -22,14 +22,14 @@ public class TourRatingAdministratorCommandTests : BaseToursIntegrationTest
         var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
 
         // Act
-        var result = (OkResult)controller.Delete(3);
+        var result = (OkResult)controller.Delete(-3);
 
         // Assert - Response
         result.ShouldNotBeNull();
         result.StatusCode.ShouldBe(200);
 
         // Assert - Database
-        var storedCourse = dbContext.TourRating.FirstOrDefault(i => i.Id == 3);
+        var storedCourse = dbContext.TourRating.FirstOrDefault(i => i.Id == -3);
         storedCourse.ShouldBeNull();
     }
 

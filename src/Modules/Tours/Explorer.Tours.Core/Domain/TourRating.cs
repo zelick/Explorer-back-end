@@ -17,6 +17,7 @@ namespace Explorer.Tours.Core.Domain
         public string[]? Pictures { get; init; } // TO DO -> upload picture file
         public TourRating() { }
         public TourRating(int rating, string? comment, int touristId, int  tourId, DateTime tourDate, DateTime creationDate, string[]? pictures)
+        //public TourRating(int rating, string? comment, int touristId, int tourId, Tour tour, DateTime tourDate, DateTime creationDate, string[]? pictures)
         {
             if (rating == 0 || rating > 5) throw new ArgumentNullException("Invalid rating.");
             if (touristId == 0) throw new ArgumentNullException("Invalid tourist.");
@@ -28,6 +29,7 @@ namespace Explorer.Tours.Core.Domain
             Comment = comment;
             TouristId = touristId;
             TourId = tourId;
+            //Tour = tour;
             TourDate = tourDate;
             CreationDate = creationDate;
             Pictures = pictures;

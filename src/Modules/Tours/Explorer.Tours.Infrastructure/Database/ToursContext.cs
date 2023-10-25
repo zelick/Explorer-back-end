@@ -13,5 +13,11 @@ public class ToursContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasDefaultSchema("tours");
+
+        //ConfigureTourRatings(modelBuilder);
     }
+    //private static void ConfigureTourRatings(ModelBuilder modelBuilder)
+    //{
+    //    modelBuilder.Entity<TourRating>().HasOne(t => t.Tour).WithMany().HasForeignKey(t => t.TourId);
+    //}
 }

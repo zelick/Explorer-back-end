@@ -6,13 +6,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 
-namespace Explorer.Tours.Tests.Integration.Administration;
+namespace Explorer.Tours.Tests.Integration.Tourism;
 [Collection("Sequential")]
 
-public class TourRatingTouristQueryTests : BaseToursIntegrationTest
+public class TourRatingTouristQueryTest : BaseToursIntegrationTest
 {
-    public TourRatingTouristQueryTests(ToursTestFactory factory) : base(factory) { }
-
+    public TourRatingTouristQueryTest(ToursTestFactory factory) : base(factory) { }
     [Fact]
     public void Retrieves_all()
     {
@@ -28,7 +27,6 @@ public class TourRatingTouristQueryTests : BaseToursIntegrationTest
         result.Results.Count.ShouldBe(3);
         result.TotalCount.ShouldBe(3);
     }
-
     private static TourRatingTouristController CreateController(IServiceScope scope)
     {
         return new TourRatingTouristController(scope.ServiceProvider.GetRequiredService<ITourRatingService>())

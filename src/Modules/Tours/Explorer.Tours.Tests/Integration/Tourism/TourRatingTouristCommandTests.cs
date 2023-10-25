@@ -6,14 +6,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 
-namespace Explorer.Tours.Tests.Integration.Administration;
-
+namespace Explorer.Tours.Tests.Integration.Tourism;
 [Collection("Sequential")]
+
 public class TourRatingTouristCommandTests : BaseToursIntegrationTest
 {
     public TourRatingTouristCommandTests(ToursTestFactory factory) : base(factory) { }
-    
-    /*
+
     [Fact]
     public void Creates()
     {
@@ -25,8 +24,8 @@ public class TourRatingTouristCommandTests : BaseToursIntegrationTest
         {
             Rating = 4,
             Comment = "neki komentar",
-            TouristId = 1,
-            TourId = 1,
+            TouristId = -2,
+            TourId = -1,
             TourDate = new DateTime(),
             CreationDate = new DateTime(),
             Pictures = null
@@ -49,7 +48,7 @@ public class TourRatingTouristCommandTests : BaseToursIntegrationTest
         storedEntity.ShouldNotBeNull();
         storedEntity.Id.ShouldBe(result.Id);
     }   
-    */
+    
     [Fact]
     public void Create_fails_invalid_data()
     {
