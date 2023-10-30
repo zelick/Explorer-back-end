@@ -35,7 +35,7 @@ namespace Explorer.Tours.Tests.Integration.Tourist
             // Assert
             result.ShouldNotBeNull();
             //result.Results.Count.ShouldBe(5);
-            //result.TotalCount.ShouldBe(5); zakomentarisano zbog brisanja
+            //result.TotalCount.ShouldBe(5); //zakomentarisano zbog brisanja
         }
 
         [Fact]
