@@ -4,6 +4,8 @@ using Explorer.Stakeholders.API.Public;
 using Explorer.Stakeholders.Core.Domain;
 using Explorer.Stakeholders.Core.Domain.RepositoryInterfaces;
 using FluentResults;
+using System.IdentityModel.Tokens.Jwt;
+using System.Net.Mail;
 
 namespace Explorer.Stakeholders.Core.UseCases;
 
@@ -43,15 +45,51 @@ public class AuthenticationService : IAuthenticationService
 
         try
         {
-            var user = _userRepository.Create(new User(account.Username, account.Password, UserRole.Tourist, true));
-            var person = _personRepository.Create(new Person(user.Id, account.Name, account.Surname, account.Email));
+            if (!IsValidName(account.Name) || !IsValidName(account.Surname))
+                return Result.Fail("Name and Surname must not be empty and must start with an uppercase letter");
+
+            if (!IsValidEmail(account.Email))
+                return Result.Fail("Invalid email format");
+
+            Domain.UserRole userRole;
+
+            if (account.Role.Equals("Administrator"))
+            {
+                userRole = Domain.UserRole.Administrator;
+            }
+            else if (account.Role.Equals("Author"))
+            {
+                userRole = Domain.UserRole.Author;
+            }
+            else userRole = Domain.UserRole.Tourist;
+
+
+            var user = _userRepository.Create(new User(account.Username, account.Password, userRole , true));
+            var person = _personRepository.Create(new Person(user.Id, account.Name, account.Surname, account.Email, account.ProfilePictureUrl, account.Biography, account.Motto));
 
             return _tokenGenerator.GenerateAccessToken(user, person.Id);
         }
         catch (ArgumentException e)
         {
             return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
-            // There is a subtle issue here. Can you find it?
+        }
+    }
+
+    private bool IsValidName(string name)
+    {
+        return !string.IsNullOrWhiteSpace(name) && char.IsUpper(name[0]);
+    }
+
+    private bool IsValidEmail(string email)
+    {
+        try
+        {
+            var mailAddress = new MailAddress(email);
+            return true;
+        }
+        catch
+        {
+            return false;
         }
     }
 }

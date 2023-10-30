@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
+using AutoMapper.Execution;
 using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Stakeholders.API.Dtos;
 using Explorer.Stakeholders.API.Public;
 using Explorer.Stakeholders.Core.Domain;
+using Explorer.Stakeholders.Core.Domain.RepositoryInterfaces;
+using FluentResults;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +16,72 @@ namespace Explorer.Stakeholders.Core.UseCases
 {
     public class ClubService : CrudService<ClubDto, Club>, IClubService
     {
-        public ClubService(ICrudRepository<Club> repository, IMapper mapper) : base(repository, mapper) { }
+        private readonly IClubRepository _clubRepository;
+        private readonly IUserClubRepository _userClubrepository;
+        public ClubService(IClubRepository repository, IMapper mapper, IUserClubRepository userClubRepository) : base(repository, mapper) 
+        {
+            _clubRepository = repository;
+            _userClubrepository = userClubRepository;
+        }
+
+        public Result<ClubDto> GetClubWithUsers(int id) 
+        {
+            try {
+                var result = _clubRepository.GetClubWithUsers(id);
+                return MapToDto(result); 
+            }
+            catch (KeyNotFoundException e) 
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            } 
+        }
+
+		public Result<ClubDto> RemoveMember(int memberId, int clubId)
+        {
+			try
+			{
+				var result = _userClubrepository.RemoveUserFromClub(memberId, clubId);
+                var updatedClub = GetClubWithUsers((int)result.ClubId);
+				return updatedClub;
+			}
+			catch (KeyNotFoundException e)
+			{
+				return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+			}
+		}
+
+		public Result<ClubDto> AddMember(int memberId, int clubId)
+		{
+			try
+			{
+				var result = _userClubrepository.AddUserToClub(memberId, clubId);
+				var updatedClub = GetClubWithUsers((int)result.ClubId);
+				return updatedClub;
+			}
+			catch (KeyNotFoundException e)
+			{
+				return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+			}
+		}
+
+		public Result<List<ClubDto>> GetClubsByUser(int userId)
+		{
+            try
+            {
+                var clubs = new List<ClubDto>();
+                var clubsIds = _userClubrepository.GetClubIdsByUser(userId);
+                foreach(var clubId in clubsIds)
+                {
+                    var club = _clubRepository.Get(clubId); //ako mi bude trebalo izmeni 
+                    clubs.Add(MapToDto(club));
+
+                }
+                return Result.Ok(clubs);
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+        }
     }
 }

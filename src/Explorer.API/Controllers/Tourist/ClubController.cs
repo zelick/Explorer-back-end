@@ -9,7 +9,7 @@ using System.Security.Claims;
 
 namespace Explorer.API.Controllers.Tourist
 {
-    [Authorize(Policy = "touristPolicy")]
+   // [Authorize(Policy = "touristPolicy")]
     [Route("api/club")]
     public class ClubController : BaseApiController
     {
@@ -22,10 +22,19 @@ namespace Explorer.API.Controllers.Tourist
 
         [HttpGet]
         public ActionResult<PagedResult<ClubDto>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
+         {
+             var result = _clubService.GetPaged(page, pageSize);
+
+             return CreateResponse(result);
+         }
+
+        [HttpGet("{id:int}")]
+        public ActionResult<ClubDto> Get(int id)
         {
-            var result = _clubService.GetPaged(page, pageSize);
+            var result = _clubService.GetClubWithUsers(id);
             return CreateResponse(result);
         }
+
 
         [HttpPost]
         public ActionResult<ClubDto> Create([FromBody] ClubDto club)
