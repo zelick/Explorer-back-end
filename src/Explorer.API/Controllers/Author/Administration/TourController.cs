@@ -73,6 +73,13 @@ namespace Explorer.API.Controllers.Author.Administration
             return CreateResponse(result);
         }
 
+        [HttpPut("publishedTours/{id:int}")]
+        public ActionResult<TourDto> Publish(int id)
+        {
+            var result = _tourService.Publish(id);
+            return CreateResponse(result);
+        }
+
 
     }
 }

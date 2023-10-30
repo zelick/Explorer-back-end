@@ -21,10 +21,13 @@ public class ToursContext : DbContext
     {
         modelBuilder.HasDefaultSchema("tours");
 
-        modelBuilder.Entity<Checkpoint>()
-           .HasOne<Tour>()
-           .WithMany()
-           .HasForeignKey(bc => bc.TourId);
+        modelBuilder.Entity<Tour>()
+           .HasMany(t => t.Checkpoints)
+           .WithOne(t => t.Tour)
+           .HasForeignKey(t => t.TourId)
+           .IsRequired();
+        ConfigureReportedIssues(modelBuilder);
+        ConfigureTourRatings(modelBuilder);
 
         modelBuilder.Entity<Tour>()
             .HasMany(t => t.Equipment)
@@ -32,7 +35,11 @@ public class ToursContext : DbContext
             .UsingEntity<TourEquipment>();
         ConfigureReportedIssues(modelBuilder);
         ConfigureTourRatings(modelBuilder);
+
+        modelBuilder.Entity<Tour>()
+           .Property(item => item.PublishedTours).HasColumnType("jsonb");
     }
+
     private static void ConfigureReportedIssues(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<ReportedIssue>().HasOne(t => t.Tour).WithMany().HasForeignKey(t => t.TourId);

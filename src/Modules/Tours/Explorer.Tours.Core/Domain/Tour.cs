@@ -8,11 +8,13 @@ namespace Explorer.Tours.Core.Domain
         public string Name { get; init; }
         public string? Description { get; init; }
         public Demandigness? DemandignessLevel { get; init; }
-        public TourStatus Status { get; init; }
+        public TourStatus Status { get; private set; }
         public double Price { get; init; }
         public List<string>? Tags { get; init; }
-
         public List<Equipment> Equipment { get; init; }
+        public List<Checkpoint> Checkpoints { get; init; }
+        public List<PublishedTour>? PublishedTours { get; init; }
+        public double Distance { get; init; }
 
         public Tour(int authorId, string name, string? description, Demandigness? demandignessLevel, List<string>? tags, TourStatus status = TourStatus.Draft,double price=0)
         {
@@ -28,13 +30,39 @@ namespace Explorer.Tours.Core.Domain
             AuthorId = authorId;
             Tags = tags;
             Equipment = new List<Equipment>();
+            Checkpoints = new List<Checkpoint>();
+            Distance = 0;
+        }
+
+        public bool IsForPublishing()
+        {
+            return !string.IsNullOrWhiteSpace(Name) && !string.IsNullOrWhiteSpace(Description) && DemandignessLevel != null && Tags != null;
+        }
+
+        public bool ValidateCheckpoints()
+        {
+            return Checkpoints != null && Checkpoints.Count() >= 2;
+        }
+
+        public bool Publish()
+        {
+            if(IsForPublishing() && ValidateCheckpoints())
+            {
+                Status = TourStatus.Published;
+                var publishedTour = new PublishedTour(DateTime.Now);
+                PublishedTours.Add(publishedTour);
+                return true;
+            }
+            return false;
         }
     }
 }
 
 public enum TourStatus
 {
-    Draft
+    Draft,
+    Published,
+    Archived
 }
 
 public enum Demandigness

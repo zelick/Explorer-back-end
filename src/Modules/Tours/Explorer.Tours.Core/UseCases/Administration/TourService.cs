@@ -68,5 +68,12 @@ namespace Explorer.Tours.Core.UseCases.Administration
             return MapToDto(updatedTour);
         }
 
+        public Result<TourDto> Publish(int id)
+        {
+            var tour = _tourRepository.Get(id);
+            tour.Publish();
+            var result = _tourRepository.Update(tour);
+            return MapToDto(result);
+        }
     }
 }

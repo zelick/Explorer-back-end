@@ -10,6 +10,7 @@ namespace Explorer.Tours.Core.Domain
     public class Checkpoint : Entity
     {
         public long TourId { get; init; }
+        public Tour Tour { get; init; }
         public double Longitude { get; init; }
         public double Latitude { get; init; }
         public string Name { get; init; }
