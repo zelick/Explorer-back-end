@@ -31,7 +31,7 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
 
         public Tour Get(long id)
         {
-            var tour = _dbContext.Tours.Include(t => t.Equipment).FirstOrDefault(t => t.Id == id);
+            var tour = _dbContext.Tours.Include(t => t.Equipment).Include(t => t.Checkpoints).FirstOrDefault(t => t.Id == id);
             if (tour == null) throw new KeyNotFoundException("Not found: " + id);
 
             return tour;
