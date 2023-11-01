@@ -14,7 +14,7 @@ namespace Explorer.Tours.Core.Domain
         public List<Equipment> Equipment { get; init; }
         public List<Checkpoint> Checkpoints { get; init; }
         public List<PublishedTour>? PublishedTours { get; init; }
-        public double Distance { get; init; }
+        public List<TourTime>? TourTimes { get; private set; }
 
         public Tour(int authorId, string name, string? description, Demandigness? demandignessLevel, List<string>? tags, TourStatus status = TourStatus.Draft,double price=0)
         {
@@ -31,7 +31,7 @@ namespace Explorer.Tours.Core.Domain
             Tags = tags;
             Equipment = new List<Equipment>();
             Checkpoints = new List<Checkpoint>();
-            Distance = 0;
+            TourTimes = new List<TourTime>();
         }
 
         public bool IsForPublishing()
@@ -44,6 +44,10 @@ namespace Explorer.Tours.Core.Domain
             return Checkpoints != null && Checkpoints.Count() >= 2;
         }
 
+        public bool ValidateTourTimes()
+        {
+            return TourTimes != null && TourTimes.Count() >= 1;
+        }
         public bool Publish()
         {
             if(IsForPublishing() && ValidateCheckpoints())
@@ -54,6 +58,35 @@ namespace Explorer.Tours.Core.Domain
                 return true;
             }
             return false;
+        }
+
+        public void AddTime(double time, double distance, string type)
+        {
+            if (TourTimes == null)
+            {
+                TourTimes = new List<TourTime>();
+
+            }
+            if(Enum.TryParse<TransportationType>(type, true, out var t))
+            {
+                var tourTime = new TourTime(time + CalculateRequiredTime(), distance, t);
+                TourTimes.Add(tourTime);
+            }
+        }
+
+        public void ClearTourTimes()
+        {
+            if (TourTimes != null)
+                TourTimes.Clear();
+        }
+
+        private double CalculateRequiredTime()
+        {
+            if(Checkpoints != null)
+            {
+                return Checkpoints.Sum(n => n.RequiredTimeInSeconds);
+            }
+            return 0;
         }
     }
 }

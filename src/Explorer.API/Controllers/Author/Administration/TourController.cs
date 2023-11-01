@@ -1,6 +1,7 @@
 ﻿using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
+using Explorer.Tours.Core.Domain;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -80,6 +81,12 @@ namespace Explorer.API.Controllers.Author.Administration
             return CreateResponse(result);
         }
 
+        [HttpPut("tourTime/{id:int}")]
+        public ActionResult<TourDto> AddTime(TourTimesDto tourTimesDto, int id)
+        {
+            var result = _tourService.AddTime(tourTimesDto, id);
+            return CreateResponse(result);
+        }
 
     }
 }

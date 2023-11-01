@@ -75,5 +75,25 @@ namespace Explorer.Tours.Core.UseCases.Administration
             var result = _tourRepository.Update(tour);
             return MapToDto(result);
         }
+
+        public Result<TourDto> AddTime(TourTimesDto tourTimesDto, int id)
+
+        {
+            var tour = _tourRepository.Get(id);
+            tour.ClearTourTimes();
+            try
+            {
+                foreach(var time in tourTimesDto.TourTimes)
+                {
+                    tour.AddTime(time.TimeInSeconds, time.Distance, time.Transportation);
+                }
+                var result = _tourRepository.Update(tour);
+                return MapToDto(result);
+            }
+            catch {
+                throw new Exception("Invalid tour time");
+
+            }
+        }
     }
 }

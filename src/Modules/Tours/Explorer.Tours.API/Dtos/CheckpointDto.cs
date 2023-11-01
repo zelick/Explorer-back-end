@@ -15,5 +15,6 @@ namespace Explorer.Tours.API.Dtos
         public string Name { get; set; }
         public string? Description { get; set; }
         public List<string> Pictures { get; set; }
+        public double RequiredTimeInSeconds { get; set; }
     }
 }
