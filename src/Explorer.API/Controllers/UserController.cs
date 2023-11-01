@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Explorer.API.Controllers
 {
 	//[Authorize(Policy = "touristPolicy")]
-	[Route("api/user")]
+	[Route("api/User")]
 	public class UserController : BaseApiController
 	{
 		private readonly IUserService _userService;

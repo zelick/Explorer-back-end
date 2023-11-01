@@ -32,7 +32,7 @@ public class BlogPostController : BaseApiController
     }
 
     // TODO authorization
-    [HttpGet("user/{id:int}")]
+    [HttpGet("User/{id:int}")]
     public ActionResult<PagedResult<BlogPostDto>> GetByUser([FromQuery] int page, [FromQuery] int pageSize, int id)
     {
 

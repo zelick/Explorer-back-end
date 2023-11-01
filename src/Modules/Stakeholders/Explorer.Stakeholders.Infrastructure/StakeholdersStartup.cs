@@ -30,11 +30,13 @@ public static class StakeholdersStartup
         services.AddScoped<IClubRequestService, ClubRequestService>();
         services.AddScoped<IClubService, ClubService>(); 
         services.AddScoped<IClubInvitationService, ClubInvitationService>();
-		    services.AddScoped<IUserService, UserService>();
+        services.AddScoped<IUserService, UserService>();
         services.AddScoped<IApplicationGradeService, ApplicationGradeService>();
         services.AddScoped<IPersonEditingService, PersonEditingService>();
         services.AddScoped<IAccountsManagementService, AccountsManagementService>();
         services.AddScoped<IPersonRepository, PersonDatabaseRepository>();
+        services.AddScoped<IUserProfileService,  UserProfileService>();
+        services.AddScoped<IMessageService, MessageService>();
     }
 
 
@@ -57,6 +59,10 @@ public static class StakeholdersStartup
 
         services.AddScoped(typeof(ICrudRepository<Club>), typeof(CrudDatabaseRepository<Club, StakeholdersContext>));
 
+        services.AddScoped(typeof(IUserFollowerRepository), typeof(UserFollowerDatabaseRepository));
+        //services.AddScoped(typeof(IMessageRepository), typeof(MessageDatabaseRepository));
+        services.AddScoped(typeof(ICrudRepository<Message>), typeof(CrudDatabaseRepository<Message, StakeholdersContext>));
+        services.AddScoped(typeof(IMessageRepository), typeof(MessageDatabaseRepository));
 
         services.AddDbContext<StakeholdersContext>(opt =>
             opt.UseNpgsql(DbConnectionStringBuilder.Build("stakeholders"),

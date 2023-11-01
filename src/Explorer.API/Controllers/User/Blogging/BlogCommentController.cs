@@ -42,7 +42,7 @@ public class BlogCommentController : BaseApiController
     [HttpDelete("{id:int}")]
     public ActionResult Delete(int id)
     {
-        // var userId = long.Parse(user.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+        // var userId = long.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
 
         var result = _blogCommentService.Delete(id);
         return CreateResponse(result);

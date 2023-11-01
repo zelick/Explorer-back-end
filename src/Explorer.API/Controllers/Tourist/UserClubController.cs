@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Explorer.API.Controllers.Tourist
 {
 	[Authorize(Policy = "touristPolicy")]
-	[Route("api/user-club")]
+	[Route("api/User-club")]
 	public class UserClubController : BaseApiController
 	{
 		private readonly IClubService _clubService;
@@ -32,7 +32,7 @@ namespace Explorer.API.Controllers.Tourist
 		}
 
 
-        [HttpGet("user/{userId:int}")]
+        [HttpGet("User/{userId:int}")]
 		public ActionResult<PagedResult<ClubDto>> GetAll(int userId)
 		{
 			var result = _clubService.GetClubsByUser(userId);

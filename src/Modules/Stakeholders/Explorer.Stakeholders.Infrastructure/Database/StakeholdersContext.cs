@@ -14,6 +14,9 @@ public class StakeholdersContext : DbContext
     public DbSet<UserClub> UserClubs { get; set; }
     public DbSet<ClubRequest> Requests { get; set; }
     public DbSet<ApplicationGrade> ApplicationGrades { get; set; }
+    public DbSet<UserFollower> UserFollower { get; set; }
+
+    public DbSet<Message> Messages { get; set; }
 
     public StakeholdersContext(DbContextOptions<StakeholdersContext> options) : base(options) { }
 
@@ -34,6 +37,11 @@ public class StakeholdersContext : DbContext
             .HasOne<Club>()
             .WithMany()
             .HasForeignKey(uc => uc.ClubId);
+
+        //UserFollower table
+        modelBuilder.Entity<UserFollower>()
+            .HasKey(uf => new { uf.UserId, uf.FollowerId });
+
 
         ConfigureStakeholder(modelBuilder);
     }

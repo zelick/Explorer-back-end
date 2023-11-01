@@ -1,6 +1,5 @@
 ﻿using Explorer.Tours.Core.Domain;
 using Explorer.Tours.Core.Domain.RepositoryInterfaces;
-using System.Linq;
 
 namespace Explorer.Tours.Infrastructure.Database.Repositories
 {
