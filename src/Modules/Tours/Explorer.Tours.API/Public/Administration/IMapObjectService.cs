@@ -10,5 +10,6 @@ namespace Explorer.Tours.API.Public.Administration
         Result<MapObjectDto> Create(MapObjectDto mapObject);
         Result<MapObjectDto> Update(MapObjectDto mapObject);
         Result Delete(int id);
+        Result<MapObjectDto> Get(int id);
     }
 }

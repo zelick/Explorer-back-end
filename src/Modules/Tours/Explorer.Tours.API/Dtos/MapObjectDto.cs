@@ -15,5 +15,7 @@ namespace Explorer.Tours.API.Dtos
         public string? Category { get; set; }
         public float? Longitude { get; set; }
         public float? Latitude { get; set; }
+        public bool IsPublic { get; set; }
+        public bool IsVisible { get; set; }
     }
 }

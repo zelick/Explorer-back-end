@@ -45,5 +45,12 @@ namespace Explorer.API.Controllers.Author.Administration
             var result = _mapObjectService.Delete(id);
             return CreateResponse(result);
         }
+
+        [HttpGet("{id:int}")]
+        public ActionResult<MapObjectDto> GetObject(int id)
+        {
+            var result = _mapObjectService.Get(id);
+            return CreateResponse(result);
+        }
     }
 }

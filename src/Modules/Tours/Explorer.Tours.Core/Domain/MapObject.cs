@@ -17,16 +17,20 @@ namespace Explorer.Tours.Core.Domain
         public MapObjectType? Category { get; init; }
         public float? Longitude { get; init; }
         public float? Latitude { get; init; }
+        public bool IsPublic { get; init; }
+        public bool IsVisible { get; init; }
 
-        public MapObject(string name, string? description, string pictureURL, MapObjectType? category, float? longitude, float? latitude)
+        public MapObject(string name, string? description, string pictureURL, MapObjectType? category, float? longitude, float? latitude, bool isPublic, bool isVisible)
         {
-            if(string.IsNullOrWhiteSpace(name)) throw new ArgumentException("Invalid Name.");
+            if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("Invalid Name.");
             Name = name;
             Description = description;
             PictureURL = pictureURL;
             Category = category;
             Longitude = longitude;
             Latitude = latitude;
+            IsPublic = isPublic;
+            IsVisible = isVisible;
         }
     }
 }
