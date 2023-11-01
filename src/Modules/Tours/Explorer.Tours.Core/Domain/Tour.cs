@@ -14,6 +14,10 @@ namespace Explorer.Tours.Core.Domain
 
         public List<Equipment> Equipment { get; init; }
 
+        public List<Checkpoint> Checkpoints { get; init; }
+
+        public double Distance { get; init; }
+
         public Tour(int authorId, string name, string? description, Demandigness? demandignessLevel, List<string>? tags, TourStatus status = TourStatus.Draft,double price=0)
         {
             if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("Invalid Name.");
@@ -28,13 +32,17 @@ namespace Explorer.Tours.Core.Domain
             AuthorId = authorId;
             Tags = tags;
             Equipment = new List<Equipment>();
+            Checkpoints = new List<Checkpoint>();
+            Distance = 0;
         }
     }
 }
 
 public enum TourStatus
 {
-    Draft
+    Draft,
+    Published,
+    Archived
 }
 
 public enum Demandigness
