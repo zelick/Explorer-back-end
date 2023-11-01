@@ -17,6 +17,23 @@ namespace Explorer.Stakeholders.Core.Domain
     {
         public int MapObjectId { get; init; }
         public int AuthorId { get; init; }
-        public RequestStatus Status { get; init; }
+        public RequestStatus Status { get; private set; }
+
+        public ObjectRequest(int mapObjectId, int authorId, RequestStatus status)
+        {
+            MapObjectId = mapObjectId;
+            AuthorId = authorId;
+            Status = status;
+        }
+
+        public void AcceptRequest()
+        {
+            Status = RequestStatus.Accepted;
+        }
+
+        public void RejectRequest()
+        {
+            Status = RequestStatus.Rejected;
+        }
     }
 }

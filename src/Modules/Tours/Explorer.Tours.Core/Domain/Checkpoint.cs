@@ -7,6 +7,12 @@ using Explorer.BuildingBlocks.Core.Domain;
 
 namespace Explorer.Tours.Core.Domain
 {
+    public enum CheckpointStatus
+    {
+        Private,
+        OnHold,
+        Public
+    }
     public class Checkpoint : Entity
     {
         public long TourId { get; init; }
@@ -16,8 +22,9 @@ namespace Explorer.Tours.Core.Domain
         public string Name { get; init; }
         public string? Description { get; init; }
         public List<string> Pictures { get; init; }
+        public CheckpointStatus Status { get; init; }
 
-        public Checkpoint(long tourId, double longitude, double latitude, string name, string description, List<string> pictures)
+        public Checkpoint(long tourId, double longitude, double latitude, string name, string description, List<string> pictures, CheckpointStatus status)
         {
             if (tourId == 0) throw new ArgumentException("Invalid Tour ID");
             TourId = tourId;
@@ -28,6 +35,7 @@ namespace Explorer.Tours.Core.Domain
             if (pictures.Count() > 0)
                 Pictures = pictures ?? throw new ArgumentNullException(nameof(pictures));
             else throw new ArgumentException("Invalid Picture");
+            Status = status;
         }
     }
 }

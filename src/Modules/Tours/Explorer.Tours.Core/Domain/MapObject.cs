@@ -9,6 +9,13 @@ namespace Explorer.Tours.Core.Domain
         WC,
         Parking
     }
+
+    public enum MapObjectStatus
+    {
+        Private,
+        OnHold,
+        Public
+    }
     public class MapObject : Entity
     {
         public string Name { get; init; }
@@ -17,10 +24,9 @@ namespace Explorer.Tours.Core.Domain
         public MapObjectType? Category { get; init; }
         public float? Longitude { get; init; }
         public float? Latitude { get; init; }
-        public bool IsPublic { get; init; }
-        public bool IsVisible { get; init; }
+        public MapObjectStatus? Status { get; init; }
 
-        public MapObject(string name, string? description, string pictureURL, MapObjectType? category, float? longitude, float? latitude, bool isPublic, bool isVisible)
+        public MapObject(string name, string? description, string pictureURL, MapObjectType? category, float? longitude, float? latitude, MapObjectStatus? status)
         {
             if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("Invalid Name.");
             Name = name;
@@ -29,8 +35,7 @@ namespace Explorer.Tours.Core.Domain
             Category = category;
             Longitude = longitude;
             Latitude = latitude;
-            IsPublic = isPublic;
-            IsVisible = isVisible;
+            Status = status;
         }
     }
 }

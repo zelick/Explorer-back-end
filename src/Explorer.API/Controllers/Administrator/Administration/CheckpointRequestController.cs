@@ -1,49 +1,47 @@
 ﻿using Explorer.Stakeholders.API.Dtos;
 using Explorer.Stakeholders.API.Public;
 using Explorer.Stakeholders.Core.UseCases;
-using Explorer.Tours.API.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Explorer.API.Controllers.Administrator.Administration
 {
     [Authorize(Policy = "administratorAndAuthorPolicy")]
-    [Route("api/administration/objectRequests")]
-    public class ObjectRequestController : BaseApiController
+    [Route("api/administration/checkpointequests")]
+    public class CheckpointRequestController : BaseApiController
     {
+        private readonly ICheckpointRequestService _checkpointRequestService;
 
-        private readonly IObjectRequestService _objectRequestService;
-
-        public ObjectRequestController(IObjectRequestService objectRequestService)
+        public CheckpointRequestController(ICheckpointRequestService checkpointRequestService)
         {
-            _objectRequestService = objectRequestService;
+            _checkpointRequestService = checkpointRequestService;
         }
 
         [HttpPost]
-        public ActionResult<ObjectRequestDto> Create([FromBody] ObjectRequestDto request)
+        public ActionResult<CheckpointRequestDto> Create([FromBody] CheckpointRequestDto request)
         {
-            var result = _objectRequestService.Create(request);
+            var result = _checkpointRequestService.Create(request);
             return CreateResponse(result);
         }
 
         [HttpGet]
-        public ActionResult<List<ObjectRequestDto>> GetAll()
+        public ActionResult<List<CheckpointRequestDto>> GetAll()
         {
-            var result = _objectRequestService.GetAll();
+            var result = _checkpointRequestService.GetAll();
             return CreateResponse(result);
         }
 
         [HttpPut("accept/{id:int}")]
         public ActionResult<ObjectRequestDto> AcceptRequest(int id)
         {
-            var result = _objectRequestService.AcceptRequest(id);
+            var result = _checkpointRequestService.AcceptRequest(id);
             return CreateResponse(result);
         }
 
         [HttpPut("reject/{id:int}")]
         public ActionResult<ObjectRequestDto> RejectRequest(int id)
         {
-            var result = _objectRequestService.RejectRequest(id);
+            var result = _checkpointRequestService.RejectRequest(id);
             return CreateResponse(result);
         }
     }
