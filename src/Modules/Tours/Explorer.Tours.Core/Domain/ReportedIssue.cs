@@ -20,7 +20,7 @@ namespace Explorer.Tours.Core.Domain
         public int TouristId { get; init; }
         [ForeignKey("TourId")]
         public Tour Tour { get; set; }
-        public virtual ICollection<ReportedIssueComment> Comments { get; set; }
+        public virtual ICollection<ReportedIssueComment> ?Comments { get; set; }
         public ReportedIssue() { }
         public ReportedIssue(string category, string? description, int priority, DateTime time, int tourId, int touristId, Tour tour, bool resolved)
         {
@@ -33,6 +33,7 @@ namespace Explorer.Tours.Core.Domain
             TouristId = touristId;
             Tour= tour;
             Resolved = resolved;
+            Comments= new List<ReportedIssueComment>();
         }
 
         public bool IsUnresolvedWithinFiveDays()

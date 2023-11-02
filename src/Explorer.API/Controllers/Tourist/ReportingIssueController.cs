@@ -23,6 +23,7 @@ namespace Explorer.API.Controllers.Tourist
         [HttpPost]
         public ActionResult<ReportedIssueDto> Create([FromBody] ReportedIssueDto reportedIssue)
         {
+            reportedIssue.Comments = new List<ReportedIssueCommentDto>();
             if(reportedIssue.Category.IsNullOrEmpty() || reportedIssue.Priority==0 ||reportedIssue.TourId==0 || reportedIssue.TouristId == 0)
             {
                 return BadRequest("Fill all the fields.");
