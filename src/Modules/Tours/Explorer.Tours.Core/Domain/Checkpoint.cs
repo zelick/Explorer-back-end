@@ -10,7 +10,6 @@ namespace Explorer.Tours.Core.Domain
     public enum CheckpointStatus
     {
         Private,
-        OnHold,
         Public
     }
     public class Checkpoint : Entity
@@ -22,7 +21,7 @@ namespace Explorer.Tours.Core.Domain
         public string Name { get; init; }
         public string? Description { get; init; }
         public List<string> Pictures { get; init; }
-        public CheckpointStatus Status { get; init; }
+        public CheckpointStatus Status { get; private set; }
 
         public Checkpoint(long tourId, double longitude, double latitude, string name, string description, List<string> pictures, CheckpointStatus status)
         {
@@ -36,6 +35,11 @@ namespace Explorer.Tours.Core.Domain
                 Pictures = pictures ?? throw new ArgumentNullException(nameof(pictures));
             else throw new ArgumentException("Invalid Picture");
             Status = status;
+        }
+
+        public void SetPublicStatus()
+        {
+            Status = CheckpointStatus.Public;
         }
     }
 }

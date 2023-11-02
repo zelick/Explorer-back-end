@@ -52,5 +52,12 @@ namespace Explorer.API.Controllers.Author.Administration
             var result = _checkpointService.Delete(id);
             return CreateResponse(result);
         }
+
+        [HttpPut("setPublicStatus/{id:int}")]
+        public ActionResult<CheckpointDto> SetPublicStatus(int id)
+        {
+            var result = _checkpointService.SetPublicStatus(id);
+            return CreateResponse(result);
+        }
     }
 }
