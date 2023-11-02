@@ -52,5 +52,12 @@ namespace Explorer.API.Controllers.Author.Administration
             var result = _mapObjectService.Get(id);
             return CreateResponse(result);
         }
+
+        [HttpPut("setPublicStatus/{id:int}")]
+        public ActionResult<MapObjectDto> SetPublicStatus(int id)
+        {
+            var result = _mapObjectService.SetPublicStatus(id);
+            return CreateResponse(result);
+        }
     }
 }

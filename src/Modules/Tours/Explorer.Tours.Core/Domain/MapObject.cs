@@ -13,7 +13,6 @@ namespace Explorer.Tours.Core.Domain
     public enum MapObjectStatus
     {
         Private,
-        OnHold,
         Public
     }
     public class MapObject : Entity
@@ -24,7 +23,7 @@ namespace Explorer.Tours.Core.Domain
         public MapObjectType? Category { get; init; }
         public float? Longitude { get; init; }
         public float? Latitude { get; init; }
-        public MapObjectStatus? Status { get; init; }
+        public MapObjectStatus? Status { get; private set; }
 
         public MapObject(string name, string? description, string pictureURL, MapObjectType? category, float? longitude, float? latitude, MapObjectStatus? status)
         {
@@ -36,6 +35,11 @@ namespace Explorer.Tours.Core.Domain
             Longitude = longitude;
             Latitude = latitude;
             Status = status;
+        }
+
+        public void SetPublicStatus()
+        {
+            Status = MapObjectStatus.Public;
         }
     }
 }
