@@ -117,6 +117,14 @@ namespace Explorer.Tours.Core.UseCases.Administration
             return MapToDto(result);
         }
 
+        public Result<TourDto> Archive(int id)
+        {
+            var tour = _tourRepository.Get(id);
+            tour.Archive();
+            var result = _tourRepository.Update(tour);
+            return MapToDto(result);
+        }
+
         public Result<TourDto> AddTime(TourTimesDto tourTimesDto, int id)
 
         {

@@ -81,6 +81,13 @@ namespace Explorer.API.Controllers.Author.Administration
             return CreateResponse(result);
         }
 
+        [HttpPut("archivedTours/{id:int}")]
+        public ActionResult<TourDto> Archive(int id)
+        {
+            var result = _tourService.Archive(id);
+            return CreateResponse(result);
+        }
+
         [HttpPut("tourTime/{id:int}")]
         public ActionResult<TourDto> AddTime(TourTimesDto tourTimesDto, int id)
         {

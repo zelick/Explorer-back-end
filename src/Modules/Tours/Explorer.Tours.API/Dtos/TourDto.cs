@@ -20,6 +20,7 @@ namespace Explorer.Tours.API.Dtos
         public List<EquipmentDto>? Equipment { get; set; }
         public List<CheckpointDto>? Checkpoints { get; set; }
         public List<PublishedTourDto>? PublishedTours { get; set; }
+        public List<ArchivedTourDto>? ArchivedTours { get; set; }
         public List<TourTimeDto>? TourTimes { get; set;}
     }
 }
