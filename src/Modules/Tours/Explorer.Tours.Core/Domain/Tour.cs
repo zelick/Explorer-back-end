@@ -1,4 +1,5 @@
 ﻿using Explorer.BuildingBlocks.Core.Domain;
+using System.ComponentModel.DataAnnotations;
 
 namespace Explorer.Tours.Core.Domain
 {
@@ -15,6 +16,12 @@ namespace Explorer.Tours.Core.Domain
         public List<Checkpoint> Checkpoints { get; init; }
         public List<PublishedTour>? PublishedTours { get; init; }
         public List<TourTime>? TourTimes { get; private set; }
+
+        public Tour AddEquipment(Equipment equip)
+        {
+            Equipment.Add(equip);
+            return this;
+        }
 
         public Tour(int authorId, string name, string? description, Demandigness? demandignessLevel, List<string>? tags, TourStatus status = TourStatus.Draft,double price=0)
         {
@@ -88,6 +95,20 @@ namespace Explorer.Tours.Core.Domain
             }
             return 0;
         }
+
+
+        public Tour FilterView(Tour tour)
+        {
+            if (tour.Checkpoints.Count > 0) {
+                Checkpoint cp = tour.Checkpoints[0];
+                tour.Checkpoints.Clear();
+                tour.Checkpoints.Add(cp);
+            };
+
+
+            return tour;
+        }
+
     }
 }
 

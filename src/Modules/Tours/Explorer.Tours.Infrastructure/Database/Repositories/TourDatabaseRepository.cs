@@ -29,6 +29,15 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
                 .ToList();
         }
 
+        public List<Tour> GetPublishedTours()
+        {
+            return _dbContext.Tours
+                .Include(t => t.Equipment)
+                .Include(t => t.Checkpoints)
+                .Where(t => t.Status == TourStatus.Published)
+                .ToList();
+        }
+
         public Tour Get(long id)
         {
             var tour = _dbContext.Tours.Include(t => t.Equipment).Include(t => t.Checkpoints).FirstOrDefault(t => t.Id == id);
@@ -77,5 +86,6 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
             _dbContext.Tours.Remove(entity);
             _dbContext.SaveChanges();
         }
+
     }
 }
