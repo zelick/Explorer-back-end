@@ -23,6 +23,7 @@ namespace Explorer.Stakeholders.Infrastructure.Database.Repositories
             CheckpointRequest requestToUpdate = _dbContext.CheckpointRequests.FirstOrDefault(o => o.Id == id);
             if (requestToUpdate == null) throw new KeyNotFoundException("Not found " + id);
             requestToUpdate.AcceptRequest();
+            _dbContext.SaveChanges();
             return requestToUpdate;
         }
 
@@ -31,6 +32,7 @@ namespace Explorer.Stakeholders.Infrastructure.Database.Repositories
             CheckpointRequest requestToUpdate = _dbContext.CheckpointRequests.FirstOrDefault(o => o.Id == id);
             if (requestToUpdate == null) throw new KeyNotFoundException("Not found " + id);
             requestToUpdate.RejectRequest();
+            _dbContext.SaveChanges();
             return requestToUpdate;
         }
     }
