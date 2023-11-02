@@ -16,7 +16,7 @@ namespace Explorer.Tours.Core.Domain
         public int Priority { get; init; }
         public DateTime Time { get; init; }
         public long TourId { get; init; }
-        public bool Resolved { get; init; } // indicates if the problem is resolved or not
+        public bool Resolved { get; private set; } // indicates if the problem is resolved or not
         public int TouristId { get; init; }
         [ForeignKey("TourId")]
         public Tour Tour { get; set; }
@@ -38,6 +38,10 @@ namespace Explorer.Tours.Core.Domain
         public bool IsUnresolvedWithinFiveDays()
         {
             return (!Resolved) && (DateTime.Now.AddDays(-5) > Time);
+        }
+        public void Resolve()
+        {
+            Resolved = true;
         }
     }
 }

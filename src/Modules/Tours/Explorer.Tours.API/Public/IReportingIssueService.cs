@@ -11,5 +11,6 @@ namespace Explorer.Tours.API.Public
     public interface IReportingIssueService
     {
         Result<ReportedIssueDto> Create(ReportedIssueDto reportedIssue);
+        Result<ReportedIssueDto> Resolve(long id);
     }
 }

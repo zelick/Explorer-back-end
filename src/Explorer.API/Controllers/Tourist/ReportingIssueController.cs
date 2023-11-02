@@ -21,13 +21,19 @@ namespace Explorer.API.Controllers.Tourist
         }
 
         [HttpPost]
-        public ActionResult<EquipmentDto> Create([FromBody] ReportedIssueDto equipment)
+        public ActionResult<ReportedIssueDto> Create([FromBody] ReportedIssueDto reportedIssue)
         {
-            if(equipment.Category.IsNullOrEmpty() || equipment.Priority==0 ||equipment.TourId==0 || equipment.TouristId == 0)
+            if(reportedIssue.Category.IsNullOrEmpty() || reportedIssue.Priority==0 ||reportedIssue.TourId==0 || reportedIssue.TouristId == 0)
             {
                 return BadRequest("Fill all the fields.");
             }
-            var result = _reportingIssueService.Create(equipment);
+            var result = _reportingIssueService.Create(reportedIssue);
+            return CreateResponse(result);
+        }
+        [HttpPut("resolve/{id:int}")]
+        public ActionResult<EquipmentDto> Resolve(int id)
+        {
+            var result = _reportingIssueService.Resolve(id);
             return CreateResponse(result);
         }
     }

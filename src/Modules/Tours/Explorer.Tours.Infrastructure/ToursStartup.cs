@@ -42,6 +42,7 @@ public static class ToursStartup
         services.AddScoped(typeof(ICrudRepository<Explorer.Tours.Core.Domain.MapObject>), typeof(CrudDatabaseRepository<Explorer.Tours.Core.Domain.MapObject, ToursContext>));
         services.AddScoped(typeof(ICrudRepository<TourPreference>), typeof(CrudDatabaseRepository<TourPreference, ToursContext>));
         services.AddScoped(typeof(ICheckpointRepository), typeof(CheckpointDatabaseRepository));
+        services.AddScoped(typeof(IReportedIssueRepository), typeof(ReportedIssuesDatabaseRepository));
         services.AddScoped(typeof(ICrudRepository<Tour>), typeof(CrudDatabaseRepository<Tour, ToursContext>));
         services.AddScoped(typeof(ITourEquipmentRepository), typeof(TourEquipmentDatabaseRepository));
         services.AddScoped(typeof(ITourRepository), typeof(TourDatabaseRepository));
