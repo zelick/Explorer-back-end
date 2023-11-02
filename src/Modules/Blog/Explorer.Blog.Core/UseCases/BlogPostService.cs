@@ -17,11 +17,24 @@ public class BlogPostService : CrudService<BlogPostDto, BlogPost>, IBlogPostServ
         _blogPostsRepository = repository;
     }
 
-    public Result<PagedResult<BlogPostDto>> GetByUser(int page, int pagedSize, int id)
+    public Result<PagedResult<BlogPostDto>> GetAllNonDraft(int page, int pageSize)
     {
         try
         {
-            var result = _blogPostsRepository.GetByUser(page, pagedSize, id);
+            var result = _blogPostsRepository.GetAllNonDraft(page, pageSize);
+            return MapToDto(result);
+        }
+        catch (KeyNotFoundException e)
+        {
+            return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+        }
+    }
+
+    public Result<PagedResult<BlogPostDto>> GetAllByUser(int page, int pageSize, int id)
+    {
+        try
+        {
+            var result = _blogPostsRepository.GetAllByUser(page, pageSize, id);
             return MapToDto(result);
         }
         catch (KeyNotFoundException e)
@@ -36,7 +49,8 @@ public class BlogPostService : CrudService<BlogPostDto, BlogPost>, IBlogPostServ
         {
             var blogPost = CrudRepository.Get(blogPostDto.Id);
 
-            if (blogPost.Status != BlogPostStatus.Draft) throw new ArgumentException("Only Blog Posts with Draft Status can be updated.");
+            if (blogPost.Status != BlogPostStatus.Draft)
+                throw new ArgumentException("Only Blog Posts with Draft Status can be updated.");
 
             blogPost.Update(MapToDomain(blogPostDto));
             var result = CrudRepository.Update(blogPost);

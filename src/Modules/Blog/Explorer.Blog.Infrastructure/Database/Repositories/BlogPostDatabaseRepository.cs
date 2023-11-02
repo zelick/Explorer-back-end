@@ -9,7 +9,22 @@ public class BlogPostDatabaseRepository : CrudDatabaseRepository<BlogPost, BlogC
 {
     public BlogPostDatabaseRepository(BlogContext blogContext) : base(blogContext) {}
 
-    public PagedResult<BlogPost> GetByUser(int page, int pageSize, long userId)
+    public PagedResult<BlogPost> GetAllNonDraft(int page, int pageSize)
+    {
+        var query = DbContext.BlogPosts.Where(bp => bp.Status != BlogPostStatus.Draft);
+
+        var count = query.Count();
+
+        var pagedData = (page != 0 && pageSize != 0)
+            ? query.Skip((page - 1) * pageSize).Take(pageSize)
+            : query;
+
+        var items = pagedData.ToList();
+
+        return new PagedResult<BlogPost>(items, count);
+    }
+
+    public PagedResult<BlogPost> GetAllByUser(int page, int pageSize, long userId)
     {
         var query = DbContext.BlogPosts.Where(bp => bp.UserId == userId);
 

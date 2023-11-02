@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Explorer.API.Controllers.User.Blogging;
 
 [Authorize(Policy = "userPolicy")]
-[Route("api/blogging/blog-post")]
+[Route("api/blogging/blog-posts")]
 public class BlogPostController : BaseApiController
 {
     private readonly IBlogPostService _blogPostService;
@@ -18,9 +18,16 @@ public class BlogPostController : BaseApiController
     }
 
     [HttpGet]
-    public ActionResult<PagedResult<BlogPostDto>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
+    public ActionResult<PagedResult<BlogPostDto>> GetAllNonDraft([FromQuery] int page, [FromQuery] int pageSize)
     {
-        var result = _blogPostService.GetPaged(page, pageSize);
+        var result = _blogPostService.GetAllNonDraft(page, pageSize);
+        return CreateResponse(result);
+    }
+
+    [HttpGet("{id:int}")]
+    public ActionResult<BlogPostDto> GetById(int id)
+    {
+        var result = _blogPostService.Get(id);
         return CreateResponse(result);
     }
 
@@ -33,10 +40,10 @@ public class BlogPostController : BaseApiController
 
     // TODO authorization
     [HttpGet("user/{id:int}")]
-    public ActionResult<PagedResult<BlogPostDto>> GetByUser([FromQuery] int page, [FromQuery] int pageSize, int id)
+    public ActionResult<PagedResult<BlogPostDto>> GetAllByUser([FromQuery] int page, [FromQuery] int pageSize, int id)
     {
 
-        var result = _blogPostService.GetByUser(page, pageSize, id);
+        var result = _blogPostService.GetAllByUser(page, pageSize, id);
         return CreateResponse(result);
     }
 
