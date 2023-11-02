@@ -15,6 +15,7 @@ namespace Explorer.Tours.Core.Domain
         public List<Equipment> Equipment { get; init; }
         public List<Checkpoint> Checkpoints { get; init; }
         public List<PublishedTour>? PublishedTours { get; init; }
+        public List<ArchivedTour>? ArchivedTours { get; init; }
         public List<TourTime>? TourTimes { get; private set; }
 
         public Tour AddEquipment(Equipment equip)
@@ -45,6 +46,10 @@ namespace Explorer.Tours.Core.Domain
         {
             return !string.IsNullOrWhiteSpace(Name) && !string.IsNullOrWhiteSpace(Description) && DemandignessLevel != null && Tags != null;
         }
+        private bool IsForArchiving()
+        {
+            return Status == TourStatus.Published;
+        }
 
         public bool ValidateCheckpoints()
         {
@@ -66,6 +71,19 @@ namespace Explorer.Tours.Core.Domain
             }
             return false;
         }
+
+        public bool Archive()
+        {
+            if (IsForArchiving())
+            {
+                Status = TourStatus.Archived;
+                var archivedTour = new ArchivedTour(DateTime.Now);
+                ArchivedTours.Add(archivedTour);
+                return true;
+            }
+            return false;
+        }
+
 
         public void AddTime(double time, double distance, string type)
         {

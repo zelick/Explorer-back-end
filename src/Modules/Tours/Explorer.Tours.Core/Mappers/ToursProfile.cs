@@ -20,6 +20,7 @@ public class ToursProfile : Profile
         CreateMap<TourRatingDto, TourRating>().ReverseMap();
         CreateMap<TourDto, Tour>().ReverseMap();
         CreateMap<PublishedTourDto, PublishedTour>().ReverseMap();
+        CreateMap<ArchivedTourDto, ArchivedTour>().ReverseMap();
         CreateMap<TourTimeDto, TourTime>().ReverseMap();
     }
 
