@@ -32,6 +32,8 @@ public class ToursContext : DbContext
             .UsingEntity<TourEquipment>();
         ConfigureReportedIssues(modelBuilder);
         ConfigureTourRatings(modelBuilder);
+
+        modelBuilder.Entity<ReportedIssue>().Property(item => item.Comments).HasColumnType("jsonb");
     }
     private static void ConfigureReportedIssues(ModelBuilder modelBuilder)
     {
