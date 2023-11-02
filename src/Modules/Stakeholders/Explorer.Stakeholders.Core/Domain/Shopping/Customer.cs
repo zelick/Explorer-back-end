@@ -11,7 +11,7 @@ namespace Explorer.Stakeholders.Core.Domain.Shopping
     {
         public long TouristId { get; init; }
         public List<TourPurchaseToken>? PurchaseTokens { get; init; } = new List<TourPurchaseToken>();
-        // public long ShoppingCartId { get; init; }
+        // public long ShoppingCartId { get; init; } //strani kljuc !!
 
         public Customer() { }
         public Customer(long toruistId)

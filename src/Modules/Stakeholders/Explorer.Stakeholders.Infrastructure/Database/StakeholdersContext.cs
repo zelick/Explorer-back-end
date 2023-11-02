@@ -16,6 +16,7 @@ public class StakeholdersContext : DbContext
     public DbSet<ClubRequest> Requests { get; set; }
     public DbSet<ApplicationGrade> ApplicationGrades { get; set; }
     public DbSet<Customer> Customers { get; set; }
+    public DbSet<ShoppingCart> ShoppingCarts { get; set; }
 
     public StakeholdersContext(DbContextOptions<StakeholdersContext> options) : base(options) { }
 
@@ -36,12 +37,15 @@ public class StakeholdersContext : DbContext
             .HasOne<Club>()
             .WithMany()
             .HasForeignKey(uc => uc.ClubId);
-        //dodaj strane kljuceve
+        //dodaj strane kljuceve!!!!
 
         ConfigureStakeholder(modelBuilder);
 
         modelBuilder.Entity<Customer>()
            .Property(item => item.PurchaseTokens).HasColumnType("jsonb");
+
+        modelBuilder.Entity<ShoppingCart>()
+          .Property(item => item.Items).HasColumnType("jsonb");
     }
 
     private static void ConfigureStakeholder(ModelBuilder modelBuilder)
