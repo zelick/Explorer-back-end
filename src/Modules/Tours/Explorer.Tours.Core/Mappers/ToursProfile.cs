@@ -1,6 +1,8 @@
+using System.Linq;
 using AutoMapper;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.Core.Domain;
+using FluentResults;
 
 namespace Explorer.Tours.Core.Mappers;
 
@@ -14,9 +16,11 @@ public class ToursProfile : Profile
             .ReverseMap();
         CreateMap<TourPreferenceDto, TourPreference>().ReverseMap();
         CreateMap<CheckpointDto, Checkpoint>().ReverseMap();
-        CreateMap<TourDto, Tour>().ReverseMap();
         CreateMap<ReportedIssueDto, ReportedIssue>().ReverseMap();
         CreateMap<TourRatingDto, TourRating>().ReverseMap();
+        CreateMap<TourDto, Tour>().ReverseMap();
+        CreateMap<PublishedTourDto, PublishedTour>().ReverseMap();
+        CreateMap<TourTimeDto, TourTime>().ReverseMap();
     }
 
     private MapObjectType MapObjectTypeFromString(string category)
