@@ -43,5 +43,20 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
             }
             return equipment;
         }
+        public ReportedIssue AddComment(long id,ReportedIssueComment comment)
+        {
+            var equipment = Get(id);
+            try
+            {
+                equipment.Comments.Add(comment);
+                _dbContext.ReportedIssues.Update(equipment);
+                _dbContext.SaveChanges();
+            }
+            catch (DbUpdateException e)
+            {
+                throw new KeyNotFoundException(e.Message);
+            }
+            return equipment;
+        }
     }
 }

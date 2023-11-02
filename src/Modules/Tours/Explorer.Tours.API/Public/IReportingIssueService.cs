@@ -12,5 +12,6 @@ namespace Explorer.Tours.API.Public
     {
         Result<ReportedIssueDto> Create(ReportedIssueDto reportedIssue);
         Result<ReportedIssueDto> Resolve(long id);
+        Result<ReportedIssueDto> AddComment(long id, ReportedIssueCommentDto reportedIssueComment);
     }
 }

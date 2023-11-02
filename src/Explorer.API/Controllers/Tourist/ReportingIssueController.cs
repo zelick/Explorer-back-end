@@ -32,9 +32,15 @@ namespace Explorer.API.Controllers.Tourist
             return CreateResponse(result);
         }
         [HttpPut("resolve/{id:int}")]
-        public ActionResult<EquipmentDto> Resolve(int id)
+        public ActionResult<ReportedIssueDto> Resolve(int id)
         {
             var result = _reportingIssueService.Resolve(id);
+            return CreateResponse(result);
+        }
+        [HttpPost("comment/{id:int}")]
+        public ActionResult<ReportedIssueDto> AddComment([FromBody] ReportedIssueCommentDto ric, int id)
+        {
+            var result = _reportingIssueService.AddComment(id,ric);
             return CreateResponse(result);
         }
     }
