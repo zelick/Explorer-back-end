@@ -10,7 +10,7 @@ public class BlogPost : Entity
     public DateTime CreationDate { get; private set; }
     public List<string>? ImageUrls { get; private set; }
     public BlogPostStatus Status { get; private set; }
-
+    public List<BlogRating>? BlogRatings { get; private set; }
 
     public BlogPost(long userId, string title, string description, DateTime creationDate, List<string>? imageUrls,
         BlogPostStatus status)
@@ -21,6 +21,7 @@ public class BlogPost : Entity
         CreationDate = creationDate;
         ImageUrls = imageUrls;
         Status = status;
+        BlogRatings = new List<BlogRating>();
         Validate();
     }
 
@@ -47,6 +48,27 @@ public class BlogPost : Entity
         if (string.IsNullOrWhiteSpace(Description)) throw new ArgumentException("Invalid Description.");
         if (CreationDate.Date > DateTime.Now.Date) throw new ArgumentException("Invalid CreationDate.");
     }
+
+    public void AddRating(BlogRating blogRating)
+    {
+        if (BlogRatings == null) return;
+
+        var existingRating = BlogRatings.FirstOrDefault(rating => rating.UserId == blogRating.UserId);
+
+        if (existingRating is not null)
+        {
+            if (existingRating.Rating == blogRating.Rating)
+                throw new Exception("Cannot vote with the same rating again");
+
+            existingRating.Rating = blogRating.Rating;
+            existingRating.TimeStamp = DateTime.Now;
+        }
+        else
+        {
+            BlogRatings?.Add(blogRating);
+        }
+    }
+
 }
 
 public enum BlogPostStatus

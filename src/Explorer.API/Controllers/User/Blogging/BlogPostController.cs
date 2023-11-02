@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Explorer.API.Controllers.User.Blogging;
 
 [Authorize(Policy = "userPolicy")]
-[Route("api/blogging/blog-post")]
+[Route("api/blogging/blog-posts")]
 public class BlogPostController : BaseApiController
 {
     private readonly IBlogPostService _blogPostService;
@@ -58,6 +58,13 @@ public class BlogPostController : BaseApiController
     public ActionResult Delete(int id)
     {
         var result = _blogPostService.Delete(id);
+        return CreateResponse(result);
+    }
+
+    [HttpPut("{id:int}/ratings")]
+    public ActionResult<BlogPostDto> Rate(int id,[FromBody] BlogRatingDto blogRatingDto)
+    {
+        var result = _blogPostService.Rate(id, blogRatingDto);
         return CreateResponse(result);
     }
 }

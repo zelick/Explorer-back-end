@@ -15,6 +15,8 @@ public class BlogContext : DbContext
         modelBuilder.HasDefaultSchema("blog");
 
         ConfigureBlogComment(modelBuilder);
+        modelBuilder.Entity<BlogPost>()
+            .Property(item => item.BlogRatings).HasColumnType("jsonb");
     }
 
     private static void ConfigureBlogComment(ModelBuilder modelBuilder)
