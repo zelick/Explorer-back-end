@@ -35,23 +35,64 @@ namespace Explorer.Tours.Core.UseCases.Administration
 
         }
 
+
+        public Result<List<TourDto>> GetFilteredPublishedTours(int page, int pageSize) 
+        {
+            try
+            {
+               List<Tour> publishedTours= _tourRepository.GetPublishedTours();
+               List<Tour> fillteredTours= new List<Tour>();
+                foreach(var tour in publishedTours)
+                {
+                    fillteredTours.Add(tour.FilterView(tour));
+                }
+                return MapToDto(fillteredTours);
+
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+        }
+
+        public Result<TourDto> GetPublishedTour(int id)
+        {
+            try
+            {
+                Tour publishedTour=_tourRepository.Get(id);
+                return MapToDto(publishedTour.FilterView(publishedTour));
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+        
+        }
+
         public Result<TourDto> AddEquipment(int tourId, int equipmentId)
         {
-            var isTourExists = _tourRepository.Exists(tourId);
-            if (!isTourExists) return Result.Fail(FailureCode.NotFound);
+            /*  var isTourExists = _tourRepository.Exists(tourId);
+              if (!isTourExists) return Result.Fail(FailureCode.NotFound);
 
-            var isEquipmentExists = _equipmentRepository.Exists(equipmentId);
-            if (!isEquipmentExists) return Result.Fail(FailureCode.NotFound);
+              var isEquipmentExists = _equipmentRepository.Exists(equipmentId);
+              if (!isEquipmentExists) return Result.Fail(FailureCode.NotFound);
 
-            var isRelationshipExists = _tourEquipmentRepository.Exists(tourId, equipmentId);
-            if (isRelationshipExists) return Result.Fail(FailureCode.NotFound);
+              var isRelationshipExists = _tourEquipmentRepository.Exists(tourId, equipmentId);
+              if (isRelationshipExists) return Result.Fail(FailureCode.NotFound);
 
 
-            var updatedTourId = _tourEquipmentRepository.AddEquipment(tourId, equipmentId).TourId;
+              var updatedTourId = _tourEquipmentRepository.AddEquipment(tourId, equipmentId).TourId;
 
-            var updatedTour = _tourRepository.Get(updatedTourId);
+              var updatedTour = _tourRepository.Get(updatedTourId);
 
-            return MapToDto(updatedTour);
+               return MapToDto(updatedTour);
+             */
+            Tour t =_tourRepository.Get(tourId);
+            Equipment e=_equipmentRepository.Get(equipmentId);
+            t = t.AddEquipment(e);
+            _tourRepository.Update(t);
+
+            return MapToDto(t);
 
         }
 

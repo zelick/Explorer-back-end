@@ -7,6 +7,7 @@ namespace Explorer.Tours.API.Public.Administration
     public interface ITourService
     {
         Result<List<TourDto>> GetToursByAuthor(int page, int pageSize, int id);
+        Result<List<TourDto>> GetFilteredPublishedTours(int page, int pageSize);
         Result<PagedResult<TourDto>> GetPaged(int page, int pageSize);
         Result<TourDto> Create(TourDto tour);
         Result<TourDto> Update(TourDto tour);
@@ -14,5 +15,6 @@ namespace Explorer.Tours.API.Public.Administration
         Result<TourDto> AddEquipment(int tourId, int equipmentId);
         Result<TourDto> RemoveEquipment(int tourId, int equipmentId);
         Result<TourDto> Get(int id);
+        public Result<TourDto> GetPublishedTour(int id);
     }
 }

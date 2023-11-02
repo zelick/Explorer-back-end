@@ -1,4 +1,5 @@
 ﻿using Explorer.BuildingBlocks.Core.Domain;
+using System.ComponentModel.DataAnnotations;
 
 namespace Explorer.Tours.Core.Domain
 {
@@ -18,6 +19,12 @@ namespace Explorer.Tours.Core.Domain
 
         public double Distance { get; init; }
 
+        public Tour AddEquipment(Equipment equip)
+        {
+            Equipment.Add(equip);
+            return this;
+        }
+
         public Tour(int authorId, string name, string? description, Demandigness? demandignessLevel, List<string>? tags, TourStatus status = TourStatus.Draft,double price=0)
         {
             if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("Invalid Name.");
@@ -35,6 +42,20 @@ namespace Explorer.Tours.Core.Domain
             Checkpoints = new List<Checkpoint>();
             Distance = 0;
         }
+
+
+        public Tour FilterView(Tour tour)
+        {
+            if (tour.Checkpoints.Count > 0) {
+                Checkpoint cp = tour.Checkpoints[0];
+                tour.Checkpoints.Clear();
+                tour.Checkpoints.Add(cp);
+            };
+
+
+            return tour;
+        }
+
     }
 }
 
