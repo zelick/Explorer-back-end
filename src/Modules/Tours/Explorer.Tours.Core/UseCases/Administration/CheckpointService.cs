@@ -20,6 +20,7 @@ namespace Explorer.Tours.Core.UseCases.Administration
         {
             _checkpointRepository = repository;
         }
+
         public Result<PagedResult<CheckpointDto>> GetPagedByTour(int page, int pageSize, int id)
         {
             try
@@ -30,6 +31,12 @@ namespace Explorer.Tours.Core.UseCases.Administration
             {
                 return Result.Fail(FailureCode.NotFound).WithError(e.Message);
             }
+        }
+
+        public Result<CheckpointDto> SetPublicStatus(int id)
+        {
+            var checkpoint = _checkpointRepository.SetPublicStatus(id);
+            return MapToDto(checkpoint);
         }
     }
 }
