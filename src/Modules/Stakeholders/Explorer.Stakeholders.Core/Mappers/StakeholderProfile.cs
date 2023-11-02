@@ -2,6 +2,7 @@ using AutoMapper;
 using Explorer.BuildingBlocks.Core.Domain;
 using Explorer.Stakeholders.API.Dtos;
 using Explorer.Stakeholders.Core.Domain;
+using Explorer.Stakeholders.Core.Domain.Shopping;
 
 namespace Explorer.Stakeholders.Core.Mappers;
 
@@ -17,5 +18,6 @@ public class StakeholderProfile : Profile
         CreateMap<PersonDto, Person>().ReverseMap();
         CreateMap<ClubDto, Club>().ReverseMap();
         CreateMap<UserDto, User>().ReverseMap();
+        CreateMap<CustomerDto, Customer>().ReverseMap();
     }
 }

@@ -1,4 +1,6 @@
 ﻿using Explorer.BuildingBlocks.Core.Domain;
+using Explorer.Stakeholders.Core.Domain.Shopping;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Explorer.Stakeholders.Core.Domain;
 
@@ -17,6 +19,7 @@ public class User : Entity
 		this.Role = role;
 		this.IsActive = isActive;
 	}
+
 
 	private void Validate()
     {

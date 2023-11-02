@@ -3,6 +3,7 @@ using Explorer.Stakeholders.API.Dtos;
 using Explorer.Stakeholders.API.Public;
 using Explorer.Stakeholders.Core.Domain;
 using Explorer.Stakeholders.Core.Domain.RepositoryInterfaces;
+using Explorer.Stakeholders.Core.Domain.Shopping;
 using FluentResults;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net.Mail;
@@ -14,12 +15,15 @@ public class AuthenticationService : IAuthenticationService
     private readonly ITokenGenerator _tokenGenerator;
     private readonly IUserRepository _userRepository;
     private readonly ICrudRepository<Person> _personRepository;
+    //customer rep 
+    private readonly ICustomerRepository _customerRepository;
 
-    public AuthenticationService(IUserRepository userRepository, ICrudRepository<Person> personRepository, ITokenGenerator tokenGenerator)
+    public AuthenticationService(IUserRepository userRepository, ICrudRepository<Person> personRepository, ITokenGenerator tokenGenerator, ICustomerRepository customerRepository)
     {
         _tokenGenerator = tokenGenerator;
         _userRepository = userRepository;
         _personRepository = personRepository;
+        _customerRepository = customerRepository;
     }
 
     public Result<AuthenticationTokensDto> Login(CredentialsDto credentials)
@@ -62,11 +66,17 @@ public class AuthenticationService : IAuthenticationService
                 userRole = Domain.UserRole.Author;
             }
             else userRole = Domain.UserRole.Tourist;
+              
+
 
 
             var user = _userRepository.Create(new User(account.Username, account.Password, userRole , true));
             var person = _personRepository.Create(new Person(user.Id, account.Name, account.Surname, account.Email, account.ProfilePictureUrl, account.Biography, account.Motto));
-
+            if(userRole.Equals(UserRole.Tourist))
+            {
+                var customer = new Customer(user.Id);
+                _customerRepository.Create(customer);
+            }
             return _tokenGenerator.GenerateAccessToken(user, person.Id);
         }
         catch (ArgumentException e)

@@ -1,5 +1,6 @@
 ﻿using Explorer.BuildingBlocks.Core.Domain;
 using Explorer.Stakeholders.Core.Domain;
+using Explorer.Stakeholders.Core.Domain.Shopping;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 
@@ -14,6 +15,7 @@ public class StakeholdersContext : DbContext
     public DbSet<UserClub> UserClubs { get; set; }
     public DbSet<ClubRequest> Requests { get; set; }
     public DbSet<ApplicationGrade> ApplicationGrades { get; set; }
+    public DbSet<Customer> Customers { get; set; }
 
     public StakeholdersContext(DbContextOptions<StakeholdersContext> options) : base(options) { }
 
@@ -34,6 +36,7 @@ public class StakeholdersContext : DbContext
             .HasOne<Club>()
             .WithMany()
             .HasForeignKey(uc => uc.ClubId);
+        //dodaj strane kljuceve
 
         ConfigureStakeholder(modelBuilder);
     }
