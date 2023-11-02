@@ -72,7 +72,5 @@ namespace Explorer.API.Controllers.Author.Administration
             var result = _tourService.Get(id);
             return CreateResponse(result);
         }
-
-
     }
 }

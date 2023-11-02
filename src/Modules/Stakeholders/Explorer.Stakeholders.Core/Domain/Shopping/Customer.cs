@@ -9,22 +9,21 @@ namespace Explorer.Stakeholders.Core.Domain.Shopping
 {
     public class Customer: Entity
     {
-
         public long TouristId { get; init; }
-       // public long ShoppingCartId { get; init; }
-       //lista tokena
+        public List<TourPurchaseToken>? PurchaseTokens { get; init; } = new List<TourPurchaseToken>();
+        // public long ShoppingCartId { get; init; }
 
-        //metoda prosledim token kao param 
-        //dodaje u listu 
-        //iz servisa se ne poziva rep nego meotda iz modela 
-        //iz neke put metode iz kontorl servis se pozova 
-        public Customer()
-        {
-
-        }
+        public Customer() { }
         public Customer(long toruistId)
         {
-            this.TouristId = toruistId; 
+            TouristId = toruistId;
+            PurchaseTokens = new List<TourPurchaseToken>();
+        }
+
+        //ovo zovem iz nekog servisa 
+        public void CustomersPurchaseTokens (TourPurchaseToken purchaseToken)
+        {
+            PurchaseTokens.Add(purchaseToken);
         }
     }
 }

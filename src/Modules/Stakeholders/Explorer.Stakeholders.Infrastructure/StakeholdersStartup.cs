@@ -54,7 +54,7 @@ public static class StakeholdersStartup
         services.AddScoped<IClubRepository, ClubDatabaseRepository>();
 
         services.AddScoped<ICustomerRepository, CustomerDatabaseRepository>(); //dodala
-        //services.AddScoped(typeof(ICrudRepository<Customer>), typeof(CrudDatabaseRepository<Customer, StakeholdersContext>)); //dodala
+        //services.AddScoped(typ//eof(ICrudRepository<Customer>), typeof(CrudDatabaseRepository<Customer, StakeholdersContext>)); //dodala
 
         services.AddDbContext<StakeholdersContext>(opt =>
         opt.UseNpgsql(DbConnectionStringBuilder.Build("stakeholders"),

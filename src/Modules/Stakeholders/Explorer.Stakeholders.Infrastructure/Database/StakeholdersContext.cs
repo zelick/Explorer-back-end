@@ -39,6 +39,9 @@ public class StakeholdersContext : DbContext
         //dodaj strane kljuceve
 
         ConfigureStakeholder(modelBuilder);
+
+        modelBuilder.Entity<Customer>()
+           .Property(item => item.PurchaseTokens).HasColumnType("jsonb");
     }
 
     private static void ConfigureStakeholder(ModelBuilder modelBuilder)

@@ -75,5 +75,12 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
             _dbContext.Tours.Remove(entity);
             _dbContext.SaveChanges();
         }
+
+        public List<Tour> GetToursByIds(List<long> tourIds)
+        {
+            return _dbContext.Tours
+                .Where(t => tourIds.Contains(t.Id))
+                .ToList();
+        }
     }
 }

@@ -68,5 +68,11 @@ namespace Explorer.Tours.Core.UseCases.Administration
             return MapToDto(updatedTour);
         }
 
+        public Result<List<TourDto>> GetToursByIds(List<long> tourIds)
+        {
+            var tours = _tourRepository.GetToursByIds(tourIds);
+
+            return MapToDto(tours);
+        }
     }
 }

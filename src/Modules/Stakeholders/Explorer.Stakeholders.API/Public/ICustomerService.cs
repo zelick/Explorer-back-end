@@ -15,5 +15,7 @@ namespace Explorer.Stakeholders.API.Public
         Result<CustomerDto> Create(CustomerDto customer);
         Result<CustomerDto> Update(CustomerDto customer);
         Result Delete(int id);
+        Result<CustomerDto> ShopingCartCheckOut(long customerId);
+        List<long> getCustomersPurchasedTours (long customerId);
     }
 }

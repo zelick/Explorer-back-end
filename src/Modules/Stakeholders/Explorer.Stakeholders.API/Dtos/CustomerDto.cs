@@ -9,8 +9,7 @@ namespace Explorer.Stakeholders.API.Dtos
     public class CustomerDto
     {
         public long Id { get; set; }
-        public long TouristId { get; init; }
-        // public long ShoppingCartId { get; init; }
-        //lista tokena
+        public long TouristId { get; set; }
+        public List<TourPurchaseTokenDto>? PurchaseTokens { get; set; }
     }
 }
