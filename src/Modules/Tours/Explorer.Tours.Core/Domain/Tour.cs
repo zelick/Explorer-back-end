@@ -38,7 +38,6 @@ namespace Explorer.Tours.Core.Domain
             Tags = tags;
             Equipment = new List<Equipment>();
             Checkpoints = new List<Checkpoint>();
-            TourTimes = new List<TourTime>();
         }
 
         public bool IsForPublishing()

@@ -20,7 +20,8 @@ public class ToursProfile : Profile
         CreateMap<TourRatingDto, TourRating>().ReverseMap();
         CreateMap<TourDto, Tour>().ReverseMap();
         CreateMap<PublishedTourDto, PublishedTour>().ReverseMap();
-        CreateMap<TourTimeDto, TourTime>().ReverseMap();
+        CreateMap<TourTimeDto, TourTime>().ForMember(dest => dest.Transportation, opt => opt.MapFrom(src => MapObjectTypeFromString(src.Transportation)))
+            .ReverseMap();
     }
 
     private MapObjectType MapObjectTypeFromString(string category)
