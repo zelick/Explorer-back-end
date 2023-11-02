@@ -36,6 +36,8 @@ public static class StakeholdersStartup
         services.AddScoped<IAccountsManagementService, AccountsManagementService>();
         services.AddScoped<INotificationService, NotificationService>();
         services.AddScoped<IPersonRepository, PersonDatabaseRepository>();
+        services.AddScoped<IObjectRequestService, ObjectRequestService>();
+        services.AddScoped<ICheckpointRequestService, CheckpointRequestService>();
     }
 
 
@@ -52,8 +54,12 @@ public static class StakeholdersStartup
         services.AddScoped<IClubRepository, ClubDatabaseRepository>();
         services.AddScoped(typeof(ICrudRepository<Notification>), typeof(CrudDatabaseRepository<Notification, StakeholdersContext>));
         services.AddScoped<INotificationRepository, NotificationDatabaseRepository>();
+        services.AddScoped(typeof(ICrudRepository<ObjectRequest>), typeof(CrudDatabaseRepository<ObjectRequest, StakeholdersContext>));
+        services.AddScoped(typeof(ICrudRepository<CheckpointRequest>), typeof(CrudDatabaseRepository<CheckpointRequest, StakeholdersContext>));
+        services.AddScoped<IObjectRequestRepository, ObjectRequestDatabaseRepository>();
+        services.AddScoped<ICheckpointRequestRepository, CheckpointRequestDatabaseRepository>();
 
-		    services.AddDbContext<StakeholdersContext>(opt =>
+        services.AddDbContext<StakeholdersContext>(opt =>
         opt.UseNpgsql(DbConnectionStringBuilder.Build("stakeholders"),
         x => x.MigrationsHistoryTable("__EFMigrationsHistory", "stakeholders")));
         services.AddScoped<IPersonRepository, PersonDatabaseRepository>();

@@ -15,6 +15,8 @@ public class StakeholdersContext : DbContext
     public DbSet<ClubRequest> Requests { get; set; }
     public DbSet<ApplicationGrade> ApplicationGrades { get; set; }
     public DbSet<Notification> Notifications { get; set; }
+    public DbSet<ObjectRequest> ObjectRequests { get; set; }
+    public DbSet<CheckpointRequest> CheckpointRequests { get; set; }
 
     public StakeholdersContext(DbContextOptions<StakeholdersContext> options) : base(options) { }
 

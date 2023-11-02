@@ -21,10 +21,13 @@ public class ToursContext : DbContext
     {
         modelBuilder.HasDefaultSchema("tours");
 
-        modelBuilder.Entity<Checkpoint>()
-           .HasOne<Tour>()
-           .WithMany()
-           .HasForeignKey(bc => bc.TourId);
+        modelBuilder.Entity<Tour>()
+           .HasMany(t => t.Checkpoints)
+           .WithOne(t => t.Tour)
+           .HasForeignKey(t => t.TourId)
+           .IsRequired();
+        ConfigureReportedIssues(modelBuilder);
+        ConfigureTourRatings(modelBuilder);
 
         modelBuilder.Entity<Tour>()
             .HasMany(t => t.Equipment)

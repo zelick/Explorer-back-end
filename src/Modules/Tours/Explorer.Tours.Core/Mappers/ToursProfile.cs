@@ -4,7 +4,7 @@ using Explorer.Tours.Core.Domain;
 
 namespace Explorer.Tours.Core.Mappers;
 
-public class ToursProfile : Profile
+public class ToursProfile : Profile             
 {
     public ToursProfile()
     {
