@@ -44,5 +44,12 @@ namespace Explorer.Tours.Core.Domain
         {
             Resolved = true;
         }
+        public void AddComment(ReportedIssueComment comment)
+        {
+            if (string.IsNullOrEmpty(comment.Text) && comment.CreatorId==0) throw new ArgumentException("Invalid comment");
+            if (Comments == null)
+                Comments = new List<ReportedIssueComment>();
+            Comments.Add(comment);
+        }
     }
 }

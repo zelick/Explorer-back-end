@@ -51,7 +51,7 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
             var equipment = Get(id);
             try
             {
-                equipment.Comments.Add(comment);
+                equipment.AddComment(comment);
                 _dbContext.ReportedIssues.Update(equipment);
                 _dbContext.SaveChanges();
             }
