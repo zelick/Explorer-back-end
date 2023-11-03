@@ -76,5 +76,33 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
             }
             return new PagedResult<ReportedIssue>(reportedIssues, reportedIssues.Count);
         }
+        public PagedResult<ReportedIssue> GetPagedByAuthor(long id, int page, int pageSize)
+        {
+            List<ReportedIssue> reportedIssues = new List<ReportedIssue>();
+            try
+            {
+                reportedIssues = _dbContext.ReportedIssues
+                            .Include(u => u.Tour).ToList().Where(u=>u.Tour.AuthorId==id).ToList();
+            }
+            catch (DbUpdateException e)
+            {
+                throw new KeyNotFoundException(e.Message);
+            }
+            return new PagedResult<ReportedIssue>(reportedIssues, reportedIssues.Count);
+        }
+        public PagedResult<ReportedIssue> GetPagedByTourist(long id, int page, int pageSize)
+        {
+            List<ReportedIssue> reportedIssues = new List<ReportedIssue>();
+            try
+            {
+                reportedIssues = _dbContext.ReportedIssues
+                            .Include(u => u.Tour).ToList().Where(u => u.TouristId == id).ToList();
+            }
+            catch (DbUpdateException e)
+            {
+                throw new KeyNotFoundException(e.Message);
+            }
+            return new PagedResult<ReportedIssue>(reportedIssues, reportedIssues.Count);
+        }
     }
 }

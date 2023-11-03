@@ -24,5 +24,12 @@ namespace Explorer.API.Controllers.Author.Administration
             var result = _reportingIssueService.AddComment(id, ric);
             return CreateResponse(result);
         }
+
+        [HttpGet("{id:int}")]
+        public ActionResult<PagedResult<ReportedIssueDto>> GetAllByAuthor(int id, [FromQuery] int page, [FromQuery] int pageSize)
+        {
+            var result = _reportingIssueService.GetPagedByAuthor(id, page, pageSize);
+            return CreateResponse(result);
+        }
     }
 }

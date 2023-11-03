@@ -44,5 +44,11 @@ namespace Explorer.API.Controllers.Tourist
             var result = _reportingIssueService.AddComment(id,ric);
             return CreateResponse(result);
         }
+        [HttpGet("{id:int}")]
+        public ActionResult<PagedResult<ReportedIssueDto>> GetAllByTourist(int id, [FromQuery] int page, [FromQuery] int pageSize)
+        {
+            var result = _reportingIssueService.GetPagedByTourist(id, page, pageSize);
+            return CreateResponse(result);
+        }
     }
 }

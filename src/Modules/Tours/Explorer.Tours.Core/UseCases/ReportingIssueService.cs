@@ -57,5 +57,29 @@ namespace Explorer.Tours.Core.UseCases
                 return Result.Fail(FailureCode.NotFound).WithError(e.Message);
             }
         }
+        public Result<PagedResult<ReportedIssueDto>> GetPagedByAuthor(long id, int page, int pageSize)
+        {
+            try
+            {
+                var result = _reportedIssuesRepository.GetPagedByAuthor(id, page, pageSize);
+                return MapToDto(result);
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+        }
+        public Result<PagedResult<ReportedIssueDto>> GetPagedByTourist(long id, int page, int pageSize)
+        {
+            try
+            {
+                var result = _reportedIssuesRepository.GetPagedByTourist(id, page, pageSize);
+                return MapToDto(result);
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+        }
     }
 }

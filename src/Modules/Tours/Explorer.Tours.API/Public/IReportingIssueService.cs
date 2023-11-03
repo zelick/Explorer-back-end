@@ -15,5 +15,7 @@ namespace Explorer.Tours.API.Public
         Result<ReportedIssueDto> Resolve(long id);
         Result<ReportedIssueDto> AddComment(long id, ReportedIssueCommentDto reportedIssueComment);
         Result<PagedResult<ReportedIssueDto>> GetPaged(int page, int pageSize);
+        Result<PagedResult<ReportedIssueDto>> GetPagedByAuthor(long id, int page, int pageSize);
+        Result<PagedResult<ReportedIssueDto>> GetPagedByTourist(long id, int page, int pageSize);
     }
 }
