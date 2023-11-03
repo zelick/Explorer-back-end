@@ -44,5 +44,18 @@ namespace Explorer.Tours.Core.UseCases
                 return Result.Fail(FailureCode.NotFound).WithError(e.Message);
             }
         }
+
+        public Result<PagedResult<ReportedIssueDto>> GetPaged(int page, int pageSize)
+        {
+            try
+            {
+                var result = _reportedIssuesRepository.GetPaged(page, pageSize);
+                return MapToDto(result);
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+        }
     }
 }

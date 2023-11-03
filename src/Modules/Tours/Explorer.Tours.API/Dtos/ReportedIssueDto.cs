@@ -18,5 +18,6 @@ namespace Explorer.Tours.API.Dtos
         public DateTime Time { get; set; }
         public int TourId { get; set; }
         public int TouristId { get; set; }
+        public TourDto Tour { get; set; }
     }
 }

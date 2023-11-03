@@ -24,12 +24,13 @@ namespace Explorer.API.Controllers.Tourist
         public ActionResult<ReportedIssueDto> Create([FromBody] ReportedIssueDto reportedIssue)
         {
             reportedIssue.Comments = new List<ReportedIssueCommentDto>();
+            reportedIssue.Tour = null;
             if(reportedIssue.Category.IsNullOrEmpty() || reportedIssue.Priority==0 ||reportedIssue.TourId==0 || reportedIssue.TouristId == 0)
             {
                 return BadRequest("Fill all the fields.");
             }
             var result = _reportingIssueService.Create(reportedIssue);
-            return CreateResponse(result);
+            return CreateResponse(result); // na frontu povezati opet sa turom.
         }
         [HttpPut("resolve/{id:int}")]
         public ActionResult<ReportedIssueDto> Resolve(int id)

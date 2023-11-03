@@ -23,9 +23,12 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
 
         public ReportedIssue Get(long id)
         {
-            var equipment = _dbContext.ReportedIssues.Find(id);
-            if (equipment == null) throw new KeyNotFoundException("Not found: " + id);
-            return equipment;
+            var issue = _dbContext.ReportedIssues
+                       .Where(b => b.Id == id)
+                       .Include(b => b.Tour)
+                       .FirstOrDefault();
+            if (issue == null) throw new KeyNotFoundException("Not found: " + id);
+            return issue;
         }
 
         public ReportedIssue Resolve(long id)
@@ -57,6 +60,21 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
                 throw new KeyNotFoundException(e.Message);
             }
             return equipment;
+        }
+
+        public PagedResult<ReportedIssue> GetPaged(int page, int pageSize)
+        {
+            List<ReportedIssue> reportedIssues= new List<ReportedIssue>();
+            try
+            {
+                reportedIssues = _dbContext.ReportedIssues
+                            .Include(u => u.Tour).ToList();
+            }
+            catch (DbUpdateException e)
+            {
+                throw new KeyNotFoundException(e.Message);
+            }
+            return new PagedResult<ReportedIssue>(reportedIssues, reportedIssues.Count);
         }
     }
 }

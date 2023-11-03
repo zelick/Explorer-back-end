@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Explorer.BuildingBlocks.Core.UseCases;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,5 +11,6 @@ namespace Explorer.Tours.Core.Domain.RepositoryInterfaces
     {
         ReportedIssue Resolve(long id);
         ReportedIssue AddComment(long id, ReportedIssueComment comment);
+        PagedResult<ReportedIssue> GetPaged(int page, int pageSize);
     }
 }

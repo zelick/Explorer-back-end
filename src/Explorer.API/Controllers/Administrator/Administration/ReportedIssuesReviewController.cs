@@ -1,5 +1,6 @@
 ﻿using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Tours.API.Dtos;
+using Explorer.Tours.API.Public;
 using Explorer.Tours.API.Public.Administration;
 using Explorer.Tours.Core.UseCases.Administration;
 using Microsoft.AspNetCore.Authorization;
@@ -11,9 +12,9 @@ namespace Explorer.API.Controllers.Administrator.Administration
         [Route("api/administration/reportedIssues")]
         public class ReportedIssuesReviewController : BaseApiController
         {
-            private readonly IReportedIssuesReviewService _reportedIssueAdministratorService;
+            private readonly IReportingIssueService _reportedIssueAdministratorService;
 
-            public ReportedIssuesReviewController(IReportedIssuesReviewService reportedIssueAdministratorService)
+            public ReportedIssuesReviewController(IReportingIssueService reportedIssueAdministratorService)
             {
                 _reportedIssueAdministratorService = reportedIssueAdministratorService;
             }
