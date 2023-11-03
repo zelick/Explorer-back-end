@@ -16,6 +16,7 @@ namespace Explorer.Stakeholders.Infrastructure.Database.Repositories
             _dbContext = dbContext;
         }
 
+        /*
         public UserFollower AddFollower(int userId, int followerId)
         {
             var userFollower = new UserFollower(userId, followerId);
@@ -24,6 +25,7 @@ namespace Explorer.Stakeholders.Infrastructure.Database.Repositories
             
             return userFollower;
         }
+        */
 
     }
 }

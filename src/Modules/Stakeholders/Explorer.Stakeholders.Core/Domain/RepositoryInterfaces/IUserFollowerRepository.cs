@@ -8,6 +8,6 @@ namespace Explorer.Stakeholders.Core.Domain.RepositoryInterfaces
 {
     public interface IUserFollowerRepository
     {
-        UserFollower AddFollower(int userId, int followerId);
+        //UserFollower AddFollower(int userId, int followerId);
     }
 }

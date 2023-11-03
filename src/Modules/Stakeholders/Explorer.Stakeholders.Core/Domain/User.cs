@@ -9,8 +9,10 @@ public class User : Entity
     public UserRole Role { get; private set; }
     public bool IsActive { get; set; }
     public List<Club> Clubs { get; set; }
+    public List<User> Followers { get; } = new List<User>();
+    public List<Message> Messages { get; set; }
 
-	public User(string username, string password, UserRole role, bool isActive)
+    public User(string username, string password, UserRole role, bool isActive)
 	{
 		Username = username;
 		Password = password;

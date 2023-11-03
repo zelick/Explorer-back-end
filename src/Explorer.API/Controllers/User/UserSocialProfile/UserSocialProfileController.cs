@@ -7,12 +7,13 @@ namespace Explorer.API.Controllers.User.ProfileMessaging
 {
     [Authorize(Policy = "userPolicy")]
     [Route("api/profile-messaging")]
-    public class UserProfileMessagingController : BaseApiController
+    public class UserSocialProfileController : BaseApiController
     {
         private readonly IUserProfileService _userProfileService;
         private readonly IMessageService _messageService;
+        
 
-        public UserProfileMessagingController(IUserProfileService userProfileService, IMessageService messageService)
+        public UserSocialProfileController(IUserProfileService userProfileService, IMessageService messageService)
         {
             _userProfileService = userProfileService;
             _messageService = messageService;
@@ -25,6 +26,14 @@ namespace Explorer.API.Controllers.User.ProfileMessaging
             _userProfileService.Follow(userId, followedUserId);
 
             return null;
+        }
+
+        [HttpGet("get-user-social-profile/{userId:int}")]
+        public ActionResult<UserProfileDto> GetUserSocialProfile(int userId)
+        {
+            var socialProfile = _userProfileService.Get(userId);
+
+            return CreateResponse(socialProfile);
         }
 
         [HttpPost("send-message")]
