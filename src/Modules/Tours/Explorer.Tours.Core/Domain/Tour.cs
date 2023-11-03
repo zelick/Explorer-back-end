@@ -43,7 +43,7 @@ namespace Explorer.Tours.Core.Domain
 
         public bool IsForPublishing()
         {
-            return !string.IsNullOrWhiteSpace(Name) && !string.IsNullOrWhiteSpace(Description) && DemandignessLevel != null && Tags != null;
+            return !string.IsNullOrWhiteSpace(Name) && !string.IsNullOrWhiteSpace(Description) && DemandignessLevel != null && Tags != null && ValidateTourTimes();
         }
         private bool IsForArchiving()
         {
