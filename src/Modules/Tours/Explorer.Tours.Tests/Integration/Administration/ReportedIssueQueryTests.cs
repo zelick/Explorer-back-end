@@ -1,6 +1,7 @@
 ﻿using Explorer.API.Controllers.Administrator.Administration;
 using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Tours.API.Dtos;
+using Explorer.Tours.API.Public;
 using Explorer.Tours.API.Public.Administration;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
@@ -35,7 +36,7 @@ namespace Explorer.Tours.Tests.Integration.Administration
 
         private static ReportedIssuesReviewController CreateController(IServiceScope scope)
         {
-            return new ReportedIssuesReviewController(scope.ServiceProvider.GetRequiredService<IReportedIssuesReviewService>())
+            return new ReportedIssuesReviewController(scope.ServiceProvider.GetRequiredService<IReportingIssueService>())
             {
                 ControllerContext = BuildContext("-1")
             };
