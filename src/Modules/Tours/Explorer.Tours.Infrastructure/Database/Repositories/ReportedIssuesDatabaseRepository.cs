@@ -46,7 +46,7 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
             }
             return equipment;
         }
-        public ReportedIssue AddComment(long id,ReportedIssueComment comment)
+        public ReportedIssue AddComment(long id, ReportedIssueComment comment)
         {
             var equipment = Get(id);
             try
