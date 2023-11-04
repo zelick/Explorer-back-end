@@ -78,6 +78,22 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
             return issue;
         }
 
+        public ReportedIssue Close(int id)
+        {
+            var issue = Get(id);
+            try
+            {
+                issue.Closed = true;
+                _dbContext.ReportedIssues.Update(issue);
+                _dbContext.SaveChanges();
+            }
+            catch (DbUpdateException e)
+            {
+                throw new KeyNotFoundException(e.Message);
+            }
+            return issue;
+        }
+
         public PagedResult<ReportedIssue> GetPaged(int page, int pageSize)
         {
             List<ReportedIssue> reportedIssues= new List<ReportedIssue>();

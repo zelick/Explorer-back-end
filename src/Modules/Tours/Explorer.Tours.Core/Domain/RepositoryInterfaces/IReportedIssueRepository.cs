@@ -13,6 +13,7 @@ namespace Explorer.Tours.Core.Domain.RepositoryInterfaces
         ReportedIssue Resolve(long id);
         ReportedIssue AddComment(long id, ReportedIssueComment comment);
         ReportedIssue AddDeadline(int id, DateTime deadline);
+        ReportedIssue Close(int id);
         PagedResult<ReportedIssue> GetPaged(int page, int pageSize);
         PagedResult<ReportedIssue> GetPagedByAuthor(long id, int page, int pageSize);
         PagedResult<ReportedIssue> GetPagedByTourist(long id, int page, int pageSize);

@@ -18,10 +18,15 @@ namespace Explorer.Tours.Core.UseCases
     {
         private readonly IReportedIssueRepository _reportedIssuesRepository;
         private readonly IReportedIssueNotificationRepository _reportedIssueNotificationRepository;
-        public ReportingIssueService(ICrudRepository<ReportedIssue> repository, IMapper mapper, IReportedIssueRepository issuerepo, IReportedIssueNotificationRepository reportedIssueNotificationRepository) : base(repository, mapper)
+        private readonly ITourRepository _tourRepository;
+        public ReportingIssueService(ICrudRepository<ReportedIssue> repository, IMapper mapper,
+                                     IReportedIssueRepository issuerepo, 
+                                     IReportedIssueNotificationRepository reportedIssueNotificationRepository,
+                                     ITourRepository tourRepository) : base(repository, mapper)
         {
             _reportedIssuesRepository = issuerepo;
             _reportedIssueNotificationRepository = reportedIssueNotificationRepository;
+            _tourRepository = tourRepository;
         }
         public Result<ReportedIssueDto> Resolve(long id)
         {
@@ -56,6 +61,33 @@ namespace Explorer.Tours.Core.UseCases
                 var issue = _reportedIssuesRepository.Get(id);
                 var result = _reportedIssuesRepository.AddDeadline(id, deadline);
                 _reportedIssueNotificationRepository.Create(issue.Tour.AuthorId, id);
+                return MapToDto(result);
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+        }
+
+        public Result<ReportedIssueDto> PenalizeAthor(int id)
+        {
+            try
+            {
+                var issue = _reportedIssuesRepository.Get(id);
+                var result = _tourRepository.Close(issue.Tour.Id);
+                return MapToDto(issue);
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+        }
+
+        public Result<ReportedIssueDto> Close(int id)
+        {
+            try
+            {
+                var result = _reportedIssuesRepository.Close(id);
                 return MapToDto(result);
             }
             catch (KeyNotFoundException e)

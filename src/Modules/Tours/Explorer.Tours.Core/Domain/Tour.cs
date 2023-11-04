@@ -11,7 +11,7 @@ namespace Explorer.Tours.Core.Domain
         public TourStatus Status { get; init; }
         public double Price { get; init; }
         public List<string>? Tags { get; init; }
-
+        public bool? Closed { get; set; }
         public List<Equipment> Equipment { get; init; }
 
         public Tour(int authorId, string name, string? description, Demandigness? demandignessLevel, List<string>? tags, TourStatus status = TourStatus.Draft,double price=0)

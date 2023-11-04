@@ -40,5 +40,19 @@ namespace Explorer.API.Controllers.Administrator.Administration
                 var result = _reportedIssueAdministratorService.AddDeadline(id, deadline);
                 return CreateResponse(result);
             }
+
+            [HttpPut("penalizeAuthor/{id:int}")]
+            public ActionResult<ReportedIssueDto> PenalizeAuthor(int id)
+            {
+                var result = _reportedIssueAdministratorService.PenalizeAthor(id);
+                return CreateResponse(result);
+            }
+
+            [HttpPut("closeReportedIssue/{id:int}")]
+            public ActionResult<ReportedIssueDto> Close(int id)
+            {
+                var result = _reportedIssueAdministratorService.Close(id);
+                return CreateResponse(result);
+            }
     }
 }

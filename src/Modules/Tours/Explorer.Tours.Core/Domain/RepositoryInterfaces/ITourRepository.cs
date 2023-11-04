@@ -11,5 +11,6 @@ namespace Explorer.Tours.Core.Domain.RepositoryInterfaces
     {
         bool Exists(long id);
         List<Tour> GetToursByAuthor(long id);
+        Tour Close(long id);
     }
 }

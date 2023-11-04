@@ -17,6 +17,7 @@ namespace Explorer.Tours.Core.Domain
         public DateTime Time { get; init; }
         public long TourId { get; init; }
         public DateTime? Deadline { get; set; }
+        public bool? Closed { get; set; }
         public bool Resolved { get; private set; } // indicates if the problem is resolved or not
         public int TouristId { get; init; }
         [ForeignKey("TourId")]
