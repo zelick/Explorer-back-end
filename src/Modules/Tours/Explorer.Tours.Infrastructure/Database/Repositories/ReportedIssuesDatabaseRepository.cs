@@ -48,18 +48,34 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
         }
         public ReportedIssue AddComment(long id, ReportedIssueComment comment)
         {
-            var equipment = Get(id);
+            var issue = Get(id);
             try
             {
-                equipment.AddComment(comment);
-                _dbContext.ReportedIssues.Update(equipment);
+                issue.AddComment(comment);
+                _dbContext.ReportedIssues.Update(issue);
                 _dbContext.SaveChanges();
             }
             catch (DbUpdateException e)
             {
                 throw new KeyNotFoundException(e.Message);
             }
-            return equipment;
+            return issue;
+        }
+
+        public ReportedIssue AddDeadline(int id, DateTime deadline)
+        {
+            var issue = Get(id);
+            try
+            {
+                issue.Deadline = deadline;
+                _dbContext.ReportedIssues.Update(issue);
+                _dbContext.SaveChanges();
+            }
+            catch (DbUpdateException e)
+            {
+                throw new KeyNotFoundException(e.Message);
+            }
+            return issue;
         }
 
         public PagedResult<ReportedIssue> GetPaged(int page, int pageSize)
@@ -104,5 +120,7 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
             }
             return new PagedResult<ReportedIssue>(reportedIssues, reportedIssues.Count);
         }
+
+        
     }
 }

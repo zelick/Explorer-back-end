@@ -49,6 +49,19 @@ namespace Explorer.Tours.Core.UseCases
             }
         }
 
+        public Result<ReportedIssueDto> AddDeadline(int id, DateTime deadline)
+        {
+            try
+            {
+                var result = _reportedIssuesRepository.AddDeadline(id, deadline);
+                return MapToDto(result);
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+        }
+
         private void GenerateNotification(ReportedIssue reportedIssue, int commentCreatorId)
         {
             // generate notification for new comment
@@ -98,5 +111,7 @@ namespace Explorer.Tours.Core.UseCases
                 return Result.Fail(FailureCode.NotFound).WithError(e.Message);
             }
         }
+
+        
     }
 }

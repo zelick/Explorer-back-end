@@ -33,5 +33,12 @@ namespace Explorer.API.Controllers.Administrator.Administration
                 var result = _reportedIssueAdministratorService.AddComment(id, ric);
                 return CreateResponse(result);
             }
+
+            [HttpPut("deadline/{id:int}")]
+            public ActionResult<ReportedIssueDto> AddDeadline(int id, DateTime deadline)
+            {
+                var result = _reportedIssueAdministratorService.AddDeadline(id, deadline);
+                return CreateResponse(result);
+            }
     }
 }
