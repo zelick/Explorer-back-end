@@ -66,9 +66,6 @@ public class AuthenticationService : IAuthenticationService
                 userRole = Domain.UserRole.Author;
             }
             else userRole = Domain.UserRole.Tourist;
-              
-
-
 
             var user = _userRepository.Create(new User(account.Username, account.Password, userRole , true));
             var person = _personRepository.Create(new Person(user.Id, account.Name, account.Surname, account.Email, account.ProfilePictureUrl, account.Biography, account.Motto));
