@@ -12,4 +12,4 @@ VALUES (-12, -1, 'Title 3', 'Description 3', '2023-10-03 12:30:00', ARRAY['image
 
 INSERT INTO blog."BlogPosts"(
     "Id", "UserId", "Title", "Description", "CreationDate", "ImageUrls", "Status")
-VALUES (-2, -2, 'Title 4', 'Description 4', '2023-10-04 15:15:00', ARRAY['image31.jpg', 'image32.jpg'], 2);
+VALUES (-2, -12, 'Title 4', 'Description 4', '2023-10-04 15:15:00', ARRAY['image31.jpg', 'image32.jpg'], 2);
