@@ -22,6 +22,7 @@ namespace Explorer.Tours.API.Dtos
         public List<PublishedTourDto>? PublishedTours { get; set; }
         public List<ArchivedTourDto>? ArchivedTours { get; set; }
         public List<TourTimeDto>? TourTimes { get; set;}
+        public List<TourRatingDto>? TourRatings { get; set; }
     }
 }
 

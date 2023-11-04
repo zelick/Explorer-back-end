@@ -13,4 +13,11 @@ public class Equipment : Entity
         Name = name;
         Description = description;
     }
+
+    public Equipment(long id,string name,string description) 
+    { 
+        Id = id;
+        Name = name;
+        Description = description;
+    }
 }

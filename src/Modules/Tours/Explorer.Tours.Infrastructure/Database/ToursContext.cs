@@ -26,8 +26,8 @@ public class ToursContext : DbContext
            .WithOne(t => t.Tour)
            .HasForeignKey(t => t.TourId)
            .IsRequired();
-        ConfigureReportedIssues(modelBuilder);
-        ConfigureTourRatings(modelBuilder);
+        //ConfigureReportedIssues(modelBuilder);
+        //ConfigureTourRatings(modelBuilder);
 
         modelBuilder.Entity<Tour>()
             .HasMany(t => t.Equipment)
@@ -50,6 +50,7 @@ public class ToursContext : DbContext
     }
     private static void ConfigureTourRatings(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<TourRating>().HasOne(t => t.Tour).WithMany().HasForeignKey(t => t.TourId);
+        //modelBuilder.Entity<TourRating>().HasOne(t => t.Tour).WithMany().HasForeignKey(t => t.TourId);
+        modelBuilder.Entity<Tour>().HasMany(t => t.TourRatings).WithOne(t=>t.Tour).HasForeignKey(t => t.TourId).IsRequired();
     }
 }

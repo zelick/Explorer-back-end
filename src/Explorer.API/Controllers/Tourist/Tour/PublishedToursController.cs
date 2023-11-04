@@ -19,14 +19,14 @@ namespace Explorer.API.Controllers.Tourist.Tour
         }
 
         [HttpGet]
-        public ActionResult<List<TourDto>> GetPublishedTours([FromQuery] int page, [FromQuery] int pageSize)
+        public ActionResult<List<TourPreviewDto>> GetPublishedTours([FromQuery] int page, [FromQuery] int pageSize)
         {
             var result = _tourService.GetFilteredPublishedTours(page, pageSize);
             return CreateResponse(result);
         }
 
         [HttpGet("details/{id:int}")]
-        public ActionResult<List<TourDto>> GetPublishedTour(int id)
+        public ActionResult<List<TourPreviewDto>> GetPublishedTour(int id)
         {
             var result = _tourService.GetPublishedTour(id);
             return CreateResponse(result);

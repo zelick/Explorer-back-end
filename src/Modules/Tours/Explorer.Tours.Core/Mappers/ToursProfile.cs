@@ -22,6 +22,8 @@ public class ToursProfile : Profile
         CreateMap<PublishedTourDto, PublishedTour>().ReverseMap();
         CreateMap<ArchivedTourDto, ArchivedTour>().ReverseMap();
         CreateMap<TourTimeDto, TourTime>().ReverseMap();
+
+
     }
 
     private MapObjectType MapObjectTypeFromString(string category)

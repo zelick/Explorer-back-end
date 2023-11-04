@@ -4,6 +4,7 @@ using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
 using Explorer.Tours.Core.Domain;
 using Explorer.Tours.Core.Domain.RepositoryInterfaces;
+using Explorer.Tours.Core.Mappers;
 using FluentResults;
 
 namespace Explorer.Tours.Core.UseCases.Administration
@@ -13,12 +14,15 @@ namespace Explorer.Tours.Core.UseCases.Administration
         private readonly ITourEquipmentRepository _tourEquipmentRepository;
         private readonly ITourRepository _tourRepository;
         private readonly IEquipmentRepository _equipmentRepository;
-
+        private TourPreviewMapper _tourPreviewMapper;
         public TourService(ITourRepository tourRepository, IMapper mapper, ITourEquipmentRepository tourEquipmentRepository, IEquipmentRepository equipmentRepository) : base(tourRepository, mapper)
         {
             _tourEquipmentRepository = tourEquipmentRepository;
             _tourRepository = tourRepository;
             _equipmentRepository = equipmentRepository;
+            _tourPreviewMapper = new TourPreviewMapper();
+
+
         }
 
         public Result<List<TourDto>> GetToursByAuthor(int page, int pageSize, int id) 
@@ -36,33 +40,34 @@ namespace Explorer.Tours.Core.UseCases.Administration
         }
 
 
-        public Result<List<TourDto>> GetFilteredPublishedTours(int page, int pageSize) 
+        public Result<List<TourPreviewDto>> GetFilteredPublishedTours(int page, int pageSize) 
         {
             try
             {
-               List<Tour> publishedTours= _tourRepository.GetPublishedTours();
-               List<Tour> fillteredTours= new List<Tour>();
+                List<Tour> publishedTours= _tourRepository.GetPublishedTours();
+                List<TourPreview> publishedToursPreviews= new List<TourPreview>();
                 foreach(var tour in publishedTours)
                 {
-                    fillteredTours.Add(tour.FilterView(tour));
+                    publishedToursPreviews.Add(tour.FilterView(tour));
                 }
-                return MapToDto(fillteredTours);
-
+               return _tourPreviewMapper.createDtoList(publishedToursPreviews);
             }
-            catch (KeyNotFoundException e)
+            catch(Exception e)
             {
                 return Result.Fail(FailureCode.NotFound).WithError(e.Message);
             }
         }
 
-        public Result<TourDto> GetPublishedTour(int id)
+        public Result<TourPreviewDto> GetPublishedTour(int id)
         {
             try
             {
                 Tour publishedTour=_tourRepository.Get(id);
-                return MapToDto(publishedTour.FilterView(publishedTour));
+                TourPreview publishedTourPreview = publishedTour.FilterView(publishedTour);
+                return _tourPreviewMapper.createDto(publishedTourPreview);
+
             }
-            catch (KeyNotFoundException e)
+            catch (Exception e)
             {
                 return Result.Fail(FailureCode.NotFound).WithError(e.Message);
             }
@@ -87,18 +92,17 @@ namespace Explorer.Tours.Core.UseCases.Administration
 
                return MapToDto(updatedTour);
              */
-            Tour t =_tourRepository.Get(tourId);
-            Equipment e=_equipmentRepository.Get(equipmentId);
-            t = t.AddEquipment(e);
-            _tourRepository.Update(t);
+            Tour tour =_tourRepository.Get(tourId);
+            tour = tour.AddEquipment(_equipmentRepository.Get(equipmentId));
+            _tourRepository.Update(tour);
 
-            return MapToDto(t);
+            return MapToDto(tour);
 
         }
 
         public Result<TourDto> RemoveEquipment(int tourId, int equipmentId)
         {
-            var isRelationshipExists = _tourEquipmentRepository.Exists(tourId, equipmentId);
+           /* var isRelationshipExists = _tourEquipmentRepository.Exists(tourId, equipmentId);
 
             if (!isRelationshipExists) return Result.Fail(FailureCode.NotFound);
 
@@ -106,7 +110,13 @@ namespace Explorer.Tours.Core.UseCases.Administration
 
             var updatedTour = _tourRepository.Get(updatedTourId);
 
-            return MapToDto(updatedTour);
+            return MapToDto(updatedTour);*/
+
+            Tour tour = _tourRepository.Get(tourId);
+            tour = tour.RemoveEquipment(_equipmentRepository.Get(equipmentId));
+            _tourRepository.Update(tour);
+
+            return MapToDto(tour);
         }
 
         public Result<TourDto> Publish(int id)

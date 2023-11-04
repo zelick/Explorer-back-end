@@ -17,10 +17,23 @@ namespace Explorer.Tours.Core.Domain
         public List<PublishedTour>? PublishedTours { get; init; }
         public List<ArchivedTour>? ArchivedTours { get; init; }
         public List<TourTime>? TourTimes { get; private set; }
+        public List<TourRating> TourRatings { get; init; }
 
-        public Tour AddEquipment(Equipment equip)
+        public Tour AddEquipment(Equipment equipment)
         {
-            Equipment.Add(equip);
+            if (!Equipment.Contains(equipment))
+                Equipment.Add(equipment);
+            else
+                throw new ArgumentException("This equipment is already added.");
+            return this;
+        }
+
+        public Tour RemoveEquipment(Equipment equipment)
+        {
+            if(Equipment.Contains(equipment))
+                Equipment.Remove(equipment);
+            else
+                throw new ArgumentException("This equipment doesn't exist in list.");
             return this;
         }
 
@@ -39,6 +52,7 @@ namespace Explorer.Tours.Core.Domain
             Tags = tags;
             Equipment = new List<Equipment>();
             Checkpoints = new List<Checkpoint>();
+            TourRatings=new List<TourRating>();
         }
 
         public bool IsForPublishing()
@@ -114,16 +128,13 @@ namespace Explorer.Tours.Core.Domain
         }
 
 
-        public Tour FilterView(Tour tour)
+        public TourPreview FilterView(Tour tour)
         {
+            TourPreview result = null;
             if (tour.Checkpoints.Count > 0) {
-                Checkpoint cp = tour.Checkpoints[0];
-                tour.Checkpoints.Clear();
-                tour.Checkpoints.Add(cp);
+                result = new TourPreview(tour);
             };
-
-
-            return tour;
+            return result;
         }
 
     }
