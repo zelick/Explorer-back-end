@@ -13,6 +13,7 @@ namespace Explorer.Tours.API.Dtos
         public string Category { get; set; }
         public string? Description { get; set; }
         public virtual ICollection<ReportedIssueCommentDto> Comments { get; set; }
+        public DateTime? Deadline { get; set; }
         public bool Resolved { get; set; }
         public int Priority { get; set; }
         public DateTime Time { get; set; }

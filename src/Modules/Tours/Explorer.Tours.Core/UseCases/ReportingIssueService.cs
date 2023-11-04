@@ -53,7 +53,9 @@ namespace Explorer.Tours.Core.UseCases
         {
             try
             {
+                var issue = _reportedIssuesRepository.Get(id);
                 var result = _reportedIssuesRepository.AddDeadline(id, deadline);
+                _reportedIssueNotificationRepository.Create(issue.Tour.AuthorId, id);
                 return MapToDto(result);
             }
             catch (KeyNotFoundException e)
