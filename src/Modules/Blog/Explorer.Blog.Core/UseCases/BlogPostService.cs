@@ -43,6 +43,26 @@ public class BlogPostService : CrudService<BlogPostDto, BlogPost>, IBlogPostServ
         }
     }
 
+    public Result<PagedResult<BlogPostDto>> GetFilteredByStatus(int page, int pageSize, string blogPostStatus)
+    {
+        try
+        {
+            if (!Enum.TryParse(blogPostStatus, true, out BlogPostStatus status))
+                throw new ArgumentException("Invalid blog post status value.");
+
+            var result = _blogPostsRepository.GetFilteredByStatus(page, pageSize, status);
+            return MapToDto(result);
+        }
+        catch (KeyNotFoundException e)
+        {
+            return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+        }
+        catch (ArgumentException e)
+        {
+            return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+        }
+    }
+
     public override Result<BlogPostDto> Update(BlogPostDto blogPostDto)
     {
         try

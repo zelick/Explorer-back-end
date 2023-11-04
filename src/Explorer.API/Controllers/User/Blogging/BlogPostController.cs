@@ -18,9 +18,11 @@ public class BlogPostController : BaseApiController
     }
 
     [HttpGet]
-    public ActionResult<PagedResult<BlogPostDto>> GetAllNonDraft([FromQuery] int page, [FromQuery] int pageSize)
+    public ActionResult<PagedResult<BlogPostDto>> GetAllNonDraft([FromQuery] int page, [FromQuery] int pageSize, [FromQuery] string? status = null)
     {
-        var result = _blogPostService.GetAllNonDraft(page, pageSize);
+       var result = status is null
+            ? _blogPostService.GetAllNonDraft(page, pageSize)
+            : _blogPostService.GetFilteredByStatus(page, pageSize, status);
         return CreateResponse(result);
     }
 
