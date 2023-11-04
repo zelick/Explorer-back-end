@@ -69,4 +69,11 @@ public class BlogPostController : BaseApiController
         var result = _blogPostService.Delete(id);
         return CreateResponse(result);
     }
+
+    [HttpPut("{id:int}/ratings")]
+    public ActionResult<BlogPostDto> Rate(int id,[FromBody] BlogRatingDto blogRatingDto)
+    {
+        var result = _blogPostService.Rate(id, blogRatingDto);
+        return CreateResponse(result);
+    }
 }

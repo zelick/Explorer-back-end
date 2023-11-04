@@ -10,4 +10,5 @@ public class BlogPostDto
     public DateTime CreationDate { get; set; }
     public List<string>? ImageUrls { get; set; }
     public string Status { get; set; }
+    public List<BlogRatingDto>? Ratings { get; set; }
 }
