@@ -10,6 +10,6 @@ namespace Explorer.Stakeholders.Core.Domain.RepositoryInterfaces
 {
     public interface ICustomerRepository : ICrudRepository<Customer>
     {
-       
+        public Customer GetCustomerByTouristId(long touristId);
     }
 }

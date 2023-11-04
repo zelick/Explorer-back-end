@@ -1,4 +1,5 @@
 ﻿using Explorer.BuildingBlocks.Infrastructure.Database;
+using Explorer.Stakeholders.Core.Domain;
 using Explorer.Stakeholders.Core.Domain.RepositoryInterfaces;
 using Explorer.Stakeholders.Core.Domain.Shopping;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +16,15 @@ namespace Explorer.Stakeholders.Infrastructure.Database.Repositories
         public CustomerDatabaseRepository(StakeholdersContext dbContext) : base(dbContext)
         {
 
+        }
+
+        public Customer GetCustomerByTouristId(long touristId)
+        {
+            var customer = DbContext.Customers
+                .Where(c => c.TouristId == touristId)
+                .FirstOrDefault();
+
+            return customer;
         }
     }
 }

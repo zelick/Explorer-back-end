@@ -10,6 +10,7 @@ using FluentResults;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -32,16 +33,21 @@ namespace Explorer.Stakeholders.Core.UseCases
         public Result <CustomerDto> ShopingCartCheckOut(long customerId)
         {
             var customer = _customerRepository.Get(customerId);
-            var token = new TourPurchaseToken(customerId, 2);
+            //for neki
+            var token = new TourPurchaseToken(customerId, 2); //OVA DVOJKA JE TURA
+            //ovo ima veze sa order item
+            //id korpe, i iz id korpe se izvlaci 
             customer.CustomersPurchaseTokens(token);
             var result = _customerRepository.Update(customer);
             return MapToDto(result);
         }
 
         //umesto id - TourDto
-        public List<long> getCustomersPurchasedTours(long customerId)
+        public List<long> getCustomersPurchasedTours(long touristId)
         {
-            var customer = _customerRepository.Get(customerId);
+            var customer = _customerRepository.GetCustomerByTouristId(touristId);
+
+            //var customer = _customerRepository.Get(customerId); 
             List<long> toursIds = new List<long>();
 
             foreach (var token in customer.PurchaseTokens)
