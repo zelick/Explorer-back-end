@@ -17,8 +17,11 @@ namespace Explorer.Tours.Core.UseCases
     public class ReportingIssueService : CrudService<ReportedIssueDto, ReportedIssue>, IReportingIssueService
     {
         private readonly IReportedIssueRepository _reportedIssuesRepository;
-        public ReportingIssueService(ICrudRepository<ReportedIssue> repository, IMapper mapper, IReportedIssueRepository issuerepo) : base(repository, mapper) {
+        private readonly IReportedIssueNotificationRepository _reportedIssueNotificationRepository;
+        public ReportingIssueService(ICrudRepository<ReportedIssue> repository, IMapper mapper, IReportedIssueRepository issuerepo, IReportedIssueNotificationRepository reportedIssueNotificationRepository) : base(repository, mapper)
+        {
             _reportedIssuesRepository = issuerepo;
+            _reportedIssueNotificationRepository = reportedIssueNotificationRepository;
         }
         public Result<ReportedIssueDto> Resolve(long id)
         {
@@ -37,11 +40,25 @@ namespace Explorer.Tours.Core.UseCases
             try
             {
                 var result = _reportedIssuesRepository.AddComment(id, new ReportedIssueComment(reportedISsueComment.Text, DateTime.Now, reportedISsueComment.CreatorId));
+                GenerateNotification(result, reportedISsueComment.CreatorId);
                 return MapToDto(result);
             }
             catch (KeyNotFoundException e)
             {
                 return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+        }
+
+        private void GenerateNotification(ReportedIssue reportedIssue, int commentCreatorId)
+        {
+            // generate notification for new comment
+            if (commentCreatorId == reportedIssue.TouristId)
+            {
+                var notifTourist = _reportedIssueNotificationRepository.Create(reportedIssue.Tour.AuthorId, reportedIssue.Id);
+            }
+            else
+            {
+                var notifAuthor = _reportedIssueNotificationRepository.Create(reportedIssue.TouristId, reportedIssue.Id);
             }
         }
 

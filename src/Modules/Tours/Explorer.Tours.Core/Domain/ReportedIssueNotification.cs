@@ -11,10 +11,10 @@ namespace Explorer.Tours.Core.Domain
         public long UserId { get; init; }
         public long ReportedIssueId { get; init; }
         [ForeignKey("ReportedIssueId")]
-        public ReportedIssue ReportedIssue { get; set; }
+        public ReportedIssue? ReportedIssue { get; set; }
 
         public ReportedIssueNotification() { }
-        public ReportedIssueNotification(string description, DateTime creationTime, bool isRead, long userId, long reportedIssueId, ReportedIssue reportedIssue) 
+        public ReportedIssueNotification(string description, DateTime creationTime, bool isRead, long userId, long reportedIssueId) 
         {
             if (string.IsNullOrWhiteSpace(description) || userId == 0 || reportedIssueId == 0) throw new ArgumentException("Invalid reported issue notification.");
             NotificationDescription = description;
@@ -22,7 +22,6 @@ namespace Explorer.Tours.Core.Domain
             IsRead = isRead;
             UserId = userId;
             ReportedIssueId = reportedIssueId;
-            ReportedIssue = reportedIssue;
         }
     }
 }

@@ -2,11 +2,6 @@
 using Explorer.Tours.Core.Domain;
 using Explorer.Tours.Core.Domain.RepositoryInterfaces;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Explorer.Tours.Infrastructure.Database.Repositories
 {
@@ -16,6 +11,15 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
         public ReportedIssueNotificationDatabaseRepository(ToursContext toursContext)
         {
             _dbContext = toursContext;
+        }
+        public ReportedIssueNotification Create(long userId, long reportedIssueId)
+        {
+            var notif = new ReportedIssueNotification(
+                "New notification for your reported problem!", 
+                DateTime.UtcNow, false, userId, reportedIssueId    );
+            _dbContext.ReportedIssueNotifications.Add(notif);
+            _dbContext.SaveChanges();
+            return notif;
         }
 
         public List<ReportedIssueNotification> GetAllByUser(long id)

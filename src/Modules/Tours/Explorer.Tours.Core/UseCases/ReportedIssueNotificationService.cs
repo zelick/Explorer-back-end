@@ -11,9 +11,21 @@ namespace Explorer.Tours.Core.UseCases
     public class ReportedIssueNotificationService : CrudService<ReportedIssueNotificationDto, ReportedIssueNotification>, IReportedIssueNotificationService
     {
         private readonly IReportedIssueNotificationRepository _reportedIssueNotificationsRepository;
-        public ReportedIssueNotificationService(ICrudRepository<ReportedIssueNotification> repository, IMapper mapper, IReportedIssueNotificationRepository reportedIssueRepo) : base(repository, mapper)
+        public ReportedIssueNotificationService(ICrudRepository<ReportedIssueNotification> repository, IMapper mapper, IReportedIssueNotificationRepository reportedIssueNotificationRepository, IReportedIssueRepository reportedIssueRepository) : base(repository, mapper)
         {
-            _reportedIssueNotificationsRepository = reportedIssueRepo;
+            _reportedIssueNotificationsRepository = reportedIssueNotificationRepository;
+        }
+        public Result<ReportedIssueNotificationDto> Create(long userId, long reportedIssueId)
+        {
+            try
+            {
+                var result = _reportedIssueNotificationsRepository.Create(userId, reportedIssueId);
+                return MapToDto(result);
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
         }
 
         public Result<PagedResult<ReportedIssueNotificationDto>> GetAllByUser(long id, int page, int pageSize)
