@@ -17,6 +17,7 @@ namespace Explorer.Tours.API.Dtos
         public List<string>? Tags { get; set; }
         public int AuthorId { get; set; }
         public string Status { get; set; }
+        public bool? Closed { get; set; }
         public List<EquipmentDto> Equipment { get; set; }
     }
 }

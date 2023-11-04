@@ -30,10 +30,29 @@ namespace Explorer.API.Controllers.Administrator.Administration
             [HttpPost("comment/{id:int}")]
             public ActionResult<ReportedIssueDto> Respond([FromRoute] int id, [FromBody] ReportedIssueCommentDto ric)
             {
-                Console.WriteLine("nista");
                 var result = _reportedIssueAdministratorService.AddComment(id, ric);
                 return CreateResponse(result);
             }
 
+            [HttpPut("deadline/{id:int}")]
+            public ActionResult<ReportedIssueDto> AddDeadline(int id, DateTime deadline)
+            {
+                var result = _reportedIssueAdministratorService.AddDeadline(id, deadline);
+                return CreateResponse(result);
+            }
+
+            [HttpPut("penalizeAuthor/{id:int}")]
+            public ActionResult<ReportedIssueDto> PenalizeAuthor(int id)
+            {
+                var result = _reportedIssueAdministratorService.PenalizeAthor(id);
+                return CreateResponse(result);
+            }
+
+            [HttpPut("closeReportedIssue/{id:int}")]
+            public ActionResult<ReportedIssueDto> Close(int id)
+            {
+                var result = _reportedIssueAdministratorService.Close(id);
+                return CreateResponse(result);
+            }
     }
 }
