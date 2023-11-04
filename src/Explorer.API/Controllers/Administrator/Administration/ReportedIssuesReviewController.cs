@@ -28,10 +28,12 @@ namespace Explorer.API.Controllers.Administrator.Administration
             }
 
             [HttpPost("comment/{id:int}")]
-            public ActionResult<ReportedIssueDto> Respond([FromBody] ReportedIssueCommentDto ric, int id)
+            public ActionResult<ReportedIssueDto> Respond([FromRoute] int id, [FromBody] ReportedIssueCommentDto ric)
             {
+                Console.WriteLine("nista");
                 var result = _reportedIssueAdministratorService.AddComment(id, ric);
                 return CreateResponse(result);
             }
+
     }
 }
