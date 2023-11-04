@@ -4,6 +4,7 @@ using Explorer.Blog.API.Dtos;
 using Explorer.Blog.API.Public;
 using Explorer.Blog.Core.Domain;
 using Explorer.Blog.Core.Domain.RepositoryInterfaces;
+using Explorer.Stakeholders.API.Internal;
 using FluentResults;
 
 namespace Explorer.Blog.Core.UseCases;
@@ -11,18 +12,26 @@ namespace Explorer.Blog.Core.UseCases;
 public class BlogPostService : CrudService<BlogPostDto, BlogPost>, IBlogPostService
 {
     private readonly IBlogPostRepository _blogPostsRepository;
+    private readonly IInternalUserService _userService;
 
-    public BlogPostService(IBlogPostRepository repository, IMapper mapper) : base(repository, mapper)
+    public BlogPostService(IBlogPostRepository repository, IMapper mapper, IInternalUserService userService) : base(repository, mapper)
     {
         _blogPostsRepository = repository;
+        _userService = userService;
     }
 
     public Result<PagedResult<BlogPostDto>> GetAllNonDraft(int page, int pageSize)
     {
         try
         {
-            var result = _blogPostsRepository.GetAllNonDraft(page, pageSize);
-            return MapToDto(result);
+            var blogPosts = _blogPostsRepository.GetAllNonDraft(page, pageSize);
+            var blogPostDtos = MapToDto(blogPosts);
+            foreach (var blogPostDto in blogPostDtos.Value.Results)
+            {
+                AddUsername(blogPostDto);
+            }
+
+            return blogPostDtos;
         }
         catch (KeyNotFoundException e)
         {
@@ -34,8 +43,14 @@ public class BlogPostService : CrudService<BlogPostDto, BlogPost>, IBlogPostServ
     {
         try
         {
-            var result = _blogPostsRepository.GetAllByUser(page, pageSize, id);
-            return MapToDto(result);
+            var blogPosts = _blogPostsRepository.GetAllByUser(page, pageSize, id);
+            var blogPostDtos = MapToDto(blogPosts);
+            foreach (var blogPostDto in blogPostDtos.Value.Results)
+            {
+                AddUsername(blogPostDto);
+            }
+
+            return blogPostDtos;
         }
         catch (KeyNotFoundException e)
         {
@@ -50,8 +65,14 @@ public class BlogPostService : CrudService<BlogPostDto, BlogPost>, IBlogPostServ
             if (!Enum.TryParse(blogPostStatus, true, out BlogPostStatus status))
                 throw new ArgumentException("Invalid blog post status value.");
 
-            var result = _blogPostsRepository.GetFilteredByStatus(page, pageSize, status);
-            return MapToDto(result);
+            var blogPosts = _blogPostsRepository.GetFilteredByStatus(page, pageSize, status);
+            var blogPostDtos = MapToDto(blogPosts);
+            foreach (var blogPostDto in blogPostDtos.Value.Results)
+            {
+                AddUsername(blogPostDto);
+            }
+
+            return blogPostDtos;
         }
         catch (KeyNotFoundException e)
         {
@@ -60,6 +81,22 @@ public class BlogPostService : CrudService<BlogPostDto, BlogPost>, IBlogPostServ
         catch (ArgumentException e)
         {
             return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+        }
+    }
+
+    public override Result<BlogPostDto> Get(int id)
+    {
+        try
+        {
+            var blogPost = CrudRepository.Get(id);
+            var blogPostDto = MapToDto(blogPost);
+            AddUsername(blogPostDto);
+
+            return blogPostDto;
+        }
+        catch (KeyNotFoundException e)
+        {
+            return Result.Fail(FailureCode.NotFound).WithError(e.Message);
         }
     }
 
@@ -103,5 +140,11 @@ public class BlogPostService : CrudService<BlogPostDto, BlogPost>, IBlogPostServ
         {
             return Result.Fail(FailureCode.NotFound).WithError(e.Message);
         }
+    }
+   
+    private void AddUsername(BlogPostDto blogPostDto)
+    {
+        var user = _userService.Get(blogPostDto.UserId);
+        blogPostDto.Username = user.Value.Username;
     }
 }
