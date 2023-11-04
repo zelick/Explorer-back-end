@@ -12,4 +12,5 @@ public interface IBlogPostService
     Result<BlogPostDto> Update(BlogPostDto blogPost);
     Result<BlogPostDto> Close(int id);
     Result Delete(int id);
+    Result<BlogPostDto> Rate(int id, BlogRatingDto blogRating);
 }

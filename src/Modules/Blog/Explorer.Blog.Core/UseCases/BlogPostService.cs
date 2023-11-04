@@ -70,4 +70,33 @@ public class BlogPostService : CrudService<BlogPostDto, BlogPost>, IBlogPostServ
             return Result.Fail(FailureCode.NotFound).WithError(e.Message);
         }
     }
+
+    public Result<BlogPostDto> Rate(int id, BlogRatingDto blogRatingDto)
+    {
+        var blogPost = _blogPostsRepository.Get(id);
+
+        try
+        {
+            Enum.TryParse<Rating>(blogRatingDto.Rating, out var rating);
+
+            var blogRating = new BlogRating
+            {
+                UserId = blogRatingDto.UserId,
+                Rating = rating,
+                TimeStamp = DateTime.Now
+            };
+
+            blogPost.AddRating(blogRating);
+            var result = _blogPostsRepository.Update(blogPost);
+            return MapToDto(result);
+        }
+        catch (KeyNotFoundException e)
+        {
+            return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+        }
+        catch (ArgumentException e)
+        {
+            return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+        }
+    }
 }
