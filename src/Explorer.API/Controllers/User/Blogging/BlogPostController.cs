@@ -18,9 +18,18 @@ public class BlogPostController : BaseApiController
     }
 
     [HttpGet]
-    public ActionResult<PagedResult<BlogPostDto>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
+    public ActionResult<PagedResult<BlogPostDto>> GetAllNonDraft([FromQuery] int page, [FromQuery] int pageSize, [FromQuery] string? status = null)
     {
-        var result = _blogPostService.GetPaged(page, pageSize);
+       var result = status is null
+            ? _blogPostService.GetAllNonDraft(page, pageSize)
+            : _blogPostService.GetFilteredByStatus(page, pageSize, status);
+        return CreateResponse(result);
+    }
+
+    [HttpGet("{id:int}")]
+    public ActionResult<BlogPostDto> GetById(int id)
+    {
+        var result = _blogPostService.Get(id);
         return CreateResponse(result);
     }
 
@@ -33,10 +42,10 @@ public class BlogPostController : BaseApiController
 
     // TODO authorization
     [HttpGet("user/{id:int}")]
-    public ActionResult<PagedResult<BlogPostDto>> GetByUser([FromQuery] int page, [FromQuery] int pageSize, int id)
+    public ActionResult<PagedResult<BlogPostDto>> GetAllByUser([FromQuery] int page, [FromQuery] int pageSize, int id)
     {
 
-        var result = _blogPostService.GetByUser(page, pageSize, id);
+        var result = _blogPostService.GetAllByUser(page, pageSize, id);
         return CreateResponse(result);
     }
 

@@ -74,5 +74,7 @@ public enum BlogPostStatus
 {
     Draft,
     Published,
-    Closed
+    Closed,
+    Active,
+    Famous
 }
