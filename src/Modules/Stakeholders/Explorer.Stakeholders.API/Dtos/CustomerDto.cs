@@ -11,5 +11,7 @@ namespace Explorer.Stakeholders.API.Dtos
         public long Id { get; set; }
         public long TouristId { get; set; }
         public List<TourPurchaseTokenDto>? PurchaseTokens { get; set; }
+        public long ShoppingCartId { get; set; }
+
     }
 }

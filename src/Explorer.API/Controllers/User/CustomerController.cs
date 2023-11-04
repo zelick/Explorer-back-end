@@ -1,5 +1,6 @@
 ﻿using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Stakeholders.API.Dtos;
+using Explorer.Stakeholders.API.Dtos.Shopping;
 using Explorer.Stakeholders.API.Public;
 using Explorer.Stakeholders.Core.Domain.Shopping;
 using Explorer.Stakeholders.Core.UseCases;
@@ -20,6 +21,13 @@ namespace Explorer.API.Controllers.User
         {
             _customerService = customerService;
             _tourService = tourService;
+        }
+
+        [HttpPost("create")]
+        public ActionResult<Customer> Create([FromBody] CustomerDto customer)
+        {
+            var result = _customerService.Create(customer);
+            return CreateResponse(result);
         }
 
         [HttpPost]

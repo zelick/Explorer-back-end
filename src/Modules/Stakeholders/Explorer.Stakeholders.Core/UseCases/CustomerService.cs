@@ -32,6 +32,7 @@ namespace Explorer.Stakeholders.Core.UseCases
         public Result <CustomerDto> ShopingCartCheckOut(long customerId)
         {
             var customer = _customerRepository.Get(customerId);
+            //ovo izmeni 
             var token = new TourPurchaseToken(customerId, 2);
             customer.CustomersPurchaseTokens(token);
             var result = _customerRepository.Update(customer);

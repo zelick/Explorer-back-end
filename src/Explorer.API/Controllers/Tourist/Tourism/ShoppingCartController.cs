@@ -1,6 +1,8 @@
 ﻿using Explorer.BuildingBlocks.Core.UseCases;
+using Explorer.Stakeholders.API.Dtos;
 using Explorer.Stakeholders.API.Dtos.Shopping;
 using Explorer.Stakeholders.API.Public;
+using Explorer.Stakeholders.Core.Domain.Shopping;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,6 +17,7 @@ namespace Explorer.API.Controllers.Tourist.Tourism
         public ShoppingCartController(IShoppingCartService shoppingCartService)
         {
             _shoppingCartService = shoppingCartService;
+           
         }
 
         [HttpGet]
