@@ -10,14 +10,15 @@ namespace Explorer.Stakeholders.Core.Domain.Shopping
     public class Customer: Entity
     {
         public long TouristId { get; init; }
-        public List<TourPurchaseToken>? PurchaseTokens { get; init; } = new List<TourPurchaseToken>();
-        // public long ShoppingCartId { get; init; }
+        public List<TourPurchaseToken>? PurchaseTokens { get; init; }
+        public long ShoppingCartId { get; init; } 
 
         public Customer() { }
-        public Customer(long toruistId)
+        public Customer(long toruistId, long shoppingCartId)
         {
             TouristId = toruistId;
             PurchaseTokens = new List<TourPurchaseToken>();
+            ShoppingCartId = shoppingCartId;
         }
 
         //ovo zovem iz nekog servisa 

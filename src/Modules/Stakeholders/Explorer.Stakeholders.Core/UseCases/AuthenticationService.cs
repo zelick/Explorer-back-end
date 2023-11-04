@@ -66,17 +66,14 @@ public class AuthenticationService : IAuthenticationService
                 userRole = Domain.UserRole.Author;
             }
             else userRole = Domain.UserRole.Tourist;
-              
-
-
 
             var user = _userRepository.Create(new User(account.Username, account.Password, userRole , true));
             var person = _personRepository.Create(new Person(user.Id, account.Name, account.Surname, account.Email, account.ProfilePictureUrl, account.Biography, account.Motto));
-            if(userRole.Equals(UserRole.Tourist))
+            /*if(userRole.Equals(UserRole.Tourist))
             {
                 var customer = new Customer(user.Id);
                 _customerRepository.Create(customer);
-            }
+            }*/
             return _tokenGenerator.GenerateAccessToken(user, person.Id);
         }
         catch (ArgumentException e)

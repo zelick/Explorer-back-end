@@ -25,13 +25,13 @@ namespace Explorer.Stakeholders.Core.UseCases
         }
 
         //ovo mislim da se nigde ne koristi 
-        public override Result<UserDto> Create(UserDto user)
+       /* public override Result<UserDto> Create(UserDto user)
         {
             try
             {
                 var result = CrudRepository.Create(MapToDomain(user));
                 //create za Cusomer ako je user role turista 
-                if (user.Role.Equals(UserRole.Tourist))
+               /* if (user.Role.Equals(UserRole.Tourist))
                 {
                     var customer = new Customer(user.Id);
                     _customerRepository.Create(customer);
@@ -42,6 +42,6 @@ namespace Explorer.Stakeholders.Core.UseCases
             {
                 return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
             }
-        }
+        }*/
     }
 }

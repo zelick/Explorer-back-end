@@ -4,14 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Explorer.Stakeholders.API.Dtos
+namespace Explorer.Stakeholders.API.Dtos.Shopping
 {
-    public class CustomerDto
+    public class ShoppingCartDto
     {
         public long Id { get; set; }
         public long TouristId { get; set; }
-        public List<TourPurchaseTokenDto>? PurchaseTokens { get; set; }
-        public long ShoppingCartId { get; set; }
-
+        public List<OrderItemDto> Items { get; set; } = new List<OrderItemDto>();
+        public double Price { get; set; }
     }
 }
