@@ -20,12 +20,14 @@ namespace Explorer.Stakeholders.Core.Domain.Shopping
         {
             TourId = tourId;
             Price = price;
+
         }
 
         protected override IEnumerable<object> GetEqualityComponents()
         {
             yield return TourId;
-            yield return Price; //da li ovo treba?
+            yield return Price; 
+      
         }
     }
 }
