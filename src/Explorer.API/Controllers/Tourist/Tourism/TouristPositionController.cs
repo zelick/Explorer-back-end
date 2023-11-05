@@ -40,7 +40,7 @@ namespace Explorer.API.Controllers.Tourist.Tourism
         }
 
         [HttpGet("{id:int}")]
-        public ActionResult<List<TouristPositionDto>> GetPreferenceByCreator([FromQuery] int page, [FromQuery] int pageSize, int id)
+        public ActionResult<List<TouristPositionDto>> GetPositionByCreator([FromQuery] int page, [FromQuery] int pageSize, int id)
         {
             var result = _touristPositionService.GetPositionByCreator(page, pageSize, id);
             return CreateResponse(result);
