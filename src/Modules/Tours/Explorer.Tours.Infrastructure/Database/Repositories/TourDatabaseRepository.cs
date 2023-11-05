@@ -78,9 +78,11 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
 
         public List<Tour> GetToursByIds(List<long> tourIds)
         {
-            return _dbContext.Tours
+            var result = _dbContext.Tours
                 .Where(t => tourIds.Contains(t.Id))
                 .ToList();
+
+            return result;
         }
     }
 }

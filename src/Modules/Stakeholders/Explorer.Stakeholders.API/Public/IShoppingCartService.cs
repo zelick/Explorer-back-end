@@ -18,5 +18,6 @@ namespace Explorer.Stakeholders.API.Public
         Result<bool> CheckIfShoppingCartExists(int touristId);
         Result<ShoppingCartDto> GetShoppingCart(int touristId);
         Result<ShoppingCartDto> AddItemToShoppingCart(OrderItemDto item, int touristId);
+        Result<ShoppingCartDto> DeleteOrderItems(long shoppingCartId);  
     }
 }

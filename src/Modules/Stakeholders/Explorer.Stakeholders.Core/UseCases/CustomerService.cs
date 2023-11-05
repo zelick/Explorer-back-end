@@ -19,43 +19,49 @@ namespace Explorer.Stakeholders.Core.UseCases
     public class CustomerService: CrudService<CustomerDto, Customer>, ICustomerService
     {
         private readonly ICustomerRepository _customerRepository;
+        private readonly IShoppingCartRepository _shoppingCartRepository;
 
-        public CustomerService(ICustomerRepository repository, IMapper mapper) : base(repository, mapper)
+        public CustomerService(ICustomerRepository repository, IShoppingCartRepository shoppingCartRepository, IMapper mapper) : base(repository, mapper)
         {
             _customerRepository =  repository;
+            _shoppingCartRepository = shoppingCartRepository;
         }
 
-        //mi cemo imati neku post metodu u kontroleru - to je checkout 
-        //i on kad klikne checkout meni treba da se doda toliko tokena koliko imam itemsa
-        //u kontroleru poziv servisa - tj ovog servisa
-     
-        //ovo da vrti kroz neku for petlju, za svaki orderItem 
-        public Result <CustomerDto> ShopingCartCheckOut(long customerId)
+        public Result <CustomerDto> ShopingCartCheckOut(long touristId)
         {
-            var customer = _customerRepository.Get(customerId);
-            //for neki
-            var token = new TourPurchaseToken(customerId, 2); //OVA DVOJKA JE TURA
-            //ovo ima veze sa order item
-            //id korpe, i iz id korpe se izvlaci 
-            customer.CustomersPurchaseTokens(token);
+            //var customer = _customerRepository.Get(customerId);
+            var customer = _customerRepository.GetCustomerByTouristId(touristId); //
+            var shopingCart = _shoppingCartRepository.Get(customer.ShoppingCartId);
+
+            foreach (var orderItem in shopingCart.Items)
+            {
+                var token = new TourPurchaseToken(customer.Id, orderItem.TourId); //
+                customer.CustomersPurchaseTokens(token);
+            }
+
             var result = _customerRepository.Update(customer);
             return MapToDto(result);
         }
 
-        //umesto id - TourDto
         public List<long> getCustomersPurchasedTours(long touristId)
         {
             var customer = _customerRepository.GetCustomerByTouristId(touristId);
 
-            //var customer = _customerRepository.Get(customerId); 
-            List<long> toursIds = new List<long>();
-
-            foreach (var token in customer.PurchaseTokens)
+            if (customer != null)
             {
-                toursIds.Add(token.TourId);
-            }
+                List<long> toursIds = new List<long>();
 
-            return toursIds;
+                foreach (var token in customer.PurchaseTokens)
+                {
+                    toursIds.Add(token.TourId);
+                }
+
+                return toursIds;
+            }
+            else
+            {
+                return new List<long>();
+            }
         }
     }
 }

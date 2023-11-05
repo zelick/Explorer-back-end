@@ -11,7 +11,7 @@ namespace Explorer.Stakeholders.Core.Domain.Shopping
     {
         public long TouristId { get; init; } //strani kljuc
         public List<OrderItem> Items { get; init; } = new List<OrderItem>();
-        public double Price { get; init; } 
+        public double Price { get; set; } 
 
         public ShoppingCart(){}
 

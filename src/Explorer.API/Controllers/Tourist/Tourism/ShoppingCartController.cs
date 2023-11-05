@@ -78,5 +78,12 @@ namespace Explorer.API.Controllers.Tourist.Tourism
             return CreateResponse(result);
         }
 
+        [HttpDelete("deleteOrderItems/{shoppingCartId:int}")]
+        public ActionResult DeleteOrderItems(long shoppingCartId)
+        {
+            var result = _shoppingCartService.DeleteOrderItems(shoppingCartId);
+            return CreateResponse(result);
+        }
+
     }
 }

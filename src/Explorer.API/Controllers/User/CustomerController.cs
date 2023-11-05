@@ -30,7 +30,7 @@ namespace Explorer.API.Controllers.User
             return CreateResponse(result);
         }
 
-        [HttpPost]
+        [HttpPut("{customerId:int}")]
         public ActionResult<CustomerDto> ShoppingCartCheckOut (long customerId)
         {
             var result = _customerService.ShopingCartCheckOut(customerId);

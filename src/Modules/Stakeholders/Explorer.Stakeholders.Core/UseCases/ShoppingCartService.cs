@@ -55,5 +55,16 @@ namespace Explorer.Stakeholders.Core.UseCases
             var result = _shoppingCartRepository.Update(cart);
             return MapToDto(result);
         }
+
+        public Result<ShoppingCartDto> DeleteOrderItems(long shoppingCartId)
+        {
+            var shoppingCart = _shoppingCartRepository.Get(shoppingCartId);
+
+            shoppingCart.Items.Clear();
+            shoppingCart.Price = 0;
+            
+            var result = _shoppingCartRepository.Update(shoppingCart);
+            return MapToDto(result);
+        }
     }
 }
