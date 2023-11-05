@@ -13,6 +13,7 @@ public class ToursProfile : Profile
             .ForMember(dest => dest.Category, opt => opt.MapFrom(src => MapObjectTypeFromString(src.Category)))
             .ReverseMap();
         CreateMap<TourPreferenceDto, TourPreference>().ReverseMap();
+        CreateMap<TouristPositionDto, TouristPosition>().ReverseMap();
         CreateMap<CheckpointDto, Checkpoint>().ReverseMap();
         CreateMap<TourDto, Tour>().ReverseMap();
         CreateMap<ReportedIssueDto, ReportedIssue>().ReverseMap();
