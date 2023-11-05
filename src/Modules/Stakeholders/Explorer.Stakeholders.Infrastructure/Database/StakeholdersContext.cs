@@ -37,15 +37,14 @@ public class StakeholdersContext : DbContext
             .HasOne<Club>()
             .WithMany()
             .HasForeignKey(uc => uc.ClubId);
-        //dodaj strane kljuceve!!!!
-
-        ConfigureStakeholder(modelBuilder);
-
+    
         modelBuilder.Entity<Customer>()
            .Property(item => item.PurchaseTokens).HasColumnType("jsonb");
 
         modelBuilder.Entity<ShoppingCart>()
           .Property(item => item.Items).HasColumnType("jsonb");
+
+        ConfigureStakeholder(modelBuilder);
     }
 
     private static void ConfigureStakeholder(ModelBuilder modelBuilder)
@@ -54,5 +53,28 @@ public class StakeholdersContext : DbContext
             .HasOne<User>()
             .WithOne()
             .HasForeignKey<Person>(s => s.UserId);
+
+        modelBuilder.Entity<ShoppingCart>()
+        .HasOne<User>()
+        .WithMany()
+        .HasForeignKey(s => s.TouristId)
+        .IsRequired();
+
+        modelBuilder.Entity<Customer>()
+        .HasOne<User>()
+        .WithMany()
+        .HasForeignKey(s => s.TouristId)
+        .IsRequired();
+
+        modelBuilder.Entity<Customer>()
+        .HasOne<ShoppingCart>()
+        .WithMany()
+        .HasForeignKey(s => s.ShoppingCartId)
+        .IsRequired();
+
+        /*modelBuilder.Entity<OrderItem>() 
+        .HasOne<Tour>()
+        .WithMany()
+        .HasForeignKey(o => o.TourId)*/
     }
 }

@@ -12,20 +12,24 @@ namespace Explorer.Stakeholders.Core.Domain.Shopping
     {
         public long TourId { get; set; }
         public double Price { get; set; }
+        public int Quantity { get; set; }
 
         public OrderItem() { }
 
         [JsonConstructor]
-        public OrderItem(long tourId, double price)
+        public OrderItem(long tourId, double price, int quantity)
         {
             TourId = tourId;
             Price = price;
+            Quantity = quantity;
+
         }
 
         protected override IEnumerable<object> GetEqualityComponents()
         {
             yield return TourId;
-            yield return Price; //da li ovo treba?
+            yield return Price; 
+            yield return Quantity;
         }
     }
 }

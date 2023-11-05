@@ -50,7 +50,7 @@ namespace Explorer.Stakeholders.Core.UseCases
         public Result<ShoppingCartDto> AddItemToShoppingCart(OrderItemDto item, int touristId)
         {
             var cart = _shoppingCartRepository.GetShoppingCart(touristId);
-            var newItem = new OrderItem(item.TourId, item.Price); 
+            var newItem = new OrderItem(item.TourId, item.Price, item.Quantity); 
             cart.AddItemToShoppingCart(newItem);
             var result = _shoppingCartRepository.Update(cart);
             return MapToDto(result);
