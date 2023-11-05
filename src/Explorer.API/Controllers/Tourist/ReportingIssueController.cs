@@ -20,9 +20,20 @@ namespace Explorer.API.Controllers.Tourist
             _reportingIssueService = reportingIssueService;
         }
 
-        [HttpPost]
-        public ActionResult<ReportedIssueDto> Create([FromBody] ReportedIssueDto reportedIssue)
+        [HttpPost("{category}/{description}/{priority}/{tourId}/{touristId}")]
+
+        public ActionResult<ReportedIssueDto> Create(string category, string description, int priority, int tourId, int touristId)
         {
+            ReportedIssueDto reportedIssue = new ReportedIssueDto();
+            reportedIssue.Category = category;
+            reportedIssue.Description = description;
+            reportedIssue.Priority = priority;
+            reportedIssue.TourId = tourId;
+            reportedIssue.TouristId = touristId;
+            reportedIssue.Time= DateTime.UtcNow;
+            reportedIssue.Deadline = null;
+            reportedIssue.Closed = false;
+            reportedIssue.Resolved = false;
             reportedIssue.Comments = new List<ReportedIssueCommentDto>();
             reportedIssue.Tour = null;
             if(reportedIssue.Category.IsNullOrEmpty() || reportedIssue.Priority==0 ||reportedIssue.TourId==0 || reportedIssue.TouristId == 0)
