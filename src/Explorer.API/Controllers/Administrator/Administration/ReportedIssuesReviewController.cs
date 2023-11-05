@@ -35,7 +35,7 @@ namespace Explorer.API.Controllers.Administrator.Administration
             }
 
             [HttpPut("deadline/{id:int}")]
-            public ActionResult<ReportedIssueDto> AddDeadline(int id, DateTime deadline)
+            public ActionResult<ReportedIssueDto> AddDeadline(int id, [FromBody] DateTime deadline)
             {
                 var result = _reportedIssueAdministratorService.AddDeadline(id, deadline);
                 return CreateResponse(result);
