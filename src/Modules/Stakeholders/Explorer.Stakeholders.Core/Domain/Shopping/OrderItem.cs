@@ -12,16 +12,14 @@ namespace Explorer.Stakeholders.Core.Domain.Shopping
     {
         public long TourId { get; set; }
         public double Price { get; set; }
-        public int Quantity { get; set; }
 
         public OrderItem() { }
 
         [JsonConstructor]
-        public OrderItem(long tourId, double price, int quantity)
+        public OrderItem(long tourId, double price)
         {
             TourId = tourId;
             Price = price;
-            Quantity = quantity;
 
         }
 
@@ -29,7 +27,7 @@ namespace Explorer.Stakeholders.Core.Domain.Shopping
         {
             yield return TourId;
             yield return Price; 
-            yield return Quantity;
+      
         }
     }
 }

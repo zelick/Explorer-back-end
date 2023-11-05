@@ -10,6 +10,5 @@ namespace Explorer.Stakeholders.API.Dtos.Shopping
     {
         public long TourId { get; set; }
         public double Price { get; set; }
-        public int Quantity { get; set; }
     }
 }
