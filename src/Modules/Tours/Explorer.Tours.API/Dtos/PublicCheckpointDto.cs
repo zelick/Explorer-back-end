@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace Explorer.Tours.API.Dtos
 {
-    public class MapObjectDto
+    public class PublicCheckpointDto
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
+        public long TourId { get; set; }
+        public double Longitude { get; set; }
+        public double Latitude { get; set; }
         public string Name { get; set; }
         public string? Description { get; set; }
-        public string? PictureURL { get; set; }
-        public string? Category { get; set; }
-        public float? Longitude { get; set; }
-        public float? Latitude { get; set; }
+        public List<string> Pictures { get; set; }
     }
 }

@@ -59,5 +59,12 @@ namespace Explorer.API.Controllers.Author.Administration
             var result = _checkpointService.SetPublicStatus(id);
             return CreateResponse(result);
         }
+
+        [HttpPost("create")]
+        public ActionResult<CheckpointDto> Create([FromBody] CheckpointDto checkpoint, [FromQuery] int userId, string status)
+        {
+            var result = _checkpointService.Create(checkpoint, userId, status);
+            return CreateResponse(result);
+        }
     }
 }

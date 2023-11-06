@@ -9,11 +9,11 @@ namespace Explorer.Stakeholders.Core.Domain
 {
     public class CheckpointRequest : Entity
     {
-        public int CheckpointId { get; init; }
+        public long CheckpointId { get; init; }
         public int AuthorId { get; init; }
         public RequestStatus Status { get; private set; }
 
-        public CheckpointRequest(int checkpointId, int authorId, RequestStatus status)
+        public CheckpointRequest(long checkpointId, int authorId, RequestStatus status)
         {
             CheckpointId = checkpointId;
             AuthorId = authorId;

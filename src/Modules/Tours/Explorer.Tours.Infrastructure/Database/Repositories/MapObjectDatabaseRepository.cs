@@ -22,7 +22,7 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
         {
             var mapObject = _dbContext.MapObjects.FirstOrDefault(o => o.Id == id);
             if (mapObject == null) throw new KeyNotFoundException("Not found " + id);
-            mapObject.SetPublicStatus();
+            //mapObject.SetPublicStatus();
             _dbContext.MapObjects.Update(mapObject);
             _dbContext.SaveChanges();
             return mapObject;

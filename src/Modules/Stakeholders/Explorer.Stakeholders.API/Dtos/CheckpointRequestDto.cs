@@ -8,7 +8,7 @@ namespace Explorer.Stakeholders.API.Dtos
 {
     public class CheckpointRequestDto
     {
-        public int CheckpointId { get; set; }
+        public long CheckpointId { get; set; }
         public int AuthorId { get; set; }
         public string Status { get; set; }
     }

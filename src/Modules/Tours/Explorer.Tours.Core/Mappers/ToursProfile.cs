@@ -17,6 +17,10 @@ public class ToursProfile : Profile
         CreateMap<TourDto, Tour>().ReverseMap();
         CreateMap<ReportedIssueDto, ReportedIssue>().ReverseMap();
         CreateMap<TourRatingDto, TourRating>().ReverseMap();
+        CreateMap<PublicCheckpointDto, PublicCheckpoint>().ReverseMap();
+        CreateMap<PublicMapObjectDto, PublicMapObject>()
+                  .ForMember(dest => dest.Category, opt => opt.MapFrom(src => MapObjectTypeFromString(src.Category)))
+                  .ReverseMap();
     }
 
     private MapObjectType MapObjectTypeFromString(string category)

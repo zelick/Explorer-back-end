@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Explorer.Tours.API.Dtos
 {
-    public class MapObjectDto
+    public class PublicMapObjectDto
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -15,5 +15,6 @@ namespace Explorer.Tours.API.Dtos
         public string? Category { get; set; }
         public float? Longitude { get; set; }
         public float? Latitude { get; set; }
+        public string? Status { get; set; }
     }
 }

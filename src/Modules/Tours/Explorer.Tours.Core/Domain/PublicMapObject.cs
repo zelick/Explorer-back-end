@@ -1,15 +1,13 @@
 ﻿using Explorer.BuildingBlocks.Core.Domain;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Explorer.Tours.Core.Domain
 {
-    public enum MapObjectType 
-    {
-        Other,
-        Restaurant,
-        WC,
-        Parking
-    }
-    public class MapObject : Entity
+    public class PublicMapObject : Entity
     {
         public string Name { get; init; }
         public string? Description { get; init; }
@@ -18,7 +16,7 @@ namespace Explorer.Tours.Core.Domain
         public float? Longitude { get; init; }
         public float? Latitude { get; init; }
 
-        public MapObject(string name, string? description, string pictureURL, MapObjectType? category, float? longitude, float? latitude)
+        public PublicMapObject(string name, string? description, string pictureURL, MapObjectType? category, float? longitude, float? latitude)
         {
             if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("Invalid Name.");
             Name = name;
