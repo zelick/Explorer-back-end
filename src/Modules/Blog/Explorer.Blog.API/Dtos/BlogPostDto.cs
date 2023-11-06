@@ -11,4 +11,5 @@ public class BlogPostDto
     public List<string>? ImageUrls { get; set; }
     public string Status { get; set; }
     public List<BlogRatingDto>? Ratings { get; set; }
+    public List<BlogCommentDto>? Comments { get; set; }
 }
