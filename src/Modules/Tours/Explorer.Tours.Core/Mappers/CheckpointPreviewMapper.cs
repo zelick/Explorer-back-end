@@ -25,5 +25,15 @@ namespace Explorer.Tours.Core.Mappers
             return result;
 
         }
+
+        public List<CheckpointPreviewDto> createListDto(List<CheckpointPreview> checkpointList)
+        {
+            List<CheckpointPreviewDto> result = new List<CheckpointPreviewDto>();
+            foreach (CheckpointPreview cpp in checkpointList)
+            {
+                result.Add(CreateDto(cpp));
+            }
+            return result;
+        }
     }
 }

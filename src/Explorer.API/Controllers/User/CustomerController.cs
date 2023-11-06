@@ -42,7 +42,7 @@ namespace Explorer.API.Controllers.User
         public ActionResult<List<long>> getCustomersPurchasedToursIds(long customerId)
         {
             var result = _customerService.getCustomersPurchasedTours(customerId);
-            //return CreateResponse(result);
+
             if(result != null)
             {
                 return Ok(result); // Status 200 OK
@@ -54,24 +54,20 @@ namespace Explorer.API.Controllers.User
         }
 
         [HttpGet("cutomersPurchasedTours/{customerId:int}")]
-        public ActionResult<List<TourDto>> getCustomersPurchasedTours(long customerId)
+        public ActionResult<List<PurchasedTourPreviewDto>> getCustomersPurchasedTours(long customerId)
         {
             var result = _customerService.getCustomersPurchasedTours(customerId);
 
             var tours = _tourService.GetToursByIds(result);
 
             return CreateResponse(tours);
+        }
 
-            /*
-            if (tours != null)
-            {
-                return Ok(tours); // Status 200 OK
-            }
-            else
-            {
-                return NotFound(); // Status 404 Not Found ili drugi odgovarajući status kod
-            }
-            */
+        [HttpGet("customersPurchasedTourDetails/{purchasedTourId:int}")]
+        public ActionResult <PurchasedTourPreviewDto> getCustomersPurchasedTourDetails(long purchasedTourId)
+        {
+            var result = _tourService.getPurchasedTourById(purchasedTourId);
+            return CreateResponse(result);
         }
     }
 }

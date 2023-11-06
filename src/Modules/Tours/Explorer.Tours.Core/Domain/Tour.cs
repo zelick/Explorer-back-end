@@ -127,7 +127,6 @@ namespace Explorer.Tours.Core.Domain
             return 0;
         }
 
-
         public TourPreview FilterView(Tour tour)
         {
             TourPreview result = null;
@@ -136,7 +135,14 @@ namespace Explorer.Tours.Core.Domain
             };
             return result;
         }
-
+        
+        public PurchasedTourPreview FilterPurchasedTour(Tour tour)
+        {
+            PurchasedTourPreview result = null;
+            //neki if???
+            result = new PurchasedTourPreview(tour);
+            return result;
+        }
     }
 }
 

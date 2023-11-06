@@ -15,12 +15,14 @@ namespace Explorer.Tours.Core.UseCases.Administration
         private readonly ITourRepository _tourRepository;
         private readonly IEquipmentRepository _equipmentRepository;
         private TourPreviewMapper _tourPreviewMapper;
+        private PurchasedTourPreviewMapper _purchasedTourPreviewMapper;
         public TourService(ITourRepository tourRepository, IMapper mapper, ITourEquipmentRepository tourEquipmentRepository, IEquipmentRepository equipmentRepository) : base(tourRepository, mapper)
         {
             _tourEquipmentRepository = tourEquipmentRepository;
             _tourRepository = tourRepository;
             _equipmentRepository = equipmentRepository;
             _tourPreviewMapper = new TourPreviewMapper();
+            _purchasedTourPreviewMapper = new PurchasedTourPreviewMapper();
 
 
         }
@@ -154,20 +156,29 @@ namespace Explorer.Tours.Core.UseCases.Administration
 
             }
         }
-    }
-}
-        public Result<List<TourDto>> GetToursByIds(List<long> tourIds)
+
+        public Result<List<PurchasedTourPreviewDto>> GetToursByIds(List<long> tourIds)
         {
-            //var tours = _tourRepository.GetToursByIds(tourIds);
-            var foundTours = new List<Tour>();
+            var foundTours = new List<PurchasedTourPreview>();
 
             foreach (var id in tourIds)
             {
                 var tour = _tourRepository.Get(id);
-                foundTours.Add(tour);
+                PurchasedTourPreview purchasedTourPreview = tour.FilterPurchasedTour(tour);
+
+                foundTours.Add(purchasedTourPreview);
             }
 
-            return MapToDto(foundTours);
+            return _purchasedTourPreviewMapper.createDtoList(foundTours);
+        }
+
+        public Result<PurchasedTourPreviewDto> getPurchasedTourById(long purchasedTourId)
+        {
+            var foundTour = _tourRepository.Get(purchasedTourId);
+            PurchasedTourPreview foundPurchasedTour = foundTour.FilterPurchasedTour(foundTour);
+
+            return _purchasedTourPreviewMapper.createDto(foundPurchasedTour);
+
         }
     }
 }
