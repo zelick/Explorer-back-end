@@ -3,6 +3,7 @@ using Explorer.BuildingBlocks.Infrastructure.Database;
 using Explorer.Stakeholders.API.Public;
 using Explorer.Stakeholders.Core.Domain;
 using Explorer.Stakeholders.Core.Domain.RepositoryInterfaces;
+using Explorer.Stakeholders.Core.Domain.Shopping;
 using Explorer.Stakeholders.Core.Mappers;
 using Explorer.Stakeholders.Core.UseCases;
 using Explorer.Stakeholders.Infrastructure.Authentication;
@@ -30,11 +31,14 @@ public static class StakeholdersStartup
         services.AddScoped<IClubRequestService, ClubRequestService>();
         services.AddScoped<IClubService, ClubService>(); 
         services.AddScoped<IClubInvitationService, ClubInvitationService>();
-		    services.AddScoped<IUserService, UserService>();
+		services.AddScoped<IUserService, UserService>();
         services.AddScoped<IApplicationGradeService, ApplicationGradeService>();
         services.AddScoped<IPersonEditingService, PersonEditingService>();
         services.AddScoped<IAccountsManagementService, AccountsManagementService>();
-        services.AddScoped<IPersonRepository, PersonDatabaseRepository>();
+        services.AddScoped<IPersonRepository, PersonDatabaseRepository>(); //?
+
+        services.AddScoped<ICustomerService, CustomerService>();
+        services.AddScoped<IShoppingCartService, ShoppingCartService>();
     }
 
 
@@ -44,13 +48,17 @@ public static class StakeholdersStartup
         services.AddScoped(typeof(ICrudRepository<ApplicationGrade>), typeof(CrudDatabaseRepository<ApplicationGrade, StakeholdersContext>));
         services.AddScoped(typeof(ICrudRepository<User>), typeof(CrudDatabaseRepository<User, StakeholdersContext>));
         services.AddScoped<IUserRepository, UserDatabaseRepository>();
-		    services.AddScoped<IUserClubRepository, UserClubDatabaseRepository>();
-		    services.AddScoped(typeof(ICrudRepository<ClubInvitation>), typeof(CrudDatabaseRepository<ClubInvitation, StakeholdersContext>));
+		services.AddScoped<IUserClubRepository, UserClubDatabaseRepository>();
+		services.AddScoped(typeof(ICrudRepository<ClubInvitation>), typeof(CrudDatabaseRepository<ClubInvitation, StakeholdersContext>));
         services.AddScoped(typeof(ICrudRepository<ClubRequest>), typeof(CrudDatabaseRepository<ClubRequest, StakeholdersContext>));
         services.AddScoped(typeof(ICrudRepository<Club>), typeof(CrudDatabaseRepository<Club, StakeholdersContext>));
         services.AddScoped<IClubRepository, ClubDatabaseRepository>();
 
-		    services.AddDbContext<StakeholdersContext>(opt =>
+        services.AddScoped<ICustomerRepository, CustomerDatabaseRepository>(); 
+        //services.AddScoped(typ//eof(ICrudRepository<Customer>), typeof(CrudDatabaseRepository<Customer, StakeholdersContext>)); 
+        services.AddScoped<IShoppingCartRepository, ShoppingCartDatabaseRepository>();
+
+        services.AddDbContext<StakeholdersContext>(opt =>
         opt.UseNpgsql(DbConnectionStringBuilder.Build("stakeholders"),
         x => x.MigrationsHistoryTable("__EFMigrationsHistory", "stakeholders")));
         services.AddScoped<IPersonRepository, PersonDatabaseRepository>();

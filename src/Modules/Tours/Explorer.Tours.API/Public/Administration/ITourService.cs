@@ -19,5 +19,6 @@ namespace Explorer.Tours.API.Public.Administration
         Result<TourDto> Publish(int id);
         Result<TourDto> AddTime(TourTimesDto tourTimesDto, int id);
         Result<TourDto> Archive(int id);
+        Result<List<TourDto>> GetToursByIds(List<long> tourIds);
     }
 }
