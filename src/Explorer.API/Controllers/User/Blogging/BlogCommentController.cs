@@ -17,14 +17,14 @@ public class BlogCommentController : BaseApiController
         _blogCommentService = blogCommentService;
     }
 
-    [HttpPut]
+    [HttpPatch]
     public ActionResult<BlogPostDto> Add(int id, [FromBody] BlogCommentDto blogComment)
     {
         var result = _blogCommentService.Add(id, blogComment);
         return CreateResponse(result);
     }
 
-    [HttpDelete]
+    [HttpPatch("remove")]
     public ActionResult<BlogPostDto> Remove(int id, [FromBody] BlogCommentDto blogComment)
     {
         var result = _blogCommentService.Remove(id, blogComment);

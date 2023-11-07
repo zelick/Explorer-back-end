@@ -121,6 +121,26 @@ public class BlogPost : Entity
 
     public void UpdateStatus()
     {
+        Ratings ??= new List<BlogRating>();
+        Comments ??= new List<BlogComment>();
+
+        var upvoteCount = Ratings.Count(r => r?.Rating == Rating.Upvote);
+        var downvoteCount = Ratings.Count(r => r?.Rating == Rating.Downvote);
+        var rating = upvoteCount - downvoteCount;
+        var commentCount = Comments.Count;
+
+        if (rating < ClosedRatingThreshold)
+        {
+            Status = BlogPostStatus.Closed;
+        }
+        else if (rating > FamousRatingThreshold && commentCount > FamousCommentThreshold)
+        {
+            Status = BlogPostStatus.Famous;
+        }
+        else if (rating > ActiveRatingThreshold || commentCount > ActiveCommentThreshold)
+        {
+            Status = BlogPostStatus.Active;
+        }
     }
 }
 
