@@ -2,12 +2,13 @@
 
 namespace Explorer.Tours.Core.Domain
 {
-    public class CheckoutCompletition: Entity
+    public class CheckpointCompletition: Entity
     {
+        public long TourExecutionId { get; init; }
         public long CheckpointId { get; init; }
         public DateTime CompletitionTime { get; init; }
 
-        public CheckoutCompletition(long checkpointId)
+        public CheckpointCompletition(long checkpointId)
         {
             CheckpointId = checkpointId;
             CompletitionTime = DateTime.Now;

@@ -1,12 +1,13 @@
 ﻿using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
+using Explorer.Tours.Core.Domain;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Explorer.API.Controllers.Author.Administration
 {
-    [Authorize(Policy = "authorPolicy")]
+    // [Authorize(Policy = "authorPolicy")]
     [Route("api/administration/tour")]
     public class TourController : BaseApiController
     {
@@ -73,6 +74,25 @@ namespace Explorer.API.Controllers.Author.Administration
             return CreateResponse(result);
         }
 
+        [HttpPut("publishedTours/{id:int}")]
+        public ActionResult<TourDto> Publish(int id)
+        {
+            var result = _tourService.Publish(id);
+            return CreateResponse(result);
+        }
 
+        [HttpPut("archivedTours/{id:int}")]
+        public ActionResult<TourDto> Archive(int id)
+        {
+            var result = _tourService.Archive(id);
+            return CreateResponse(result);
+        }
+
+        [HttpPut("tourTime/{id:int}")]
+        public ActionResult<TourDto> AddTime(TourTimesDto tourTimesDto, int id)
+        {
+            var result = _tourService.AddTime(tourTimesDto, id);
+            return CreateResponse(result);
+        }
     }
 }

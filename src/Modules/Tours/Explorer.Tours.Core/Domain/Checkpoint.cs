@@ -1,4 +1,4 @@
-﻿using System;
+﻿ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,11 +10,13 @@ namespace Explorer.Tours.Core.Domain
     public class Checkpoint : Entity
     {
         public long TourId { get; init; }
+        public Tour Tour { get; init; }
         public double Longitude { get; init; }
         public double Latitude { get; init; }
         public string Name { get; init; }
         public string? Description { get; init; }
         public List<string> Pictures { get; init; }
+        public double RequiredTimeInSeconds { get; init; }
 
         public Checkpoint(long tourId, double longitude, double latitude, string name, string description, List<string> pictures)
         {
