@@ -5,7 +5,7 @@ using Explorer.Blog.API.Public;
 using Explorer.Blog.Core.Domain.RepositoryInterfaces;
 using Explorer.Stakeholders.API.Internal;
 using FluentResults;
-using Explorer.Blog.Core.Domain;
+using Explorer.Blog.Core.Domain.BlogPosts;
 
 namespace Explorer.Blog.Core.UseCases;
 
@@ -22,18 +22,13 @@ public class BlogPostService : CrudService<BlogPostDto, BlogPost>, IBlogPostServ
         _userService = userService;
     }
 
+    // TODO refactor
     public Result<PagedResult<BlogPostDto>> GetAllNonDraft(int page, int pageSize)
     {
         try
         {
             var blogPosts = _blogPostsRepository.GetAllNonDraft(page, pageSize);
-            var blogPostDtos = MapToDto(blogPosts);
-            foreach (var blogPostDto in blogPostDtos.Value.Results)
-            {
-                AddUsername(blogPostDto);
-            }
-
-            return blogPostDtos;
+            return MapToDto(blogPosts);
         }
         catch (KeyNotFoundException e)
         {
@@ -46,20 +41,7 @@ public class BlogPostService : CrudService<BlogPostDto, BlogPost>, IBlogPostServ
         try
         {
             var blogPosts = _blogPostsRepository.GetAllByUser(page, pageSize, id);
-            var blogPostDtos = MapToDto(blogPosts);
-            foreach (var blogPostDto in blogPostDtos.Value.Results)
-            {
-                blogPostDto.Username = GetUsername(blogPostDto.UserId);
-
-                if (blogPostDto.Comments == null) continue;
-
-                foreach (var blogCommentDto in blogPostDto.Comments)
-                {
-                    blogCommentDto.Username = GetUsername(blogCommentDto.UserId);
-                }
-            }
-
-            return blogPostDtos;
+            return MapToDto(blogPosts);
         }
         catch (KeyNotFoundException e)
         {
@@ -75,20 +57,7 @@ public class BlogPostService : CrudService<BlogPostDto, BlogPost>, IBlogPostServ
                 throw new ArgumentException("Invalid blog post status value.");
 
             var blogPosts = _blogPostsRepository.GetFilteredByStatus(page, pageSize, status);
-            var blogPostDtos = MapToDto(blogPosts);
-            foreach (var blogPostDto in blogPostDtos.Value.Results)
-            {
-                blogPostDto.Username = GetUsername(blogPostDto.UserId);
-
-                if (blogPostDto.Comments == null) continue;
-
-                foreach (var blogCommentDto in blogPostDto.Comments)
-                {
-                    blogCommentDto.Username = GetUsername(blogCommentDto.UserId);
-                }
-            }
-
-            return blogPostDtos;
+            return MapToDto(blogPosts); ;
         }
         catch (KeyNotFoundException e)
         {

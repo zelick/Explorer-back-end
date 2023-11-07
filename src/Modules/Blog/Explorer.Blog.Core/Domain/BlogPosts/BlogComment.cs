@@ -1,7 +1,7 @@
 ﻿using Explorer.BuildingBlocks.Core.Domain;
 using System.Text.Json.Serialization;
 
-namespace Explorer.Blog.Core.Domain;
+namespace Explorer.Blog.Core.Domain.BlogPosts;
 
 public class BlogComment : ValueObject
 {

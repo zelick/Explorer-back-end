@@ -4,7 +4,7 @@ using Explorer.BuildingBlocks.Core.UseCases;
 using AutoMapper;
 using FluentResults;
 using Explorer.Blog.Core.Domain.RepositoryInterfaces;
-using Explorer.Blog.Core.Domain;
+using Explorer.Blog.Core.Domain.BlogPosts;
 
 namespace Explorer.Blog.Core.UseCases;
 
