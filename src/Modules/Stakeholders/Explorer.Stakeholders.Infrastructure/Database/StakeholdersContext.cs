@@ -1,8 +1,5 @@
-﻿using Explorer.BuildingBlocks.Core.Domain;
-using Explorer.Stakeholders.Core.Domain;
+﻿using Explorer.Stakeholders.Core.Domain;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Hosting;
-using System.Reflection.Metadata;
 
 namespace Explorer.Stakeholders.Infrastructure.Database;
 
@@ -15,7 +12,6 @@ public class StakeholdersContext : DbContext
     public DbSet<UserClub> UserClubs { get; set; }
     public DbSet<ClubRequest> Requests { get; set; }
     public DbSet<ApplicationGrade> ApplicationGrades { get; set; }
-    //public DbSet<UserFollower> UserFollower { get; set; }
 
     public DbSet<Message> Messages { get; set; }
 
@@ -41,53 +37,27 @@ public class StakeholdersContext : DbContext
             .WithMany()
             .HasForeignKey(uc => uc.ClubId);
 
-        //User follower
-        /*
-        modelBuilder.Entity<UserFollower>()
-            .HasKey(uf => new { uf.UserId, uf.FollowerId });
-        */
 
         modelBuilder.Entity<User>()
-            .HasMany(u => u.Followers)
-            .WithMany()
+            .HasMany(u => u.Followed)
+            .WithMany(u => u.Followers)
             .UsingEntity(j =>
             {
-                j.ToTable("UserFollowers"); // Set the name of the join table
-            }); ;
-
-        // Configure the many-to-many relationship
-        /*
-        modelBuilder.Entity<User>()
-            .HasMany(u => u.Followers)
-            .WithMany()
-            .UsingEntity<UserFollower>();
-        */
+                j.ToTable("UserFollowers");
+            });
 
         /*
-        modelBuilder.Entity<UserFollower>()
-            .HasKey(uf => new { uf.UserId, uf.FollowerId });
-        */
-
-        //Massage table
-        //modelBuilder.Entity<Message>().HasOne<User>()
-        //.WithMany()
-        //.HasForeignKey(m => m.SenderId);
-        //modelBuilder.Entity<Message>()
-        //  .Property<long>("SenderId");
-        //modelBuilder.Entity<Message>()
-        //.HasOne<User>()
-        //.WithMany()
-        //.HasForeignKey("SenderId");
-
         modelBuilder.Entity<Message>()
             .HasOne<User>()
             .WithMany(u => u.Messages)
-            .HasForeignKey(m => m.SenderId);
+            .HasForeignKey(m => m.RecipientId);
+        */
 
-        //modelBuilder.Entity<Message>().HasOne<User>()
-        //.WithMany()
-        //.HasForeignKey("SenderId")
-        //.HasPrincipalKey("Id");
+        modelBuilder.Entity<Message>()
+            .HasOne<User>()
+            .WithMany()
+            .HasForeignKey(m => m.RecipientId);
+
 
 
         ConfigureStakeholder(modelBuilder);

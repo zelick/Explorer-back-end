@@ -19,13 +19,13 @@ namespace Explorer.API.Controllers.User.ProfileMessaging
             _messageService = messageService;
         }
 
-        [HttpPost("follow/{userId}/{followedUserId}")]
-        public ActionResult Follow(int userId, int followedUserId)
+        [HttpPost("follow/{followersId}/{followedId}")]
+        public ActionResult<UserProfileDto> Follow(int followersId, int followedId)
         {
 
-            _userProfileService.Follow(userId, followedUserId);
+            var result = _userProfileService.Follow(followersId, followedId);
 
-            return null;
+            return CreateResponse(result);
         }
 
         [HttpGet("get-user-social-profile/{userId:int}")]
@@ -39,9 +39,11 @@ namespace Explorer.API.Controllers.User.ProfileMessaging
         [HttpPost("send-message")]
         public ActionResult<MessageDto> SendMessage([FromBody] MessageDto message)
         {
-            var result = _messageService.Create(message);
+            //var result = _messageService.Create(message);
 
-            return CreateResponse(result);
+            var result = _userProfileService.SendMessage(message);
+
+            return null;
         }
 
         [HttpPut("mark-as-read/{messageId:int}")]

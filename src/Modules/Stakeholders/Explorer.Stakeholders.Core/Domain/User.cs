@@ -1,4 +1,5 @@
 ﻿using Explorer.BuildingBlocks.Core.Domain;
+using Explorer.Stakeholders.Core.Domain.RepositoryInterfaces;
 
 namespace Explorer.Stakeholders.Core.Domain;
 
@@ -9,8 +10,9 @@ public class User : Entity
     public UserRole Role { get; private set; }
     public bool IsActive { get; set; }
     public List<Club> Clubs { get; set; }
-    public List<User> Followers { get; } = new List<User>();
-    public List<Message> Messages { get; set; }
+    public List<User> Followers { get; set; }
+    public List<User> Followed { get; set; }
+    public List<Message> Messages { get; set; } = new List<Message>();
 
     public User(string username, string password, UserRole role, bool isActive)
 	{
@@ -30,6 +32,17 @@ public class User : Entity
     {
         return Role.ToString().ToLower();
     }
+
+    public void Follow(User follower)
+    {
+        Followers.Add(follower);
+    }
+
+    public void SendMessage(Message message)
+    {
+        Messages.Add(message);
+    }
+
 }
 
 public enum UserRole

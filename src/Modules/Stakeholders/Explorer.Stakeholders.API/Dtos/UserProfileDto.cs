@@ -11,7 +11,7 @@ namespace Explorer.Stakeholders.API.Dtos
         public int Id { get; set; }
         public string Username { get; set; }
         public List<UserDto> Followers { get; set; }
+        public List<UserDto> Followed { get; set; }
         public List<MessageDto> Massages { get; set; }
-
     }
 }

@@ -4,7 +4,7 @@
     {
         public long Id { get; set; }
         public long SenderId { get; set; }
-        public int RecipientId { get; set; }
+        public long RecipientId { get; set; }
         public DateTime? SentDateTime { get;  set; }
         public DateTime? ReadDateTime { get;  set; }
         public string Content { get; set; }

@@ -10,7 +10,8 @@ namespace Explorer.Stakeholders.API.Public
 {
     public interface IUserProfileService
     {
-        void Follow(int userId, int followedUserId);
+        Result<UserProfileDto> Follow(int userId, int followedUserId);
         Result<UserProfileDto> Get(int userId);
+        Result<UserProfileDto> SendMessage(MessageDto  message);
     }
 }
