@@ -34,14 +34,14 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
             return new PagedResult<Checkpoint>(checkpoints, count);
         }
 
-        public Checkpoint SetPublicStatus(int id)
+        /*public Checkpoint SetPublicStatus(int id)
         {
             var checkpoint = _dbContext.Checkpoints.FirstOrDefault(n => n.Id == id);
             if (checkpoint == null) throw new KeyNotFoundException("Not found " + id);
-            checkpoint.SetPublicStatus();
+            // checkpoint.SetPublicStatus();
             _dbContext.Checkpoints.Update(checkpoint);
             _dbContext.SaveChanges();
             return checkpoint;
-        }
+        }*/
     }
 }

@@ -7,7 +7,6 @@ using AutoMapper;
 using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Stakeholders.API.Dtos;
 using Explorer.Stakeholders.API.Internal;
-using Explorer.Stakeholders.Core.Domain;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
 using Explorer.Tours.Core.Domain;
@@ -36,12 +35,6 @@ namespace Explorer.Tours.Core.UseCases.Administration
             {
                 return Result.Fail(FailureCode.NotFound).WithError(e.Message);
             }
-        }
-
-        public Result<CheckpointDto> SetPublicStatus(int id)
-        {
-            var checkpoint = _checkpointRepository.SetPublicStatus(id);
-            return MapToDto(checkpoint);
         }
 
         public Result<CheckpointDto> Create(CheckpointDto checkpoint,int userId, string status)

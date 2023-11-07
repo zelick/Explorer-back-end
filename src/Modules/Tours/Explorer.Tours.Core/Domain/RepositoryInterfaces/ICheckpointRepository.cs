@@ -12,6 +12,5 @@ namespace Explorer.Tours.Core.Domain.RepositoryInterfaces
     public interface ICheckpointRepository : ICrudRepository<Checkpoint>
     {
         PagedResult<Checkpoint> GetPagedByTour(int page, int pageSize, int id);
-        Checkpoint SetPublicStatus(int id);
     }
 }

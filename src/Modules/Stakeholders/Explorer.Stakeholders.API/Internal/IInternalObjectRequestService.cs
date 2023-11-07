@@ -11,5 +11,7 @@ namespace Explorer.Stakeholders.API.Internal
     public interface IInternalObjectRequestService
     {
         Result<ObjectRequestDto> Create(ObjectRequestDto request);
+        Result<ObjectRequestDto> AcceptRequest(int objectRequestId);
+        Result<ObjectRequestDto> Get(int objectRequestId);
     }
 }

@@ -53,12 +53,6 @@ namespace Explorer.API.Controllers.Author.Administration
             return CreateResponse(result);
         }
 
-        [HttpPut("setPublicStatus/{id:int}")]
-        public ActionResult<CheckpointDto> SetPublicStatus(int id)
-        {
-            var result = _checkpointService.SetPublicStatus(id);
-            return CreateResponse(result);
-        }
 
         [HttpPost("create")]
         public ActionResult<CheckpointDto> Create([FromBody] CheckpointDto checkpoint, [FromQuery] int userId, string status)
