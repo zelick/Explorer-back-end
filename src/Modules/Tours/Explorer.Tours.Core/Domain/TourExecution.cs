@@ -6,7 +6,7 @@ namespace Explorer.Tours.Core.Domain
     {
         public long TouristId { get; init; }
         public long TourId { get; init; }
-        public Tour Tour { get; init; }
+        public Tour? Tour { get; init; }
         public DateTime Start {  get; init; }
         public  DateTime LastActivity { get; private set; }
         public ExecutionStatus ExecutionStatus { get; private set; }
@@ -26,8 +26,8 @@ namespace Explorer.Tours.Core.Domain
 
             TouristId = touristId;
             TourId = tourId;
-            Start= DateTime.Now;
-            LastActivity = DateTime.Now;
+            Start= DateTime.UtcNow;
+            LastActivity = DateTime.UtcNow;
             ExecutionStatus = ExecutionStatus.InProgress;
             CompletedCheckpoints = new List<CheckpointCompletition>();
 
@@ -35,8 +35,8 @@ namespace Explorer.Tours.Core.Domain
 
         public TourExecution RegisterActivity(float longitude, float latitude)
         {
-        /*   foreach(Checkpoint checkpoint in this.Tour.Checkpoints)
-            {
+           foreach(Checkpoint checkpoint in this.Tour.Checkpoints)
+           {
                 if((checkpoint.Longitude>=longitude+0.05 || checkpoint.Longitude<= longitude - 0.05) &&
                     (checkpoint.Latitude>= latitude + 0.05 || checkpoint.Latitude <= latitude - 0.05))
                 {
@@ -48,10 +48,7 @@ namespace Explorer.Tours.Core.Domain
 
                 this.LastActivity=DateTime.Now;
                 CheckTourCompletition();
-            }
-        nije dobra veza sa turom ne napuni turu
-         
-         */
+           }
 
 
            return this;

@@ -12,10 +12,9 @@ namespace Explorer.Tours.API.Public.Administration
     public interface ITourExecutionService
     {
         Result<PagedResult<TourExecutionDto>> GetPaged(int page, int pageSize);
-        Result<TourExecutionDto> Create(TourExecutionDto tourExecution);
+        Result<TourExecutionDto> Create(long touristId, long tourId);
         Result<TourExecutionDto> Update(TourExecutionDto tourExecution);
         Result Delete(int id);
-
         Result<TourExecutionDto> CheckPosition(TouristPositionDto position, long id);
     }
 }

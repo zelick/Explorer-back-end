@@ -15,10 +15,10 @@ namespace Explorer.API.Controllers.Tourist.Tour
         {
             _tourExecutionService = tourExecutionService;
         }
-        [HttpPost]
-        public ActionResult<TourExecutionDto> Create([FromBody] TourExecutionDto tourExecution)
+        [HttpPost("{id:int}")]
+        public ActionResult<TourExecutionDto> Create([FromBody] long tourId, long id)
         {
-            var result = _tourExecutionService.Create(tourExecution);
+            var result = _tourExecutionService.Create(id, tourId);
             return CreateResponse(result);
         }
 
