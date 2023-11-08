@@ -24,7 +24,7 @@ namespace Explorer.Tours.Core.Domain
         public Tour Tour { get; set; }
         public virtual ICollection<ReportedIssueComment> ?Comments { get; set; }
         public ReportedIssue() { }
-        public ReportedIssue(string category, string? description, int priority, DateTime time, int tourId, int touristId, Tour tour, bool resolved, DateTime deadline)
+        public ReportedIssue(string category, string? description, int priority, DateTime time, int tourId, int touristId, Tour tour, bool resolved, DateTime? deadline)
         {
             if (string.IsNullOrWhiteSpace(category) || priority == 0 || tourId == 0) throw new ArgumentException("Invalid reported issue.");
             Category = category;
