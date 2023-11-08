@@ -10,5 +10,6 @@ namespace Explorer.Stakeholders.Core.Domain.RepositoryInterfaces
     {
         Message MarkAsRead(int messageId);
         List<Message> GetAllUnread(int userId);
+        Message Send(Message message);
     }
 }

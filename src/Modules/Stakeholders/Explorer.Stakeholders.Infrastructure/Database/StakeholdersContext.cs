@@ -46,17 +46,18 @@ public class StakeholdersContext : DbContext
                 j.ToTable("UserFollowers");
             });
 
-        /*
+        
         modelBuilder.Entity<Message>()
             .HasOne<User>()
             .WithMany(u => u.Messages)
             .HasForeignKey(m => m.RecipientId);
-        */
 
+        /*
         modelBuilder.Entity<Message>()
             .HasOne<User>()
             .WithMany()
             .HasForeignKey(m => m.RecipientId);
+        */
 
 
 

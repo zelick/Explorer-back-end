@@ -12,7 +12,7 @@ public class User : Entity
     public List<Club> Clubs { get; set; }
     public List<User> Followers { get; set; }
     public List<User> Followed { get; set; }
-    public List<Message> Messages { get; set; } = new List<Message>();
+    public List<Message> Messages { get; set; }
 
     public User(string username, string password, UserRole role, bool isActive)
 	{
@@ -26,6 +26,11 @@ public class User : Entity
     {
         if (string.IsNullOrWhiteSpace(Username)) throw new ArgumentException("Invalid Name");
         if (string.IsNullOrWhiteSpace(Password)) throw new ArgumentException("Invalid Surname");
+    }
+
+    public bool CanSendMessage(long followerId)
+    {
+        return Followers.Any(f => f.Id == followerId);
     }
 
     public string GetPrimaryRoleName()

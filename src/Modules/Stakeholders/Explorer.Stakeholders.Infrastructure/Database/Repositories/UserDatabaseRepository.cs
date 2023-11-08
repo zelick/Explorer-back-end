@@ -50,46 +50,18 @@ public class UserDatabaseRepository : IUserRepository
             _dbContext.Users.Update(user);
             _dbContext.SaveChanges();
         }
-        catch (DbUpdateConcurrencyException ex)
+        catch (DbUpdateException e)
         {
-            //The code from Microsoft - Resolving concurrency conflicts 
-            foreach (var entry in ex.Entries)
-            {
-                if (entry.Entity is Person)
-                {
-                    var proposedValues = entry.CurrentValues; //Your proposed changes
-                    var databaseValues = entry.GetDatabaseValues(); //Values in the Db
-
-                    foreach (var property in proposedValues.Properties)
-                    {
-                        var proposedValue = proposedValues[property];
-                        var databaseValue = databaseValues[property];
-
-                        // TODO: decide which value should be written to database
-                        // proposedValues[property] = <value to be saved>;
-                    }
-
-                    // Refresh original values to bypass next concurrency check
-                    entry.OriginalValues.SetValues(databaseValues);
-                }
-                else
-                {
-                    throw new NotSupportedException(
-                        "Don't know how to handle concurrency conflicts for "
-                        + entry.Metadata.Name);
-                }
-            }
+            throw new KeyNotFoundException(e.Message);
         }
-
         return user;
     }
 
     public User GetUserById(long id)
     {
-        return _dbContext.Users.Include(u => u.Messages)
-                                .Include(u => u.Followed)
-                                .ThenInclude(u => u.Followers)
-                                
+        return _dbContext.Users.Include(u => u.Followed)
+                                .Include(u => u.Followers)
+                                .Include(u => u.Messages)
                                 .FirstOrDefault(user => user.Id == id);
     }
 }

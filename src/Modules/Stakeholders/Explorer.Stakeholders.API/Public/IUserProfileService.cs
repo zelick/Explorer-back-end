@@ -12,6 +12,8 @@ namespace Explorer.Stakeholders.API.Public
     {
         Result<UserProfileDto> Follow(int userId, int followedUserId);
         Result<UserProfileDto> Get(int userId);
-        Result<UserProfileDto> SendMessage(MessageDto  message);
+        Result<MessageDto> SendMessage(MessageDto  message);
+        Result<MessageDto> MarkAsRead(int messageId);
+        Result<List<MessageDto>> GetNotifications(int userId);
     }
 }

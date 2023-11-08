@@ -5,18 +5,16 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Explorer.API.Controllers.User.ProfileMessaging
 {
-    [Authorize(Policy = "userPolicy")]
+    //[Authorize(Policy = "userPolicy")]
     [Route("api/profile-messaging")]
     public class UserSocialProfileController : BaseApiController
     {
         private readonly IUserProfileService _userProfileService;
-        private readonly IMessageService _messageService;
         
 
-        public UserSocialProfileController(IUserProfileService userProfileService, IMessageService messageService)
+        public UserSocialProfileController(IUserProfileService userProfileService)
         {
             _userProfileService = userProfileService;
-            _messageService = messageService;
         }
 
         [HttpPost("follow/{followersId}/{followedId}")]
@@ -43,13 +41,13 @@ namespace Explorer.API.Controllers.User.ProfileMessaging
 
             var result = _userProfileService.SendMessage(message);
 
-            return null;
+            return CreateResponse(result);
         }
 
         [HttpPut("mark-as-read/{messageId:int}")]
         public ActionResult<MessageDto> ReadMessage(int messageId)
         {
-            var result = _messageService.MarkAsRead(messageId);
+            var result = _userProfileService.MarkAsRead(messageId);
 
             return CreateResponse(result);
         }
@@ -57,7 +55,7 @@ namespace Explorer.API.Controllers.User.ProfileMessaging
         [HttpGet("get-notifications/{userId:int}")]
         public ActionResult<List<MessageDto>> GetNotifications(int userId)
         {
-            var notifications = _messageService.GetNotifications(userId);
+            var notifications = _userProfileService.GetNotifications(userId);
 
             return CreateResponse(notifications);
         }
