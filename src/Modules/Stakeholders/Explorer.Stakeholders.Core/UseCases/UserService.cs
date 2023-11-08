@@ -12,10 +12,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Explorer.Stakeholders.API.Internal;
 
 namespace Explorer.Stakeholders.Core.UseCases
 {
-	public class UserService : CrudService<UserDto, User>, IUserService
+    public class UserService : CrudService<UserDto, User>, IUserService, IInternalUserService
 	{
         //rep za kupca 
         private readonly ICustomerRepository _customerRepository;
