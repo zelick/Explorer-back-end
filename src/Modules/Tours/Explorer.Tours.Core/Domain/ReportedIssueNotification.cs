@@ -5,7 +5,7 @@ namespace Explorer.Tours.Core.Domain
 {
     public class ReportedIssueNotification : Entity
     {
-        public string NotificationDescription { get; init; }
+        public string Description { get; init; }
         public DateTime CreationTime { get; init; }
         public bool IsRead { get; init; }
         public long UserId { get; init; }
@@ -17,7 +17,7 @@ namespace Explorer.Tours.Core.Domain
         public ReportedIssueNotification(string description, DateTime creationTime, bool isRead, long userId, long reportedIssueId) 
         {
             if (string.IsNullOrWhiteSpace(description) || userId == 0 || reportedIssueId == 0) throw new ArgumentException("Invalid reported issue notification.");
-            NotificationDescription = description;
+            Description = description;
             CreationTime = creationTime;
             IsRead = isRead;
             UserId = userId;

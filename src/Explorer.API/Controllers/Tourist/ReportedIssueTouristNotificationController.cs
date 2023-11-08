@@ -16,12 +16,12 @@ namespace Explorer.API.Controllers.Tourist
             _service = service;
         }
 
-        //[HttpGet("{id:int}")]
-        //public ActionResult<ReportedIssueNotificationDto> Get(int id)
-        //{
-        //    var result = _service.Get(id);
-        //    return CreateResponse(result);
-        //}
+        [HttpGet("{id:int}")]
+        public ActionResult<ReportedIssueNotificationDto> Get(int id)
+        {
+            var result = _service.Get(id);
+            return CreateResponse(result);
+        }
 
         [HttpPut("{id:int}")]
         public ActionResult<ReportedIssueNotificationDto> Update([FromBody] ReportedIssueNotificationDto notification)
