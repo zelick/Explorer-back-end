@@ -28,8 +28,8 @@ public class ToursContext : DbContext
            .WithOne(t => t.Tour)
            .HasForeignKey(t => t.TourId)
            .IsRequired();
-        ConfigureReportedIssues(modelBuilder);
-        ConfigureTourRatings(modelBuilder);
+        //ConfigureReportedIssues(modelBuilder);
+        //ConfigureTourRatings(modelBuilder);
 
         modelBuilder.Entity<Tour>()
             .HasMany(t => t.Equipment)
@@ -37,13 +37,22 @@ public class ToursContext : DbContext
             .UsingEntity<TourEquipment>();
         ConfigureReportedIssues(modelBuilder);
         ConfigureTourRatings(modelBuilder);
+
+        modelBuilder.Entity<Tour>()
+           .Property(item => item.PublishedTours).HasColumnType("jsonb");
+        modelBuilder.Entity<Tour>()
+           .Property(item => item.ArchivedTours).HasColumnType("jsonb");
+        modelBuilder.Entity<Tour>()
+           .Property(item => item.TourTimes).HasColumnType("jsonb");
     }
+
     private static void ConfigureReportedIssues(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<ReportedIssue>().HasOne(t => t.Tour).WithMany().HasForeignKey(t => t.TourId);
     }
     private static void ConfigureTourRatings(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<TourRating>().HasOne(t => t.Tour).WithMany().HasForeignKey(t => t.TourId);
+        //modelBuilder.Entity<TourRating>().HasOne(t => t.Tour).WithMany().HasForeignKey(t => t.TourId);
+        modelBuilder.Entity<Tour>().HasMany(t => t.TourRatings).WithOne(t=>t.Tour).HasForeignKey(t => t.TourId).IsRequired();
     }
 }

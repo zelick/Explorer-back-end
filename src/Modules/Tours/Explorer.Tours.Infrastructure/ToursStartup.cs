@@ -53,6 +53,7 @@ public static class ToursStartup
         services.AddScoped(typeof(ICrudRepository<PublicMapObject>), typeof(CrudDatabaseRepository<PublicMapObject, ToursContext>));
         services.AddScoped(typeof(ICrudRepository<PublicCheckpoint>), typeof(CrudDatabaseRepository<PublicCheckpoint, ToursContext>));
 
+
         services.AddDbContext<ToursContext>(opt =>
             opt.UseNpgsql(DbConnectionStringBuilder.Build("tours"),
                 x => x.MigrationsHistoryTable("__EFMigrationsHistory", "tours")));
