@@ -21,7 +21,7 @@ namespace Explorer.Tours.Core.UseCases.Administration
         public Result<MapObjectDto> Create(MapObjectDto mapObject, int userId, string status)
         {
             var result = Create(mapObject);
-            if (status.Equals("public"))
+            if (status.Equals("Public"))
             {
                 ObjectRequestDto objectRequest = new ObjectRequestDto();
                 objectRequest.AuthorId = userId;

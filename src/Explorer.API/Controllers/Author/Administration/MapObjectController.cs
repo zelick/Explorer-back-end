@@ -53,8 +53,8 @@ namespace Explorer.API.Controllers.Author.Administration
             return CreateResponse(result);
         }
 
-        [HttpPost("create")]
-        public ActionResult<MapObjectDto> Create([FromBody] MapObjectDto mapObject, [FromQuery] int userId, string status)
+        [HttpPost("create/{userId:int}/{status}")]
+        public ActionResult<MapObjectDto> Create([FromBody] MapObjectDto mapObject, [FromRoute] int userId, [FromRoute] string status)
         {
             var result = _mapObjectService.Create(mapObject, userId, status);
             return CreateResponse(result);
