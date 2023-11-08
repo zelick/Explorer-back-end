@@ -30,15 +30,20 @@ namespace Explorer.Tours.Tests.Integration.Administration
             var newEntity = new ReportedIssueDto
             {
                 Category = "problem",
-                Description= "Description",
-                Priority= 1,
-                TourId= -1,
-                TouristId= -1,
-                Time= DateTime.Now.ToUniversalTime()
-            };
+                Description = "Description",
+                Priority = 1,
+                TourId = -1,
+                TouristId = -1,
+                Time = DateTime.Now.ToUniversalTime(),
+                Deadline = null,
+                Comments = new List<ReportedIssueCommentDto>(),
+                Resolved = false,
+                Closed = false,
+                Tour = null
+    };
 
             // Act
-            var result = ((ObjectResult)controller.Create(newEntity).Result)?.Value as ReportedIssueDto;
+            var result = ((ObjectResult)controller.Create(newEntity.Category, newEntity.Description, newEntity.Priority, newEntity.TourId, newEntity.TouristId).Result)?.Value as ReportedIssueDto;
 
             // Assert - Response
             result.ShouldNotBeNull();
@@ -67,7 +72,7 @@ namespace Explorer.Tours.Tests.Integration.Administration
             };
 
             // Act
-            var result = (ObjectResult)controller.Create(updatedEntity).Result;
+            var result = (ObjectResult)controller.Create(updatedEntity.Category, updatedEntity.Description, updatedEntity.Priority, updatedEntity.TourId, updatedEntity.TouristId).Result;
 
             // Assert
             result.StatusCode.ShouldBe(400);
