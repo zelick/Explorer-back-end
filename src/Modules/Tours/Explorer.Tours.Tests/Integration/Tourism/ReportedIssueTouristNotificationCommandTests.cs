@@ -12,59 +12,63 @@ public class ReportedIssueTouristNotificationCommandTests : BaseToursIntegration
 {
     public ReportedIssueTouristNotificationCommandTests(ToursTestFactory factory) : base(factory) { }
 
-    //[Fact]
-    //public void Updates()
-    //{
-    //    // Arrange
-    //    using var scope = Factory.Services.CreateScope();
-    //    var controller = CreateController(scope);
-    //    var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
-    //    var updatedEntity = new ReportedIssueNotificationDto
-    //    {
-    //        Id = -4,
-    //        Description = "Old notification!!!",
-    //        CreationTime = DateTime.UtcNow,
-    //        IsRead = true, 
-    //        UserId = 2,
-    //        ReportedIssueId = -3
-    //    };
+    [Fact]
+    public void Updates()
+    {
+        // Arrange
+        using var scope = Factory.Services.CreateScope();
+        var controller = CreateController(scope);
+        var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
+        var updatedEntity = new ReportedIssueNotificationDto
+        {
+            Id = -4,
+            Description = "Tourist old notification!!!",
+            CreationTime = DateTime.UtcNow,
+            IsRead = true,
+            UserId = 2,
+            ReportedIssueId = -3
+        };
 
-    //    // Act
-    //    var result = ((ObjectResult)controller.Update(updatedEntity).Result)?.Value as ReportedIssueNotificationDto;
+        // Act
+        var result = ((ObjectResult)controller.Update(updatedEntity).Result)?.Value as ReportedIssueNotificationDto;
 
-    //    // Assert - Response
-    //    result.ShouldNotBeNull();
-    //    result.Id.ShouldBe(-4);
-    //    result.Description.ShouldBe(updatedEntity.Description);
-    //    result.IsRead.ShouldBe(updatedEntity.IsRead);
+        // Assert - Response
+        result.ShouldNotBeNull();
+        result.Id.ShouldBe(-4);
+        result.Description.ShouldBe(updatedEntity.Description);
+        result.IsRead.ShouldBe(updatedEntity.IsRead);
 
-    //    // Assert - Database
-    //    var storedEntity = dbContext.ReportedIssueNotifications.FirstOrDefault(i => i.Description == "Old notification!!!");
-    //    storedEntity.ShouldNotBeNull();
-    //    storedEntity.Description.ShouldBe(updatedEntity.Description);
-    //    var oldEntity = dbContext.ReportedIssueNotifications.FirstOrDefault(i => i.Description == "Old notification!!!");
-    //    oldEntity.ShouldBeNull();
-    //}
+        // Assert - Database
+        var storedEntity = dbContext.ReportedIssueNotifications.FirstOrDefault(i => i.Description == "Tourist old notification!!!");
+        storedEntity.ShouldNotBeNull();
+        storedEntity.Description.ShouldBe(updatedEntity.Description);
+        var oldEntity = dbContext.ReportedIssueNotifications.FirstOrDefault(i => i.Description == "New notification 4!");
+        oldEntity.ShouldBeNull();
+    }
 
-    //[Fact]
-    //public void Update_fails_invalid_id()
-    //{
-    //    // Arrange
-    //    using var scope = Factory.Services.CreateScope();
-    //    var controller = CreateController(scope);
-    //    var updatedEntity = new ReportedIssueNotificationDto
-    //    {
-    //        Id = -100,
-    //        IsRead = true
-    //    };
+    [Fact]
+    public void Update_fails_invalid_id()
+    {
+        // Arrange
+        using var scope = Factory.Services.CreateScope();
+        var controller = CreateController(scope);
+        var updatedEntity = new ReportedIssueNotificationDto
+        {
+            Id = -100,
+            IsRead = true,
+            Description = "test",
+            CreationTime = DateTime.UtcNow,
+            UserId = 2,
+            ReportedIssueId = -2
+        };
 
-    //    // Act
-    //    var result = (ObjectResult)controller.Update(updatedEntity).Result;
+        // Act
+        var result = (ObjectResult)controller.Update(updatedEntity).Result;
 
-    //    // Assert
-    //    result.ShouldNotBeNull();
-    //    result.StatusCode.ShouldBe(404);
-    //}
+        // Assert
+        result.ShouldNotBeNull();
+        result.StatusCode.ShouldBe(404);
+    }
 
     [Fact]
     public void Deletes()
