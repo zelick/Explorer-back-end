@@ -34,6 +34,55 @@ namespace Explorer.Tours.Tests.Integration.Administration
             result.TotalCount.ShouldBe(3);
         }
 
+        [Fact]
+        public void Set_deadline()
+        {
+            // Arrange
+            using var scope = Factory.Services.CreateScope();
+            var controller = CreateController(scope);
+            DateTime currentDate = DateTime.UtcNow.AddDays(6);
+
+
+            // Act
+            var result = ((ObjectResult)controller.AddDeadline(-1, currentDate).Result).Value as ReportedIssueDto;
+
+            // Assert
+            result.ShouldNotBeNull();
+            result.Deadline.ShouldBe(currentDate);
+        }
+
+        [Fact]
+        public void Close_reported_issue()
+        {
+            // Arrange
+            using var scope = Factory.Services.CreateScope();
+            var controller = CreateController(scope);
+
+
+            // Act
+            var result = ((ObjectResult)controller.Close(-1).Result).Value as ReportedIssueDto;
+
+            // Assert
+            result.ShouldNotBeNull();
+            result.Closed.ShouldBe(true);
+        }
+
+        [Fact]
+        public void Penalize_author_of_reported_issue()
+        {
+            // Arrange
+            using var scope = Factory.Services.CreateScope();
+            var controller = CreateController(scope);
+
+
+            // Act
+            var result = ((ObjectResult)controller.PenalizeAuthor(-1).Result).Value as ReportedIssueDto;
+
+            // Assert
+            result.ShouldNotBeNull();
+            result.Tour.Closed.ShouldBe(true);
+        }
+
         private static ReportedIssuesReviewController CreateController(IServiceScope scope)
         {
             return new ReportedIssuesReviewController(scope.ServiceProvider.GetRequiredService<IReportingIssueService>())
