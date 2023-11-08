@@ -12,13 +12,20 @@ namespace Explorer.Stakeholders.Core.UseCases
     public class ObjectRequestService : CrudService<ObjectRequestDto,ObjectRequest>, IObjectRequestService, IInternalObjectRequestService
     {
         private readonly IObjectRequestRepository _objectRequestRepository;
-        public ObjectRequestService(ICrudRepository<ObjectRequest> repository, IMapper mapper, IObjectRequestRepository objectRequestRepository) : base(repository, mapper)
+        private readonly INotificationRepository _notificationRepository;
+
+        public ObjectRequestService(ICrudRepository<ObjectRequest> repository, IMapper mapper, IObjectRequestRepository objectRequestRepository, INotificationRepository notificationRepository) : base(repository, mapper)
         {
             _objectRequestRepository = objectRequestRepository;
+            _notificationRepository = notificationRepository;
         }
 
         public Result<ObjectRequestDto> AcceptRequest(int id)
         {
+            var request = CrudRepository.Get(id);
+            string text = "Your request for object is accepted.";
+            Notification notification = new Notification(text, request.AuthorId, id);
+            _notificationRepository.AddNotification(notification);
             var objectRequest = _objectRequestRepository.AcceptRequest(id);
             return MapToDto(objectRequest);
         }
@@ -31,6 +38,10 @@ namespace Explorer.Stakeholders.Core.UseCases
 
         public Result<ObjectRequestDto> RejectRequest(int id)
         {
+            var request = CrudRepository.Get(id);
+            string text = "Your request for object is refused.";
+            Notification notification = new Notification(text, request.AuthorId, id);
+            _notificationRepository.AddNotification(notification);
             var objectRequest = _objectRequestRepository.RejectRequest(id);
             return MapToDto(objectRequest);
         }
