@@ -70,6 +70,36 @@ namespace Explorer.Tours.Core.Domain
             if (Id == this.Id)
                 this.ExecutionStatus = ExecutionStatus.Abandoned;
         }
+
+        public double CalculateTourProgressPercentage()
+        {
+            double percentage = 0;
+
+            int checkpointsCount = this.Tour.Checkpoints.Count;
+            int completedCheckpointsCount = this.CompletedCheckpoints.Count;
+
+            if (checkpointsCount > 0)
+            {
+                percentage = (double)completedCheckpointsCount / checkpointsCount * 100;
+            }
+
+            return percentage;
+        }
+
+        public bool IsTourProgressAbove35Percent()
+        {
+            double progressPercentage = CalculateTourProgressPercentage();
+
+            return progressPercentage > 35.0;
+        }
+
+        public bool HasOneWeekPassedSinceLastActivity()
+        {
+            DateTime currentTime = DateTime.Now;
+            TimeSpan difference = currentTime - this.LastActivity;
+
+            return difference.TotalDays > 7;
+        }
     }
 
     public enum ExecutionStatus
