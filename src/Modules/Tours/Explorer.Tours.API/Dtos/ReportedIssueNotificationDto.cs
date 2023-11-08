@@ -8,6 +8,6 @@
         public bool IsRead { get; set; }
         public int UserId { get; set; }
         public int ReportedIssueId { get; set; }
-        public ReportedIssueDto ReportedIssue { get; set; }
+        public ReportedIssueDto? ReportedIssue { get; set; }
     }
 }
