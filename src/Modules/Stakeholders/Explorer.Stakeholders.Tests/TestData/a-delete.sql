@@ -5,3 +5,4 @@ DELETE FROM stakeholders."Clubs";
 DELETE FROM stakeholders."Requests";
 DELETE FROM stakeholders."ClubInvitations";
 DELETE FROM stakeholders."ObjectRequests";
+DELETE FROM stakeholders."CheckpointRequests";

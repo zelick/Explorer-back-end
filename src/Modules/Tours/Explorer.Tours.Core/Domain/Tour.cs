@@ -14,7 +14,7 @@ namespace Explorer.Tours.Core.Domain
 
         public List<Equipment> Equipment { get; init; }
 
-        public List<Checkpoint> Checkpoints { get; init; }
+        public List<Checkpoint>? Checkpoints { get; init; }
 
         public double Distance { get; init; }
 
