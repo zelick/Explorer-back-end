@@ -24,13 +24,25 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
         {
             return _dbContext.Tours
                 .Include(t => t.Equipment)
+                .Include(t => t.Checkpoints)
+                .Include(t=>t.TourRatings)
                 .Where(t => t.AuthorId == id)
+                .ToList();
+        }
+
+        public List<Tour> GetPublishedTours()
+        {
+            return _dbContext.Tours
+                .Include(t => t.Equipment)
+                .Include(t => t.Checkpoints)
+                .Include(t => t.TourRatings)
+                .Where(t => t.Status == TourStatus.Published)
                 .ToList();
         }
 
         public Tour Get(long id)
         {
-            var tour = _dbContext.Tours.Include(t => t.Equipment).FirstOrDefault(t => t.Id == id);
+            var tour = _dbContext.Tours.Include(t => t.Equipment).Include(t => t.Checkpoints).Include(t=>t.TourRatings).FirstOrDefault(t => t.Id == id);
             if (tour == null) throw new KeyNotFoundException("Not found: " + id);
 
             return tour;
@@ -39,6 +51,7 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
         public PagedResult<Tour> GetPaged(int page, int pageSize)
         {
             var task = _dbContext.Tours
+                .Include(t => t.Checkpoints)
                 .Include(t => t.Equipment)
                 .AsQueryable()
                 .GetPagedById(page, pageSize);
@@ -74,6 +87,15 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
             var entity = Get(id); 
             _dbContext.Tours.Remove(entity);
             _dbContext.SaveChanges();
+        }
+
+        public List<Tour> GetToursByIds(List<long> tourIds)
+        {
+            var result = _dbContext.Tours
+                .Where(t => tourIds.Contains(t.Id))
+                .ToList();
+
+            return result;
         }
     }
 }
