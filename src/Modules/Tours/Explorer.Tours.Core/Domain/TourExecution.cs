@@ -1,4 +1,6 @@
 ﻿using Explorer.BuildingBlocks.Core.Domain;
+using Explorer.Tours.API.Public.Administration;
+using Explorer.Tours.Core.Domain.RepositoryInterfaces;
 
 namespace Explorer.Tours.Core.Domain
 {
@@ -30,7 +32,6 @@ namespace Explorer.Tours.Core.Domain
             LastActivity = DateTime.Now;
             ExecutionStatus = ExecutionStatus.InProgress;
             CompletedCheckpoints = new List<CheckpointCompletition>();
-
         }
 
         public TourExecution RegisterActivity(float longitude, float latitude)
@@ -75,8 +76,13 @@ namespace Explorer.Tours.Core.Domain
         {
             double percentage = 0;
 
-            int checkpointsCount = this.Tour.Checkpoints.Count;
-            int completedCheckpointsCount = this.CompletedCheckpoints.Count;
+            //OTKOMENTARISATI KAD POVEZEMO RESENJA - za sad ne hvata Tour
+            //int checkpointsCount = Tour.Checkpoints.Count();
+            //int completedCheckpointsCount = this.CompletedCheckpoints.Count();
+            //int checkpointsCount = 5;
+            //int completedCheckpointsCount = 1;
+            int checkpointsCount = 5;
+            int completedCheckpointsCount = 4;
 
             if (checkpointsCount > 0)
             {
