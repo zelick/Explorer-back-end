@@ -57,6 +57,55 @@ namespace Explorer.Tours.Tests.Integration.Administration
         }
 
         [Fact]
+        public void Resolve()
+        {
+            // Arrange
+            using var scope = Factory.Services.CreateScope();
+            var controller = CreateController(scope);
+            var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
+
+            // Act
+            var result = ((ObjectResult)controller.Resolve(-1).Result)?.Value as ReportedIssueDto;
+
+            // Assert - Response
+            result.ShouldNotBeNull();
+            result.Id.ShouldNotBe(0);
+            result.Resolved.ShouldBeTrue();
+
+            // Assert - Database
+            var storedEntity = dbContext.ReportedIssues.FirstOrDefault(i => i.Resolved);
+            storedEntity.ShouldNotBeNull();
+            storedEntity.Id.ShouldBe(result.Id);
+        }
+
+        [Fact]
+        public void AddComment()
+        {
+            // Arrange
+            using var scope = Factory.Services.CreateScope();
+            var controller = CreateController(scope);
+            var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
+            ReportedIssueCommentDto comment = new ReportedIssueCommentDto{
+                Text = "Zaboravio sam",
+                CreationTime= DateTime.UtcNow,
+                CreatorId = 1
+            };
+
+            // Act
+            var result = ((ObjectResult)controller.AddComment(comment, -1).Result)?.Value as ReportedIssueDto;
+
+            // Assert - Response
+            result.ShouldNotBeNull();
+            result.Id.ShouldNotBe(0);
+            result.Comments.Count.ShouldBe(1);
+
+            // Assert - Database
+            var storedEntity = dbContext.ReportedIssues.FirstOrDefault(i => i.Id==-1);
+            storedEntity.ShouldNotBeNull();
+            storedEntity.Comments.Count.ShouldBe(1);
+        }
+
+        [Fact]
         public void Create_fails_missing_category()
         {
             // Arrange
