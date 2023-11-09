@@ -1,16 +1,11 @@
 ﻿using AutoMapper;
 using Explorer.BuildingBlocks.Core.UseCases;
+using Explorer.Stakeholders.API.Internal;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public;
-using Explorer.Tours.API.Public.Administration;
 using Explorer.Tours.Core.Domain;
 using Explorer.Tours.Core.Domain.RepositoryInterfaces;
 using FluentResults;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Explorer.Tours.Core.UseCases
 {
@@ -19,6 +14,7 @@ namespace Explorer.Tours.Core.UseCases
         private readonly IReportedIssueRepository _reportedIssuesRepository;
         private readonly IReportedIssueNotificationRepository _reportedIssueNotificationRepository;
         private readonly ITourRepository _tourRepository;
+        private readonly IInternalPersonService _personService;
         public ReportingIssueService(ICrudRepository<ReportedIssue> repository, IMapper mapper,
                                      IReportedIssueRepository issuerepo, 
                                      IReportedIssueNotificationRepository reportedIssueNotificationRepository,
@@ -114,7 +110,9 @@ namespace Explorer.Tours.Core.UseCases
             try
             {
                 var result = _reportedIssuesRepository.GetPaged(page, pageSize);
-                return MapToDto(result);
+                var list =  MapToDto(result);
+                AddPersonsInfo(list.Value.Results);
+                return list;
             }
             catch (KeyNotFoundException e)
             {
@@ -126,7 +124,9 @@ namespace Explorer.Tours.Core.UseCases
             try
             {
                 var result = _reportedIssuesRepository.GetPagedByAuthor(id, page, pageSize);
-                return MapToDto(result);
+                var list = MapToDto(result);
+                AddPersonsInfo(list.Value.Results);
+                return list;
             }
             catch (KeyNotFoundException e)
             {
@@ -138,7 +138,9 @@ namespace Explorer.Tours.Core.UseCases
             try
             {
                 var result = _reportedIssuesRepository.GetPagedByTourist(id, page, pageSize);
-                return MapToDto(result);
+                var list = MapToDto(result);
+                AddPersonsInfo(list.Value.Results);
+                return list;
             }
             catch (KeyNotFoundException e)
             {
@@ -146,6 +148,31 @@ namespace Explorer.Tours.Core.UseCases
             }
         }
 
-        
+        private void AddPersonsInfo(List<ReportedIssueDto> reportedIssues)
+        {
+            foreach (var reportedIssue in reportedIssues)
+            {
+                var person = _personService.GetByUserId(reportedIssue.TouristId);
+
+                if (person != null)
+                {
+                    reportedIssue.PersonName = person.Name + " " + person.Surname;
+                    reportedIssue.ProfilePictureUrl = person.ProfilePictureUrl;
+                }
+
+                foreach (var comment in reportedIssue.Comments)
+                {
+                    var person1 = _personService.GetByUserId(comment.CreatorId);
+
+                    if (person1 != null)
+                    {
+                        comment.PersonName = person1.Name + " " + person1.Surname;
+                        comment.ProfilePictureUrl = person1.ProfilePictureUrl;
+                    }
+                }
+            }
+        }
+
+
     }
 }

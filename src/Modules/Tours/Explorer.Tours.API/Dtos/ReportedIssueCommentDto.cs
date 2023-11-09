@@ -11,5 +11,7 @@ namespace Explorer.Tours.API.Dtos
         public DateTime CreationTime { get; set; }
         public int CreatorId { get; set; }
         public string Text { get; set; }
+        public string PersonName { get; set; }
+        public string ProfilePictureUrl { get; set; }
     }
 }

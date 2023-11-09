@@ -1,5 +1,9 @@
 using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.BuildingBlocks.Infrastructure.Database;
+using Explorer.Stakeholders.API.Internal;
+using Explorer.Stakeholders.Core.Domain.RepositoryInterfaces;
+using Explorer.Stakeholders.Core.UseCases;
+using Explorer.Stakeholders.Infrastructure.Database.Repositories;
 using Explorer.Tours.API.Public;
 using Explorer.Tours.API.Public.Administration;
 using Explorer.Tours.Core.Domain;
@@ -36,6 +40,7 @@ public static class ToursStartup
         services.AddScoped<IReportingIssueService, ReportingIssueService>();
         services.AddScoped<IReportedIssueNotificationService, ReportedIssueNotificationService>();
         services.AddScoped<ITourRatingService, TourRatingService>();
+        services.AddScoped<IInternalPersonService, InternalPersonService>();
     }
     private static void SetupInfrastructure(IServiceCollection services)
     {
@@ -52,6 +57,7 @@ public static class ToursStartup
         services.AddScoped(typeof(IReportedIssueNotificationRepository), typeof(ReportedIssueNotificationDatabaseRepository));
         services.AddScoped(typeof(ICrudRepository<ReportedIssueNotification>), typeof(CrudDatabaseRepository<ReportedIssueNotification, ToursContext>));
         services.AddScoped(typeof(ICrudRepository<TourRating>), typeof(CrudDatabaseRepository<TourRating, ToursContext>));
+        services.AddScoped<IPersonRepository, PersonDatabaseRepository>();
 
         services.AddDbContext<ToursContext>(opt =>
             opt.UseNpgsql(DbConnectionStringBuilder.Build("tours"),

@@ -21,5 +21,7 @@ namespace Explorer.Tours.API.Dtos
         public int TourId { get; set; }
         public int TouristId { get; set; }
         public TourDto Tour { get; set; }
+        public string PersonName { get; set; }
+        public string ProfilePictureUrl { get; set; }
     }
 }
