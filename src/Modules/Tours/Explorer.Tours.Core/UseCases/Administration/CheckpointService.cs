@@ -31,5 +31,27 @@ namespace Explorer.Tours.Core.UseCases.Administration
                 return Result.Fail(FailureCode.NotFound).WithError(e.Message);
             }
         }
+
+        public Result<CheckpointDto> CreateChechpointSecreat(CheckpointSecretDto secret,int id)
+        {
+            Checkpoint checkpoint = _checkpointRepository.Get(id);
+            return MapToDto(_checkpointRepository.Update(checkpoint.CreateCheckpointSecret(secret.Description, secret.Pictures)));
+        }
+
+        public Result<CheckpointDto> UpdateChechpointSecreat(CheckpointSecretDto secret, int id)
+        {
+            Checkpoint checkpoint = _checkpointRepository.Get(id);
+            return MapToDto(_checkpointRepository.Update(checkpoint.UpdateCheckpointSecret(secret.Description, secret.Pictures)));
+        }
+        public Result<CheckpointDto> DeleteChechpointSecreat(int id)
+        {
+            Checkpoint checkpoint = _checkpointRepository.Get(id);
+            return MapToDto(_checkpointRepository.Update(checkpoint.DeleteCheckpointSecret()));
+        }
+
+        public Result<CheckpointDto> Get(int id)
+        {
+            return MapToDto(_checkpointRepository.Get(id));
+        }
     }
 }

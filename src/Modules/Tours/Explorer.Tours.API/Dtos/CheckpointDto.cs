@@ -16,5 +16,8 @@ namespace Explorer.Tours.API.Dtos
         public string? Description { get; set; }
         public List<string> Pictures { get; set; }
         public double RequiredTimeInSeconds { get; set; }
+        public CheckpointSecretDto? CheckpointSecret { get; set; }
+
+
     }
 }

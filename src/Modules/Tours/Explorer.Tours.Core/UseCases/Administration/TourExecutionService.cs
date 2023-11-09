@@ -48,6 +48,13 @@ namespace Explorer.Tours.Core.UseCases.Administration
             }
         }
 
+        /*public TourExecution GetExactExecution(long tourId, long touristId)
+        {
+            var result = _tourExecutionRepository.GetExactExecution(tourId, touristId);
+            return result;
+        }
+        */
+
         public Result<TourExecutionDto> GetInProgressByTourAndTourist(long tourId, long touristId)
         {
             var result = _tourExecutionRepository.GetInProgressByTourAndTourist(tourId, touristId);

@@ -9,6 +9,7 @@ namespace Explorer.Tours.Core.Domain
 {
     public class TourRatingPreview
     {
+        public long Id { get; init; }    
         public int Rating { get; init; }
         public string? Comment { get; init; }
         public int TouristId { get; init; }
@@ -18,6 +19,7 @@ namespace Explorer.Tours.Core.Domain
 
         public TourRatingPreview(TourRating tourRating)
         {
+            Id = tourRating.Id;
             Rating = tourRating.Rating;
             Comment = tourRating.Comment;
             TouristId = tourRating.TouristId;

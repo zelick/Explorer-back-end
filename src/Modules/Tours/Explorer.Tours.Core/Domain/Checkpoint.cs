@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using Explorer.BuildingBlocks.Core.Domain;
 
 namespace Explorer.Tours.Core.Domain
@@ -17,6 +18,7 @@ namespace Explorer.Tours.Core.Domain
         public string? Description { get; init; }
         public List<string> Pictures { get; init; }
         public double RequiredTimeInSeconds { get; init; }
+        public CheckpointSecret? CheckpointSecret { get; private set; }
 
         public Checkpoint(long tourId, double longitude, double latitude, string name, string description, List<string> pictures)
         {
@@ -30,5 +32,29 @@ namespace Explorer.Tours.Core.Domain
                 Pictures = pictures ?? throw new ArgumentNullException(nameof(pictures));
             else throw new ArgumentException("Invalid Picture");
         }
+
+        public Checkpoint CreateCheckpointSecret(string description,List<string> pictures)
+        {
+            if(string.IsNullOrWhiteSpace(description)) throw new ArgumentException("Invalid description.");
+            {
+                this.CheckpointSecret = new CheckpointSecret(description, pictures);
+            }
+            return this;
+        }
+
+        public Checkpoint UpdateCheckpointSecret(string description, List<string> pictures)
+        {
+            if (string.IsNullOrWhiteSpace(description)) throw new ArgumentException("Invalid description.");
+            {
+                this.CheckpointSecret = new CheckpointSecret(description, pictures);
+            }
+            return this;
+        }
+
+        public Checkpoint DeleteCheckpointSecret() {
+            this.CheckpointSecret = null;   
+            return this;
+        }
+
     }
 }

@@ -37,6 +37,8 @@ namespace Explorer.Tours.Core.Domain
             return this;
         }
 
+        public Tour() { }
+
         public Tour(int authorId, string name, string? description, Demandigness? demandignessLevel, List<string>? tags, TourStatus status = TourStatus.Draft,double price=0)
         {
             if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("Invalid Name.");
@@ -142,6 +144,19 @@ namespace Explorer.Tours.Core.Domain
             //neki if???
             result = new PurchasedTourPreview(tour);
             return result;
+        }
+
+        public double CalculateAverageRating()
+        {
+            double inTotal = 0;
+            int counter = 0;
+            foreach (TourRating tr in TourRatings)
+            {
+                inTotal += tr.Rating;
+                counter++;
+            }
+
+            return (double)inTotal/counter;
         }
     }
 }

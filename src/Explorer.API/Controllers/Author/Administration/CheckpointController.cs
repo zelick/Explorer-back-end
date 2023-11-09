@@ -32,6 +32,13 @@ namespace Explorer.API.Controllers.Author.Administration
             return CreateResponse(result);
         }
 
+        [HttpGet("details/{id:int}")]
+        public ActionResult<CheckpointDto> GetById(int id)
+        {
+            var result = _checkpointService.Get(id);
+            return CreateResponse(result);
+        }
+
         [HttpPost]
         public ActionResult<CheckpointDto> Create([FromBody] CheckpointDto checkpoint)
         {
@@ -50,6 +57,27 @@ namespace Explorer.API.Controllers.Author.Administration
         public ActionResult Delete(int id)
         {
             var result = _checkpointService.Delete(id);
+            return CreateResponse(result);
+        }
+
+        [HttpPut("createSecret/{id:int}")]
+        public ActionResult<CheckpointDto> CreateCheckpointSecret([FromBody] CheckpointSecretDto secretDto,int id)
+        {
+            var result = _checkpointService.CreateChechpointSecreat(secretDto,id);
+            return CreateResponse(result);
+        }
+
+        [HttpPut("updateSecret/{id:int}")]
+        public ActionResult<CheckpointDto> UpdateCheckpointSecret([FromBody] CheckpointSecretDto secretDto, int id)
+        {
+            var result = _checkpointService.UpdateChechpointSecreat(secretDto, id);
+            return CreateResponse(result);
+        }
+
+        [HttpPut("deleteSecret/{id:int}")]
+        public ActionResult<CheckpointDto> DeleteCheckpointSecret(int id)
+        {
+            var result = _checkpointService.DeleteChechpointSecreat(id);
             return CreateResponse(result);
         }
     }

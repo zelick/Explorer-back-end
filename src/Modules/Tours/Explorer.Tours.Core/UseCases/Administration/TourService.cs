@@ -121,6 +121,7 @@ namespace Explorer.Tours.Core.UseCases.Administration
             return MapToDto(tour);
         }
 
+
         public Result<TourDto> Publish(int id)
         {
             var tour = _tourRepository.Get(id);
@@ -179,6 +180,13 @@ namespace Explorer.Tours.Core.UseCases.Administration
 
             return _purchasedTourPreviewMapper.createDto(foundPurchasedTour);
 
+        }
+
+        public double GetAverageRating(long tourId)
+        {
+            var tour = _tourRepository.Get(tourId);
+
+            return tour.CalculateAverageRating();
         }
     }
 }

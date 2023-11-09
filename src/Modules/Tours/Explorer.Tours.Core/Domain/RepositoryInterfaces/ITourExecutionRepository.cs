@@ -11,6 +11,7 @@ namespace Explorer.Tours.Core.Domain.RepositoryInterfaces
 {
     public interface ITourExecutionRepository:ICrudRepository<TourExecution>
     {
+        public TourExecution GetExactExecution(long tourId, long touristId);
         TourExecution GetInProgressByTourAndTourist(long tourId, long touristId);
     }
 }
