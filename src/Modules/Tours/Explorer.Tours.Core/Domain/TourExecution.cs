@@ -1,4 +1,6 @@
 ﻿using Explorer.BuildingBlocks.Core.Domain;
+using Explorer.Tours.API.Public.Administration;
+using Explorer.Tours.Core.Domain.RepositoryInterfaces;
 
 namespace Explorer.Tours.Core.Domain
 {
@@ -6,11 +8,10 @@ namespace Explorer.Tours.Core.Domain
     {
         public long TouristId { get; init; }
         public long TourId { get; init; }
-        public Tour Tour { get; init; }
+        public Tour? Tour { get; init; }
         public DateTime Start {  get; init; }
         public  DateTime LastActivity { get; private set; }
         public ExecutionStatus ExecutionStatus { get; private set; }
-
         public List<CheckpointCompletition> CompletedCheckpoints { get; init; }
 
         public TourExecution(long touristId,long tourId) 
@@ -26,17 +27,16 @@ namespace Explorer.Tours.Core.Domain
 
             TouristId = touristId;
             TourId = tourId;
-            Start= DateTime.Now;
-            LastActivity = DateTime.Now;
+            Start= DateTime.UtcNow;
+            LastActivity = DateTime.UtcNow;
             ExecutionStatus = ExecutionStatus.InProgress;
             CompletedCheckpoints = new List<CheckpointCompletition>();
-
         }
 
         public TourExecution RegisterActivity(float longitude, float latitude)
         {
-        /*   foreach(Checkpoint checkpoint in this.Tour.Checkpoints)
-            {
+           foreach(Checkpoint checkpoint in this.Tour.Checkpoints)
+           {
                 if((checkpoint.Longitude>=longitude+0.05 || checkpoint.Longitude<= longitude - 0.05) &&
                     (checkpoint.Latitude>= latitude + 0.05 || checkpoint.Latitude <= latitude - 0.05))
                 {
@@ -48,16 +48,12 @@ namespace Explorer.Tours.Core.Domain
 
                 this.LastActivity=DateTime.Now;
                 CheckTourCompletition();
-            }
-        nije dobra veza sa turom ne napuni turu
-         
-         */
+           }
 
 
            return this;
 
         }
-
 
         public void CheckTourCompletition()
         {
@@ -70,6 +66,36 @@ namespace Explorer.Tours.Core.Domain
             if (Id == this.Id)
                 this.ExecutionStatus = ExecutionStatus.Abandoned;
         }
+
+        public double CalculateTourProgressPercentage()
+        {
+            double percentage = 0;
+
+            int checkpointsCount = this.Tour.Checkpoints.Count();
+            int completedCheckpointsCount = this.CompletedCheckpoints.Count();
+
+            if (checkpointsCount > 0)
+            {
+                percentage = (double)completedCheckpointsCount / checkpointsCount * 100;
+            }
+
+            return percentage;
+        }
+
+        public bool IsTourProgressAbove35Percent()
+        {
+            double progressPercentage = CalculateTourProgressPercentage();
+
+            return progressPercentage > 35.0;
+        }
+
+        public bool HasOneWeekPassedSinceLastActivity()
+        {
+            DateTime currentTime = DateTime.Now;
+            TimeSpan difference = currentTime - this.LastActivity;
+
+            return difference.TotalDays > 7;
+        }
     }
 
     public enum ExecutionStatus
@@ -78,6 +104,4 @@ namespace Explorer.Tours.Core.Domain
         Abandoned,
         InProgress
     }
-
-
 }

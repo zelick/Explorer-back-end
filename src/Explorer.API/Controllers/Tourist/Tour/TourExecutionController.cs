@@ -1,5 +1,7 @@
-﻿using Explorer.Tours.API.Dtos;
+﻿using Explorer.BuildingBlocks.Core.UseCases;
+using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
+using Explorer.Tours.Core.UseCases.Administration;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,10 +17,10 @@ namespace Explorer.API.Controllers.Tourist.Tour
         {
             _tourExecutionService = tourExecutionService;
         }
-        [HttpPost]
-        public ActionResult<TourExecutionDto> Create([FromBody] TourExecutionDto tourExecution)
+        [HttpPost("{id:int}")]
+        public ActionResult<TourExecutionDto> Create([FromBody] long tourId, long id)
         {
-            var result = _tourExecutionService.Create(tourExecution);
+            var result = _tourExecutionService.Create(id, tourId);
             return CreateResponse(result);
         }
 
