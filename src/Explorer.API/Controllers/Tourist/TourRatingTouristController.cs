@@ -78,19 +78,19 @@ namespace Explorer.API.Controllers.Tourist
 
             if (!customerPurchasedToursIds.Contains(tourRating.TourId))
             {
-                return BadRequest("The tour is not included in the purchased tours of this tourist");
+                return BadRequest("Unfortunately, you cannot leave a review. This tour is not in your purchased tours.");
             }
 
             TourExecution tourExecution = _executionRepository.GetExactExecution(tourRating.TourId, tourRating.TouristId);
 
             if (!tourExecution.IsTourProgressAbove35Percent())
             {
-                return BadRequest("The tour is not completed more than 35 percent, so you cannot edit a review.");
+                return BadRequest("Unfortunately, you haven't completed enough of the tour, so you cannot leave a review.");
             }
 
             if (tourExecution.HasOneWeekPassedSinceLastActivity())
             {
-                return BadRequest("You cannot edit a review, more than a week has passed since the tour was activated.");
+                return BadRequest("You cannot leave a review, more than a week has passed since the tour was activated.");
             }
 
             var result = _tourRatingService.Update(tourRating);

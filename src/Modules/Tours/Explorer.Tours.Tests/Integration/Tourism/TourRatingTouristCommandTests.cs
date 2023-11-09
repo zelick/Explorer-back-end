@@ -2,6 +2,7 @@
 using Explorer.Stakeholders.API.Public;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
+using Explorer.Tours.Core.Domain.RepositoryInterfaces;
 using Explorer.Tours.Infrastructure.Database;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
@@ -71,7 +72,8 @@ public class TourRatingTouristCommandTests : BaseToursIntegrationTest
     private static TourRatingTouristController CreateController(IServiceScope scope)
     {
         return new TourRatingTouristController(scope.ServiceProvider.GetRequiredService<ITourRatingService>(),
-            scope.ServiceProvider.GetRequiredService<ICustomerService>())
+            scope.ServiceProvider.GetRequiredService<ICustomerService>(),
+            scope.ServiceProvider.GetRequiredService<ITourExecutionRepository>())
         {
             ControllerContext = BuildContext("-1")
         };
