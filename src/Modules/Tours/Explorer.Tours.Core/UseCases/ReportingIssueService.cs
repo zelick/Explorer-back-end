@@ -18,11 +18,12 @@ namespace Explorer.Tours.Core.UseCases
         public ReportingIssueService(ICrudRepository<ReportedIssue> repository, IMapper mapper,
                                      IReportedIssueRepository issuerepo, 
                                      IReportedIssueNotificationRepository reportedIssueNotificationRepository,
-                                     ITourRepository tourRepository) : base(repository, mapper)
+                                     ITourRepository tourRepository, IInternalPersonService personService) : base(repository, mapper)
         {
             _reportedIssuesRepository = issuerepo;
             _reportedIssueNotificationRepository = reportedIssueNotificationRepository;
             _tourRepository = tourRepository;
+            _personService = personService;
         }
         public Result<ReportedIssueDto> Resolve(long id)
         {

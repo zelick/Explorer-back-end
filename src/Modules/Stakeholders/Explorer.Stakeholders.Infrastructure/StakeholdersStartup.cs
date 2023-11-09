@@ -35,7 +35,6 @@ public static class StakeholdersStartup
         services.AddScoped<IApplicationGradeService, ApplicationGradeService>();
         services.AddScoped<IPersonEditingService, PersonEditingService>();
         services.AddScoped<IAccountsManagementService, AccountsManagementService>();
-        services.AddScoped<IPersonRepository, PersonDatabaseRepository>();
         services.AddScoped<IInternalPersonService, InternalPersonService>();
     }
 
