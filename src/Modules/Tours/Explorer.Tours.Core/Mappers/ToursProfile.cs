@@ -24,7 +24,7 @@ public class ToursProfile : Profile
         CreateMap<ArchivedTourDto, ArchivedTour>().ReverseMap();
         CreateMap<TourTimeDto, TourTime>().ReverseMap();
         CreateMap<TourExecutionDto, TourExecution>().ReverseMap();
-
+        CreateMap<CheckpointCompletitionDto, CheckpointCompletition>().ReverseMap();
 
     }
 

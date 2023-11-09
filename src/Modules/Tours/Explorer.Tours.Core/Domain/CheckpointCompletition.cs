@@ -11,7 +11,7 @@ namespace Explorer.Tours.Core.Domain
         public CheckpointCompletition(long checkpointId)
         {
             CheckpointId = checkpointId;
-            CompletitionTime = DateTime.Now;
+            CompletitionTime = DateTime.UtcNow;
         }
 
     }

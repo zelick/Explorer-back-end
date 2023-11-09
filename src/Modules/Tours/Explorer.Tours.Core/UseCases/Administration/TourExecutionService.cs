@@ -31,7 +31,7 @@ namespace Explorer.Tours.Core.UseCases.Administration
         {
             TourExecution tourExecution = CrudRepository.Get(id);
             TourExecution result=CrudRepository.Update(tourExecution.RegisterActivity(position.Longitude,position.Latitude));
-            return MapToDto(result);
+            return _tourExecutionMapper.createDto(result);
 
         }
         public Result<TourExecutionDto> Create(long touristId, long tourId)
@@ -54,6 +54,14 @@ namespace Explorer.Tours.Core.UseCases.Administration
             if(result != null)
                 return _tourExecutionMapper.createDto(result);
             return new Result<TourExecutionDto>();
+        }
+
+        public Result<TourExecutionDto> Abandon(long id)
+        {
+            TourExecution tourExecution = CrudRepository.Get(id);
+            tourExecution.Abandone(id);
+            TourExecution result = CrudRepository.Update(tourExecution);
+            return _tourExecutionMapper.createDto(result);
         }
     }
 }

@@ -78,7 +78,7 @@ namespace Explorer.Tours.Core.Domain
             if(IsForPublishing() && ValidateCheckpoints())
             {
                 Status = TourStatus.Published;
-                var publishedTour = new PublishedTour(DateTime.Now);
+                var publishedTour = new PublishedTour(DateTime.UtcNow);
                 PublishedTours.Add(publishedTour);
                 return true;
             }
@@ -90,7 +90,7 @@ namespace Explorer.Tours.Core.Domain
             if (IsForArchiving())
             {
                 Status = TourStatus.Archived;
-                var archivedTour = new ArchivedTour(DateTime.Now);
+                var archivedTour = new ArchivedTour(DateTime.UtcNow);
                 ArchivedTours.Add(archivedTour);
                 return true;
             }

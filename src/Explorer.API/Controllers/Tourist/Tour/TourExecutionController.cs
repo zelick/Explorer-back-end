@@ -15,8 +15,8 @@ namespace Explorer.API.Controllers.Tourist.Tour
         {
             _tourExecutionService = tourExecutionService;
         }
-        [HttpGet("newExecution")]
-        public ActionResult<TourExecutionDto> Create([FromQuery] long tourId, [FromQuery] long touristId)
+        [HttpPost("{touristId:int}/{tourId:int}")]
+        public ActionResult<TourExecutionDto> Create(long tourId, long touristId)
         {
             var result = _tourExecutionService.Create(touristId, tourId);
             return CreateResponse(result);
@@ -33,6 +33,13 @@ namespace Explorer.API.Controllers.Tourist.Tour
         public ActionResult<TourExecutionDto> Get([FromQuery] long touristId, [FromQuery]long tourId)
         {
             var result = _tourExecutionService.GetInProgressByTourAndTourist(tourId, touristId);
+            return CreateResponse(result);
+        }
+
+        [HttpPut("abandoned")]
+        public ActionResult<TourExecutionDto> Abandon([FromBody] long id)
+        {
+            var result = _tourExecutionService.Abandon(id);
             return CreateResponse(result);
         }
     }

@@ -17,7 +17,6 @@ public class ToursContext : DbContext
     public DbSet<TourExecution> TourExecution { get; set; }
 
 
-
     public ToursContext(DbContextOptions<ToursContext> options) : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

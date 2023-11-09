@@ -46,7 +46,7 @@ namespace Explorer.Tours.Core.Domain
                 }
 
 
-                this.LastActivity=DateTime.Now;
+                this.LastActivity=DateTime.UtcNow;
                 CheckTourCompletition();
            }
 
