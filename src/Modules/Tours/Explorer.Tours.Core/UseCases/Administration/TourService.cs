@@ -121,6 +121,7 @@ namespace Explorer.Tours.Core.UseCases.Administration
             return MapToDto(tour);
         }
 
+
         public Result<TourDto> Publish(int id)
         {
             var tour = _tourRepository.Get(id);
