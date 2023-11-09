@@ -30,7 +30,9 @@ namespace Explorer.Tours.Core.UseCases
             try
             {
                 var result = _reportedIssuesRepository.Resolve(id);
-                return MapToDto(result);
+                var dto = MapToDto(result);
+                LoadPerson(dto);
+                return dto;
             }
             catch (KeyNotFoundException e)
             {
@@ -43,7 +45,9 @@ namespace Explorer.Tours.Core.UseCases
             {
                 var result = _reportedIssuesRepository.AddComment(id, new ReportedIssueComment(reportedISsueComment.Text, DateTime.Now, reportedISsueComment.CreatorId));
                 GenerateNotification(result, reportedISsueComment.CreatorId);
-                return MapToDto(result);
+                var dto = MapToDto(result);
+                LoadPerson(dto);
+                return dto;
             }
             catch (KeyNotFoundException e)
             {
@@ -58,7 +62,9 @@ namespace Explorer.Tours.Core.UseCases
                 var issue = _reportedIssuesRepository.Get(id);
                 var result = _reportedIssuesRepository.AddDeadline(id, deadline);
                 _reportedIssueNotificationRepository.Create(issue.Tour.AuthorId, id);
-                return MapToDto(result);
+                var dto = MapToDto(result);
+                LoadPerson(dto);
+                return dto;
             }
             catch (KeyNotFoundException e)
             {
@@ -72,7 +78,9 @@ namespace Explorer.Tours.Core.UseCases
             {
                 var issue = _reportedIssuesRepository.Get(id);
                 var result = _tourRepository.Close(issue.Tour.Id);
-                return MapToDto(issue);
+                var dto = MapToDto(issue);
+                LoadPerson(dto);
+                return dto;
             }
             catch (KeyNotFoundException e)
             {
@@ -85,7 +93,9 @@ namespace Explorer.Tours.Core.UseCases
             try
             {
                 var result = _reportedIssuesRepository.Close(id);
-                return MapToDto(result);
+                var dto = MapToDto(result);
+                LoadPerson(dto);
+                return dto;
             }
             catch (KeyNotFoundException e)
             {
@@ -153,27 +163,31 @@ namespace Explorer.Tours.Core.UseCases
         {
             foreach (var reportedIssue in reportedIssues)
             {
-                var person = _personService.GetByUserId(reportedIssue.TouristId);
-
-                if (person != null)
-                {
-                    reportedIssue.PersonName = person.Name + " " + person.Surname;
-                    reportedIssue.ProfilePictureUrl = person.ProfilePictureUrl;
-                }
-
-                foreach (var comment in reportedIssue.Comments)
-                {
-                    var person1 = _personService.GetByUserId(comment.CreatorId);
-
-                    if (person1 != null)
-                    {
-                        comment.PersonName = person1.Name + " " + person1.Surname;
-                        comment.ProfilePictureUrl = person1.ProfilePictureUrl;
-                    }
-                }
+                LoadPerson(reportedIssue);
             }
         }
 
+        private void LoadPerson(ReportedIssueDto reportedIssue)
+        {
+            var person = _personService.GetByUserId(reportedIssue.TouristId);
+
+            if (person != null)
+            {
+                reportedIssue.PersonName = person.Name + " " + person.Surname;
+                reportedIssue.ProfilePictureUrl = person.ProfilePictureUrl;
+            }
+
+            foreach (var comment in reportedIssue.Comments)
+            {
+                var person1 = _personService.GetByUserId(comment.CreatorId);
+
+                if (person1 != null)
+                {
+                    comment.PersonName = person1.Name + " " + person1.Surname;
+                    comment.ProfilePictureUrl = person1.ProfilePictureUrl;
+                }
+            }
+        }
 
     }
 }
