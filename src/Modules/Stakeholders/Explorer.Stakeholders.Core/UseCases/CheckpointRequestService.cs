@@ -5,6 +5,7 @@ using Explorer.Stakeholders.API.Internal;
 using Explorer.Stakeholders.API.Public;
 using Explorer.Stakeholders.Core.Domain;
 using Explorer.Stakeholders.Core.Domain.RepositoryInterfaces;
+using Explorer.Stakeholders.Core.Mappers;
 using FluentResults;
 using System;
 using System.Collections.Generic;
@@ -17,9 +18,11 @@ namespace Explorer.Stakeholders.Core.UseCases
     public class CheckpointRequestService : CrudService<CheckpointRequestDto,CheckpointRequest>, ICheckpointRequestService, IInternalCheckpointRequestService
     {
         private readonly ICheckpointRequestRepository _checkpointRequestRepository;
+        private CheckpointRequestMapper _checkpointRequestMapper;
         public CheckpointRequestService(ICrudRepository<CheckpointRequest> repository, IMapper mapper, ICheckpointRequestRepository checkpointRequestRepository) : base(repository, mapper) 
         {
             _checkpointRequestRepository = checkpointRequestRepository;
+            _checkpointRequestMapper = new CheckpointRequestMapper();
         }
 
         public Result<List<CheckpointRequestDto>> GetAll()
@@ -38,6 +41,12 @@ namespace Explorer.Stakeholders.Core.UseCases
         {
             var objectRequest = _checkpointRequestRepository.AcceptRequest(id);
             return MapToDto(objectRequest);
+        }
+
+        public Result<CheckpointRequestDto> Create(int checkpointId, int authorId, string status)
+        {
+            var checpointRequest = _checkpointRequestMapper.createDto(checkpointId, authorId, status);
+            return Create(checpointRequest);
         }
     }
 }

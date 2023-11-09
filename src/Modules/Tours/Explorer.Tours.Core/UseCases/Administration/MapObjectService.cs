@@ -23,11 +23,7 @@ namespace Explorer.Tours.Core.UseCases.Administration
             var result = Create(mapObject);
             if (status.Equals("Public"))
             {
-                ObjectRequestDto objectRequest = new ObjectRequestDto();
-                objectRequest.AuthorId = userId;
-                objectRequest.MapObjectId = result.Value.Id;
-                objectRequest.Status = "OnHold";
-                _internalObjectRequestService.Create(objectRequest);
+                _internalObjectRequestService.Create(mapObject.Id, userId, "OnHold");
             }
             return result;
         }

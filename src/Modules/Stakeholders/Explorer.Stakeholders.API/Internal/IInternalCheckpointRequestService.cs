@@ -10,7 +10,7 @@ namespace Explorer.Stakeholders.API.Internal
 {
     public interface IInternalCheckpointRequestService
     {
-        Result<CheckpointRequestDto> Create(CheckpointRequestDto request);
+        Result<CheckpointRequestDto> Create(int checkpointId, int authorId, string status);
         Result<CheckpointRequestDto> AcceptRequest(int requestId);
         Result<CheckpointRequestDto> Get(int requestId);
     }
