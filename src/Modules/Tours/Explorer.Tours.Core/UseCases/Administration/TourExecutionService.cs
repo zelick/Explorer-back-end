@@ -4,6 +4,7 @@ using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
 using Explorer.Tours.Core.Domain;
 using Explorer.Tours.Core.Domain.RepositoryInterfaces;
+using Explorer.Tours.Core.Mappers;
 using FluentResults;
 using System;
 using System.Collections.Generic;
@@ -17,9 +18,13 @@ namespace Explorer.Tours.Core.UseCases.Administration
     public class TourExecutionService : CrudService<TourExecutionDto, TourExecution>, ITourExecutionService
     {
         private readonly ITourExecutionRepository _tourExecutionRepository;
-        public TourExecutionService(ITourExecutionRepository repository, IMapper mapper) : base(repository, mapper) 
+        private TourExecutionMapper _tourExecutionMapper;
+        private readonly ITourRepository _tourRepository;
+        public TourExecutionService(ITourExecutionRepository repository, IMapper mapper, ITourRepository tourRepository) : base(repository, mapper) 
         {
             _tourExecutionRepository = repository;
+            _tourRepository = tourRepository;
+            _tourExecutionMapper = new TourExecutionMapper();
         }
 
         public Result<TourExecutionDto> CheckPosition(TouristPositionDto position, long id)
@@ -34,7 +39,8 @@ namespace Explorer.Tours.Core.UseCases.Administration
             try
             {
                 var result = _tourExecutionRepository.Create(new TourExecution(touristId, tourId));
-                return MapToDto(result);
+                result.setTour(_tourRepository.Get(tourId));
+                return _tourExecutionMapper.createDto(result);
             }
             catch (KeyNotFoundException e)
             {
@@ -42,6 +48,12 @@ namespace Explorer.Tours.Core.UseCases.Administration
             }
         }
 
-
+        public Result<TourExecutionDto> GetInProgressByTourAndTourist(long tourId, long touristId)
+        {
+            var result = _tourExecutionRepository.GetInProgressByTourAndTourist(tourId, touristId);
+            if(result != null)
+                return _tourExecutionMapper.createDto(result);
+            return new Result<TourExecutionDto>();
+        }
     }
 }

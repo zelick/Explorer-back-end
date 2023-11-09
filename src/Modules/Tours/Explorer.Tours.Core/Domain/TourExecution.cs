@@ -6,7 +6,7 @@ namespace Explorer.Tours.Core.Domain
     {
         public long TouristId { get; init; }
         public long TourId { get; init; }
-        public Tour? Tour { get; init; }
+        public Tour? Tour { get; private set; }
         public DateTime Start {  get; init; }
         public  DateTime LastActivity { get; private set; }
         public ExecutionStatus ExecutionStatus { get; private set; }
@@ -66,6 +66,11 @@ namespace Explorer.Tours.Core.Domain
         {
             if (Id == this.Id)
                 this.ExecutionStatus = ExecutionStatus.Abandoned;
+        }
+
+        public void setTour(Tour tour)
+        {
+            this.Tour = tour;
         }
     }
 

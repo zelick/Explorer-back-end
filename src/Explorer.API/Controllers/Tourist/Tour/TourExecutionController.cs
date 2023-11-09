@@ -15,10 +15,10 @@ namespace Explorer.API.Controllers.Tourist.Tour
         {
             _tourExecutionService = tourExecutionService;
         }
-        [HttpPost("{id:int}")]
-        public ActionResult<TourExecutionDto> Create([FromBody] long tourId, long id)
+        [HttpGet("newExecution")]
+        public ActionResult<TourExecutionDto> Create([FromQuery] long tourId, [FromQuery] long touristId)
         {
-            var result = _tourExecutionService.Create(id, tourId);
+            var result = _tourExecutionService.Create(touristId, tourId);
             return CreateResponse(result);
         }
 
@@ -26,6 +26,13 @@ namespace Explorer.API.Controllers.Tourist.Tour
         public ActionResult<TourExecutionDto> CheckPosition([FromBody] TouristPositionDto touristPosition, long id)
         {
             var result = _tourExecutionService.CheckPosition(touristPosition, id);
+            return CreateResponse(result);
+        }
+
+        [HttpGet]
+        public ActionResult<TourExecutionDto> Get([FromQuery] long touristId, [FromQuery]long tourId)
+        {
+            var result = _tourExecutionService.GetInProgressByTourAndTourist(tourId, touristId);
             return CreateResponse(result);
         }
     }
