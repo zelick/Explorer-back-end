@@ -15,6 +15,9 @@ public class StakeholdersContext : DbContext
     public DbSet<UserClub> UserClubs { get; set; }
     public DbSet<ClubRequest> Requests { get; set; }
     public DbSet<ApplicationGrade> ApplicationGrades { get; set; }
+    public DbSet<Notification> Notifications { get; set; }
+    public DbSet<ObjectRequest> ObjectRequests { get; set; }
+    public DbSet<CheckpointRequest> CheckpointRequests { get; set; }
     public DbSet<Customer> Customers { get; set; }
     public DbSet<ShoppingCart> ShoppingCarts { get; set; }
 

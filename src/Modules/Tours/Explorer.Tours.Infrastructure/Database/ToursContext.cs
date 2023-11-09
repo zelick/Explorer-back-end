@@ -13,6 +13,8 @@ public class ToursContext : DbContext
     public DbSet<TourPreference> TourPreference { get; set; }
     public DbSet<ReportedIssue> ReportedIssues { get; set; }
     public DbSet<TourRating> TourRating { get; set; }
+    public DbSet<PublicCheckpoint> PublicCheckpoint { get; set; }
+    public DbSet<PublicMapObject> PublicMapObjects { get; set; }
     public DbSet<TouristPosition> TouristPosition { get; set; }
     public DbSet<TourExecution> TourExecution { get; set; }
 

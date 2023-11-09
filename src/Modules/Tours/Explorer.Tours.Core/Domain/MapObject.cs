@@ -20,7 +20,7 @@ namespace Explorer.Tours.Core.Domain
 
         public MapObject(string name, string? description, string pictureURL, MapObjectType? category, float? longitude, float? latitude)
         {
-            if(string.IsNullOrWhiteSpace(name)) throw new ArgumentException("Invalid Name.");
+            if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("Invalid Name.");
             Name = name;
             Description = description;
             PictureURL = pictureURL;

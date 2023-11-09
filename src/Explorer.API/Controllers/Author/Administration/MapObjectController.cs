@@ -45,5 +45,19 @@ namespace Explorer.API.Controllers.Author.Administration
             var result = _mapObjectService.Delete(id);
             return CreateResponse(result);
         }
+
+        [HttpGet("{id:int}")]
+        public ActionResult<MapObjectDto> GetObject(int id)
+        {
+            var result = _mapObjectService.Get(id);
+            return CreateResponse(result);
+        }
+
+        [HttpPost("create/{userId:int}/{status}")]
+        public ActionResult<MapObjectDto> Create([FromBody] MapObjectDto mapObject, [FromRoute] int userId, [FromRoute] string status)
+        {
+            var result = _mapObjectService.Create(mapObject, userId, status);
+            return CreateResponse(result);
+        }
     }
 }
