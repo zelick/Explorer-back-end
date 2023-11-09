@@ -33,12 +33,23 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
         {
             var task = _dbContext.TourExecution
                .Include(t => t.CompletedCheckpoints)
-               .Include(t => t.Tour)
+               .Include(t => t.Tour).ThenInclude(c => c.Checkpoints)
                .AsQueryable()
                .GetPagedById(page, pageSize);
 
 
             return task.Result;
+        }
+
+        public TourExecution GetExactExecution(long tourId, long touristId)
+        {
+            var exactTourExecution = _dbContext.TourExecution
+               .Include(t => t.CompletedCheckpoints)
+               .Include(t => t.Tour).ThenInclude(c => c.Checkpoints)
+               .FirstOrDefault(t => t.TourId == tourId && t.TouristId == touristId);
+
+            return exactTourExecution;
+
         }
     }
 }

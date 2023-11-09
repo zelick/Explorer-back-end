@@ -37,6 +37,8 @@ namespace Explorer.Tours.Core.Domain
             return this;
         }
 
+        public Tour() { }
+
         public Tour(int authorId, string name, string? description, Demandigness? demandignessLevel, List<string>? tags, TourStatus status = TourStatus.Draft,double price=0)
         {
             if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("Invalid Name.");

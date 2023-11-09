@@ -4,6 +4,7 @@ using Explorer.Stakeholders.API.Public;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
 using Explorer.Tours.Core.Domain;
+using Explorer.Tours.Core.Domain.RepositoryInterfaces;
 using FluentResults;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -16,11 +17,13 @@ namespace Explorer.API.Controllers.Tourist
     {
         private readonly ITourRatingService _tourRatingService;
         private readonly ICustomerService _customerService;
+        private readonly ITourExecutionRepository _executionRepository;
 
-        public TourRatingTouristController(ITourRatingService tourRatingService, ICustomerService customerService)
+        public TourRatingTouristController(ITourRatingService tourRatingService, ICustomerService customerService, ITourExecutionRepository executionRepository)
         {
             _tourRatingService = tourRatingService;
             _customerService = customerService;
+            _executionRepository = executionRepository;
         }
 
         [HttpGet]
@@ -42,14 +45,14 @@ namespace Explorer.API.Controllers.Tourist
 
             if (!customerPurchasedToursIds.Contains(tourRating.TourId))
             {
-                return BadRequest("The tour is not included in the purchased tours of this tourist");
+                return BadRequest("Unfortunately, you cannot leave a review. This tour is not in your purchased tours.");
             }
 
-            TourExecution tourExecution = new TourExecution(tourRating.TouristId, tourRating.TourId);
+            TourExecution tourExecution = _executionRepository.GetExactExecution(tourRating.TourId, tourRating.TouristId);
 
             if (!tourExecution.IsTourProgressAbove35Percent())
             {
-                return BadRequest("The tour is not completed more than 35 percent, so you cannot leave a review.");
+                return BadRequest("Unfortunately, you haven't completed enough of the tour, so you cannot leave a review.");
             }
 
             if (tourExecution.HasOneWeekPassedSinceLastActivity())
@@ -78,7 +81,7 @@ namespace Explorer.API.Controllers.Tourist
                 return BadRequest("The tour is not included in the purchased tours of this tourist");
             }
 
-            TourExecution tourExecution = new TourExecution(tourRating.TouristId, tourRating.TourId);
+            TourExecution tourExecution = _executionRepository.GetExactExecution(tourRating.TourId, tourRating.TouristId);
 
             if (!tourExecution.IsTourProgressAbove35Percent())
             {

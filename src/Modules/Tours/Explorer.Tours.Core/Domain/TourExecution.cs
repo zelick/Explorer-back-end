@@ -12,7 +12,6 @@ namespace Explorer.Tours.Core.Domain
         public DateTime Start {  get; init; }
         public  DateTime LastActivity { get; private set; }
         public ExecutionStatus ExecutionStatus { get; private set; }
-
         public List<CheckpointCompletition> CompletedCheckpoints { get; init; }
 
         public TourExecution(long touristId,long tourId) 
@@ -56,7 +55,6 @@ namespace Explorer.Tours.Core.Domain
 
         }
 
-
         public void CheckTourCompletition()
         {
             if (this.CompletedCheckpoints.Count == this.Tour.Checkpoints.Count)
@@ -73,13 +71,8 @@ namespace Explorer.Tours.Core.Domain
         {
             double percentage = 0;
 
-            //OTKOMENTARISATI KAD POVEZEMO RESENJA - za sad ne hvata Tour
-            //int checkpointsCount = Tour.Checkpoints.Count();
-            //int completedCheckpointsCount = this.CompletedCheckpoints.Count();
-            //int checkpointsCount = 5;
-            //int completedCheckpointsCount = 1;
-            int checkpointsCount = 5;
-            int completedCheckpointsCount = 4;
+            int checkpointsCount = this.Tour.Checkpoints.Count();
+            int completedCheckpointsCount = this.CompletedCheckpoints.Count();
 
             if (checkpointsCount > 0)
             {
@@ -111,6 +104,4 @@ namespace Explorer.Tours.Core.Domain
         Abandoned,
         InProgress
     }
-
-
 }
