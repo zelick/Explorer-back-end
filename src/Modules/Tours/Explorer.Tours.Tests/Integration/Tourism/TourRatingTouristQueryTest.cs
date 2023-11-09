@@ -1,5 +1,6 @@
 ﻿using Explorer.API.Controllers.Tourist;
 using Explorer.BuildingBlocks.Core.UseCases;
+using Explorer.Stakeholders.API.Public;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
 using Microsoft.AspNetCore.Mvc;
@@ -29,7 +30,8 @@ public class TourRatingTouristQueryTest : BaseToursIntegrationTest
     }
     private static TourRatingTouristController CreateController(IServiceScope scope)
     {
-        return new TourRatingTouristController(scope.ServiceProvider.GetRequiredService<ITourRatingService>())
+        return new TourRatingTouristController(scope.ServiceProvider.GetRequiredService<ITourRatingService>(),
+            scope.ServiceProvider.GetRequiredService<ICustomerService>())
         {
             ControllerContext = BuildContext("-1")
         };

@@ -2,7 +2,8 @@
 {
     public class TourRatingDto
     {
-        public int Id { get; set; }
+        public long
+            Id { get; set; }
         public int Rating { get; set; }
         public string? Comment { get; set; }
         public int TouristId { get; set; }

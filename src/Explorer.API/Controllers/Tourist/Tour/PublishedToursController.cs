@@ -31,5 +31,12 @@ namespace Explorer.API.Controllers.Tourist.Tour
             var result = _tourService.GetPublishedTour(id);
             return CreateResponse(result);
         }
+
+        [HttpGet("averageRating/{tourId:int}")]
+        public double GetAverageRating(long tourId)
+        {
+            var result = _tourService.GetAverageRating(tourId);
+            return result;
+        }
     }
 }

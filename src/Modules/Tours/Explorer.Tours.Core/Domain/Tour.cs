@@ -143,6 +143,19 @@ namespace Explorer.Tours.Core.Domain
             result = new PurchasedTourPreview(tour);
             return result;
         }
+
+        public double CalculateAverageRating()
+        {
+            double inTotal = 0;
+            int counter = 0;
+            foreach (TourRating tr in TourRatings)
+            {
+                inTotal += tr.Rating;
+                counter++;
+            }
+
+            return (double)inTotal/counter;
+        }
     }
 }
 

@@ -1,4 +1,6 @@
 ﻿using Explorer.BuildingBlocks.Core.Domain;
+using Explorer.Tours.API.Public.Administration;
+using Explorer.Tours.Core.Domain.RepositoryInterfaces;
 
 namespace Explorer.Tours.Core.Domain
 {
@@ -30,7 +32,6 @@ namespace Explorer.Tours.Core.Domain
             LastActivity = DateTime.UtcNow;
             ExecutionStatus = ExecutionStatus.InProgress;
             CompletedCheckpoints = new List<CheckpointCompletition>();
-
         }
 
         public TourExecution RegisterActivity(float longitude, float latitude)
@@ -66,6 +67,41 @@ namespace Explorer.Tours.Core.Domain
         {
             if (Id == this.Id)
                 this.ExecutionStatus = ExecutionStatus.Abandoned;
+        }
+
+        public double CalculateTourProgressPercentage()
+        {
+            double percentage = 0;
+
+            //OTKOMENTARISATI KAD POVEZEMO RESENJA - za sad ne hvata Tour
+            //int checkpointsCount = Tour.Checkpoints.Count();
+            //int completedCheckpointsCount = this.CompletedCheckpoints.Count();
+            //int checkpointsCount = 5;
+            //int completedCheckpointsCount = 1;
+            int checkpointsCount = 5;
+            int completedCheckpointsCount = 4;
+
+            if (checkpointsCount > 0)
+            {
+                percentage = (double)completedCheckpointsCount / checkpointsCount * 100;
+            }
+
+            return percentage;
+        }
+
+        public bool IsTourProgressAbove35Percent()
+        {
+            double progressPercentage = CalculateTourProgressPercentage();
+
+            return progressPercentage > 35.0;
+        }
+
+        public bool HasOneWeekPassedSinceLastActivity()
+        {
+            DateTime currentTime = DateTime.Now;
+            TimeSpan difference = currentTime - this.LastActivity;
+
+            return difference.TotalDays > 7;
         }
     }
 
