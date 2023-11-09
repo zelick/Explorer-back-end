@@ -7,9 +7,9 @@ public class BlogPost : Entity
 {
     private const int ClosedRatingThreshold = -10;
     private const int ActiveRatingThreshold = 100;
+    private const int ActiveCommentThreshold = 10;
     private const int FamousRatingThreshold = 500;
-    private const int FamousCommentThreshold = 10;
-    private const int ActiveCommentThreshold = 30;
+    private const int FamousCommentThreshold = 30;
 
     public long UserId { get; init; }
     public string Title { get; private set; }
@@ -45,7 +45,8 @@ public class BlogPost : Entity
 
     public void Close()
     {
-        if (Status != BlogPostStatus.Published) throw new ArgumentException("Invalid Status");
+        if (Status is BlogPostStatus.Draft or BlogPostStatus.Closed) 
+            throw new ArgumentException("Invalid Status");
 
         Status = BlogPostStatus.Closed;
     }
@@ -80,6 +81,7 @@ public class BlogPost : Entity
         }
         else
         {
+            blogRating.TimeStamp = DateTime.Now;
             Ratings.Add(blogRating);
         }
 
