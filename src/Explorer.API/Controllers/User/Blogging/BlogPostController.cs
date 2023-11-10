@@ -37,7 +37,7 @@ public class BlogPostController : BaseApiController
     }
 
     [HttpPost]
-    public ActionResult<BlogPostDto> Create([FromForm] BlogPostDto blogPost, List<IFormFile>? images)
+    public ActionResult<BlogPostDto> Create([FromForm] BlogPostDto blogPost, List<IFormFile>? images = null)
     {
         if (images != null && images.Any())
         {
