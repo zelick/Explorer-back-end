@@ -15,7 +15,7 @@ namespace Explorer.Tours.Core.Domain
         public double Price { get; init; }
         public List<string>? Tags { get; init; }
         public List<Equipment> Equipment { get; init; }
-        public List <CheckpointPreview> Checkpoints { get; init; }
+        public List <Checkpoint> Checkpoints { get; init; }
         public List<TourRatingPreview> TourRatings { get; init; }
         public List<TourTime> TourTimes { get; init; }
 
@@ -31,11 +31,11 @@ namespace Explorer.Tours.Core.Domain
                 Equipment = tour.Equipment;
             else
                 Equipment = new List<Equipment>();
-            Checkpoints = new List<CheckpointPreview>();
+            Checkpoints = tour.Checkpoints;
             TourTimes = tour.TourTimes;
             TourRatings = new List<TourRatingPreview>();
 
-            if(tour.TourRatings != null)
+            if (tour.TourRatings != null)
             {
                 foreach (TourRating tourRating in tour.TourRatings)
                 {
@@ -43,10 +43,7 @@ namespace Explorer.Tours.Core.Domain
                 }
             }
 
-            foreach (Checkpoint cp in tour.Checkpoints)
-            {
-                Checkpoints.Add(new CheckpointPreview(cp)); 
-            }
+            
         }
     }
 }

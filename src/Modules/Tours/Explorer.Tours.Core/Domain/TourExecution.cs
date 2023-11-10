@@ -37,8 +37,9 @@ namespace Explorer.Tours.Core.Domain
         {
             foreach (Checkpoint checkpoint in this.Tour.Checkpoints)
             {
-                if ((checkpoint.Longitude >= longitude + 0.05 || checkpoint.Longitude <= longitude - 0.05) &&
-                    (checkpoint.Latitude >= latitude + 0.05 || checkpoint.Latitude <= latitude - 0.05))
+                double a = Math.Abs(Math.Round(checkpoint.Longitude,4) - Math.Round(longitude,4));
+                double b= Math.Abs(Math.Round(checkpoint.Latitude, 4) - Math.Round(latitude, 4));
+                if (a<0.01 && b<0.01)
                 {
                     CheckpointCompletition checkpointCompletition = new CheckpointCompletition(checkpoint.Id);
                     if (!this.CompletedCheckpoints.Contains(checkpointCompletition))

@@ -10,13 +10,13 @@ namespace Explorer.Tours.Core.Mappers
 {
     public class PurchasedTourPreviewMapper
     {
-        private CheckpointPreviewMapper checkpointMapper;
+        private CheckpointMapper checkpointMapper;
         private EquipmentMapper equipmentMapper;
         private TourRatingPreviewMapper ratingMapper;
         private TourTimeMapper timeMapper;
         public PurchasedTourPreviewMapper()
         {
-            checkpointMapper = new CheckpointPreviewMapper();
+            checkpointMapper = new CheckpointMapper();
             equipmentMapper = new EquipmentMapper();
             ratingMapper = new TourRatingPreviewMapper();
             timeMapper = new TourTimeMapper();
