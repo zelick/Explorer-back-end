@@ -10,4 +10,5 @@ public interface ITourRatingService
     Result<TourRatingDto> Create(TourRatingDto tourRating);
     Result<TourRatingDto> Update(TourRatingDto tourRating);
     Result Delete(int id);
+    Result<TourRatingDto> GetTourRating(int ratingId);
 }

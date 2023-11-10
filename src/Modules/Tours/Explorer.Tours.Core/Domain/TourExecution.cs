@@ -71,8 +71,7 @@ namespace Explorer.Tours.Core.Domain
         public double CalculateTourProgressPercentage()
         {
             double percentage = 0;
-
-            int checkpointsCount = this.Tour.Checkpoints.Count();
+            int checkpointsCount = Tour.Checkpoints.Count();
             int completedCheckpointsCount = this.CompletedCheckpoints.Count();
 
             if (checkpointsCount > 0)
