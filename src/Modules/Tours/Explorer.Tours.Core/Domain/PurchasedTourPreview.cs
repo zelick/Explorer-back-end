@@ -27,14 +27,20 @@ namespace Explorer.Tours.Core.Domain
             DemandignessLevel = tour.DemandignessLevel;
             Price = tour.Price;
             Tags = tour.Tags;
-            Equipment = tour.Equipment;
+            if (tour.Equipment != null)
+                Equipment = tour.Equipment;
+            else
+                Equipment = new List<Equipment>();
             Checkpoints = new List<CheckpointPreview>();
             TourTimes = tour.TourTimes;
             TourRatings = new List<TourRatingPreview>();
 
-            foreach (TourRating tourRating in tour.TourRatings)
+            if(tour.TourRatings != null)
             {
-                TourRatings.Add(new TourRatingPreview(tourRating));
+                foreach (TourRating tourRating in tour.TourRatings)
+                {
+                    TourRatings.Add(new TourRatingPreview(tourRating));
+                }
             }
 
             foreach (Checkpoint cp in tour.Checkpoints)

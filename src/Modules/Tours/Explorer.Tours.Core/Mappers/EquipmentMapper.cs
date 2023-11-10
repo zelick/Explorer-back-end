@@ -16,7 +16,7 @@ namespace Explorer.Tours.Core.Mappers
             return equipmentDto;
 
         }
-        public List<EquipmentDto> createListDto(List<Equipment> equipmentList)
+        public List<EquipmentDto> createListDto(List<Equipment>? equipmentList)
         {
             List<EquipmentDto> result= new List<EquipmentDto>();
             foreach(Equipment equipment in equipmentList)

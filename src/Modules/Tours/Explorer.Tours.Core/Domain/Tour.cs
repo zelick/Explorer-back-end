@@ -12,12 +12,12 @@ namespace Explorer.Tours.Core.Domain
         public TourStatus Status { get; private set; }
         public double Price { get; init; }
         public List<string>? Tags { get; init; }
-        public List<Equipment> Equipment { get; init; }
-        public List<Checkpoint> Checkpoints { get; init; }
+        public List<Equipment>? Equipment { get; init; }
+        public List<Checkpoint>? Checkpoints { get; init; }
         public List<PublishedTour>? PublishedTours { get; init; }
         public List<ArchivedTour>? ArchivedTours { get; init; }
         public List<TourTime>? TourTimes { get; private set; }
-        public List<TourRating> TourRatings { get; init; }
+        public List<TourRating>? TourRatings { get; init; }
 
         public Tour AddEquipment(Equipment equipment)
         {

@@ -11,10 +11,10 @@ namespace Explorer.Tours.Core.Domain
         public Demandigness? DemandignessLevel { get; init; }
         public double Price { get; init; }
         public List<string>? Tags { get; init; }
-        public List<Equipment> Equipment { get; init; }
+        public List<Equipment>? Equipment { get; init; }
         public CheckpointPreview Checkpoint { get; init; }
 
-        public List<TourRatingPreview> TourRatings { get; init; }
+        public List<TourRatingPreview>? TourRatings { get; init; }
 
         public List<TourTime> TourTimes { get; init; }
 

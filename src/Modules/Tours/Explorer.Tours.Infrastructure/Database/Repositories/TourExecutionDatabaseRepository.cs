@@ -35,6 +35,8 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
             var task = _dbContext.TourExecution
                .Include(t => t.CompletedCheckpoints)
                .Include(t => t.Tour).ThenInclude(c => c.Checkpoints)
+               .Include(t => t.Tour).ThenInclude(c => c.Equipment)
+               .Include(t => t.Tour).ThenInclude(c => c.TourRatings)
                .AsQueryable()
                .GetPagedById(page, pageSize);
 
@@ -58,6 +60,8 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
             var tour = _dbContext.TourExecution
                  .Include(t => t.CompletedCheckpoints)
                  .Include(t => t.Tour).ThenInclude(c => c.Checkpoints)
+                 .Include(t => t.Tour).ThenInclude(c => c.Equipment)
+                 .Include(t => t.Tour).ThenInclude(c => c.TourRatings)
                  .Where(t => t.TourId == tourId && t.TouristId == touristId && t.ExecutionStatus == ExecutionStatus.InProgress).FirstOrDefault<TourExecution>();
 
             return tour;

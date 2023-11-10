@@ -42,7 +42,7 @@ namespace Explorer.Tours.Core.Mappers
             return result;
         }
 
-        public List<PurchasedTourPreviewDto> createDtoList(List<PurchasedTourPreview> purchasedTourPreviewList)
+        public List<PurchasedTourPreviewDto> createDtoList(List<PurchasedTourPreview>? purchasedTourPreviewList)
         {
             List<PurchasedTourPreviewDto> purchasedTourPreviewDtos = new List<PurchasedTourPreviewDto>();
             foreach (var purchasedTourPreview in purchasedTourPreviewList)
