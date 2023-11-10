@@ -1,4 +1,5 @@
-﻿using Explorer.Tours.API.Dtos;
+﻿using Explorer.BuildingBlocks.Core.UseCases;
+using Explorer.Tours.API.Dtos;
 using FluentResults;
 using System;
 using System.Collections.Generic;
@@ -14,5 +15,6 @@ namespace Explorer.Tours.API.Public.Administration
         Result<PublicMapObjectDto> Update(PublicMapObjectDto publicMapObject);
         Result Delete(int id);
         Result<PublicMapObjectDto> Create(int objectRequestId);
+        Result<PagedResult<PublicMapObjectDto>> GetPaged(int page, int pageSize);
     }
 }

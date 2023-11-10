@@ -18,7 +18,6 @@ namespace Explorer.Tours.Core.Mappers
             publicCheckpointDto.Name = checkpoint.Name;
             publicCheckpointDto.Description = checkpoint.Description;
             publicCheckpointDto.Pictures = checkpoint.Pictures;
-            publicCheckpointDto.TourId = checkpoint.TourId;
             publicCheckpointDto.Latitude = checkpoint.Latitude;
             publicCheckpointDto.Longitude = checkpoint.Longitude;
 

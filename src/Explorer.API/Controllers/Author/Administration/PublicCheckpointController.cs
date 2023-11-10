@@ -1,4 +1,5 @@
-﻿using Explorer.Stakeholders.Core.Domain;
+﻿using Explorer.BuildingBlocks.Core.UseCases;
+using Explorer.Stakeholders.Core.Domain;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
 using Explorer.Tours.Core.UseCases.Administration;
@@ -36,6 +37,13 @@ namespace Explorer.API.Controllers.Author.Administration
         public ActionResult Delete(int id)
         {
             var result = _publicCheckpointService.Delete(id);
+            return CreateResponse(result);
+        }
+
+        [HttpGet]
+        public ActionResult<PagedResult<PublicCheckpointDto>> GetAll()
+        {
+            var result = _publicCheckpointService.GetPaged(0,0);
             return CreateResponse(result);
         }
     }
