@@ -33,7 +33,14 @@ namespace Explorer.API.Controllers.Tourist
             return CreateResponse(result);
         }
 
-        [HttpPost]
+		[HttpGet("getTourRating/{id:int}")]
+		public ActionResult<TourRatingDto> GetTourRating(int id)
+		{
+			var result = _tourRatingService.GetTourRating(id);
+			return CreateResponse(result);
+		}
+
+		[HttpPost]
         public ActionResult<TourRatingDto> Create([FromBody] TourRatingDto tourRating)
         {
             if (tourRating.TourId == 0 || tourRating.TouristId == 0 || tourRating.Rating == 0 || tourRating.Rating > 5)
