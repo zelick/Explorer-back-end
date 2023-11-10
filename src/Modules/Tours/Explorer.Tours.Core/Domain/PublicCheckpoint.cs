@@ -9,18 +9,14 @@ namespace Explorer.Tours.Core.Domain
 {
     public class PublicCheckpoint : Entity
     {
-        public long TourId { get; init; }
-        public Tour Tour { get; init; }
         public double Longitude { get; init; }
         public double Latitude { get; init; }
         public string Name { get; init; }
         public string? Description { get; init; }
         public List<string> Pictures { get; init; }
 
-        public PublicCheckpoint(long tourId, double longitude, double latitude, string name, string description, List<string> pictures)
+        public PublicCheckpoint(double longitude, double latitude, string name, string description, List<string> pictures)
         {
-            if (tourId == 0) throw new ArgumentException("Invalid Tour ID");
-            TourId = tourId;
             Longitude = longitude;
             Latitude = latitude;
             Name = name ?? throw new ArgumentNullException(nameof(name));

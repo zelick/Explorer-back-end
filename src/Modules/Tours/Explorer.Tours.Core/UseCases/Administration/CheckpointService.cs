@@ -37,16 +37,12 @@ namespace Explorer.Tours.Core.UseCases.Administration
             }
         }
 
-        public Result<CheckpointDto> Create(CheckpointDto checkpoint,int userId, string status)
+        public Result<CheckpointDto> Create(CheckpointDto checkpoint,int authorId, string status)
         {
             var result = Create(checkpoint);
             if (status.Equals("public"))
             {
-                CheckpointRequestDto checkpointRequest = new CheckpointRequestDto();
-                checkpointRequest.AuthorId = userId;
-                checkpointRequest.CheckpointId = result.Value.Id;
-                checkpointRequest.Status = "OnHold";
-                _internalCheckpointRequestService.Create(checkpointRequest);
+                _internalCheckpointRequestService.Create(Convert.ToInt32(checkpoint.Id), authorId, "OnHold");
             }
             return result;
         }
