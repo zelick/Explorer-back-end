@@ -15,11 +15,11 @@ namespace Explorer.Tours.Core.UseCases
         {
             _reportedIssueNotificationsRepository = reportedIssueNotificationRepository;
         }
-        public Result<ReportedIssueNotificationDto> Create(long userId, long reportedIssueId)
+        public Result<ReportedIssueNotificationDto> Create(string description, long userId, long reportedIssueId)
         {
             try
             {
-                var result = _reportedIssueNotificationsRepository.Create(userId, reportedIssueId);
+                var result = _reportedIssueNotificationsRepository.Create(description, userId, reportedIssueId);
                 return MapToDto(result);
             }
             catch (KeyNotFoundException e)

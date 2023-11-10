@@ -12,11 +12,10 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
         {
             _dbContext = toursContext;
         }
-        public ReportedIssueNotification Create(long userId, long reportedIssueId)
+        public ReportedIssueNotification Create(string description, long userId, long reportedIssueId)
         {
-            var notif = new ReportedIssueNotification(
-                "New notification for your reported problem!", 
-                DateTime.UtcNow, false, userId, reportedIssueId    );
+            var notif = new ReportedIssueNotification(description,
+                DateTime.UtcNow, false, userId, reportedIssueId);
             _dbContext.ReportedIssueNotifications.Add(notif);
             _dbContext.SaveChanges();
             return notif;

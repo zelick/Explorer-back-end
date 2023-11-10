@@ -44,14 +44,28 @@ namespace Explorer.Tours.Core.UseCases
             try
             {
                 var result = _reportedIssuesRepository.AddComment(id, new ReportedIssueComment(reportedISsueComment.Text, DateTime.Now, reportedISsueComment.CreatorId));
-                GenerateNotification(result, reportedISsueComment.CreatorId);
                 var dto = MapToDto(result);
                 LoadPerson(dto);
+                GenerateNotification(dto, reportedISsueComment.CreatorId);
                 return dto;
             }
             catch (KeyNotFoundException e)
             {
                 return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+        }
+        private void GenerateNotification(ReportedIssueDto reportedIssue, int commentCreatorId)
+        {
+            // generate notification for new comment
+            if (commentCreatorId == reportedIssue.TouristId)
+            {
+                var description = "" + "You have new comment for your issue: " + reportedIssue.Description + " in tour " + reportedIssue.Tour.Name + "!";
+                var notifTourist = _reportedIssueNotificationRepository.Create(description, reportedIssue.Tour.AuthorId, reportedIssue.Id);
+            }
+            else
+            {
+                var description = "You have new comment for your issue: " + reportedIssue.Description + " in tour " + reportedIssue.Tour.Name + "!";
+                var notifAuthor = _reportedIssueNotificationRepository.Create(description, reportedIssue.TouristId, reportedIssue.Id);
             }
         }
 
@@ -61,9 +75,10 @@ namespace Explorer.Tours.Core.UseCases
             {
                 var issue = _reportedIssuesRepository.Get(id);
                 var result = _reportedIssuesRepository.AddDeadline(id, deadline);
-                _reportedIssueNotificationRepository.Create(issue.Tour.AuthorId, id);
                 var dto = MapToDto(result);
                 LoadPerson(dto);
+                var description = "New deadline added on your issue: " + dto.Description + ". Please deal with this problem before " + deadline.ToString("dd.MM.yyyy") + "!";
+                _reportedIssueNotificationRepository.Create(description, issue.Tour.AuthorId, id);
                 return dto;
             }
             catch (KeyNotFoundException e)
@@ -100,19 +115,6 @@ namespace Explorer.Tours.Core.UseCases
             catch (KeyNotFoundException e)
             {
                 return Result.Fail(FailureCode.NotFound).WithError(e.Message);
-            }
-        }
-
-        private void GenerateNotification(ReportedIssue reportedIssue, int commentCreatorId)
-        {
-            // generate notification for new comment
-            if (commentCreatorId == reportedIssue.TouristId)
-            {
-                var notifTourist = _reportedIssueNotificationRepository.Create(reportedIssue.Tour.AuthorId, reportedIssue.Id);
-            }
-            else
-            {
-                var notifAuthor = _reportedIssueNotificationRepository.Create(reportedIssue.TouristId, reportedIssue.Id);
             }
         }
 
