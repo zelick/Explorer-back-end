@@ -1,4 +1,4 @@
-﻿using Explorer.Blog.Core.Domain;
+﻿using Explorer.Blog.Core.Domain.BlogPosts;
 using Explorer.Blog.Core.Domain.RepositoryInterfaces;
 using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.BuildingBlocks.Infrastructure.Database;
@@ -36,7 +36,6 @@ public class BlogPostDatabaseRepository : CrudDatabaseRepository<BlogPost, BlogC
         return new PagedResult<BlogPost>(items, count);
     }
 
-    // BUG: paging doesn't work when filtering
     private List<BlogPost> PageResults(int page, int pageSize, IQueryable<BlogPost> query)
     {
         if (pageSize != 0 && page != 0)
