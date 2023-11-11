@@ -27,5 +27,13 @@ namespace Explorer.Tours.Core.UseCases.Administration
             }
             return result;
         }
+
+        public Result DeleteObjectAndRequest(int mapObjectId)
+        {
+            var request = _internalObjectRequestService.GetRequestByMapObjectId(mapObjectId);
+            if (request == null) throw new Exception($"Request for MapObject with ID {mapObjectId} not found.");
+            _internalObjectRequestService.Delete(request.Value.Id);
+            return Delete(mapObjectId);
+        }
     }
 }

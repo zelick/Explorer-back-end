@@ -13,5 +13,7 @@ namespace Explorer.Stakeholders.API.Internal
         Result<CheckpointRequestDto> Create(int checkpointId, int authorId, string status);
         Result<CheckpointRequestDto> AcceptRequest(int requestId);
         Result<CheckpointRequestDto> Get(int requestId);
+        Result<CheckpointRequestDto> GetRequestByCheckpointId(int checkpointId);
+        Result Delete(int id);
     }
 }

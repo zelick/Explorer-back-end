@@ -13,5 +13,7 @@ namespace Explorer.Stakeholders.API.Internal
         Result<ObjectRequestDto> Create(int mapObjectId, int authorId, string status);
         Result<ObjectRequestDto> AcceptRequest(int objectRequestId);
         Result<ObjectRequestDto> Get(int objectRequestId);
+        Result<ObjectRequestDto> GetRequestByMapObjectId(int mapObjectId);
+        Result Delete(int objectRequestId);
     }
 }

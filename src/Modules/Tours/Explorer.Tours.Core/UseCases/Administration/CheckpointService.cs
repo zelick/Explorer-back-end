@@ -46,5 +46,13 @@ namespace Explorer.Tours.Core.UseCases.Administration
             }
             return result;
         }
+
+        public Result DeleteChekcpointAndRequest(int id)
+        {
+            var request = _internalCheckpointRequestService.GetRequestByCheckpointId(id);
+            if (request == null) throw new Exception($"Request for MapObject with ID {id} not found.");
+            _internalCheckpointRequestService.Delete(request.Value.Id);
+            return Delete(id);
+        }
     }
 }

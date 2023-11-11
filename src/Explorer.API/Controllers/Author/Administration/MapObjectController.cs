@@ -42,7 +42,7 @@ namespace Explorer.API.Controllers.Author.Administration
         [HttpDelete("{id:int}")]
         public ActionResult Delete(int id)
         {
-            var result = _mapObjectService.Delete(id);
+            var result = _mapObjectService.DeleteObjectAndRequest(id);
             return CreateResponse(result);
         }
 

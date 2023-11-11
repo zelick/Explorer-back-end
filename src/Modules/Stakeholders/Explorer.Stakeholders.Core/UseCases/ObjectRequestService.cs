@@ -38,6 +38,11 @@ namespace Explorer.Stakeholders.Core.UseCases
             return MapToDto(objectRequests);
         }
 
+        public Result<ObjectRequestDto> GetRequestByMapObjectId(int mapObjectId)
+        {
+            return MapToDto(_objectRequestRepository.GetRequestByMapObjectId(mapObjectId));
+        }
+
         public Result<ObjectRequestDto> RejectRequest(int id)
         {
             var objectRequest = _objectRequestRepository.RejectRequest(id);

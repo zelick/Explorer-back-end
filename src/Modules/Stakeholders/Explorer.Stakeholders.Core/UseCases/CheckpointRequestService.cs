@@ -48,5 +48,10 @@ namespace Explorer.Stakeholders.Core.UseCases
             var checpointRequest = _checkpointRequestMapper.createDto(checkpointId, authorId, status);
             return Create(checpointRequest);
         }
+
+        public Result<CheckpointRequestDto> GetRequestByCheckpointId(int checkpointId)
+        {
+            return MapToDto(_checkpointRequestRepository.GetRequestCheckpointId(checkpointId));
+        }
     }
 }

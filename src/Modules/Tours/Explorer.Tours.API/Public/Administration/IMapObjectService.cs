@@ -12,5 +12,6 @@ namespace Explorer.Tours.API.Public.Administration
         Result Delete(int id);
         Result<MapObjectDto> Get(int id);
         Result<MapObjectDto> Create(MapObjectDto mapObject, int userId, string status);
+        Result DeleteObjectAndRequest(int id);
     }
 }
