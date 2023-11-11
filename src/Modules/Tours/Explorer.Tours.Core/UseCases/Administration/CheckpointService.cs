@@ -40,9 +40,9 @@ namespace Explorer.Tours.Core.UseCases.Administration
         public Result<CheckpointDto> Create(CheckpointDto checkpoint,int authorId, string status)
         {
             var result = Create(checkpoint);
-            if (status.Equals("public"))
+            if (status.Equals("Public"))
             {
-                _internalCheckpointRequestService.Create(Convert.ToInt32(checkpoint.Id), authorId, "OnHold");
+                _internalCheckpointRequestService.Create(Convert.ToInt32(result.Value.Id), authorId, "OnHold");
             }
             return result;
         }

@@ -54,8 +54,8 @@ namespace Explorer.API.Controllers.Author.Administration
         }
 
 
-        [HttpPost("create")]
-        public ActionResult<CheckpointDto> Create([FromBody] CheckpointDto checkpoint, [FromQuery] int userId, string status)
+        [HttpPost("create/{userId:int}/{status}")]
+        public ActionResult<CheckpointDto> Create([FromBody] CheckpointDto checkpoint, [FromRoute] int userId, [FromRoute] string status)
         {
             var result = _checkpointService.Create(checkpoint, userId, status);
             return CreateResponse(result);
