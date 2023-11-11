@@ -31,14 +31,14 @@ namespace Explorer.API.Controllers.Administrator.Administration
             return CreateResponse(result);
         }
 
-        [HttpPut("accept/{id:int}/{notificationComment:string}")]
+        [HttpPut("accept/{id:int}/{notificationComment}")]
         public ActionResult<ObjectRequestDto> AcceptRequest(int id, string notificationComment)
         {
             var result = _checkpointRequestService.AcceptRequest(id, notificationComment);
             return CreateResponse(result);
         }
 
-        [HttpPut("reject/{id:int}/{notificationComment:string}")]
+        [HttpPut("reject/{id:int}/{notificationComment}")]
         public ActionResult<ObjectRequestDto> RejectRequest(int id, string notificationComment)
         {
             var result = _checkpointRequestService.RejectRequest(id, notificationComment);

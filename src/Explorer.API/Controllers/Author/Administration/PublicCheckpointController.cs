@@ -18,7 +18,7 @@ namespace Explorer.API.Controllers.Author.Administration
             _publicCheckpointService = publicCheckpointService;
         }
 
-        [HttpPost("create/{checkpointRequestId:int}/{notificationComment:string}")]
+        [HttpPost("create/{checkpointRequestId:int}/{notificationComment}")]
         public ActionResult<PublicCheckpointDto> Create(int checkpointRequestId, string notificationComment)
         {
             var result = _publicCheckpointService.Create(checkpointRequestId, notificationComment);

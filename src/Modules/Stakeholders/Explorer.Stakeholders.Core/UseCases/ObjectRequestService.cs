@@ -20,11 +20,10 @@ namespace Explorer.Stakeholders.Core.UseCases
             _notificationRepository = notificationRepository;
         }
 
-        public Result<ObjectRequestDto> AcceptRequest(int id)
+        public Result<ObjectRequestDto> AcceptRequest(int id, string notificationComment)
         {
             var request = CrudRepository.Get(id);
-            string text = "Your request for object is accepted.";
-            Notification notification = new Notification(text, request.AuthorId, id);
+            Notification notification = new Notification(notificationComment, request.AuthorId, id);
             _notificationRepository.AddNotification(notification);
             var objectRequest = _objectRequestRepository.AcceptRequest(id);
             return MapToDto(objectRequest);
@@ -36,11 +35,10 @@ namespace Explorer.Stakeholders.Core.UseCases
             return MapToDto(objectRequests);
         }
 
-        public Result<ObjectRequestDto> RejectRequest(int id)
+        public Result<ObjectRequestDto> RejectRequest(int id, string notificationComment)
         {
             var request = CrudRepository.Get(id);
-            string text = "Your request for object is refused.";
-            Notification notification = new Notification(text, request.AuthorId, id);
+            Notification notification = new Notification(notificationComment, request.AuthorId, id);
             _notificationRepository.AddNotification(notification);
             var objectRequest = _objectRequestRepository.RejectRequest(id);
             return MapToDto(objectRequest);
