@@ -42,7 +42,7 @@ public class BlogPostController : BaseApiController
         if (images != null && images.Any())
         {
             var imageUrls = _imageService.UploadImages(images);
-            blogPost.ImageUrls = imageUrls;
+            blogPost.ImageNames = imageUrls;
         }
 
         var result = _blogPostService.Create(blogPost);

@@ -2,7 +2,7 @@
 
 public class ImageService
 {
-    private readonly string _imageStoragePath = "wwwroot/images";
+    private const string ImageStoragePath = "wwwroot/images";
 
     public ImageService()
     {
@@ -11,26 +11,14 @@ public class ImageService
 
     public List<string> UploadImages(List<IFormFile> images)
     {
-        var imageBytes = new List<byte[]>();
+        var uploadedImageNames = new List<string>();
 
         foreach (var image in images)
         {
-            using var stream = new MemoryStream();
-            image.CopyTo(stream);
-            imageBytes.Add(stream.ToArray());
-        }
-
-        List<string> uploadedImagePaths = new List<string>();
-        
-        foreach (var imageData in imageBytes)
-        {
-            string imageName = GenerateUniqueImageName();
-            string imagePath = Path.Combine(_imageStoragePath, imageName);
-
             try
             {
-                File.WriteAllBytes(imagePath, imageData);
-                uploadedImagePaths.Add(imageName);
+                var imageName = SaveImage(image);
+                uploadedImageNames.Add(imageName);
             }
             catch (Exception ex)
             {
@@ -38,14 +26,27 @@ public class ImageService
             }
         }
 
-        return uploadedImagePaths;
+        return uploadedImageNames;
     }
+
+    private string SaveImage(IFormFile image)
+    {
+        using var stream = new MemoryStream();
+        image.CopyTo(stream);
+
+        var imageName = GenerateUniqueImageName();
+        var imagePath = Path.Combine(ImageStoragePath, imageName);
+        File.WriteAllBytes(imagePath, stream.ToArray());
+
+        return imageName;
+    }
+
 
     private void InitializeStorageDirectory()
     {
-        if (!Directory.Exists(_imageStoragePath))
+        if (!Directory.Exists(ImageStoragePath))
         {
-            Directory.CreateDirectory(_imageStoragePath);
+            Directory.CreateDirectory(ImageStoragePath);
         }
     }
 

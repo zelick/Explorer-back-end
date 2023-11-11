@@ -15,19 +15,19 @@ public class BlogPost : Entity
     public string Title { get; private set; }
     public string Description { get; private set; }
     public DateTime CreationDate { get; private set; }
-    public List<string>? ImageUrls { get; private set; }
+    public List<string>? ImageNames { get; private set; }
     public BlogPostStatus Status { get; private set; }
     public List<BlogRating>? Ratings { get; private set; }
     public List<BlogComment>? Comments { get; private set; }
 
-    public BlogPost(long userId, string title, string description, DateTime creationDate, List<string>? imageUrls,
+    public BlogPost(long userId, string title, string description, DateTime creationDate, List<string>? imageNames,
         BlogPostStatus status)
     {
         UserId = userId;
         Title = title;
         Description = description;
         CreationDate = creationDate;
-        ImageUrls = imageUrls;
+        ImageNames = imageNames;
         Status = status;
         Ratings = new List<BlogRating>();
         Comments = new List<BlogComment>();
@@ -39,7 +39,7 @@ public class BlogPost : Entity
         Title = updatedBlogPost.Title;
         Description = updatedBlogPost.Description;
         CreationDate = updatedBlogPost.CreationDate;
-        ImageUrls = updatedBlogPost.ImageUrls;
+        ImageNames = updatedBlogPost.ImageNames;
         Status = updatedBlogPost.Status;
     }
 
