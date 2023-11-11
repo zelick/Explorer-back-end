@@ -4,15 +4,10 @@ using Explorer.API.Controllers.Tourist;
 using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public;
-using Explorer.Tours.API.Public.Administration;
+using Explorer.Tours.Infrastructure.Database;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Explorer.Tours.Tests.Integration.Administration
 {
@@ -74,6 +69,7 @@ namespace Explorer.Tours.Tests.Integration.Administration
             // Arrange
             using var scope = Factory.Services.CreateScope();
             var controller = CreateController(scope);
+            var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
             DateTime currentDate = DateTime.UtcNow.AddDays(6);
 
 
@@ -83,6 +79,10 @@ namespace Explorer.Tours.Tests.Integration.Administration
             // Assert
             result.ShouldNotBeNull();
             result.Deadline.ShouldBe(currentDate);
+
+            // Assert - generate notification
+            var generatedNotif = dbContext.ReportedIssueNotifications.FirstOrDefault(notif => notif.ReportedIssueId == result.Id && notif.Description.StartsWith("New deadline added"));
+            generatedNotif.ShouldNotBeNull();
         }
 
         [Fact]
