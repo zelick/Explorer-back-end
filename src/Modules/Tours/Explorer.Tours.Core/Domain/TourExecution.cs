@@ -16,15 +16,6 @@ namespace Explorer.Tours.Core.Domain
 
         public TourExecution(long touristId, long tourId)
         {
-            if (touristId < 0)
-            {
-                throw new ArgumentException("Invalid tourist.");
-            }
-            if (tourId < 0)
-            {
-                throw new ArgumentException("Invalid tour.");
-            }
-
             TouristId = touristId;
             TourId = tourId;
             Start = DateTime.UtcNow;
@@ -50,10 +41,7 @@ namespace Explorer.Tours.Core.Domain
                 this.LastActivity = DateTime.UtcNow;
                 CheckTourCompletition();
             }
-
-
             return this;
-
         }
 
         public void CheckTourCompletition()

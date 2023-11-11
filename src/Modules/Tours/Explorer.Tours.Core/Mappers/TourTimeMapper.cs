@@ -21,12 +21,15 @@ namespace Explorer.Tours.Core.Mappers
             return result;  
         }
 
-        public List<TourTimeDto> createListDto(List<TourTime> tourTimes) 
+        public List<TourTimeDto> createListDto(List<TourTime>? tourTimes) 
         {
             List<TourTimeDto> result=new List<TourTimeDto>();
-            foreach(TourTime t in tourTimes)
+            if(tourTimes !=null)
             {
-                result.Add(createDto(t));
+                foreach(TourTime t in tourTimes)
+                {
+                    result.Add(createDto(t));
+                }
             }
             return result;
         }

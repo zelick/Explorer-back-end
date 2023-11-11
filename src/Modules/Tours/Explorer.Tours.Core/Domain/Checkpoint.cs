@@ -12,6 +12,7 @@ namespace Explorer.Tours.Core.Domain
     {
         public long TourId { get; init; }
         public Tour? Tour { get; init; }
+        public int AuthorId { get; init; }
         public double Longitude { get; init; }
         public double Latitude { get; init; }
         public string Name { get; init; }
@@ -20,17 +21,20 @@ namespace Explorer.Tours.Core.Domain
         public double RequiredTimeInSeconds { get; init; }
         public CheckpointSecret? CheckpointSecret { get; private set; }
 
-        public Checkpoint(long tourId, double longitude, double latitude, string name, string description, List<string> pictures)
+        public Checkpoint(long tourId, int authorId, double longitude, double latitude, string name, string description, List<string> pictures, double requiredTimeInSeconds)
         {
             if (tourId == 0) throw new ArgumentException("Invalid Tour ID");
             TourId = tourId;
+            AuthorId = authorId;
             Longitude = longitude;
             Latitude = latitude;
             Name = name ?? throw new ArgumentNullException(nameof(name));
             Description = description;
+            Pictures = new List<string>();
             if (pictures.Count() > 0)
                 Pictures = pictures ?? throw new ArgumentNullException(nameof(pictures));
             else throw new ArgumentException("Invalid Picture");
+            RequiredTimeInSeconds = requiredTimeInSeconds;
         }
 
         public Checkpoint CreateCheckpointSecret(string description,List<string> pictures)
@@ -56,5 +60,9 @@ namespace Explorer.Tours.Core.Domain
             return this;
         }
 
+        public bool IsAuthor(int userId)
+        {
+            return AuthorId == userId;
+        }
     }
 }

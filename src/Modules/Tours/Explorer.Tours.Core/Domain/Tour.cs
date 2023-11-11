@@ -81,7 +81,7 @@ namespace Explorer.Tours.Core.Domain
             {
                 Status = TourStatus.Published;
                 var publishedTour = new PublishedTour(DateTime.UtcNow);
-                PublishedTours.Add(publishedTour);
+                PublishedTours?.Add(publishedTour);
                 return true;
             }
             return false;
@@ -93,7 +93,7 @@ namespace Explorer.Tours.Core.Domain
             {
                 Status = TourStatus.Archived;
                 var archivedTour = new ArchivedTour(DateTime.UtcNow);
-                ArchivedTours.Add(archivedTour);
+                ArchivedTours?.Add(archivedTour);
                 return true;
             }
             return false;
@@ -157,6 +157,11 @@ namespace Explorer.Tours.Core.Domain
             }
 
             return (double)inTotal/counter;
+        }
+
+        public bool IsAuthor(int authorId)
+        {
+            return authorId == AuthorId;
         }
     }
 }

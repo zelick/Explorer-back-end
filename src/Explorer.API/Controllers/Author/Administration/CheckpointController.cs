@@ -40,23 +40,23 @@ namespace Explorer.API.Controllers.Author.Administration
         }
 
         [HttpPost]
-        public ActionResult<CheckpointDto> Create([FromBody] CheckpointDto checkpoint)
+        public ActionResult<CheckpointDto> Create([FromBody] CheckpointDto checkpoint, [FromQuery] int userId)
         {
-            var result = _checkpointService.Create(checkpoint);
+            var result = _checkpointService.Create(checkpoint, userId);
             return CreateResponse(result);
         }
 
         [HttpPut("{id:int}")]
-        public ActionResult<CheckpointDto> Update([FromBody] CheckpointDto checkpoint)
+        public ActionResult<CheckpointDto> Update([FromBody] CheckpointDto checkpoint, [FromQuery] int userId)
         {
-            var result = _checkpointService.Update(checkpoint);
+            var result = _checkpointService.Update(checkpoint, userId);
             return CreateResponse(result);
         }
 
         [HttpDelete("{id:int}")]
-        public ActionResult Delete(int id)
+        public ActionResult Delete(int id, [FromQuery] int userId)
         {
-            var result = _checkpointService.Delete(id);
+            var result = _checkpointService.Delete(id, userId);
             return CreateResponse(result);
         }
 
