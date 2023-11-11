@@ -25,7 +25,7 @@ namespace Explorer.Tours.Core.UseCases.Administration
 
         public Result<PublicMapObjectDto> Create(int objectRequestId)
         {
-            _internalObjectRequestService.AcceptRequest(objectRequestId);
+            //_internalObjectRequestService.AcceptRequest(objectRequestId);
             var request = _internalObjectRequestService.Get(objectRequestId);
             var mapObject = _mapObjectService.Get(request.Value.MapObjectId);
             PublicMapObjectDto result = new PublicMapObjectDto();

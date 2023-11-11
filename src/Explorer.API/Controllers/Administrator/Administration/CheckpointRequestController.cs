@@ -31,17 +31,17 @@ namespace Explorer.API.Controllers.Administrator.Administration
             return CreateResponse(result);
         }
 
-        [HttpPut("accept/{id:int}")]
-        public ActionResult<ObjectRequestDto> AcceptRequest(int id)
+        [HttpPut("accept/{id:int}/{notificationComment:string}")]
+        public ActionResult<ObjectRequestDto> AcceptRequest(int id, string notificationComment)
         {
-            var result = _checkpointRequestService.AcceptRequest(id);
+            var result = _checkpointRequestService.AcceptRequest(id, notificationComment);
             return CreateResponse(result);
         }
 
-        [HttpPut("reject/{id:int}")]
-        public ActionResult<ObjectRequestDto> RejectRequest(int id)
+        [HttpPut("reject/{id:int}/{notificationComment:string}")]
+        public ActionResult<ObjectRequestDto> RejectRequest(int id, string notificationComment)
         {
-            var result = _checkpointRequestService.RejectRequest(id);
+            var result = _checkpointRequestService.RejectRequest(id, notificationComment);
             return CreateResponse(result);
         }
     }

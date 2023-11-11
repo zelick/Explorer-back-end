@@ -31,21 +31,19 @@ namespace Explorer.Stakeholders.Core.UseCases
             return MapToDto(objectRequests);
         }
 
-        public Result<CheckpointRequestDto> RejectRequest(int id)
+        public Result<CheckpointRequestDto> RejectRequest(int id, string notificationComment)
         {
             var request = CrudRepository.Get(id);
-            string text = "Your request for checkpoint is refused.";
-            Notification notification = new Notification(text, request.AuthorId, id);
+            Notification notification = new Notification(notificationComment, request.AuthorId, id);
             _notificationRepository.AddNotification(notification);
             var objectRequest = _checkpointRequestRepository.RejectRequest(id);
             return MapToDto(objectRequest);
         }
 
-        public Result<CheckpointRequestDto> AcceptRequest(int id)
+        public Result<CheckpointRequestDto> AcceptRequest(int id, string notificationComment)
         {
             var request = CrudRepository.Get(id);
-            string text = "Your request for checkpoint is accepted.";
-            Notification notification = new Notification(text, request.AuthorId, id);
+            Notification notification = new Notification(notificationComment, request.AuthorId, id);
             _notificationRepository.AddNotification(notification);
             var objectRequest = _checkpointRequestRepository.AcceptRequest(id);
             return MapToDto(objectRequest);

@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Explorer.API.Controllers.Author.Administration
 {
-    [Authorize(Policy = "authorPolicy")]
+    [Authorize(Policy = "administratorAndAuthorPolicy")] //administratorAndAuthorPolicy authorPolicy
     [Route("api/administration/publicCheckpoint")]
     public class PublicCheckpointController : BaseApiController
     {
@@ -18,10 +18,10 @@ namespace Explorer.API.Controllers.Author.Administration
             _publicCheckpointService = publicCheckpointService;
         }
 
-        [HttpPost("create")]
-        public ActionResult<PublicCheckpointDto> Create([FromQuery] int checkpointRequestId)
+        [HttpPost("create/{checkpointRequestId:int}/{notificationComment:string}")]
+        public ActionResult<PublicCheckpointDto> Create(int checkpointRequestId, string notificationComment)
         {
-            var result = _publicCheckpointService.Create(checkpointRequestId);
+            var result = _publicCheckpointService.Create(checkpointRequestId, notificationComment);
             return CreateResponse(result);
         }
 

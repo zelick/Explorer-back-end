@@ -11,7 +11,7 @@ namespace Explorer.Stakeholders.API.Internal
     public interface IInternalCheckpointRequestService
     {
         Result<CheckpointRequestDto> Create(CheckpointRequestDto request);
-        Result<CheckpointRequestDto> AcceptRequest(int requestId);
+        Result<CheckpointRequestDto> AcceptRequest(int requestId, string notificationComment);
         Result<CheckpointRequestDto> Get(int requestId);
     }
 }
