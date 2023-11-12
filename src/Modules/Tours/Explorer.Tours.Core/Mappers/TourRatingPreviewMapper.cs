@@ -18,7 +18,7 @@ namespace Explorer.Tours.Core.Mappers
             result.TourDate = tourRatingPreview.TourDate;
             result.CreationDate= tourRatingPreview.CreationDate;
             result.Rating= tourRatingPreview.Rating;
-            result.Pictures= tourRatingPreview.Pictures;
+            result.ImageNames = tourRatingPreview.ImageNames;
             result.Comment= tourRatingPreview.Comment;
             result.TouristId= tourRatingPreview.TouristId;  
             return result;
