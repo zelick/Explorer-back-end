@@ -1,5 +1,5 @@
 INSERT INTO blog."BlogPosts"(
-    "Id", "UserId", "Title", "Description", "CreationDate", "ImageUrls", "Status")
+    "Id", "UserId", "Title", "Description", "CreationDate", "ImageNames", "Status")
 VALUES (
     -1,
     -1,
@@ -11,7 +11,7 @@ VALUES (
 );
 
 INSERT INTO blog."BlogPosts"(
-    "Id", "UserId", "Title", "Description", "CreationDate", "ImageUrls", "Status", "Comments")
+    "Id", "UserId", "Title", "Description", "CreationDate", "ImageNames", "Status", "Comments")
 VALUES (
     -11,
     -1,
@@ -41,7 +41,7 @@ VALUES (
 );
 
 INSERT INTO blog."BlogPosts"(
-    "Id", "UserId", "Title", "Description", "CreationDate", "ImageUrls", "Status", "Comments")
+    "Id", "UserId", "Title", "Description", "CreationDate", "ImageNames", "Status", "Comments")
 VALUES (
     -12,
     -1,
@@ -71,7 +71,7 @@ VALUES (
 );
 
 INSERT INTO blog."BlogPosts"(
-    "Id", "UserId", "Title", "Description", "CreationDate", "ImageUrls", "Status")
+    "Id", "UserId", "Title", "Description", "CreationDate", "ImageNames", "Status")
 VALUES (
     -2,
     -12,

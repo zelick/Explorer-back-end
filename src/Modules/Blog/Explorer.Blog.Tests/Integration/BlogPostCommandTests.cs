@@ -76,7 +76,7 @@ public class BlogPostCommandTests : BaseBlogIntegrationTest
             ImageNames = new List<string> { "sample_image1.jpg", "sample_image2.jpg" },
         };
 
-        var result = ((ObjectResult)controller.Update(updatedEntity).Result)?.Value as BlogPostDto;
+        var result = ((ObjectResult)controller.Update(-1, updatedEntity).Result)?.Value as BlogPostDto;
 
         result.ShouldNotBeNull();
         result.Id.ShouldBe(-1);
@@ -109,7 +109,7 @@ public class BlogPostCommandTests : BaseBlogIntegrationTest
             ImageNames = new List<string> { "sample_image1.jpg", "sample_image2.jpg" }
         };
 
-        var result = (ObjectResult)controller.Update(updatedEntity).Result;
+        var result = (ObjectResult)controller.Update(-42, updatedEntity).Result;
 
         result.ShouldNotBeNull();
         result.StatusCode.ShouldBe(404);
