@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Explorer.API.Controllers.Author.Administration
 {
-    [Authorize(Policy = "authorPolicy")]
+    [Authorize(Policy = "administratorAndAuthorPolicy")]
     [Route("api/administration/mapObject")]
     public class MapObjectController : BaseApiController
     {

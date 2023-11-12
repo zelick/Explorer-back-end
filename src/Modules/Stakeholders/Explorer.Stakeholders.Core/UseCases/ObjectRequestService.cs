@@ -13,15 +13,20 @@ namespace Explorer.Stakeholders.Core.UseCases
     public class ObjectRequestService : CrudService<ObjectRequestDto,ObjectRequest>, IObjectRequestService, IInternalObjectRequestService
     {
         private readonly IObjectRequestRepository _objectRequestRepository;
+        private readonly INotificationRepository _notificationRepository;
         private ObjectRequestMapper _objectRequestMapper;
-        public ObjectRequestService(ICrudRepository<ObjectRequest> repository, IMapper mapper, IObjectRequestRepository objectRequestRepository) : base(repository, mapper)
+        public ObjectRequestService(ICrudRepository<ObjectRequest> repository, IMapper mapper, IObjectRequestRepository objectRequestRepository, INotificationRepository notificationRepository) : base(repository, mapper)
         {
             _objectRequestRepository = objectRequestRepository;
             _objectRequestMapper = new ObjectRequestMapper();
+            _notificationRepository = notificationRepository;
         }
 
-        public Result<ObjectRequestDto> AcceptRequest(int id)
+        public Result<ObjectRequestDto> AcceptRequest(int id, string notificationComment)
         {
+            var request = CrudRepository.Get(id);
+            Notification notification = new Notification(notificationComment, request.AuthorId, id);
+            _notificationRepository.AddNotification(notification);
             var objectRequest = _objectRequestRepository.AcceptRequest(id);
             return MapToDto(objectRequest);
         }
@@ -43,8 +48,11 @@ namespace Explorer.Stakeholders.Core.UseCases
             return MapToDto(_objectRequestRepository.GetRequestByMapObjectId(mapObjectId));
         }
 
-        public Result<ObjectRequestDto> RejectRequest(int id)
+        public Result<ObjectRequestDto> RejectRequest(int id, string notificationComment)
         {
+            var request = CrudRepository.Get(id);
+            Notification notification = new Notification(notificationComment, request.AuthorId, id);
+            _notificationRepository.AddNotification(notification);
             var objectRequest = _objectRequestRepository.RejectRequest(id);
             return MapToDto(objectRequest);
         }

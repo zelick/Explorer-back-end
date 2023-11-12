@@ -23,6 +23,13 @@ namespace Explorer.Stakeholders.Infrastructure.Database.Repositories
             _dbContext = context;
         }
 
+        public Notification AddNotification(Notification notification)
+        {
+            _dbContext.Notifications.Add(notification);
+            _dbContext.SaveChanges();
+            return notification;
+        }
+
         public List<Notification> GetAllUnread(int userId)
         {
             return _dbContext.Notifications.Where(n =>  n.UserId == userId && !n.IsRead).ToList();
