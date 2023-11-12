@@ -7,3 +7,5 @@ DELETE FROM tours."ReportedIssues";
 DELETE FROM tours."Tours";
 DELETE FROM tours."MapObjects";
 DELETE FROM tours."TouristPosition";
+DELETE FROM tours."PublicMapObjects";
+DELETE FROM tours."PublicCheckpoint";
