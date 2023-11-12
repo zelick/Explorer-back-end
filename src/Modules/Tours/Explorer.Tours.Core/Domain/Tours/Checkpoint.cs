@@ -1,4 +1,4 @@
-﻿ using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using Explorer.BuildingBlocks.Core.Domain;
 
-namespace Explorer.Tours.Core.Domain
+namespace Explorer.Tours.Core.Domain.Tours
 {
     public class Checkpoint : Entity
     {
@@ -37,11 +37,11 @@ namespace Explorer.Tours.Core.Domain
             RequiredTimeInSeconds = requiredTimeInSeconds;
         }
 
-        public Checkpoint CreateCheckpointSecret(string description,List<string> pictures)
+        public Checkpoint CreateCheckpointSecret(string description, List<string> pictures)
         {
-            if(string.IsNullOrWhiteSpace(description)) throw new ArgumentException("Invalid description.");
+            if (string.IsNullOrWhiteSpace(description)) throw new ArgumentException("Invalid description.");
             {
-                this.CheckpointSecret = new CheckpointSecret(description, pictures);
+                CheckpointSecret = new CheckpointSecret(description, pictures);
             }
             return this;
         }
@@ -50,13 +50,14 @@ namespace Explorer.Tours.Core.Domain
         {
             if (string.IsNullOrWhiteSpace(description)) throw new ArgumentException("Invalid description.");
             {
-                this.CheckpointSecret = new CheckpointSecret(description, pictures);
+                CheckpointSecret = new CheckpointSecret(description, pictures);
             }
             return this;
         }
 
-        public Checkpoint DeleteCheckpointSecret() {
-            this.CheckpointSecret = null;   
+        public Checkpoint DeleteCheckpointSecret()
+        {
+            CheckpointSecret = null;
             return this;
         }
 

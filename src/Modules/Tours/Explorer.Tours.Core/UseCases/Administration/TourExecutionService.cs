@@ -2,8 +2,8 @@
 using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
-using Explorer.Tours.Core.Domain;
 using Explorer.Tours.Core.Domain.RepositoryInterfaces;
+using Explorer.Tours.Core.Domain.TourExecutions;
 using Explorer.Tours.Core.Mappers;
 using FluentResults;
 using System;
@@ -20,7 +20,7 @@ namespace Explorer.Tours.Core.UseCases.Administration
         private readonly ITourExecutionRepository _tourExecutionRepository;
         private TourExecutionMapper _tourExecutionMapper;
         private readonly ITourRepository _tourRepository;
-        public TourExecutionService(ITourExecutionRepository repository, IMapper mapper, ITourRepository tourRepository) : base(repository, mapper) 
+        public TourExecutionService(ITourExecutionRepository repository, IMapper mapper, ITourRepository tourRepository) : base(repository, mapper)
         {
             _tourExecutionRepository = repository;
             _tourRepository = tourRepository;
@@ -30,7 +30,7 @@ namespace Explorer.Tours.Core.UseCases.Administration
         public Result<TourExecutionDto> CheckPosition(TouristPositionDto position, long id)
         {
             TourExecution tourExecution = CrudRepository.Get(id);
-            TourExecution result=CrudRepository.Update(tourExecution.RegisterActivity(position.Longitude,position.Latitude));
+            TourExecution result = CrudRepository.Update(tourExecution.RegisterActivity(position.Longitude, position.Latitude));
             return _tourExecutionMapper.createDto(result);
 
         }
@@ -48,17 +48,10 @@ namespace Explorer.Tours.Core.UseCases.Administration
             }
         }
 
-        /*public TourExecution GetExactExecution(long tourId, long touristId)
-        {
-            var result = _tourExecutionRepository.GetExactExecution(tourId, touristId);
-            return result;
-        }
-        */
-
         public Result<TourExecutionDto> GetInProgressByTourAndTourist(long tourId, long touristId)
         {
             var result = _tourExecutionRepository.GetInProgressByTourAndTourist(tourId, touristId);
-            if(result != null)
+            if (result != null)
                 return _tourExecutionMapper.createDto(result);
             return new Result<TourExecutionDto>();
         }

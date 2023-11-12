@@ -1,8 +1,9 @@
 ﻿using Explorer.BuildingBlocks.Core.Domain;
 using Explorer.Tours.API.Public.Administration;
 using Explorer.Tours.Core.Domain.RepositoryInterfaces;
+using Explorer.Tours.Core.Domain.Tours;
 
-namespace Explorer.Tours.Core.Domain
+namespace Explorer.Tours.Core.Domain.TourExecutions
 {
     public class TourExecution : Entity
     {
@@ -26,19 +27,19 @@ namespace Explorer.Tours.Core.Domain
 
         public TourExecution RegisterActivity(float longitude, float latitude)
         {
-            foreach (Checkpoint checkpoint in this.Tour.Checkpoints)
+            foreach (Checkpoint checkpoint in Tour.Checkpoints)
             {
-                double a = Math.Abs(Math.Round(checkpoint.Longitude,4) - Math.Round(longitude,4));
-                double b= Math.Abs(Math.Round(checkpoint.Latitude, 4) - Math.Round(latitude, 4));
-                if (a<0.01 && b<0.01)
+                double a = Math.Abs(Math.Round(checkpoint.Longitude, 4) - Math.Round(longitude, 4));
+                double b = Math.Abs(Math.Round(checkpoint.Latitude, 4) - Math.Round(latitude, 4));
+                if (a < 0.01 && b < 0.01)
                 {
                     CheckpointCompletition checkpointCompletition = new CheckpointCompletition(checkpoint.Id);
-                    if (!this.CompletedCheckpoints.Contains(checkpointCompletition))
-                        this.CompletedCheckpoints.Add(checkpointCompletition);
+                    if (!CompletedCheckpoints.Contains(checkpointCompletition))
+                        CompletedCheckpoints.Add(checkpointCompletition);
                 }
 
 
-                this.LastActivity = DateTime.UtcNow;
+                LastActivity = DateTime.UtcNow;
                 CheckTourCompletition();
             }
             return this;
@@ -46,21 +47,21 @@ namespace Explorer.Tours.Core.Domain
 
         public void CheckTourCompletition()
         {
-            if (this.CompletedCheckpoints.Count == this.Tour.Checkpoints.Count)
-                this.ExecutionStatus = ExecutionStatus.Completed;
+            if (CompletedCheckpoints.Count == Tour.Checkpoints.Count)
+                ExecutionStatus = ExecutionStatus.Completed;
         }
 
         public void Abandone(long Id)
         {
             if (Id == this.Id)
-                this.ExecutionStatus = ExecutionStatus.Abandoned;
+                ExecutionStatus = ExecutionStatus.Abandoned;
         }
 
         public double CalculateTourProgressPercentage()
         {
             double percentage = 0;
             int checkpointsCount = Tour.Checkpoints.Count();
-            int completedCheckpointsCount = this.CompletedCheckpoints.Count();
+            int completedCheckpointsCount = CompletedCheckpoints.Count();
 
             if (checkpointsCount > 0)
             {
@@ -72,7 +73,7 @@ namespace Explorer.Tours.Core.Domain
 
         public void setTour(Tour tour)
         {
-            this.Tour = tour;
+            Tour = tour;
         }
 
         public bool IsTourProgressAbove35Percent()
@@ -85,7 +86,7 @@ namespace Explorer.Tours.Core.Domain
         public bool HasOneWeekPassedSinceLastActivity()
         {
             DateTime currentTime = DateTime.Now;
-            TimeSpan difference = currentTime - this.LastActivity;
+            TimeSpan difference = currentTime - LastActivity;
 
             return difference.TotalDays > 7;
         }

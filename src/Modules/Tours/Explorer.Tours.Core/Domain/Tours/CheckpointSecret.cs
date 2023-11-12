@@ -6,9 +6,9 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace Explorer.Tours.Core.Domain
+namespace Explorer.Tours.Core.Domain.Tours
 {
-    public class CheckpointSecret: ValueObject
+    public class CheckpointSecret : ValueObject
     {
         public string Description { get; init; }
         public List<string>? Pictures { get; init; }
@@ -16,10 +16,10 @@ namespace Explorer.Tours.Core.Domain
         public CheckpointSecret() { }
 
         [JsonConstructor]
-        public CheckpointSecret(string description,List<string>? pictures)
+        public CheckpointSecret(string description, List<string>? pictures)
         {
-           Description=description;
-           Pictures=pictures;
+            Description = description;
+            Pictures = pictures;
         }
         protected override IEnumerable<object> GetEqualityComponents()
         {

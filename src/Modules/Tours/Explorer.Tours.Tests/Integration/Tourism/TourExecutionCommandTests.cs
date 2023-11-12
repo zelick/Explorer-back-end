@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Explorer.Tours.API.Public.Administration;
-using Explorer.Tours.Core.Domain;
 using Explorer.API.Controllers.Tourist.Tour;
+using Explorer.Tours.Core.Domain.TourExecutions;
 
 namespace Explorer.Tours.Tests.Integration.Tourism;
 

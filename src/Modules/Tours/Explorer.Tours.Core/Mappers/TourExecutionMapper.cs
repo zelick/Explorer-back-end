@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Explorer.Tours.API.Dtos;
-using Explorer.Tours.Core.Domain;
+using Explorer.Tours.Core.Domain.TourExecutions;
 
 namespace Explorer.Tours.Core.Mappers
 {

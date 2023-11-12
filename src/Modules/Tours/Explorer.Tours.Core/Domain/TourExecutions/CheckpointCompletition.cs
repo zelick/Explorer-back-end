@@ -1,8 +1,8 @@
 ﻿using Explorer.BuildingBlocks.Core.Domain;
 
-namespace Explorer.Tours.Core.Domain
+namespace Explorer.Tours.Core.Domain.TourExecutions
 {
-    public class CheckpointCompletition: Entity
+    public class CheckpointCompletition : Entity
     {
         public long TourExecutionId { get; init; }
         public long CheckpointId { get; init; }

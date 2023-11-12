@@ -1,7 +1,7 @@
 ﻿using Explorer.BuildingBlocks.Core.Domain;
 using System.ComponentModel.DataAnnotations;
 
-namespace Explorer.Tours.Core.Domain
+namespace Explorer.Tours.Core.Domain.Tours
 {
     public class Tour : Entity
     {
@@ -30,7 +30,7 @@ namespace Explorer.Tours.Core.Domain
 
         public Tour RemoveEquipment(Equipment equipment)
         {
-            if(Equipment.Contains(equipment))
+            if (Equipment.Contains(equipment))
                 Equipment.Remove(equipment);
             else
                 throw new ArgumentException("This equipment doesn't exist in list.");
@@ -39,7 +39,7 @@ namespace Explorer.Tours.Core.Domain
 
         public Tour() { }
 
-        public Tour(int authorId, string name, string? description, Demandigness? demandignessLevel, List<string>? tags, TourStatus status = TourStatus.Draft,double price=0)
+        public Tour(int authorId, string name, string? description, Demandigness? demandignessLevel, List<string>? tags, TourStatus status = TourStatus.Draft, double price = 0)
         {
             if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("Invalid Name.");
             if (authorId == 0) throw new ArgumentException("Invalid author");
@@ -54,7 +54,7 @@ namespace Explorer.Tours.Core.Domain
             Tags = tags;
             Equipment = new List<Equipment>();
             Checkpoints = new List<Checkpoint>();
-            TourRatings=new List<TourRating>();
+            TourRatings = new List<TourRating>();
         }
 
         public bool IsForPublishing()
@@ -77,7 +77,7 @@ namespace Explorer.Tours.Core.Domain
         }
         public bool Publish()
         {
-            if(IsForPublishing() && ValidateCheckpoints())
+            if (IsForPublishing() && ValidateCheckpoints())
             {
                 Status = TourStatus.Published;
                 var publishedTour = new PublishedTour(DateTime.UtcNow);
@@ -107,7 +107,7 @@ namespace Explorer.Tours.Core.Domain
                 TourTimes = new List<TourTime>();
 
             }
-            if(Enum.TryParse<TransportationType>(type, true, out var t))
+            if (Enum.TryParse<TransportationType>(type, true, out var t))
             {
                 var tourTime = new TourTime(time + CalculateRequiredTime(), distance, t);
                 TourTimes.Add(tourTime);
@@ -122,7 +122,7 @@ namespace Explorer.Tours.Core.Domain
 
         private double CalculateRequiredTime()
         {
-            if(Checkpoints != null)
+            if (Checkpoints != null)
             {
                 return Checkpoints.Sum(n => n.RequiredTimeInSeconds);
             }
@@ -132,12 +132,13 @@ namespace Explorer.Tours.Core.Domain
         public TourPreview FilterView(Tour tour)
         {
             TourPreview result = null;
-            if (tour.Checkpoints.Count > 0) {
+            if (tour.Checkpoints.Count > 0)
+            {
                 result = new TourPreview(tour);
             };
             return result;
         }
-        
+
         public PurchasedTourPreview FilterPurchasedTour(Tour tour)
         {
             PurchasedTourPreview result = null;
@@ -156,7 +157,7 @@ namespace Explorer.Tours.Core.Domain
                 counter++;
             }
 
-            return (double)inTotal/counter;
+            return (double)inTotal / counter;
         }
 
         public bool IsAuthor(int authorId)
