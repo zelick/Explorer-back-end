@@ -1,4 +1,6 @@
 using Explorer.Tours.Core.Domain;
+using Explorer.Tours.Core.Domain.TourExecutions;
+using Explorer.Tours.Core.Domain.Tours;
 using Microsoft.EntityFrameworkCore;
 
 namespace Explorer.Tours.Infrastructure.Database;
@@ -16,6 +18,8 @@ public class ToursContext : DbContext
     public DbSet<PublicCheckpoint> PublicCheckpoint { get; set; }
     public DbSet<PublicMapObject> PublicMapObjects { get; set; }
     public DbSet<TouristPosition> TouristPosition { get; set; }
+    public DbSet<TourExecution> TourExecution { get; set; }
+
 
     public ToursContext(DbContextOptions<ToursContext> options) : base(options) { }
 
@@ -28,6 +32,20 @@ public class ToursContext : DbContext
            .WithOne(t => t.Tour)
            .HasForeignKey(t => t.TourId)
            .IsRequired();
+
+
+        modelBuilder.Entity<TourExecution>()
+           .HasMany(t => t.CompletedCheckpoints)
+           .WithOne()
+           .HasForeignKey(t => t.TourExecutionId)
+           .IsRequired();
+
+        modelBuilder.Entity<TourExecution>()
+            .HasOne(t => t.Tour)
+            .WithMany()
+            .HasForeignKey(t => t.TourId)
+            .IsRequired();
+
         //ConfigureReportedIssues(modelBuilder);
         //ConfigureTourRatings(modelBuilder);
 
@@ -44,6 +62,8 @@ public class ToursContext : DbContext
            .Property(item => item.ArchivedTours).HasColumnType("jsonb");
         modelBuilder.Entity<Tour>()
            .Property(item => item.TourTimes).HasColumnType("jsonb");
+        modelBuilder.Entity<Checkpoint>()
+          .Property(item => item.CheckpointSecret).HasColumnType("jsonb");
     }
 
     private static void ConfigureReportedIssues(ModelBuilder modelBuilder)
