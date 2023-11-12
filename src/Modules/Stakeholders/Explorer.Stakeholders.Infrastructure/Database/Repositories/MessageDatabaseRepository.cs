@@ -4,38 +4,42 @@ using Explorer.Stakeholders.Core.Domain.RepositoryInterfaces;
 
 namespace Explorer.Stakeholders.Infrastructure.Database.Repositories
 {
-    public class MessageDatabaseRepository : IMessageRepository
+    public class MessageDatabaseRepository : CrudDatabaseRepository<Message, StakeholdersContext>, IMessageRepository
     {
-        private readonly StakeholdersContext _dbContext;
-
-        public MessageDatabaseRepository(StakeholdersContext dbContext)
-        {
-            _dbContext = dbContext;
-        }
+        public MessageDatabaseRepository(StakeholdersContext dbContext) : base(dbContext) { }
 
         public Message MarkAsRead(int messageId)
         {
 
-            var message = _dbContext.Messages.FirstOrDefault(m => m.Id == messageId);
+            var message = DbContext.Messages.FirstOrDefault(m => m.Id == messageId);
             if (message == null) throw new KeyNotFoundException("Not found: " + messageId);
             message.MarkAsRead();
-            _dbContext.Messages.Update(message);
-            _dbContext.SaveChanges();
+            DbContext.Messages.Update(message);
+            DbContext.SaveChanges();
 
             return message;
         }
 
         public List<Message> GetAllUnread(int userId)
         {
-            return _dbContext.Messages.Where(m => m.RecipientId == userId && !m.IsRead).ToList();
+            return DbContext.Messages.Where(m => m.RecipientId == userId && !m.IsRead).ToList();
         }
 
         public Message Send(Message message)
         {
-            _dbContext.Messages.Add(message);
-            _dbContext.SaveChanges();
+            DbContext.Messages.Add(message);
+            DbContext.SaveChanges();
             return message;
+        }
 
+        public List<Message> GetAllSent(int userId)
+        {
+            return DbContext.Messages.Where(m => m.SenderId == userId).ToList();
+        }
+
+        public List<Message> GetAllReceived(int userId)
+        {
+            return DbContext.Messages.Where(m => m.RecipientId == userId).ToList();
         }
     }
 }

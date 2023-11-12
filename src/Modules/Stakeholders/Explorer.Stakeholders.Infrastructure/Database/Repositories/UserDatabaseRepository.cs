@@ -28,6 +28,9 @@ public class UserDatabaseRepository : IUserRepository
     {
         _dbContext.Users.Add(user);
         _dbContext.SaveChanges();
+
+        _dbContext.SocialProfiles.Add(new SocialProfile(user.Id));
+        _dbContext.SaveChanges();
         return user;
     }
 
@@ -40,7 +43,7 @@ public class UserDatabaseRepository : IUserRepository
 
     public List<User> GetAll()
     {
-        return _dbContext.Users.Include(u => u.Followers).Include(u => u.Followed).Include(u => u.Messages).ToList();
+        return _dbContext.Users.ToList(); //.Include(u => u.Followers).Include(u => u.Followed).Include(u => u.Messages).ToList();
     }
 
     public User Update(User user)
@@ -59,9 +62,9 @@ public class UserDatabaseRepository : IUserRepository
 
     public User GetUserById(long id)
     {
-        return _dbContext.Users.Include(u => u.Followed)
-                                .Include(u => u.Followers)
-                                .Include(u => u.Messages)
-                                .FirstOrDefault(user => user.Id == id);
+        return _dbContext.Users.FirstOrDefault(user => user.Id == id); //.Include(u => u.Followed)
+                                //.Include(u => u.Followers)
+                                //.Include(u => u.Messages)
+                                //.FirstOrDefault(user => user.Id == id);
     }
 }

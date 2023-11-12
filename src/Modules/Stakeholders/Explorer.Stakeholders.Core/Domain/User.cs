@@ -10,17 +10,16 @@ public class User : Entity
     public UserRole Role { get; private set; }
     public bool IsActive { get; set; }
     public List<Club> Clubs { get; set; }
-    public List<User> Followers { get; set; }
-    public List<User> Followed { get; set; }
-    public List<Message> Messages { get; set; }
+
 
     public User(string username, string password, UserRole role, bool isActive)
 	{
 		Username = username;
 		Password = password;
-		this.Role = role;
-		this.IsActive = isActive;
-	}
+		Role = role;
+		IsActive = isActive;
+        Validate();
+    }
 
 	private void Validate()
     {
@@ -28,26 +27,10 @@ public class User : Entity
         if (string.IsNullOrWhiteSpace(Password)) throw new ArgumentException("Invalid Surname");
     }
 
-    public bool CanSendMessage(long followerId)
-    {
-        return Followers.Any(f => f.Id == followerId);
-    }
-
     public string GetPrimaryRoleName()
     {
         return Role.ToString().ToLower();
     }
-
-    public void Follow(User follower)
-    {
-        Followers.Add(follower);
-    }
-
-    public void SendMessage(Message message)
-    {
-        Messages.Add(message);
-    }
-
 }
 
 public enum UserRole

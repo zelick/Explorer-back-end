@@ -34,7 +34,8 @@ public static class StakeholdersStartup
         services.AddScoped<IApplicationGradeService, ApplicationGradeService>();
         services.AddScoped<IPersonEditingService, PersonEditingService>();
         services.AddScoped<IAccountsManagementService, AccountsManagementService>();
-        services.AddScoped<IUserProfileService,  UserProfileService>();
+        services.AddScoped<ISocialProfileService,  SocialProfileService>();
+        services.AddScoped<IMessageService, MessageService>();
     }
 
 
@@ -51,7 +52,10 @@ public static class StakeholdersStartup
         services.AddScoped<IClubRepository, ClubDatabaseRepository>();
         services.AddScoped<IPersonRepository, PersonDatabaseRepository>();
         services.AddScoped(typeof(ICrudRepository<Club>), typeof(CrudDatabaseRepository<Club, StakeholdersContext>));
+        services.AddScoped(typeof(ICrudRepository<Message>),
+            typeof(CrudDatabaseRepository<Message, StakeholdersContext>));
         services.AddScoped(typeof(IMessageRepository), typeof(MessageDatabaseRepository));
+        services.AddScoped(typeof(ISocialProfileRepository), typeof(SocialProfileDatabaseRepository));
 ;
 
         services.AddDbContext<StakeholdersContext>(opt =>

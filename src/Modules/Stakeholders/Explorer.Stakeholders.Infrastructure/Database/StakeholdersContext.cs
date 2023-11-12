@@ -15,6 +15,8 @@ public class StakeholdersContext : DbContext
 
     public DbSet<Message> Messages { get; set; }
 
+    public DbSet<SocialProfile> SocialProfiles { get; set; }
+
     public StakeholdersContext(DbContextOptions<StakeholdersContext> options) : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -38,19 +40,29 @@ public class StakeholdersContext : DbContext
             .HasForeignKey(uc => uc.ClubId);
 
 
+
+
+        //One-to-one relationship User-SocialProfile
         modelBuilder.Entity<User>()
-            .HasMany(u => u.Followed)
-            .WithMany(u => u.Followers)
+            .HasOne<SocialProfile>()
+            .WithOne();
+
+        modelBuilder.Entity<SocialProfile>().Ignore(sp => sp.Followers);
+
+        modelBuilder.Entity<SocialProfile>()
+            .HasMany(sc => sc.Followed)
+            .WithMany()
             .UsingEntity(j =>
             {
                 j.ToTable("UserFollowers");
             });
 
-        
+        /*
         modelBuilder.Entity<Message>()
             .HasOne<User>()
-            .WithMany(u => u.Messages)
+            .WithMany(u => u.Inbox)
             .HasForeignKey(m => m.RecipientId);
+        */
 
         /*
         modelBuilder.Entity<Message>()

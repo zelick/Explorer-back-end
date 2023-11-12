@@ -7,12 +7,12 @@ using FluentResults;
 
 namespace Explorer.Stakeholders.Core.UseCases
 {
-    public class UserProfileService : ISocialProfileService
+    public class SocialProfileService : ISocialProfileService
     {
         private readonly IUserRepository _userRepository;
         private readonly ISocialProfileRepository _socialProfileRepository;
 
-        public UserProfileService(IUserRepository userRepository, ISocialProfileRepository socialProfileRepository)
+        public SocialProfileService(IUserRepository userRepository, ISocialProfileRepository socialProfileRepository)
         {
             _userRepository = userRepository;
             _socialProfileRepository = socialProfileRepository;
@@ -34,8 +34,6 @@ namespace Explorer.Stakeholders.Core.UseCases
 
         public Result<SocialProfileDto> Get(int userId)
         {
-            //var user = _userRepository.GetUserById(userId);
-            //return _mapper.Map<SocialProfileDto>(user);
 
             var socialProfile = _socialProfileRepository.Get(userId);
 
