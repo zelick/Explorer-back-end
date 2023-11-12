@@ -1,6 +1,9 @@
-﻿using Explorer.Stakeholders.API.Dtos;
+﻿using Explorer.API.Services;
+using Explorer.Blog.Core.Domain.BlogPosts;
+using Explorer.Stakeholders.API.Dtos;
 using Explorer.Stakeholders.API.Public;
 using Microsoft.AspNetCore.Mvc;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Explorer.API.Controllers;
 
@@ -8,18 +11,27 @@ namespace Explorer.API.Controllers;
 public class AuthenticationController : BaseApiController
 {
     private readonly IAuthenticationService _authenticationService;
+    private readonly ImageService _imageService;
 
     public AuthenticationController(IAuthenticationService authenticationService)
     {
         _authenticationService = authenticationService;
+        _imageService = new ImageService();
     }
 
     [HttpPost]
-    public ActionResult<AuthenticationTokensDto> RegisterTourist([FromBody] AccountRegistrationDto account)
+    public ActionResult<AuthenticationTokensDto> RegisterTourist([FromForm] AccountRegistrationDto account, IFormFile profilePicture = null)
     {
+        if (profilePicture != null)
+        {
+            var pictureUrl = _imageService.UploadImages(new List<IFormFile> { profilePicture });
+            account.ProfilePictureUrl = pictureUrl[0];
+        }
+
         var result = _authenticationService.RegisterTourist(account);
         return CreateResponse(result);
     }
+
 
     [HttpPost("login")]
     public ActionResult<AuthenticationTokensDto> Login([FromBody] CredentialsDto credentials)
