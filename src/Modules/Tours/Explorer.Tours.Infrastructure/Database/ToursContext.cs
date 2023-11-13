@@ -14,6 +14,7 @@ public class ToursContext : DbContext
     public DbSet<TourEquipment> TourEquipment { get; set; }
     public DbSet<TourPreference> TourPreference { get; set; }
     public DbSet<ReportedIssue> ReportedIssues { get; set; }
+    public DbSet<ReportedIssueNotification> ReportedIssueNotifications { get; set; }
     public DbSet<TourRating> TourRating { get; set; }
     public DbSet<PublicCheckpoint> PublicCheckpoint { get; set; }
     public DbSet<PublicMapObject> PublicMapObjects { get; set; }
@@ -54,7 +55,10 @@ public class ToursContext : DbContext
             .WithMany()
             .UsingEntity<TourEquipment>();
         ConfigureReportedIssues(modelBuilder);
+        ConfigureReportedIssueNotificationss(modelBuilder);
         ConfigureTourRatings(modelBuilder);
+
+        modelBuilder.Entity<ReportedIssue>().Property(item => item.Comments).HasColumnType("jsonb");
 
         modelBuilder.Entity<Tour>()
            .Property(item => item.PublishedTours).HasColumnType("jsonb");
@@ -69,6 +73,10 @@ public class ToursContext : DbContext
     private static void ConfigureReportedIssues(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<ReportedIssue>().HasOne(t => t.Tour).WithMany().HasForeignKey(t => t.TourId);
+    }
+    private static void ConfigureReportedIssueNotificationss(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<ReportedIssueNotification>().HasOne(t => t.ReportedIssue).WithMany().HasForeignKey(t => t.ReportedIssueId);
     }
     private static void ConfigureTourRatings(ModelBuilder modelBuilder)
     {
