@@ -26,11 +26,11 @@ namespace Explorer.Stakeholders.Tests.Integration.Author
             var controller = CreateController(scope);
 
             // Act
-            var result = ((ObjectResult)controller.GetAll().Result)?.Value as List<ObjectRequestDto>;
+            var result = ((ObjectResult)controller.GetAll().Result)?.Value as List<CheckpointRequestDto>;
 
             // Assert
-            //result.ShouldNotBeNull();
-            //result.Count.ShouldBe(3);
+            result.ShouldNotBeNull();
+            result.Count.ShouldBe(3);
         }
         private static CheckpointRequestController CreateController(IServiceScope scope)
         {

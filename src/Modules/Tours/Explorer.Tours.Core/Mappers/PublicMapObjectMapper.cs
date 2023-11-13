@@ -16,7 +16,7 @@ namespace Explorer.Tours.Core.Mappers
         {
             PublicMapObjectDto publicMapObjectDto = new PublicMapObjectDto();
             publicMapObjectDto.Name = mapObject.Name;
-            publicMapObjectDto.Id = Convert.ToInt32(mapObject.Id);
+            //publicMapObjectDto.Id = Convert.ToInt32(mapObject.Id);
             publicMapObjectDto.Description = mapObject.Description;
             publicMapObjectDto.Category = mapObject.Category.ToString();
             publicMapObjectDto.PictureURL = mapObject.PictureURL;
