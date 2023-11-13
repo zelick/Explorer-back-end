@@ -1,4 +1,5 @@
-﻿using Explorer.BuildingBlocks.Core.UseCases;
+﻿using Explorer.API.Services;
+using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
 using Explorer.Tours.Core.UseCases.Administration;
@@ -12,10 +13,12 @@ namespace Explorer.API.Controllers.Author.Administration
     public class MapObjectController : BaseApiController
     {
         private readonly IMapObjectService _mapObjectService;
+        private readonly ImageService _imageService;
 
         public MapObjectController(IMapObjectService mapObjectService)
         {
             _mapObjectService = mapObjectService;
+            _imageService = new ImageService();
         }
 
         [HttpGet]
@@ -54,8 +57,13 @@ namespace Explorer.API.Controllers.Author.Administration
         }
 
         [HttpPost("create/{userId:int}/{status}")]
-        public ActionResult<MapObjectDto> Create([FromBody] MapObjectDto mapObject, [FromRoute] int userId, [FromRoute] string status)
+        public ActionResult<MapObjectDto> Create([FromForm] MapObjectDto mapObject, [FromRoute] int userId, [FromRoute] string status, IFormFile picture = null)
         {
+            if (picture != null)
+            {
+                var pictureUrl = _imageService.UploadImages(new List<IFormFile> { picture });
+                mapObject.PictureURL = pictureUrl[0];
+            }
             var result = _mapObjectService.Create(mapObject, userId, status);
             return CreateResponse(result);
         }
