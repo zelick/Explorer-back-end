@@ -144,7 +144,7 @@ public class TourCommandTests: BaseToursIntegrationTest
         var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
 
         // Act
-        var result = (OkResult)controller.Delete(-3, 2);
+        var result = (OkResult)controller.Delete(-3, -11);
 
         // Assert - Response
         result.ShouldNotBeNull();
