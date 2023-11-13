@@ -16,6 +16,7 @@ namespace Explorer.Tours.Core.UseCases.Administration
         private readonly IEquipmentRepository _equipmentRepository;
         private TourPreviewMapper _tourPreviewMapper;
         private PurchasedTourPreviewMapper _purchasedTourPreviewMapper;
+        private PublicTourMapper _publicTourMapper;
         public TourService(ITourRepository tourRepository, IMapper mapper, ITourEquipmentRepository tourEquipmentRepository, IEquipmentRepository equipmentRepository) : base(tourRepository, mapper)
         {
             _tourEquipmentRepository = tourEquipmentRepository;
@@ -23,7 +24,7 @@ namespace Explorer.Tours.Core.UseCases.Administration
             _equipmentRepository = equipmentRepository;
             _tourPreviewMapper = new TourPreviewMapper();
             _purchasedTourPreviewMapper = new PurchasedTourPreviewMapper();
-
+            _publicTourMapper =  new PublicTourMapper();
 
         }
 
@@ -40,7 +41,6 @@ namespace Explorer.Tours.Core.UseCases.Administration
             }
 
         }
-
 
         public Result<List<TourPreviewDto>> GetFilteredPublishedTours(int page, int pageSize) 
         {
@@ -179,6 +179,17 @@ namespace Explorer.Tours.Core.UseCases.Administration
 
             return _purchasedTourPreviewMapper.createDto(foundPurchasedTour);
 
+        }
+
+        public Result<List<PublicTourDto>> GetPublicTours()
+        {
+            List<Tour> publishedTours = _tourRepository.GetPublishedTours(); 
+            List<PublicTour> publicTours = new List<PublicTour>();
+            foreach (var tour in publishedTours)
+            {
+                publicTours.Add(tour.CreatePublicTour(tour));
+            }
+            return _publicTourMapper.createDtoList(publicTours);
         }
     }
 }
