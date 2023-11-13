@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Explorer.Stakeholders.API.Dtos;
 using Explorer.Stakeholders.API.Public;
-using Explorer.Stakeholders.Core.Domain;
 using Explorer.Stakeholders.Core.Domain.RepositoryInterfaces;
 using FluentResults;
 
@@ -11,11 +10,13 @@ namespace Explorer.Stakeholders.Core.UseCases
     {
         private readonly IUserRepository _userRepository;
         private readonly ISocialProfileRepository _socialProfileRepository;
+        private readonly IMapper _mapper;
 
-        public SocialProfileService(IUserRepository userRepository, ISocialProfileRepository socialProfileRepository)
+        public SocialProfileService(IUserRepository userRepository, ISocialProfileRepository socialProfileRepository, IMapper mapper)
         {
             _userRepository = userRepository;
             _socialProfileRepository = socialProfileRepository;
+            _mapper = mapper;
         }
 
         public Result<SocialProfileDto> Follow(int followerId, int followedId)
@@ -29,15 +30,17 @@ namespace Explorer.Stakeholders.Core.UseCases
 
             var result = _socialProfileRepository.Update(socialProfile);
 
-            return null;
+            var socialProfileDto = _mapper.Map<SocialProfileDto>(result);
+
+            return socialProfileDto;
         }
 
         public Result<SocialProfileDto> Get(int userId)
         {
-
             var socialProfile = _socialProfileRepository.Get(userId);
+            var socialProfileDto = _mapper.Map<SocialProfileDto>(socialProfile);
 
-            return null;
+            return socialProfileDto;
         }
     }
 }

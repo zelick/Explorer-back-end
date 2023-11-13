@@ -19,8 +19,8 @@ namespace Explorer.Stakeholders.Infrastructure.Database.Repositories
             var socialProfile = _dbContext.SocialProfiles.Include(sp => sp.Followed)
                                                             .FirstOrDefault(sc => sc.UserId == userId);
 
-            if (socialProfile == null) throw new KeyNotFoundException("Social profile not found");
-            socialProfile.Followers = GetFollowers(socialProfile);
+            if (socialProfile == null) throw new KeyNotFoundException("Social profile not found.");
+            socialProfile.SetFollowers(GetFollowers(socialProfile));
 
             return socialProfile;
         }

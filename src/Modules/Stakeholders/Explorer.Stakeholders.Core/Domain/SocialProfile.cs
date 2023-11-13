@@ -5,8 +5,8 @@ namespace Explorer.Stakeholders.Core.Domain
     public class SocialProfile : Entity
     {
         public long UserId { get; private set; }
-        public List<User> Followers { get; set; } = new List<User>();
-        public List<User> Followed { get; set; } = new List<User>();
+        public List<User> Followers { get; private set; } = new List<User>();
+        public List<User> Followed { get; private set; } = new List<User>();
 
         public SocialProfile() { }
 
@@ -25,6 +25,11 @@ namespace Explorer.Stakeholders.Core.Domain
         public bool IsFollower(long recipientId)
         {
             return Followers.Any(u => u.Id == recipientId);
+        }
+
+        public void SetFollowers(List<User> followers)
+        {
+            Followers = followers;
         }
     }
 }

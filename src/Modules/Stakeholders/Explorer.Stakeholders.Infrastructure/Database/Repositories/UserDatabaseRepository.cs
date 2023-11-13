@@ -2,6 +2,7 @@
 using Explorer.Stakeholders.Core.Domain;
 using Explorer.Stakeholders.Core.Domain.RepositoryInterfaces;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace Explorer.Stakeholders.Infrastructure.Database.Repositories;
 
@@ -43,7 +44,7 @@ public class UserDatabaseRepository : IUserRepository
 
     public List<User> GetAll()
     {
-        return _dbContext.Users.ToList(); //.Include(u => u.Followers).Include(u => u.Followed).Include(u => u.Messages).ToList();
+        return _dbContext.Users.ToList();
     }
 
     public User Update(User user)
@@ -62,9 +63,9 @@ public class UserDatabaseRepository : IUserRepository
 
     public User GetUserById(long id)
     {
-        return _dbContext.Users.FirstOrDefault(user => user.Id == id); //.Include(u => u.Followed)
-                                //.Include(u => u.Followers)
-                                //.Include(u => u.Messages)
-                                //.FirstOrDefault(user => user.Id == id);
+        var user = _dbContext.Users.FirstOrDefault(user => user.Id == id);
+        if (user == null) throw new KeyNotFoundException("Not found.");
+
+        return user;
     }
 }
