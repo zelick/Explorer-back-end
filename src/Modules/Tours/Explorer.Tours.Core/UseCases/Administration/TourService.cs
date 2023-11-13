@@ -1,9 +1,12 @@
 ﻿using AutoMapper;
+using Explorer.BuildingBlocks.Core.Domain;
 using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
 using Explorer.Tours.Core.Domain;
 using Explorer.Tours.Core.Domain.RepositoryInterfaces;
+using Explorer.Tours.Core.Domain.Tours;
+using Explorer.Tours.Core.Mappers;
 using FluentResults;
 
 namespace Explorer.Tours.Core.UseCases.Administration
@@ -13,14 +16,61 @@ namespace Explorer.Tours.Core.UseCases.Administration
         private readonly ITourEquipmentRepository _tourEquipmentRepository;
         private readonly ITourRepository _tourRepository;
         private readonly IEquipmentRepository _equipmentRepository;
-
+        private TourPreviewMapper _tourPreviewMapper;
+        private PurchasedTourPreviewMapper _purchasedTourPreviewMapper;
         public TourService(ITourRepository tourRepository, IMapper mapper, ITourEquipmentRepository tourEquipmentRepository, IEquipmentRepository equipmentRepository) : base(tourRepository, mapper)
         {
             _tourEquipmentRepository = tourEquipmentRepository;
             _tourRepository = tourRepository;
             _equipmentRepository = equipmentRepository;
+            _tourPreviewMapper = new TourPreviewMapper();
+            _purchasedTourPreviewMapper = new PurchasedTourPreviewMapper();
+
+
         }
 
+        public Result<TourDto> Update(TourDto tour, int authorId)
+        {
+            Tour t = MapToDomain(tour);
+            if (!t.IsAuthor(authorId))
+                return Result.Fail(FailureCode.InvalidArgument).WithError("Not tour author!");
+            try
+            {
+               var result = CrudRepository.Update(t);
+               return MapToDto(result);
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+            catch (ArgumentException e)
+            {
+                return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+            }
+        }
+        public Result Delete(int id, int authorId)
+        {
+            Tour t;
+            try
+            {
+            t = _tourRepository.Get(id);
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+            if (!t.IsAuthor(authorId))
+                return Result.Fail(FailureCode.InvalidArgument).WithError("Not tour author!");
+            try
+            {
+                CrudRepository.Delete(id);
+                return Result.Ok();
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+        }
         public Result<List<TourDto>> GetToursByAuthor(int page, int pageSize, int id) 
         { 
             try
@@ -35,38 +85,184 @@ namespace Explorer.Tours.Core.UseCases.Administration
 
         }
 
-        public Result<TourDto> AddEquipment(int tourId, int equipmentId)
+
+        public Result<List<TourPreviewDto>> GetFilteredPublishedTours(int page, int pageSize) 
         {
-            var isTourExists = _tourRepository.Exists(tourId);
-            if (!isTourExists) return Result.Fail(FailureCode.NotFound);
+            try
+            {
+                List<Tour> publishedTours= _tourRepository.GetPublishedTours();
+                List<TourPreview> publishedToursPreviews= new List<TourPreview>();
+                foreach(var tour in publishedTours)
+                {
+                    publishedToursPreviews.Add(tour.FilterView(tour));
+                }
+               return _tourPreviewMapper.createDtoList(publishedToursPreviews);
+            }
+            catch(Exception e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+        }
 
-            var isEquipmentExists = _equipmentRepository.Exists(equipmentId);
-            if (!isEquipmentExists) return Result.Fail(FailureCode.NotFound);
+        public Result<TourPreviewDto> GetPublishedTour(int id)
+        {
+            try
+            {
+                Tour publishedTour=_tourRepository.Get(id);
+                TourPreview publishedTourPreview = publishedTour.FilterView(publishedTour);
+                return _tourPreviewMapper.createDto(publishedTourPreview);
 
-            var isRelationshipExists = _tourEquipmentRepository.Exists(tourId, equipmentId);
-            if (isRelationshipExists) return Result.Fail(FailureCode.NotFound);
+            }
+            catch (Exception e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+        
+        }
 
+        public Result<TourDto> AddEquipment(int tourId, int equipmentId, int userId)
+        {
+            try
+            {
+                Tour tour = _tourRepository.Get(tourId);
+                if (!tour.IsAuthor(userId))
+                    return Result.Fail(FailureCode.InvalidArgument).WithError("Not tour author");
+                tour = tour.AddEquipment(_equipmentRepository.Get(equipmentId));
+                _tourRepository.Update(tour);
 
-            var updatedTourId = _tourEquipmentRepository.AddEquipment(tourId, equipmentId).TourId;
-
-            var updatedTour = _tourRepository.Get(updatedTourId);
-
-            return MapToDto(updatedTour);
+                return MapToDto(tour);
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+            catch (ArgumentException e)
+            {
+                return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+            }
 
         }
 
-        public Result<TourDto> RemoveEquipment(int tourId, int equipmentId)
+        public Result<TourDto> RemoveEquipment(int tourId, int equipmentId, int userId)
         {
-            var isRelationshipExists = _tourEquipmentRepository.Exists(tourId, equipmentId);
+            try
+            {
+                Tour tour = _tourRepository.Get(tourId);
+                if (!tour.IsAuthor(userId))
+                    return Result.Fail(FailureCode.InvalidArgument).WithError("Not tour author");
+                tour = tour.RemoveEquipment(_equipmentRepository.Get(equipmentId));
+                _tourRepository.Update(tour);
 
-            if (!isRelationshipExists) return Result.Fail(FailureCode.NotFound);
-
-            var updatedTourId = _tourEquipmentRepository.RemoveEquipment(tourId, equipmentId).TourId;
-
-            var updatedTour = _tourRepository.Get(updatedTourId);
-
-            return MapToDto(updatedTour);
+                return MapToDto(tour);
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+            catch (ArgumentException e)
+            {
+                return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+            }
         }
 
+
+        public Result<TourDto> Publish(int id, int userId)
+        {
+            Tour tour;
+            try
+            {
+                tour = _tourRepository.Get(id);
+                if(!tour.IsAuthor(userId))
+                    return Result.Fail(FailureCode.InvalidArgument).WithError("Not tour author");
+                tour.Publish();
+                var result = _tourRepository.Update(tour);
+                return MapToDto(result);
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+            catch (ArgumentException e)
+            {
+                return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+            }
+        }
+
+        public Result<TourDto> Archive(int id, int userId)
+        {
+            try
+            {
+                var tour = _tourRepository.Get(id);
+                if (!tour.IsAuthor(userId))
+                    return Result.Fail(FailureCode.InvalidArgument).WithError("Not tour author");
+                tour.Archive();
+                var result = _tourRepository.Update(tour);
+                return MapToDto(result);
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+            catch (ArgumentException e)
+            {
+                return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+            }
+        }
+
+        public Result<TourDto> AddTime(TourTimesDto tourTimesDto, int id, int userId)
+        {
+            try
+            {
+                var tour = _tourRepository.Get(id);
+                if (!tour.IsAuthor(userId))
+                    return Result.Fail(FailureCode.InvalidArgument).WithError("Not tour author");
+                tour.ClearTourTimes();
+                    foreach (var time in tourTimesDto.TourTimes)
+                    {
+                        tour.AddTime(time.TimeInSeconds, time.Distance, time.Transportation);
+                    }
+                    var result = _tourRepository.Update(tour);
+                    return MapToDto(result);
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+            catch (ArgumentException e)
+            {
+                return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+            }
+        }
+
+        public Result<List<PurchasedTourPreviewDto>> GetToursByIds(List<long> tourIds)
+        {
+            var foundTours = new List<PurchasedTourPreview>();
+
+            foreach (var id in tourIds)
+            {
+                var tour = _tourRepository.Get(id);
+                PurchasedTourPreview purchasedTourPreview = tour.FilterPurchasedTour(tour);
+
+                foundTours.Add(purchasedTourPreview);
+            }
+
+            return _purchasedTourPreviewMapper.createDtoList(foundTours);
+        }
+
+        public Result<PurchasedTourPreviewDto> getPurchasedTourById(long purchasedTourId)
+        {
+            var foundTour = _tourRepository.Get(purchasedTourId);
+            PurchasedTourPreview foundPurchasedTour = foundTour.FilterPurchasedTour(foundTour);
+
+            return _purchasedTourPreviewMapper.createDto(foundPurchasedTour);
+
+        }
+
+        public double GetAverageRating(long tourId)
+        {
+            var tour = _tourRepository.Get(tourId);
+
+            return tour.CalculateAverageRating();
+        }
     }
 }

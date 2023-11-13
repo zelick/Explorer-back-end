@@ -2,13 +2,12 @@
 using Explorer.Blog.API.Dtos;
 using Explorer.Blog.API.Public;
 using Microsoft.AspNetCore.Authorization;
-using Explorer.BuildingBlocks.Core.UseCases;
 
 namespace Explorer.API.Controllers.User.Blogging;
 
 [Authorize(Policy = "userPolicy")]
 [ApiController]
-[Route("api/blogging/blog-comment")]
+[Route("api/blogging/blog-posts/{id:int}/comments")]
 public class BlogCommentController : BaseApiController
 {
     private readonly IBlogCommentService _blogCommentService;
@@ -18,33 +17,17 @@ public class BlogCommentController : BaseApiController
         _blogCommentService = blogCommentService;
     }
 
-    [HttpGet]
-    public ActionResult<PagedResult<BlogCommentDto>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
+    [HttpPatch]
+    public ActionResult<BlogPostDto> Add(int id, [FromBody] BlogCommentDto blogComment)
     {
-        var result = _blogCommentService.GetPaged(page, pageSize);
+        var result = _blogCommentService.Add(id, blogComment);
         return CreateResponse(result);
     }
 
-    [HttpPost]
-    public ActionResult<BlogCommentDto> Create([FromBody] BlogCommentDto blogComment)
+    [HttpPatch("remove")]
+    public ActionResult<BlogPostDto> Remove(int id, [FromBody] BlogCommentDto blogComment)
     {
-        var result = _blogCommentService.Create(blogComment);
-        return CreateResponse(result);
-    }
-
-    [HttpPut("{id:int}")]
-    public ActionResult<BlogCommentDto> Update([FromBody] BlogCommentDto blogComment)
-    {
-        var result = _blogCommentService.Update(blogComment);
-        return CreateResponse(result);
-    }
-
-    [HttpDelete("{id:int}")]
-    public ActionResult Delete(int id)
-    {
-        // var userId = long.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-
-        var result = _blogCommentService.Delete(id);
+        var result = _blogCommentService.Remove(id, blogComment);
         return CreateResponse(result);
     }
 }

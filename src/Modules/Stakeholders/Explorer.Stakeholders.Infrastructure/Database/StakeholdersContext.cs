@@ -1,4 +1,7 @@
-﻿using Explorer.Stakeholders.Core.Domain;
+using Explorer.Stakeholders.Core.Domain;
+using Explorer.BuildingBlocks.Core.Domain;
+using Explorer.Stakeholders.Core.Domain;
+using Explorer.Stakeholders.Core.Domain.Shopping;
 using Microsoft.EntityFrameworkCore;
 
 namespace Explorer.Stakeholders.Infrastructure.Database;
@@ -12,11 +15,15 @@ public class StakeholdersContext : DbContext
     public DbSet<UserClub> UserClubs { get; set; }
     public DbSet<ClubRequest> Requests { get; set; }
     public DbSet<ApplicationGrade> ApplicationGrades { get; set; }
-
+    public DbSet<Notification> Notifications { get; set; }
+    public DbSet<ObjectRequest> ObjectRequests { get; set; }
+    public DbSet<CheckpointRequest> CheckpointRequests { get; set; }
+    public DbSet<Customer> Customers { get; set; }
+    public DbSet<ShoppingCart> ShoppingCarts { get; set; }
     public DbSet<Message> Messages { get; set; }
-
     public DbSet<SocialProfile> SocialProfiles { get; set; }
-
+    
+    
     public StakeholdersContext(DbContextOptions<StakeholdersContext> options) : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -38,6 +45,12 @@ public class StakeholdersContext : DbContext
             .HasOne<Club>()
             .WithMany()
             .HasForeignKey(uc => uc.ClubId);
+    
+        modelBuilder.Entity<Customer>()
+           .Property(item => item.PurchaseTokens).HasColumnType("jsonb");
+
+        modelBuilder.Entity<ShoppingCart>()
+          .Property(item => item.Items).HasColumnType("jsonb");
 
 
 
@@ -58,22 +71,6 @@ public class StakeholdersContext : DbContext
                 j.ToTable("UserFollowers");
             });
 
-        /*
-        modelBuilder.Entity<Message>()
-            .HasOne<User>()
-            .WithMany(u => u.Inbox)
-            .HasForeignKey(m => m.RecipientId);
-        */
-
-        /*
-        modelBuilder.Entity<Message>()
-            .HasOne<User>()
-            .WithMany()
-            .HasForeignKey(m => m.RecipientId);
-        */
-
-
-
         ConfigureStakeholder(modelBuilder);
     }
 
@@ -83,5 +80,28 @@ public class StakeholdersContext : DbContext
             .HasOne<User>()
             .WithOne()
             .HasForeignKey<Person>(s => s.UserId);
+
+        modelBuilder.Entity<ShoppingCart>()
+        .HasOne<User>()
+        .WithMany()
+        .HasForeignKey(s => s.TouristId)
+        .IsRequired();
+
+        modelBuilder.Entity<Customer>()
+        .HasOne<User>()
+        .WithMany()
+        .HasForeignKey(s => s.TouristId)
+        .IsRequired();
+
+        modelBuilder.Entity<Customer>()
+        .HasOne<ShoppingCart>()
+        .WithMany()
+        .HasForeignKey(s => s.ShoppingCartId)
+        .IsRequired();
+
+        /*modelBuilder.Entity<OrderItem>() 
+        .HasOne<Tour>()
+        .WithMany()
+        .HasForeignKey(o => o.TourId)*/
     }
 }

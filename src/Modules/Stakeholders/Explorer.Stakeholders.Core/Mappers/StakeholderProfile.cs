@@ -1,7 +1,9 @@
 using AutoMapper;
 using Explorer.BuildingBlocks.Core.Domain;
 using Explorer.Stakeholders.API.Dtos;
+using Explorer.Stakeholders.API.Dtos.Shopping;
 using Explorer.Stakeholders.Core.Domain;
+using Explorer.Stakeholders.Core.Domain.Shopping;
 
 namespace Explorer.Stakeholders.Core.Mappers;
 
@@ -19,5 +21,12 @@ public class StakeholderProfile : Profile
         CreateMap<UserDto, User>().ReverseMap();
         CreateMap<MessageDto,  Message>().ReverseMap();
         CreateMap<SocialProfileDto, SocialProfile>().ReverseMap();
+        CreateMap<NotificationDto, Notification>().ReverseMap();
+        CreateMap<ObjectRequestDto, ObjectRequest>().ReverseMap();
+        CreateMap<CheckpointRequestDto, CheckpointRequest>().ReverseMap();
+        CreateMap<CustomerDto, Customer>().ReverseMap();
+        CreateMap<TourPurchaseTokenDto, TourPurchaseToken>().ReverseMap();
+        CreateMap<ShoppingCartDto, ShoppingCart>().ReverseMap();
+        CreateMap<OrderItemDto, OrderItem>().ReverseMap();
     }
 }
