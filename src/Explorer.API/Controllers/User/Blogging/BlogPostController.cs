@@ -1,4 +1,5 @@
-﻿using Explorer.Blog.API.Dtos;
+﻿using Explorer.API.Services;
+using Explorer.Blog.API.Dtos;
 using Explorer.Blog.API.Public;
 using Explorer.BuildingBlocks.Core.UseCases;
 using Microsoft.AspNetCore.Authorization;
@@ -11,16 +12,18 @@ namespace Explorer.API.Controllers.User.Blogging;
 public class BlogPostController : BaseApiController
 {
     private readonly IBlogPostService _blogPostService;
+    private readonly ImageService _imageService;
 
     public BlogPostController(IBlogPostService blogPostService)
     {
         _blogPostService = blogPostService;
+        _imageService = new ImageService();
     }
 
     [HttpGet]
     public ActionResult<PagedResult<BlogPostDto>> GetAllNonDraft([FromQuery] int page, [FromQuery] int pageSize, [FromQuery] string? status = null)
-    {
-       var result = status is null
+    { 
+        var result = status is null
             ? _blogPostService.GetAllNonDraft(page, pageSize)
             : _blogPostService.GetFilteredByStatus(page, pageSize, status);
         return CreateResponse(result);
@@ -34,8 +37,14 @@ public class BlogPostController : BaseApiController
     }
 
     [HttpPost]
-    public ActionResult<BlogPostDto> Create([FromBody] BlogPostDto blogPost)
+    public ActionResult<BlogPostDto> Create([FromForm] BlogPostDto blogPost, [FromForm] List<IFormFile>? images = null)
     {
+        if (images != null && images.Any())
+        {
+            var imageNames = _imageService.UploadImages(images);
+            blogPost.ImageNames = imageNames;
+        }
+
         var result = _blogPostService.Create(blogPost);
         return CreateResponse(result);
     }
@@ -50,8 +59,15 @@ public class BlogPostController : BaseApiController
     }
 
     [HttpPut("{id:int}")]
-    public ActionResult<BlogPostDto> Update([FromBody] BlogPostDto blogPost)
+    public ActionResult<BlogPostDto> Update(int id, [FromForm] BlogPostDto blogPost, [FromForm] List<IFormFile>? images = null)
     {
+        if (images != null && images.Any())
+        {
+            var imageNames = _imageService.UploadImages(images);
+            blogPost.ImageNames = imageNames;
+        }
+
+        blogPost.Id = id;
         var result = _blogPostService.Update(blogPost);
         return CreateResponse(result);
     }
