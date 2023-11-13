@@ -10,7 +10,8 @@ namespace Explorer.Stakeholders.API.Public
 {
     public interface ISocialProfileService
     {
-        Result<SocialProfileDto> Follow(int userId, int followedUserId);
+        Result<SocialProfileDto> Follow(int followerId, int followedUserId);
+        Result<SocialProfileDto> UnFollow(int followerId, int unFollowedUserId);
         Result<SocialProfileDto> Get(int userId);
     }
 }

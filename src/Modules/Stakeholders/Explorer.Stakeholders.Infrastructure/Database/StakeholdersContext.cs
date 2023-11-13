@@ -48,6 +48,7 @@ public class StakeholdersContext : DbContext
             .WithOne();
 
         modelBuilder.Entity<SocialProfile>().Ignore(sp => sp.Followers);
+        modelBuilder.Entity<SocialProfile>().Ignore(sp => sp.Followable);
 
         modelBuilder.Entity<SocialProfile>()
             .HasMany(sc => sc.Followed)

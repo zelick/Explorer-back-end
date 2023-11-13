@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Explorer.API.Controllers.User.SocialProfile
 {
     //[Authorize(Policy = "userPolicy")]
-    [Route("api/profile-messaging")]
+    [Route("api/social-profile")]
     public class SocialProfileController : BaseApiController
     {
         private readonly ISocialProfileService _userProfileService;
@@ -16,17 +16,25 @@ namespace Explorer.API.Controllers.User.SocialProfile
             _userProfileService = userProfileService;
         }
 
-        [HttpPost("follow/{followersId}/{followedId}")]
-        public ActionResult<SocialProfileDto> Follow(int followersId, int followedId)
+        [HttpPost("follow/{followerId:int}/{followedId:int}")]
+        public ActionResult<SocialProfileDto> Follow(int followerId, int followedId)
         {
 
-            var result = _userProfileService.Follow(followersId, followedId);
+            var result = _userProfileService.Follow(followerId, followedId);
 
             return CreateResponse(result);
         }
 
-        [HttpGet("get-user-social-profile/{userId:int}")]
-        public ActionResult<SocialProfileDto> GetUserSocialProfile(int userId)
+        [HttpPost("un-follow/{followerId:int}/{unFollowedId:int}")]
+        public ActionResult<SocialProfileDto> UnFollow(int followerId, int unFollowedId)
+        {
+            var result = _userProfileService.UnFollow(followerId, unFollowedId);
+
+            return CreateResponse(result);
+        }
+
+        [HttpGet("get/{userId:int}")]
+        public ActionResult<SocialProfileDto> GetSocialProfile(int userId)
         {
             var socialProfile = _userProfileService.Get(userId);
 

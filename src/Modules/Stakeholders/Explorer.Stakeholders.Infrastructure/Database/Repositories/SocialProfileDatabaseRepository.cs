@@ -16,30 +16,15 @@ namespace Explorer.Stakeholders.Infrastructure.Database.Repositories
 
         public SocialProfile Get(long userId)
         {
-            var socialProfile = _dbContext.SocialProfiles.Include(sp => sp.Followed)
+            var profile = _dbContext.SocialProfiles.Include(sp => sp.Followed)
                                                             .FirstOrDefault(sc => sc.UserId == userId);
 
-            if (socialProfile == null) throw new KeyNotFoundException("Social profile not found.");
-            socialProfile.SetFollowers(GetFollowers(socialProfile));
+            if (profile == null) throw new KeyNotFoundException("Social profile not found.");
+            profile.SetFollowers(GetFollowers(profile));
+            profile.SetFollowable(GetFollowable(profile));
 
-            return socialProfile;
+            return profile;
         }
-
-        private List<User> GetFollowers(SocialProfile socialProfile)
-        {
-            var followersSocialProfiles = _dbContext.SocialProfiles
-                .Where(sp => sp.Followed.Any(followedUser => followedUser.Id == socialProfile.UserId))
-                .ToList();
-
-            var followerUserIds = followersSocialProfiles.Select(profile => profile.UserId).ToList();
-
-            var followers = _dbContext.Users
-                .Where(user => followerUserIds.Contains(user.Id))
-                .ToList();
-
-            return followers;
-        }
-
 
         public SocialProfile Update(SocialProfile profile)
         {
@@ -58,7 +43,32 @@ namespace Explorer.Stakeholders.Infrastructure.Database.Repositories
 
                 _dbContext.SaveChanges();
             }
+            profile.SetFollowers(GetFollowers(profile));
+            profile.SetFollowable(GetFollowable(profile));
+
             return profile;
+        }
+
+        private List<User> GetFollowers(SocialProfile profile)
+        {
+            var followersSocialProfiles = _dbContext.SocialProfiles
+                .Where(sp => sp.Followed.Any(followedUser => followedUser.Id == profile.UserId))
+                .ToList();
+
+            var followerUserIds = followersSocialProfiles.Select(sp => sp.UserId).ToList();
+
+            var followers = _dbContext.Users
+                .Where(user => followerUserIds.Contains(user.Id))
+                .ToList();
+
+            return followers;
+        }
+
+        private List<User> GetFollowable(SocialProfile profile)
+        {
+            return _dbContext.Users
+                .Where(u => !profile.Followed.Contains(u) && u.Id != profile.UserId)
+                .ToList();
         }
     }
 }

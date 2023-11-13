@@ -35,6 +35,20 @@ namespace Explorer.Stakeholders.Core.UseCases
             return socialProfileDto;
         }
 
+        public Result<SocialProfileDto> UnFollow(int followerId, int unFollowedUserId)
+        {
+            var socialProfile = _socialProfileRepository.Get(followerId);
+            var unFollowedUser = _userRepository.GetUserById(unFollowedUserId);
+
+            socialProfile.UnFollow(unFollowedUser);
+
+            var result = _socialProfileRepository.Update(socialProfile);
+
+            var socialProfileDto = _mapper.Map<SocialProfileDto>(result);
+
+            return socialProfileDto;
+        }
+
         public Result<SocialProfileDto> Get(int userId)
         {
             var socialProfile = _socialProfileRepository.Get(userId);

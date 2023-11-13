@@ -15,7 +15,7 @@ namespace Explorer.API.Controllers.User.SocialProfile
             _messageService = messageService;
         }
 
-        [HttpPost("/send")]
+        [HttpPost("send")]
         public ActionResult<MessageDto> SendMessage(MessageDto messageDto)
         {
             var message = _messageService.Send(messageDto);
@@ -23,7 +23,7 @@ namespace Explorer.API.Controllers.User.SocialProfile
             return CreateResponse(message);
         }
 
-        [HttpPut("/update")]
+        [HttpPut("update")]
         public ActionResult<MessageDto> Update(MessageDto messageDto)
         {
             var message = _messageService.Update(messageDto);

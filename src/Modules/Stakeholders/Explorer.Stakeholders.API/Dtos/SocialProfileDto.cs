@@ -5,5 +5,6 @@
         public int Id { get; set; }
         public List<UserDto> Followers { get; set; }
         public List<UserDto> Followed { get; set; }
+        public List<UserDto> Followable { get; set; }
     }
 }
