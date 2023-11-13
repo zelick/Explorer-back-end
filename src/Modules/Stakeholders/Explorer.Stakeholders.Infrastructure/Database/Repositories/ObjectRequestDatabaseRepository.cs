@@ -27,6 +27,11 @@ namespace Explorer.Stakeholders.Infrastructure.Database.Repositories
             return requestToUpdate;
         }
 
+        public ObjectRequest GetRequestByMapObjectId(int mapObjectId)
+        {
+            return _dbContext.ObjectRequests.FirstOrDefault(o => o.MapObjectId == mapObjectId);
+        }
+
         public ObjectRequest RejectRequest(int id)
         {
             ObjectRequest requestToUpdate = _dbContext.ObjectRequests.FirstOrDefault(o => o.Id == id);

@@ -12,5 +12,6 @@ namespace Explorer.Stakeholders.Core.Domain.RepositoryInterfaces
     {
         List<Notification> GetAllUnread(int userId);
         Notification MarkAsRead(int id);
+        Notification AddNotification(Notification notification);
     }
 }

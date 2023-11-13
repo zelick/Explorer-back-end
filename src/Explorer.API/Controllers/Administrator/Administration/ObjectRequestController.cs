@@ -33,17 +33,17 @@ namespace Explorer.API.Controllers.Administrator.Administration
             return CreateResponse(result);
         }
 
-        [HttpPut("accept/{id:int}")]
-        public ActionResult<ObjectRequestDto> AcceptRequest(int id)
+        [HttpPut("accept/{id:int}/{notificationComment}")]
+        public ActionResult<ObjectRequestDto> AcceptRequest(int id, string notificationComment)
         {
-            var result = _objectRequestService.AcceptRequest(id);
+            var result = _objectRequestService.AcceptRequest(id, notificationComment);
             return CreateResponse(result);
         }
 
-        [HttpPut("reject/{id:int}")]
-        public ActionResult<ObjectRequestDto> RejectRequest(int id)
+        [HttpPut("reject/{id:int}/{notificationComment}")]
+        public ActionResult<ObjectRequestDto> RejectRequest(int id, string notificationComment)
         {
-            var result = _objectRequestService.RejectRequest(id);
+            var result = _objectRequestService.RejectRequest(id, notificationComment);
             return CreateResponse(result);
         }
     }

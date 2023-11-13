@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Explorer.API.Controllers.Author.Administration
 {
-    [Authorize(Policy = "authorPolicy")]
+    [Authorize(Policy = "administratorAndAuthorPolicy")]
     [Route("api/administration/publicMapObject")]
     public class PublicMapObjectController : BaseApiController
     {
@@ -18,10 +18,10 @@ namespace Explorer.API.Controllers.Author.Administration
             _publicObjectService = publicObjectService;
         }
 
-        [HttpPost("create")]
-        public ActionResult<PublicMapObjectDto> Create([FromQuery] int objectRequestId)
+        [HttpPost("create/{objectRequestId:int}/{notificationComment}")]
+        public ActionResult<PublicMapObjectDto> Create(int objectRequestId, string notificationComment)
         {
-            var result = _publicObjectService.Create(objectRequestId);
+            var result = _publicObjectService.Create(objectRequestId, notificationComment);
             return CreateResponse(result);
         }
 

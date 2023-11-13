@@ -14,7 +14,7 @@ namespace Explorer.Tours.API.Public.Administration
         Result<PublicMapObjectDto> Create(PublicMapObjectDto publicMapObject);
         Result<PublicMapObjectDto> Update(PublicMapObjectDto publicMapObject);
         Result Delete(int id);
-        Result<PublicMapObjectDto> Create(int objectRequestId);
         Result<PagedResult<PublicMapObjectDto>> GetPaged(int page, int pageSize);
+        Result<PublicMapObjectDto> Create(int objectRequestId, string notificationComment);
     }
 }

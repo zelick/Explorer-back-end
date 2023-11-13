@@ -27,6 +27,11 @@ namespace Explorer.Stakeholders.Infrastructure.Database.Repositories
             return requestToUpdate;
         }
 
+        public CheckpointRequest GetRequestCheckpointId(int checkpointId)
+        {
+            return _dbContext.CheckpointRequests.FirstOrDefault(o => o.CheckpointId == checkpointId);
+        }
+
         public CheckpointRequest RejectRequest(int id)
         {
             CheckpointRequest requestToUpdate = _dbContext.CheckpointRequests.FirstOrDefault(o => o.Id == id);

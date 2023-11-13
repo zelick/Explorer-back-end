@@ -98,12 +98,19 @@ namespace Explorer.Tours.Core.UseCases.Administration
         public Result<CheckpointDto> Create(CheckpointDto checkpoint,int authorId, string status)
         {
             var result = Create(checkpoint);
-            if (status.Equals("public"))
+            if (status.Equals("Public"))
             {
-                _internalCheckpointRequestService.Create(Convert.ToInt32(checkpoint.Id), authorId, "OnHold");
+                _internalCheckpointRequestService.Create(Convert.ToInt32(result.Value.Id), authorId, "OnHold");
             }
             return result;
         }
+
+        public Result DeleteChekcpointAndRequest(int id)
+        {
+            var request = _internalCheckpointRequestService.GetRequestByCheckpointId(id);
+            if (request == null) throw new Exception($"Request for MapObject with ID {id} not found.");
+            _internalCheckpointRequestService.Delete(request.Value.Id);
+            return Delete(id);
 
         public Result<CheckpointDto> CreateChechpointSecreat(CheckpointSecretDto secret,int id)
         {

@@ -18,11 +18,13 @@ namespace Explorer.Stakeholders.Core.UseCases
     public class CheckpointRequestService : CrudService<CheckpointRequestDto,CheckpointRequest>, ICheckpointRequestService, IInternalCheckpointRequestService
     {
         private readonly ICheckpointRequestRepository _checkpointRequestRepository;
+        private readonly INotificationRepository _notificationRepository;
         private CheckpointRequestMapper _checkpointRequestMapper;
-        public CheckpointRequestService(ICrudRepository<CheckpointRequest> repository, IMapper mapper, ICheckpointRequestRepository checkpointRequestRepository) : base(repository, mapper) 
+        public CheckpointRequestService(ICrudRepository<CheckpointRequest> repository, IMapper mapper, ICheckpointRequestRepository checkpointRequestRepository, INotificationRepository notificationRepository) : base(repository, mapper) 
         {
             _checkpointRequestRepository = checkpointRequestRepository;
             _checkpointRequestMapper = new CheckpointRequestMapper();
+            _notificationRepository = notificationRepository;
         }
 
         public Result<List<CheckpointRequestDto>> GetAll()
@@ -31,14 +33,20 @@ namespace Explorer.Stakeholders.Core.UseCases
             return MapToDto(objectRequests);
         }
 
-        public Result<CheckpointRequestDto> RejectRequest(int id)
+        public Result<CheckpointRequestDto> RejectRequest(int id, string notificationComment)
         {
+            var request = CrudRepository.Get(id);
+            Notification notification = new Notification(notificationComment, request.AuthorId, id);
+            _notificationRepository.AddNotification(notification);
             var objectRequest = _checkpointRequestRepository.RejectRequest(id);
             return MapToDto(objectRequest);
         }
 
-        public Result<CheckpointRequestDto> AcceptRequest(int id)
+        public Result<CheckpointRequestDto> AcceptRequest(int id, string notificationComment)
         {
+            var request = CrudRepository.Get(id);
+            Notification notification = new Notification(notificationComment, request.AuthorId, id);
+            _notificationRepository.AddNotification(notification);
             var objectRequest = _checkpointRequestRepository.AcceptRequest(id);
             return MapToDto(objectRequest);
         }
@@ -47,6 +55,11 @@ namespace Explorer.Stakeholders.Core.UseCases
         {
             var checpointRequest = _checkpointRequestMapper.createDto(checkpointId, authorId, status);
             return Create(checpointRequest);
+        }
+
+        public Result<CheckpointRequestDto> GetRequestByCheckpointId(int checkpointId)
+        {
+            return MapToDto(_checkpointRequestRepository.GetRequestCheckpointId(checkpointId));
         }
     }
 }

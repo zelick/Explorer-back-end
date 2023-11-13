@@ -24,7 +24,7 @@ namespace Explorer.Stakeholders.Core.UseCases
         public Result<NotificationDto> AddNotification(NotificationDto notificationDto)
         {
             Notification notification = new Notification(notificationDto.Text, notificationDto.UserId, notificationDto.RequestId);
-            return MapToDto(CrudRepository.Create(notification));
+            return MapToDto(_notificationRepository.AddNotification(notification));
         }
 
         public Result<List<NotificationDto>> GetAllUnread(int userId)

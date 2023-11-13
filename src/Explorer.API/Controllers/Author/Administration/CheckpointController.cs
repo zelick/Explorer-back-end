@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Explorer.API.Controllers.Author.Administration
 {
-    [Authorize(Policy = "authorPolicy")]
+    [Authorize(Policy = "administratorAndAuthorPolicy")]
     [Route("api/administration/checkpoint")]
     public class CheckpointController : BaseApiController
     {
@@ -78,12 +78,13 @@ namespace Explorer.API.Controllers.Author.Administration
         public ActionResult<CheckpointDto> DeleteCheckpointSecret(int id)
         {
             var result = _checkpointService.DeleteChechpointSecreat(id);
+            var result = _checkpointService.DeleteChekcpointAndRequest(id);
             return CreateResponse(result);
         }
 
 
-        [HttpPost("create")]
-        public ActionResult<CheckpointDto> Create([FromBody] CheckpointDto checkpoint, [FromQuery] int userId, string status)
+        [HttpPost("create/{userId:int}/{status}")]
+        public ActionResult<CheckpointDto> Create([FromBody] CheckpointDto checkpoint, [FromRoute] int userId, [FromRoute] string status)
         {
             var result = _checkpointService.Create(checkpoint, userId, status);
             return CreateResponse(result);

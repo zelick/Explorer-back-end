@@ -13,7 +13,7 @@ namespace Explorer.Stakeholders.API.Public
         Result<CheckpointRequestDto> Create(CheckpointRequestDto request);
         Result<CheckpointRequestDto> Update(CheckpointRequestDto request);
         Result<List<CheckpointRequestDto>> GetAll();
-        Result<CheckpointRequestDto> AcceptRequest(int id);
-        Result<CheckpointRequestDto> RejectRequest(int id);
+        Result<CheckpointRequestDto> AcceptRequest(int id, string notificationComment);
+        Result<CheckpointRequestDto> RejectRequest(int id, string notificationComment);
     }
 }

@@ -10,5 +10,6 @@ namespace Explorer.Stakeholders.Core.Domain.RepositoryInterfaces
     {
         ObjectRequest AcceptRequest(int id);
         ObjectRequest RejectRequest(int id);
+        ObjectRequest GetRequestByMapObjectId(int mapObjectId);
     }
 }

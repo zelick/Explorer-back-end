@@ -21,9 +21,9 @@ namespace Explorer.Tours.Core.UseCases.Administration
             _publicCheckpointMapper = new PublicCheckpointMapper();
         }
 
-        public Result<PublicCheckpointDto> Create(int checkpointRequestId)
+        public Result<PublicCheckpointDto> Create(int checkpointRequestId, string notificationComment)
         {
-            _internalCheckpointRequestService.AcceptRequest(checkpointRequestId);
+            _internalCheckpointRequestService.AcceptRequest(checkpointRequestId, notificationComment);
             var request = _internalCheckpointRequestService.Get(checkpointRequestId);
             var checkpoint = _checkpointService.Get(Convert.ToInt32(request.Value.CheckpointId));
             return Create(_publicCheckpointMapper.createDto(checkpoint.Value));
