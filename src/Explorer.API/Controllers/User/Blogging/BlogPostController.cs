@@ -37,12 +37,12 @@ public class BlogPostController : BaseApiController
     }
 
     [HttpPost]
-    public ActionResult<BlogPostDto> Create([FromForm] BlogPostDto blogPost, List<IFormFile>? images = null)
+    public ActionResult<BlogPostDto> Create([FromForm] BlogPostDto blogPost, [FromForm] List<IFormFile>? images = null)
     {
         if (images != null && images.Any())
         {
-            var imageUrls = _imageService.UploadImages(images);
-            blogPost.ImageNames = imageUrls;
+            var imageNames = _imageService.UploadImages(images);
+            blogPost.ImageNames = imageNames;
         }
 
         var result = _blogPostService.Create(blogPost);
@@ -59,8 +59,15 @@ public class BlogPostController : BaseApiController
     }
 
     [HttpPut("{id:int}")]
-    public ActionResult<BlogPostDto> Update([FromBody] BlogPostDto blogPost)
+    public ActionResult<BlogPostDto> Update(int id, [FromForm] BlogPostDto blogPost, [FromForm] List<IFormFile>? images = null)
     {
+        if (images != null && images.Any())
+        {
+            var imageNames = _imageService.UploadImages(images);
+            blogPost.ImageNames = imageNames;
+        }
+
+        blogPost.Id = id;
         var result = _blogPostService.Update(blogPost);
         return CreateResponse(result);
     }

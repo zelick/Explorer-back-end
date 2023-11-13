@@ -14,7 +14,7 @@ namespace Explorer.Tours.Core.Domain
         public int TouristId { get; init; }
         public DateTime TourDate { get; init; }
         public DateTime CreationDate { get; init; }
-        public string[]? Pictures { get; init; }
+        public List<string>? ImageNames { get; init; }
 
         public TourRatingPreview(TourRating tourRating)
         {
@@ -23,8 +23,7 @@ namespace Explorer.Tours.Core.Domain
             TouristId = tourRating.TouristId;
             CreationDate = tourRating.CreationDate;
             TourDate = tourRating.CreationDate;
-            Pictures = tourRating.Pictures;
+            ImageNames = tourRating.ImageNames;
         }
-       
     }
 }
