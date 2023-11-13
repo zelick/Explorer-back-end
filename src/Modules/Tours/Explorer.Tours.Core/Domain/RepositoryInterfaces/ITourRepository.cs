@@ -14,5 +14,6 @@ namespace Explorer.Tours.Core.Domain.RepositoryInterfaces
         List<Tour> GetToursByAuthor(long id);
         List<Tour> GetToursByIds(List<long> tourIds);
         List<Tour> GetPublishedTours();
+        Tour Close(long id);
     }
 }

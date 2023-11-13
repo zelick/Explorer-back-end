@@ -29,6 +29,7 @@ namespace Explorer.API.Controllers.Author.Administration
         [HttpPut("{id:int}")]
         public ActionResult<TourDto> Update([FromBody] TourDto tour, [FromQuery] int userId)
         {
+            tour.Equipment = new List<EquipmentDto>();
             var result = _tourService.Update(tour, userId);
             return CreateResponse(result);
         }

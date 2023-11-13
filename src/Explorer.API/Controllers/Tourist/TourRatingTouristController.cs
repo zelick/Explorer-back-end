@@ -1,4 +1,5 @@
-﻿using Explorer.BuildingBlocks.Core.UseCases;
+﻿using Explorer.API.Services;
+using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Stakeholders.API.Dtos;
 using Explorer.Stakeholders.API.Public;
 using Explorer.Tours.API.Dtos;
@@ -8,6 +9,7 @@ using Explorer.Tours.Core.Domain.TourExecutions;
 using FluentResults;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 
 namespace Explorer.API.Controllers.Tourist
 {
@@ -18,10 +20,12 @@ namespace Explorer.API.Controllers.Tourist
         private readonly ITourRatingService _tourRatingService;
         private readonly ICustomerService _customerService;
         private readonly ITourExecutionRepository _executionRepository;
+        private readonly ImageService _imageService;
 
         public TourRatingTouristController(ITourRatingService tourRatingService, ICustomerService customerService, ITourExecutionRepository executionRepository)
         {
             _tourRatingService = tourRatingService;
+            _imageService = new ImageService();
             _customerService = customerService;
             _executionRepository = executionRepository;
         }
@@ -40,14 +44,13 @@ namespace Explorer.API.Controllers.Tourist
 			return CreateResponse(result);
 		}
 
-		[HttpPost]
-        public ActionResult<TourRatingDto> Create([FromBody] TourRatingDto tourRating)
+        [HttpPost]
+        public ActionResult<TourRatingDto> Create([FromForm] TourRatingDto tourRating, [FromForm] List<IFormFile>? images = null)
         {
             if (tourRating.TourId == 0 || tourRating.TouristId == 0 || tourRating.Rating == 0 || tourRating.Rating > 5)
             {
                 return BadRequest("Fill all the fields properly.");
             }
-
             List<long> customerPurchasedToursIds = _customerService.getCustomersPurchasedTours(tourRating.TouristId);
 
             if (!customerPurchasedToursIds.Contains(tourRating.TourId))
@@ -66,7 +69,12 @@ namespace Explorer.API.Controllers.Tourist
             {
                 return BadRequest("You cannot leave a review, more than a week has passed since the tour was activated.");
             }
-
+            // image upload
+            if (images != null && images.Any())
+            {
+                var imageNames = _imageService.UploadImages(images);
+                tourRating.ImageNames = imageNames;
+            }
             var result = _tourRatingService.Create(tourRating);
             return CreateResponse(result);
 

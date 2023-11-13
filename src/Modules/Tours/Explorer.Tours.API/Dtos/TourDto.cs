@@ -23,6 +23,7 @@ namespace Explorer.Tours.API.Dtos
         public List<ArchivedTourDto>? ArchivedTours { get; set; }
         public List<TourTimeDto>? TourTimes { get; set;}
         public List<TourRatingDto>? TourRatings { get; set; }
+        public bool? Closed { get; set; }
     }
 }
 

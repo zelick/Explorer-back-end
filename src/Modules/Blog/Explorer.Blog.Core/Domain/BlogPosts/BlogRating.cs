@@ -1,7 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 using Explorer.BuildingBlocks.Core.Domain;
 
-namespace Explorer.Blog.Core.Domain;
+namespace Explorer.Blog.Core.Domain.BlogPosts;
 
 public class BlogRating : ValueObject
 {

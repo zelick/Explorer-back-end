@@ -25,7 +25,7 @@ namespace Explorer.Tours.Tests.Integration.Administration
         public void Publish_succeeds()
         {
             // Arrange - Input data
-            var authorId = 2;
+            var authorId = -12;
             var tourId = -1;
             var expectedResponseCode = 200;
             var expectedStatus = TourStatus.Published;
@@ -50,7 +50,7 @@ namespace Explorer.Tours.Tests.Integration.Administration
         public void Publish_fails_invalid_transport()
         {
             // Arrange - Input data
-            var authorId = 2;
+            var authorId = -11;
             var tourId = -3;
             var expectedResponseCode = 200;
             var expectedStatus = TourStatus.Draft;
@@ -124,7 +124,7 @@ namespace Explorer.Tours.Tests.Integration.Administration
         public void Archive_succeeds()
         {
             // Arrange - Input data
-            var authorId = 2;
+            var authorId = -12;
             var tourId = -4;
             var expectedResponseCode = 200;
             var expectedStatus = TourStatus.Archived;
@@ -199,7 +199,7 @@ namespace Explorer.Tours.Tests.Integration.Administration
         public void Add_tour_time_succeeds()
         {
             // Arrange - Input data
-            var authorId = 2;
+            var authorId = -12;
             var tourId = -2;
             TourTimesDto tourTimesDto = new TourTimesDto();
             TourTimeDto tourTimeDto = new TourTimeDto();
@@ -261,7 +261,7 @@ namespace Explorer.Tours.Tests.Integration.Administration
         public void Adding_equipment_succeeds()
         {
             // Arrange - Input data
-            var authorId = 2;
+            var authorId = -12;
             var tourId = -4;
             var expectedResponseCode = 200;
             var expectedCount = 1;
