@@ -67,7 +67,7 @@ namespace Explorer.Stakeholders.Core.UseCases
 
         public bool IsTourPurchasedByUser(long touristId, long tourId)
         {
-            return this.getCustomersPurchasedTours(touristId).Find(t => t == tourId) != null;
+            return !this.getCustomersPurchasedTours(touristId).Find(t => t == tourId).Equals(0);
         }
     }
 }
