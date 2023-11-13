@@ -90,7 +90,7 @@ public class TourCommandTests: BaseToursIntegrationTest
         };
 
         // Act
-        var result = ((ObjectResult)controller.Update(updatedEntity).Result)?.Value as TourDto;
+        var result = ((ObjectResult)controller.Update(updatedEntity, 2).Result)?.Value as TourDto;
 
         // Assert - Response
         result.ShouldNotBeNull();
@@ -128,7 +128,7 @@ public class TourCommandTests: BaseToursIntegrationTest
         };
 
         // Act
-        var result = (ObjectResult)controller.Update(updatedEntity).Result;
+        var result = (ObjectResult)controller.Update(updatedEntity, 2).Result;
 
         // Assert
         result.ShouldNotBeNull();
@@ -144,7 +144,7 @@ public class TourCommandTests: BaseToursIntegrationTest
         var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
 
         // Act
-        var result = (OkResult)controller.Delete(-3);
+        var result = (OkResult)controller.Delete(-3, 2);
 
         // Assert - Response
         result.ShouldNotBeNull();
@@ -163,7 +163,7 @@ public class TourCommandTests: BaseToursIntegrationTest
         var controller = CreateController(scope);
 
         // Act
-        var result = (ObjectResult)controller.Delete(-1000);
+        var result = (ObjectResult)controller.Delete(-1000, 2);
 
         // Assert
         result.ShouldNotBeNull();

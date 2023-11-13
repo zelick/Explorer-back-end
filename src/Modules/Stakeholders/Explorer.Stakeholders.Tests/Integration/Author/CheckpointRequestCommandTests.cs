@@ -52,7 +52,7 @@ namespace Explorer.Stakeholders.Tests.Integration.Author
             var dbContext = scope.ServiceProvider.GetRequiredService<StakeholdersContext>();
 
             // Act
-            var result = ((ObjectResult)controller.AcceptRequest(-1).Result)?.Value as CheckpointRequestDto; ;
+            var result = ((ObjectResult)controller.AcceptRequest(-1, "kom").Result)?.Value as CheckpointRequestDto; ;
 
             // Assert - Response
             result.ShouldNotBeNull();
@@ -72,7 +72,7 @@ namespace Explorer.Stakeholders.Tests.Integration.Author
             var dbContext = scope.ServiceProvider.GetRequiredService<StakeholdersContext>();
 
             // Act
-            var result = ((ObjectResult)controller.RejectRequest(-1).Result)?.Value as CheckpointRequestDto;
+            var result = ((ObjectResult)controller.RejectRequest(-1, "kom").Result)?.Value as CheckpointRequestDto;
 
             // Assert - Response
             result.ShouldNotBeNull();

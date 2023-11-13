@@ -10,5 +10,6 @@ namespace Explorer.Stakeholders.Core.Domain.RepositoryInterfaces
     {
         CheckpointRequest AcceptRequest(int id);
         CheckpointRequest RejectRequest(int id);
+        CheckpointRequest GetRequestCheckpointId(int chekpointId);
     }
 }

@@ -2,6 +2,8 @@ using System.Linq;
 using AutoMapper;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.Core.Domain;
+using Explorer.Tours.Core.Domain.TourExecutions;
+using Explorer.Tours.Core.Domain.Tours;
 using FluentResults;
 
 namespace Explorer.Tours.Core.Mappers;
@@ -27,6 +29,9 @@ public class ToursProfile : Profile
         CreateMap<PublishedTourDto, PublishedTour>().ReverseMap();
         CreateMap<ArchivedTourDto, ArchivedTour>().ReverseMap();
         CreateMap<TourTimeDto, TourTime>().ReverseMap();
+        CreateMap<TourExecutionDto, TourExecution>().ReverseMap();
+        CreateMap<CheckpointCompletitionDto, CheckpointCompletition>().ReverseMap();
+        CreateMap<CheckpointSecretDto, CheckpointSecret>().ReverseMap();
 
 
     }

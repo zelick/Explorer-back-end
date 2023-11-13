@@ -10,13 +10,13 @@ namespace Explorer.Tours.Core.Mappers
 {
     public class PurchasedTourPreviewMapper
     {
-        private CheckpointPreviewMapper checkpointMapper;
+        private CheckpointMapper checkpointMapper;
         private EquipmentMapper equipmentMapper;
         private TourRatingPreviewMapper ratingMapper;
         private TourTimeMapper timeMapper;
         public PurchasedTourPreviewMapper()
         {
-            checkpointMapper = new CheckpointPreviewMapper();
+            checkpointMapper = new CheckpointMapper();
             equipmentMapper = new EquipmentMapper();
             ratingMapper = new TourRatingPreviewMapper();
             timeMapper = new TourTimeMapper();
@@ -42,7 +42,7 @@ namespace Explorer.Tours.Core.Mappers
             return result;
         }
 
-        public List<PurchasedTourPreviewDto> createDtoList(List<PurchasedTourPreview> purchasedTourPreviewList)
+        public List<PurchasedTourPreviewDto> createDtoList(List<PurchasedTourPreview>? purchasedTourPreviewList)
         {
             List<PurchasedTourPreviewDto> purchasedTourPreviewDtos = new List<PurchasedTourPreviewDto>();
             foreach (var purchasedTourPreview in purchasedTourPreviewList)

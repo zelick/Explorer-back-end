@@ -15,6 +15,7 @@ namespace Explorer.Tours.Core.Mappers
         public TourRatingPreviewDto createDto(TourRatingPreview tourRatingPreview)
         {
             TourRatingPreviewDto result = new TourRatingPreviewDto();
+            result.Id = tourRatingPreview.Id;
             result.TourDate = tourRatingPreview.TourDate;
             result.CreationDate= tourRatingPreview.CreationDate;
             result.Rating= tourRatingPreview.Rating;

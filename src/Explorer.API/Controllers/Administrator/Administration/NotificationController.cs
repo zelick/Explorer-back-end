@@ -31,7 +31,7 @@ namespace Explorer.API.Controllers.Administrator.Administration
             return CreateResponse(result);
         }
 
-        [HttpGet("markAsRead/{id:int}")]
+        [HttpPut("markAsRead/{id:int}")]
         public ActionResult<NotificationDto> MarkAsRead(int id)
         {
             var result = _notificationService.MarkAsRead(id);

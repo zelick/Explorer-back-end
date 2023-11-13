@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Explorer.API.Controllers.Author.Administration
 {
-    [Authorize(Policy = "authorPolicy")]
+    [Authorize(Policy = "administratorAndAuthorPolicy")]
     [Route("api/administration/checkpoint")]
     public class CheckpointController : BaseApiController
     {
@@ -32,30 +32,60 @@ namespace Explorer.API.Controllers.Author.Administration
             return CreateResponse(result);
         }
 
-        [HttpPost]
-        public ActionResult<CheckpointDto> Create([FromBody] CheckpointDto checkpoint)
+        [HttpGet("details/{id:int}")]
+        public ActionResult<CheckpointDto> GetById(int id)
         {
-            var result = _checkpointService.Create(checkpoint);
+            var result = _checkpointService.Get(id);
             return CreateResponse(result);
         }
 
-        [HttpPut("{id:int}")]
-        public ActionResult<CheckpointDto> Update([FromBody] CheckpointDto checkpoint)
+        /*
+        [HttpPost]
+        public ActionResult<CheckpointDto> Create([FromBody] CheckpointDto checkpoint, [FromQuery] int userId)
         {
-            var result = _checkpointService.Update(checkpoint);
+            var result = _checkpointService.Create(checkpoint, userId);
+            return CreateResponse(result);
+        }
+        */
+
+        [HttpPut("{id:int}")]
+        public ActionResult<CheckpointDto> Update([FromBody] CheckpointDto checkpoint, [FromQuery] int userId)
+        {
+            var result = _checkpointService.Update(checkpoint, userId);
             return CreateResponse(result);
         }
 
         [HttpDelete("{id:int}")]
-        public ActionResult Delete(int id)
+        public ActionResult Delete(int id, [FromQuery] int userId)
         {
-            var result = _checkpointService.Delete(id);
+            var result = _checkpointService.Delete(id, userId);
+            return CreateResponse(result);
+        }
+
+        [HttpPut("createSecret/{id:int}")]
+        public ActionResult<CheckpointDto> CreateCheckpointSecret([FromBody] CheckpointSecretDto secretDto,int id)
+        {
+            var result = _checkpointService.CreateChechpointSecreat(secretDto,id);
+            return CreateResponse(result);
+        }
+
+        [HttpPut("updateSecret/{id:int}")]
+        public ActionResult<CheckpointDto> UpdateCheckpointSecret([FromBody] CheckpointSecretDto secretDto, int id)
+        {
+            var result = _checkpointService.UpdateChechpointSecreat(secretDto, id);
+            return CreateResponse(result);
+        }
+
+        [HttpPut("deleteSecret/{id:int}")]
+        public ActionResult<CheckpointDto> DeleteCheckpointSecret(int id)
+        {
+            var result = _checkpointService.DeleteChechpointSecreat(id);
             return CreateResponse(result);
         }
 
 
-        [HttpPost("create")]
-        public ActionResult<CheckpointDto> Create([FromBody] CheckpointDto checkpoint, [FromQuery] int userId, string status)
+        [HttpPost("create/{userId:int}/{status}")]
+        public ActionResult<CheckpointDto> Create([FromBody] CheckpointDto checkpoint, [FromRoute] int userId, [FromRoute] string status)
         {
             var result = _checkpointService.Create(checkpoint, userId, status);
             return CreateResponse(result);

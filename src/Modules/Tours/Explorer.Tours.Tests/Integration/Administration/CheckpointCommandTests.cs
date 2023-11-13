@@ -24,11 +24,13 @@ namespace Explorer.Tours.Tests.Integration.Administration
         {
             // Arrange
             using var scope = Factory.Services.CreateScope();
+            var status = "Private";
             var controller = CreateController(scope);
             var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
             var newEntity = new CheckpointDto
             {
                 TourId = -1,
+                AuthorId = 2,
                 Longitude = 45,
                 Latitude = 45,
                 Name = "Katedrala",
@@ -37,7 +39,7 @@ namespace Explorer.Tours.Tests.Integration.Administration
             };
 
             // Act
-            var result = ((ObjectResult)controller.Create(newEntity).Result)?.Value as CheckpointDto;
+            var result = ((ObjectResult)controller.Create(newEntity, 2, status).Result)?.Value as CheckpointDto;
 
             // Assert - Response
             result.ShouldNotBeNull();
@@ -60,13 +62,16 @@ namespace Explorer.Tours.Tests.Integration.Administration
             // Arrange
             using var scope = Factory.Services.CreateScope();
             var controller = CreateController(scope);
+            var status = "Private";
             var updatedEntity = new CheckpointDto
             {
-                Name = "Test"
+                Name = "Test",
+                TourId = -1,
+                Pictures = new List<string> { "https://www.google.com/url?sa=i&url=https%3A%2F%2Filovenovisad.com%2Fvodic%2Fsakralni-objekti%2Fkatolicka-crkva-ime-marijino%2F&psig=AOvVaw2UZQxIT-Z_WvM0CTWNA8yC&ust=1697737791159000&source=images&cd=vfe&opi=89978449&ved=0CA8QjRxqFwoTCNjjwaGUgIIDFQAAAAAdAAAAABAD" }
             };
 
             // Act
-            var result = (ObjectResult)controller.Create(updatedEntity).Result;
+            var result = (ObjectResult)controller.Create(updatedEntity, 2, status).Result;
 
             // Assert
             result.ShouldNotBeNull();
@@ -84,6 +89,7 @@ namespace Explorer.Tours.Tests.Integration.Administration
             {
                 Id = -2,
                 TourId = -1,
+                AuthorId = 2,
                 Longitude = 45,
                 Latitude = 45,
                 Name = "Petrovaradin",
@@ -92,7 +98,7 @@ namespace Explorer.Tours.Tests.Integration.Administration
             };
 
             // Act
-            var result = ((ObjectResult)controller.Update(updatedEntity).Result)?.Value as CheckpointDto;
+            var result = ((ObjectResult)controller.Update(updatedEntity, 2).Result)?.Value as CheckpointDto;
 
             // Assert - Response
 
@@ -127,6 +133,7 @@ namespace Explorer.Tours.Tests.Integration.Administration
             {
                 Id = -1000,
                 TourId = -1,
+                AuthorId = 2,
                 Longitude = 45,
                 Latitude = 45,
                 Name = "Test",
@@ -135,7 +142,7 @@ namespace Explorer.Tours.Tests.Integration.Administration
             };
 
             // Act
-            var result = (ObjectResult)controller.Update(updatedEntity).Result;
+            var result = (ObjectResult)controller.Update(updatedEntity, 2).Result;
 
             // Assert
             result.ShouldNotBeNull();
@@ -151,7 +158,7 @@ namespace Explorer.Tours.Tests.Integration.Administration
             var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
 
             // Act
-            var result = (OkResult)controller.Delete(-1);
+            var result = (OkResult)controller.Delete(-1, 2);
 
             // Assert - Response
             result.ShouldNotBeNull();
@@ -170,7 +177,7 @@ namespace Explorer.Tours.Tests.Integration.Administration
             var controller = CreateController(scope);
 
             // Act
-            var result = (ObjectResult)controller.Delete(-1000);
+            var result = (ObjectResult)controller.Delete(-1000, 2);
 
             // Assert
             result.ShouldNotBeNull();
