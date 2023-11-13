@@ -15,7 +15,7 @@ namespace Explorer.Tours.API.Dtos
         public double Price { get; set; }
         public List<string>? Tags { get; set; }
         public List<EquipmentDto> Equipment { get; set; }
-        public List<CheckpointPreviewDto> Checkpoints { get; set; }
+        public List<CheckpointDto> Checkpoints { get; set; }
         public List<TourRatingPreviewDto> TourRatings { get; set; }
         public List<TourTimeDto> TourTimes { get; set; }
     }

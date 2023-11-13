@@ -43,6 +43,7 @@ public static class StakeholdersStartup
         services.AddScoped<ICheckpointRequestService, CheckpointRequestService>();
         services.AddScoped<IInternalObjectRequestService, ObjectRequestService>();
         services.AddScoped<IInternalCheckpointRequestService, CheckpointRequestService>();
+        services.AddScoped<IInternalUserService, UserService>();
         services.AddScoped<ICustomerService, CustomerService>();
         services.AddScoped<IShoppingCartService, ShoppingCartService>();
     }

@@ -21,9 +21,10 @@ namespace Explorer.Tours.Tests.Integration.Administration
             var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
             var tourId = -2;
             var equipmentId = -1;
+            var authorId = 2;
 
             // Act
-            var result = ((ObjectResult)controller.AddEquipment(tourId, equipmentId).Result)?.Value as TourDto;
+            var result = ((ObjectResult)controller.AddEquipment(tourId, equipmentId, authorId).Result)?.Value as TourDto;
 
             // Assert - Response
             result.ShouldNotBeNull();
@@ -45,9 +46,10 @@ namespace Explorer.Tours.Tests.Integration.Administration
             var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
             var tourId = -2;
             var equipmentId = -2;
+            var authorId = 2;
 
             // Act
-            var result = ((ObjectResult)controller.RemoveEquipment(tourId, equipmentId).Result)?.Value as TourDto;
+            var result = ((ObjectResult)controller.RemoveEquipment(tourId, equipmentId, authorId).Result)?.Value as TourDto;
 
             // Assert - Response
             result.ShouldNotBeNull();
@@ -66,9 +68,10 @@ namespace Explorer.Tours.Tests.Integration.Administration
             var controller = CreateController(scope);
             var tourId = -10;
             var equipmentId = -2;
+            var authorId = 2;
 
             // Act
-            var response = (ObjectResult)controller.AddEquipment(tourId, equipmentId).Result;
+            var response = (ObjectResult)controller.AddEquipment(tourId, equipmentId, authorId).Result;
 
             // Assert - Response
             response.ShouldNotBeNull();
@@ -83,9 +86,10 @@ namespace Explorer.Tours.Tests.Integration.Administration
             var controller = CreateController(scope);
             var tourId = -10;
             var equipmentId = -1;
+            var authorId = 2;
 
             // Act
-            var response = (ObjectResult)controller.RemoveEquipment(tourId, equipmentId).Result;
+            var response = (ObjectResult)controller.RemoveEquipment(tourId, equipmentId, authorId).Result;
 
             // Assert - Response
             response.ShouldNotBeNull();
@@ -100,9 +104,10 @@ namespace Explorer.Tours.Tests.Integration.Administration
             var controller = CreateController(scope);
             var tourId = -1;
             var equipmentId = -21;
+            var authorId = 2;
 
             // Act
-            var response = (ObjectResult)controller.AddEquipment(tourId, equipmentId).Result;
+            var response = (ObjectResult)controller.AddEquipment(tourId, equipmentId, authorId).Result;
 
             // Assert - Response
             response.ShouldNotBeNull();
@@ -117,9 +122,10 @@ namespace Explorer.Tours.Tests.Integration.Administration
             var controller = CreateController(scope);
             var tourId = -1;
             var equipmentId = -10;
+            var authorId = 2;
 
             // Act
-            var response = (ObjectResult)controller.RemoveEquipment(tourId, equipmentId).Result;
+            var response = (ObjectResult)controller.RemoveEquipment(tourId, equipmentId, authorId).Result;
 
             // Assert - Response
             response.ShouldNotBeNull();
@@ -134,9 +140,10 @@ namespace Explorer.Tours.Tests.Integration.Administration
             var controller = CreateController(scope);
             var tourId = -1;
             var equipmentId = -1;
+            var authorId = 2;
 
             // Act
-            var response = (ObjectResult)controller.AddEquipment(tourId, equipmentId).Result;
+            var response = (ObjectResult)controller.AddEquipment(tourId, equipmentId, authorId).Result;
 
             // Assert - Response
             response.ShouldNotBeNull();
