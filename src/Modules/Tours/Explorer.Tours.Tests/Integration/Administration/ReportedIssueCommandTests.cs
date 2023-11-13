@@ -32,7 +32,9 @@ namespace Explorer.Tours.Tests.Integration.Administration
                 Comments = new List<ReportedIssueCommentDto>(),
                 Resolved = false,
                 Closed = false,
-                Tour = null
+                Tour = null,
+                PersonName = "",
+                ProfilePictureUrl = ""
     };
 
             // Act
@@ -81,7 +83,9 @@ namespace Explorer.Tours.Tests.Integration.Administration
             ReportedIssueCommentDto comment = new ReportedIssueCommentDto{
                 Text = "Zaboravio sam",
                 CreationTime= DateTime.UtcNow,
-                CreatorId = 1
+                CreatorId = 1,
+                PersonName = "",
+                ProfilePictureUrl = ""
             };
 
             // Act

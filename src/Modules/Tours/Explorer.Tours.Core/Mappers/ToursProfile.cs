@@ -1,10 +1,14 @@
+using System.Linq;
 using AutoMapper;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.Core.Domain;
+using Explorer.Tours.Core.Domain.TourExecutions;
+using Explorer.Tours.Core.Domain.Tours;
+using FluentResults;
 
 namespace Explorer.Tours.Core.Mappers;
 
-public class ToursProfile : Profile
+public class ToursProfile : Profile             
 {
     public ToursProfile()
     {
@@ -13,6 +17,7 @@ public class ToursProfile : Profile
             .ForMember(dest => dest.Category, opt => opt.MapFrom(src => MapObjectTypeFromString(src.Category)))
             .ReverseMap();
         CreateMap<TourPreferenceDto, TourPreference>().ReverseMap();
+        CreateMap<TouristPositionDto, TouristPosition>().ReverseMap();
         CreateMap<CheckpointDto, Checkpoint>().ReverseMap();
         CreateMap<TourDto, Tour>().ReverseMap();
         CreateMap<ReportedIssueDto, ReportedIssue>()
@@ -21,6 +26,19 @@ public class ToursProfile : Profile
         CreateMap<ReportedIssueCommentDto, ReportedIssueComment>().ReverseMap();
         CreateMap<ReportedIssueNotificationDto, ReportedIssueNotification>().ReverseMap();
         CreateMap<TourRatingDto, TourRating>().ReverseMap();
+        CreateMap<PublicCheckpointDto, PublicCheckpoint>().ReverseMap();
+        CreateMap<PublicMapObjectDto, PublicMapObject>()
+                  .ForMember(dest => dest.Category, opt => opt.MapFrom(src => MapObjectTypeFromString(src.Category)))
+                  .ReverseMap();
+        CreateMap<TourDto, Tour>().ReverseMap();
+        CreateMap<PublishedTourDto, PublishedTour>().ReverseMap();
+        CreateMap<ArchivedTourDto, ArchivedTour>().ReverseMap();
+        CreateMap<TourTimeDto, TourTime>().ReverseMap();
+        CreateMap<TourExecutionDto, TourExecution>().ReverseMap();
+        CreateMap<CheckpointCompletitionDto, CheckpointCompletition>().ReverseMap();
+        CreateMap<CheckpointSecretDto, CheckpointSecret>().ReverseMap();
+
+
     }
 
     private MapObjectType MapObjectTypeFromString(string category)

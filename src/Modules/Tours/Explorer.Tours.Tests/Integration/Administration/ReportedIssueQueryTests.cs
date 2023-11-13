@@ -39,7 +39,7 @@ namespace Explorer.Tours.Tests.Integration.Administration
             var controller = CreateTouristController(scope);
 
             // Act
-            var result = ((ObjectResult)controller.GetAllByTourist(2, 0, 0).Result)?.Value as PagedResult<ReportedIssueDto>;
+            var result = ((ObjectResult)controller.GetAllByTourist(-22, 0, 0).Result)?.Value as PagedResult<ReportedIssueDto>;
 
             // Assert
             result.ShouldNotBeNull();
@@ -55,12 +55,12 @@ namespace Explorer.Tours.Tests.Integration.Administration
             var controller = CreateAuthorController(scope);
 
             // Act
-            var result = ((ObjectResult)controller.GetAllByAuthor(2, 0, 0).Result)?.Value as PagedResult<ReportedIssueDto>;
+            var result = ((ObjectResult)controller.GetAllByAuthor(-12, 0, 0).Result)?.Value as PagedResult<ReportedIssueDto>;
 
             // Assert
             result.ShouldNotBeNull();
-            result.Results.Count.ShouldBe(2);
-            result.TotalCount.ShouldBe(2);
+            result.Results.Count.ShouldBe(3);
+            result.TotalCount.ShouldBe(3);
         }
 
         [Fact]

@@ -41,7 +41,7 @@ public class EquipmentCommandTests : BaseToursIntegrationTest
     }
 
     [Fact]
-    public void Create_fails_invalid_data()
+    public void Create_fails_invalid_user()
     {
         // Arrange
         using var scope = Factory.Services.CreateScope();

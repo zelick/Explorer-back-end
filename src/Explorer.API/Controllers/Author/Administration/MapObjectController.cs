@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Explorer.API.Controllers.Author.Administration
 {
-    [Authorize(Policy = "authorPolicy")]
+    [Authorize(Policy = "administratorAndAuthorPolicy")]
     [Route("api/administration/mapObject")]
     public class MapObjectController : BaseApiController
     {
@@ -42,7 +42,21 @@ namespace Explorer.API.Controllers.Author.Administration
         [HttpDelete("{id:int}")]
         public ActionResult Delete(int id)
         {
-            var result = _mapObjectService.Delete(id);
+            var result = _mapObjectService.DeleteObjectAndRequest(id);
+            return CreateResponse(result);
+        }
+
+        [HttpGet("{id:int}")]
+        public ActionResult<MapObjectDto> GetObject(int id)
+        {
+            var result = _mapObjectService.Get(id);
+            return CreateResponse(result);
+        }
+
+        [HttpPost("create/{userId:int}/{status}")]
+        public ActionResult<MapObjectDto> Create([FromBody] MapObjectDto mapObject, [FromRoute] int userId, [FromRoute] string status)
+        {
+            var result = _mapObjectService.Create(mapObject, userId, status);
             return CreateResponse(result);
         }
     }

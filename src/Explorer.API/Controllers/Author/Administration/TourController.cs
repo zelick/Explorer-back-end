@@ -1,6 +1,8 @@
-﻿using Explorer.BuildingBlocks.Core.UseCases;
+﻿using System.Security.Claims;
+using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
+using Explorer.Tours.Core.Domain;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,16 +27,16 @@ namespace Explorer.API.Controllers.Author.Administration
         }
 
         [HttpPut("{id:int}")]
-        public ActionResult<TourDto> Update([FromBody] TourDto tour)
+        public ActionResult<TourDto> Update([FromBody] TourDto tour, [FromQuery] int userId)
         {
-            var result = _tourService.Update(tour);
+            var result = _tourService.Update(tour, userId);
             return CreateResponse(result);
         }
 
         [HttpDelete("{id:int}")]
-        public ActionResult Delete(int id)
+        public ActionResult Delete(int id,[FromQuery] int userId)
         {
-            var result = _tourService.Delete(id);
+            var result = _tourService.Delete(id, userId);
             return CreateResponse(result);
         }
 
@@ -53,16 +55,16 @@ namespace Explorer.API.Controllers.Author.Administration
         }
 
         [HttpPut("add/{tourId:int}/{equipmentId:int}")]
-        public ActionResult<TourDto> AddEquipment(int tourId, int equipmentId)
+        public ActionResult<TourDto> AddEquipment(int tourId, int equipmentId, [FromQuery] int userId)
         {
-            var result = _tourService.AddEquipment(tourId, equipmentId);
+            var result = _tourService.AddEquipment(tourId, equipmentId, userId);
             return CreateResponse(result);
         }
 
         [HttpPut("remove/{tourId:int}/{equipmentId:int}")]
-        public ActionResult<TourDto> RemoveEquipment(int tourId, int equipmentId)
+        public ActionResult<TourDto> RemoveEquipment(int tourId, int equipmentId, [FromQuery] int userId)
         {
-            var result = _tourService.RemoveEquipment(tourId, equipmentId);
+            var result = _tourService.RemoveEquipment(tourId, equipmentId, userId);
             return CreateResponse(result);
         }
 
@@ -73,6 +75,25 @@ namespace Explorer.API.Controllers.Author.Administration
             return CreateResponse(result);
         }
 
+        [HttpPut("publishedTours/{id:int}")]
+        public ActionResult<TourDto> Publish(int id, [FromQuery] int userId)
+        {
+            var result = _tourService.Publish(id, userId);
+            return CreateResponse(result);
+        }
 
+        [HttpPut("archivedTours/{id:int}")]
+        public ActionResult<TourDto> Archive(int id, [FromQuery] int userId)
+        {
+            var result = _tourService.Archive(id, userId);
+            return CreateResponse(result);
+        }
+
+        [HttpPut("tourTime/{id:int}")]
+        public ActionResult<TourDto> AddTime(TourTimesDto tourTimesDto, int id, [FromQuery] int userId)
+        {
+            var result = _tourService.AddTime(tourTimesDto, id, userId);
+            return CreateResponse(result);
+        }
     }
 }

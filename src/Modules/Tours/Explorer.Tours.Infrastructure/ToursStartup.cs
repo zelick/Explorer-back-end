@@ -4,6 +4,8 @@ using Explorer.Tours.API.Public;
 using Explorer.Tours.API.Public.Administration;
 using Explorer.Tours.Core.Domain;
 using Explorer.Tours.Core.Domain.RepositoryInterfaces;
+using Explorer.Tours.Core.Domain.TourExecutions;
+using Explorer.Tours.Core.Domain.Tours;
 using Explorer.Tours.Core.Mappers;
 using Explorer.Tours.Core.UseCases;
 using Explorer.Tours.Core.UseCases.Administration;
@@ -30,18 +32,24 @@ public static class ToursStartup
         services.AddScoped<IEquipmentService, EquipmentService>();
         services.AddScoped<IMapObjectService, MapObjectService>();
         services.AddScoped<ITourPreferenceService, TourPreferenceService>();
+        services.AddScoped<ITouristPositionService, TouristPositionService>();
+        services.AddScoped<ITourExecutionService,TourExecutionService>();
         services.AddScoped<ICheckpointService, CheckpointService>();
         services.AddScoped<ITourService, TourService>();
         services.AddScoped<IReportedIssuesReviewService, ReportedIssuesReviewService>();
         services.AddScoped<IReportingIssueService, ReportingIssueService>();
         services.AddScoped<IReportedIssueNotificationService, ReportedIssueNotificationService>();
         services.AddScoped<ITourRatingService, TourRatingService>();
+        services.AddScoped<IPublicCheckpointService, PublicCheckpointService>();
+        services.AddScoped<IPublicObjectService, PublicMapObjectService>();
+        services.AddScoped<ITourExecutionService, TourExecutionService>();
     }
     private static void SetupInfrastructure(IServiceCollection services)
     {
         services.AddScoped(typeof(ICrudRepository<Equipment>), typeof(CrudDatabaseRepository<Equipment, ToursContext>));
         services.AddScoped(typeof(ICrudRepository<Explorer.Tours.Core.Domain.MapObject>), typeof(CrudDatabaseRepository<Explorer.Tours.Core.Domain.MapObject, ToursContext>));
         services.AddScoped(typeof(ICrudRepository<TourPreference>), typeof(CrudDatabaseRepository<TourPreference, ToursContext>));
+        services.AddScoped(typeof(ICrudRepository<TouristPosition>), typeof(CrudDatabaseRepository<TouristPosition, ToursContext>));
         services.AddScoped(typeof(ICheckpointRepository), typeof(CheckpointDatabaseRepository));
         services.AddScoped(typeof(IReportedIssueRepository), typeof(ReportedIssuesDatabaseRepository));
         services.AddScoped(typeof(ICrudRepository<Tour>), typeof(CrudDatabaseRepository<Tour, ToursContext>));
@@ -49,6 +57,13 @@ public static class ToursStartup
         services.AddScoped(typeof(ITourRepository), typeof(TourDatabaseRepository));
         services.AddScoped(typeof(IEquipmentRepository), typeof(EquipmentDatabaseRepository));
         services.AddScoped(typeof(ICrudRepository<ReportedIssue>), typeof(CrudDatabaseRepository<ReportedIssue, ToursContext>));
+        services.AddScoped(typeof(ICrudRepository<PublicMapObject>), typeof(CrudDatabaseRepository<PublicMapObject, ToursContext>));
+        services.AddScoped(typeof(ICrudRepository<PublicCheckpoint>), typeof(CrudDatabaseRepository<PublicCheckpoint, ToursContext>));
+
+
+        services.AddScoped(typeof(ITourExecutionRepository),typeof(TourExecutionDatabaseRepository));
+		services.AddScoped<ITourRatingRepository, TourRatingDatabaseRepository>();
+		services.AddScoped(typeof(ICrudRepository<TourExecution>),typeof(CrudDatabaseRepository<TourExecution, ToursContext>));
         services.AddScoped(typeof(IReportedIssueNotificationRepository), typeof(ReportedIssueNotificationDatabaseRepository));
         services.AddScoped(typeof(ICrudRepository<ReportedIssueNotification>), typeof(CrudDatabaseRepository<ReportedIssueNotification, ToursContext>));
         services.AddScoped(typeof(ICrudRepository<TourRating>), typeof(CrudDatabaseRepository<TourRating, ToursContext>));

@@ -1,12 +1,12 @@
-﻿using Explorer.Blog.Core.Domain;
+﻿using Explorer.Blog.Core.Domain.BlogPosts;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Explorer.Blog.Infrastructure.Database;
 
 public class BlogContext : DbContext
 {
     public DbSet<BlogPost> BlogPosts { get; set; }
-    public DbSet<BlogComment> BlogComments { get; set; }
 
     public BlogContext(DbContextOptions<BlogContext> options) : base(options) {}
 
@@ -14,14 +14,10 @@ public class BlogContext : DbContext
     {
         modelBuilder.HasDefaultSchema("blog");
 
-        ConfigureBlogComment(modelBuilder);
-    }
+        modelBuilder.Entity<BlogPost>()
+            .Property(item => item.Ratings).HasColumnType("jsonb");
 
-    private static void ConfigureBlogComment(ModelBuilder modelBuilder)
-    {
-        modelBuilder.Entity<BlogComment>()
-            .HasOne<BlogPost>()
-            .WithMany()
-            .HasForeignKey(bc => bc.BlogPostId);
+        modelBuilder.Entity<BlogPost>()
+            .Property(item => item.Comments).HasColumnType("jsonb");
     }
 }

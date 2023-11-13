@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Explorer.BuildingBlocks.Core.UseCases;
+using Explorer.Tours.Core.Domain.Tours;
 
 namespace Explorer.Tours.Core.Domain.RepositoryInterfaces
 {
@@ -11,6 +12,8 @@ namespace Explorer.Tours.Core.Domain.RepositoryInterfaces
     {
         bool Exists(long id);
         List<Tour> GetToursByAuthor(long id);
+        List<Tour> GetToursByIds(List<long> tourIds);
+        List<Tour> GetPublishedTours();
         Tour Close(long id);
     }
 }
