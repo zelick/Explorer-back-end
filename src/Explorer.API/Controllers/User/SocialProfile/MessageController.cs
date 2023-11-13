@@ -1,6 +1,5 @@
 ﻿using Explorer.Stakeholders.API.Dtos;
 using Explorer.Stakeholders.API.Public;
-using Explorer.Stakeholders.Core.Domain;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Explorer.API.Controllers.User.SocialProfile
