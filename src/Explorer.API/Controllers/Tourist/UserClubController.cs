@@ -32,7 +32,7 @@ namespace Explorer.API.Controllers.Tourist
 		}
 
 
-        [HttpGet("User/{userId:int}")]
+        [HttpGet("user/{userId:int}")]
 		public ActionResult<PagedResult<ClubDto>> GetAll(int userId)
 		{
 			var result = _clubService.GetClubsByUser(userId);
