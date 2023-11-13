@@ -15,17 +15,20 @@ namespace Explorer.Stakeholders.Tests.Integration.SocialProfile
         [Fact]
         public void Retrieves()
         {
-            // Arrange
+            //Arrange
             using var scope = Factory.Services.CreateScope();
             var controller = CreateController(scope);
-            int id = -1;
+            int id = -13;
 
             // Act
-            var result = ((ObjectResult)controller.GetSocialProfile(-1).Result)?.Value as SocialProfileDto;
+            var result = ((ObjectResult)controller.GetSocialProfile(id).Result)?.Value as SocialProfileDto;
 
             // Assert
             result.ShouldNotBeNull();
             result.Id.ShouldBe(id);
+            result.Followable.Count.ShouldBe(3);
+            result.Followed.Count.ShouldBe(3);
+            result.Followers.Count.ShouldBe(1);
         }
 
 

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Stakeholders.API.Dtos;
 using Explorer.Stakeholders.API.Public;
 using Explorer.Stakeholders.Core.Domain.RepositoryInterfaces;
@@ -21,7 +22,10 @@ namespace Explorer.Stakeholders.Core.UseCases
 
         public Result<SocialProfileDto> Follow(int followerId, int followedId)
         {
-            if(followerId == followedId) { throw new InvalidOperationException("You cannot follow yourself."); }
+            if (followerId == followedId)
+            {
+                return Result.Fail(FailureCode.InvalidArgument).WithError("You cannot follow yourself.");
+            }
 
             var socialProfile = _socialProfileRepository.Get(followerId);
             var followedUser = _userRepository.GetUserById(followedId);
@@ -37,6 +41,10 @@ namespace Explorer.Stakeholders.Core.UseCases
 
         public Result<SocialProfileDto> UnFollow(int followerId, int unFollowedUserId)
         {
+            if (followerId == unFollowedUserId)
+            {
+                return Result.Fail(FailureCode.InvalidArgument).WithError("You cannot unfollow yourself.");
+            }
             var socialProfile = _socialProfileRepository.Get(followerId);
             var unFollowedUser = _userRepository.GetUserById(unFollowedUserId);
 

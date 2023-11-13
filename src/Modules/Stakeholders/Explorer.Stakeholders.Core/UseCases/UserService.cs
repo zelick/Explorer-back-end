@@ -18,10 +18,10 @@ using Explorer.Stakeholders.API.Internal;
 namespace Explorer.Stakeholders.Core.UseCases
 {
     public class UserService : CrudService<UserDto, User>, IUserService, IInternalUserService
-	  {
+    {
         //rep za kupca 
         private readonly ICustomerRepository _customerRepository;
-		    public UserService(ICrudRepository<User> repository, IMapper mapper, ICustomerRepository customerRepository) : base(repository, mapper) 
+        public UserService(ICrudRepository<User> repository, IMapper mapper, ICustomerRepository customerRepository) : base(repository, mapper) 
         {
             _customerRepository = customerRepository;
         }
