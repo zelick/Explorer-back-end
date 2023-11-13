@@ -39,12 +39,14 @@ namespace Explorer.API.Controllers.Author.Administration
             return CreateResponse(result);
         }
 
+        /*
         [HttpPost]
         public ActionResult<CheckpointDto> Create([FromBody] CheckpointDto checkpoint, [FromQuery] int userId)
         {
             var result = _checkpointService.Create(checkpoint, userId);
             return CreateResponse(result);
         }
+        */
 
         [HttpPut("{id:int}")]
         public ActionResult<CheckpointDto> Update([FromBody] CheckpointDto checkpoint, [FromQuery] int userId)
@@ -78,7 +80,6 @@ namespace Explorer.API.Controllers.Author.Administration
         public ActionResult<CheckpointDto> DeleteCheckpointSecret(int id)
         {
             var result = _checkpointService.DeleteChechpointSecreat(id);
-            var result = _checkpointService.DeleteChekcpointAndRequest(id);
             return CreateResponse(result);
         }
 
