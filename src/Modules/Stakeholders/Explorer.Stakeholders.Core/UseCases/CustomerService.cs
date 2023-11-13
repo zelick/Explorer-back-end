@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Stakeholders.API.Dtos;
+using Explorer.Stakeholders.API.Internal;
 using Explorer.Stakeholders.API.Public;
 using Explorer.Stakeholders.Core.Domain.RepositoryInterfaces;
 using Explorer.Stakeholders.Core.Domain.Shopping;
@@ -16,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace Explorer.Stakeholders.Core.UseCases
 {
-    public class CustomerService: CrudService<CustomerDto, Customer>, ICustomerService
+    public class CustomerService: CrudService<CustomerDto, Customer>, ICustomerService, IInternalShoppingService
     {
         private readonly ICustomerRepository _customerRepository;
         private readonly IShoppingCartRepository _shoppingCartRepository;
@@ -62,6 +63,11 @@ namespace Explorer.Stakeholders.Core.UseCases
             {
                 return new List<long>();
             }
+        }
+
+        public bool IsTourPurchasedByUser(long touristId, long tourId)
+        {
+            return this.getCustomersPurchasedTours(touristId).Find(t => t == tourId) != null;
         }
     }
 }
