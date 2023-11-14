@@ -1,5 +1,6 @@
 ﻿using Explorer.BuildingBlocks.Core.Domain;
 using System.ComponentModel.DataAnnotations;
+using System.Threading.Channels;
 
 namespace Explorer.Tours.Core.Domain.Tours
 {
@@ -18,6 +19,7 @@ namespace Explorer.Tours.Core.Domain.Tours
         public List<ArchivedTour>? ArchivedTours { get; init; }
         public List<TourTime>? TourTimes { get; private set; }
         public List<TourRating>? TourRatings { get; init; }
+        public bool Closed { get; private set; }
 
         public Tour AddEquipment(Equipment equipment)
         {
@@ -39,7 +41,7 @@ namespace Explorer.Tours.Core.Domain.Tours
 
         public Tour() { }
 
-        public Tour(int authorId, string name, string? description, Demandigness? demandignessLevel, List<string>? tags, TourStatus status = TourStatus.Draft, double price = 0)
+        public Tour(int authorId, string name, string? description, Demandigness? demandignessLevel, List<string>? tags, TourStatus status = TourStatus.Draft, double price = 0, bool closed=false)
         {
             if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("Invalid Name.");
             if (authorId == 0) throw new ArgumentException("Invalid author");
@@ -55,6 +57,7 @@ namespace Explorer.Tours.Core.Domain.Tours
             Equipment = new List<Equipment>();
             Checkpoints = new List<Checkpoint>();
             TourRatings = new List<TourRating>();
+            Closed= closed;
         }
 
         public bool IsForPublishing()
@@ -99,6 +102,10 @@ namespace Explorer.Tours.Core.Domain.Tours
             return false;
         }
 
+        public void Close()
+        {
+            Closed= true;
+        }
 
         public void AddTime(double time, double distance, string type)
         {

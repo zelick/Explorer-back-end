@@ -30,7 +30,7 @@ public class TourRatingTouristCommandTests : BaseToursIntegrationTest
             TourId = -4,
             TourDate = new DateTime(),
             CreationDate = new DateTime(),
-            Pictures = null
+            ImageNames = new List<string> { "image1.jpg", "image2.jpg" }
         };
 
         // Act
@@ -44,9 +44,10 @@ public class TourRatingTouristCommandTests : BaseToursIntegrationTest
         result.TourDate.ShouldBe(newEntity.TourDate);
         result.TouristId.ShouldBe(newEntity.TouristId);
         result.CreationDate.ShouldBe(newEntity.CreationDate); // one tourist can't leave more ratings at the same time
+        result.ImageNames.ShouldNotBeNull();
 
         // Assert - Database
-        var storedEntity = dbContext.TourRating.FirstOrDefault(i => i.CreationDate == newEntity.CreationDate);
+        var storedEntity = dbContext.TourRating.FirstOrDefault(i => i.CreationDate == newEntity.CreationDate && i.Comment.Equals(newEntity.Comment));
         storedEntity.ShouldNotBeNull();
         storedEntity.Id.ShouldBe(result.Id);
     }   
@@ -59,7 +60,8 @@ public class TourRatingTouristCommandTests : BaseToursIntegrationTest
         var controller = CreateController(scope);
         var updatedEntity = new TourRatingDto
         {
-            Rating = 7
+            Rating = 7,
+            ImageNames = new List<string> { "image1.jpg", "image2.jpg" }
         };
 
         // Act

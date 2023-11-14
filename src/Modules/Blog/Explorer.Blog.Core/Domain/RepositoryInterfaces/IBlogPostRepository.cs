@@ -1,4 +1,5 @@
-﻿using Explorer.BuildingBlocks.Core.UseCases;
+﻿using Explorer.Blog.Core.Domain.BlogPosts;
+using Explorer.BuildingBlocks.Core.UseCases;
 
 namespace Explorer.Blog.Core.Domain.RepositoryInterfaces;
 

@@ -2,20 +2,22 @@
 using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Blog.API.Dtos;
 using Explorer.Blog.API.Public;
-using Explorer.Blog.Core.Domain;
 using Explorer.Blog.Core.Domain.RepositoryInterfaces;
 using Explorer.Stakeholders.API.Internal;
 using FluentResults;
+using Explorer.Blog.Core.Domain.BlogPosts;
 
 namespace Explorer.Blog.Core.UseCases;
 
 public class BlogPostService : CrudService<BlogPostDto, BlogPost>, IBlogPostService
 {
+    private readonly IMapper _mapper;
     private readonly IBlogPostRepository _blogPostsRepository;
     private readonly IInternalUserService _userService;
 
     public BlogPostService(IBlogPostRepository repository, IMapper mapper, IInternalUserService userService) : base(repository, mapper)
     {
+        _mapper = mapper;
         _blogPostsRepository = repository;
         _userService = userService;
     }
@@ -28,7 +30,7 @@ public class BlogPostService : CrudService<BlogPostDto, BlogPost>, IBlogPostServ
             var blogPostDtos = MapToDto(blogPosts);
             foreach (var blogPostDto in blogPostDtos.Value.Results)
             {
-                AddUsername(blogPostDto);
+                blogPostDto.Username = GetUsername(blogPostDto.UserId);
             }
 
             return blogPostDtos;
@@ -47,7 +49,7 @@ public class BlogPostService : CrudService<BlogPostDto, BlogPost>, IBlogPostServ
             var blogPostDtos = MapToDto(blogPosts);
             foreach (var blogPostDto in blogPostDtos.Value.Results)
             {
-                AddUsername(blogPostDto);
+                blogPostDto.Username = GetUsername(blogPostDto.UserId);
             }
 
             return blogPostDtos;
@@ -69,7 +71,7 @@ public class BlogPostService : CrudService<BlogPostDto, BlogPost>, IBlogPostServ
             var blogPostDtos = MapToDto(blogPosts);
             foreach (var blogPostDto in blogPostDtos.Value.Results)
             {
-                AddUsername(blogPostDto);
+                blogPostDto.Username = GetUsername(blogPostDto.UserId);
             }
 
             return blogPostDtos;
@@ -90,7 +92,9 @@ public class BlogPostService : CrudService<BlogPostDto, BlogPost>, IBlogPostServ
         {
             var blogPost = CrudRepository.Get(id);
             var blogPostDto = MapToDto(blogPost);
-            AddUsername(blogPostDto);
+
+            blogPostDto.Username = GetUsername(blogPostDto.UserId);
+            blogPostDto.Comments?.ForEach(comment => comment.Username = GetUsername(comment.UserId));
 
             return blogPostDto;
         }
@@ -111,6 +115,7 @@ public class BlogPostService : CrudService<BlogPostDto, BlogPost>, IBlogPostServ
 
             blogPost.Update(MapToDomain(blogPostDto));
             var result = CrudRepository.Update(blogPost);
+
             return MapToDto(result);
         }
         catch (KeyNotFoundException e)
@@ -130,6 +135,7 @@ public class BlogPostService : CrudService<BlogPostDto, BlogPost>, IBlogPostServ
             var blogPost = _blogPostsRepository.Get(id);
             blogPost.Close();
             var result = _blogPostsRepository.Update(blogPost);
+
             return MapToDto(result);
         }
         catch (ArgumentException e)
@@ -144,21 +150,16 @@ public class BlogPostService : CrudService<BlogPostDto, BlogPost>, IBlogPostServ
    
     public Result<BlogPostDto> Rate(int id, BlogRatingDto blogRatingDto)
     {
-        var blogPost = _blogPostsRepository.Get(id);
-
         try
         {
+            var blogPost = _blogPostsRepository.Get(id);
             Enum.TryParse<Rating>(blogRatingDto.Rating, out var rating);
 
-            var blogRating = new BlogRating
-            {
-                UserId = blogRatingDto.UserId,
-                Rating = rating,
-                TimeStamp = DateTime.Now
-            };
+            var blogRating = _mapper.Map<BlogRatingDto, BlogRating>(blogRatingDto);
 
             blogPost.AddRating(blogRating);
             var result = _blogPostsRepository.Update(blogPost);
+            
             return MapToDto(result);
         }
         catch (KeyNotFoundException e)
@@ -171,9 +172,9 @@ public class BlogPostService : CrudService<BlogPostDto, BlogPost>, IBlogPostServ
         }
     }
     
-    private void AddUsername(BlogPostDto blogPostDto)
+    private string GetUsername(int userId)
     {
-        var user = _userService.Get(blogPostDto.UserId);
-        blogPostDto.Username = user.Value.Username;
+        var user = _userService.Get(userId);
+        return user.Value.Username;
     }
 }

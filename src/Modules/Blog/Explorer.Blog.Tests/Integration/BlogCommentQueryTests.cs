@@ -21,17 +21,16 @@ public class BlogCommentQueryTests : BaseBlogIntegrationTest
         var controller = CreateController(scope);
 
         // Act
-        var result = ((ObjectResult)controller.GetAll(0, 0).Result)?.Value as PagedResult<BlogCommentDto>;
+        var result = ((ObjectResult)controller.GetById(-11).Result)?.Value as BlogPostDto;
 
         // Assert
         result.ShouldNotBeNull();
-        result.Results.Count.ShouldBe(3);
-        result.TotalCount.ShouldBe(3);
+        result.Comments.Count.ShouldBe(2);
     }
 
-    private static BlogCommentController CreateController(IServiceScope scope)
+    private static BlogPostController CreateController(IServiceScope scope)
     {
-        return new BlogCommentController(scope.ServiceProvider.GetRequiredService<IBlogCommentService>())
+        return new BlogPostController(scope.ServiceProvider.GetRequiredService<IBlogPostService>())
         {
             ControllerContext = BuildContext("-1")
         };

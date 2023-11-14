@@ -25,7 +25,7 @@ public class BlogPostCommandTests : BaseBlogIntegrationTest
             Title = "Sample Title",
             Description = "Sample Description",
             CreationDate = DateTime.Now.ToUniversalTime(),
-            ImageUrls = new List<string> { "image1.jpg", "image2.jpg" },
+            ImageNames = new List<string> { "image1.jpg", "image2.jpg" },
             Status = "DRAFT"
         };
 
@@ -51,7 +51,7 @@ public class BlogPostCommandTests : BaseBlogIntegrationTest
         {
             UserId = 42,
             Description = "I don't have a title...",
-            ImageUrls = new List<string> { "image1.jpg", "image2.jpg" },
+            ImageNames = new List<string> { "image1.jpg", "image2.jpg" },
         };
 
         var result = ((ObjectResult)controller.Create(newEntity).Result);
@@ -73,10 +73,10 @@ public class BlogPostCommandTests : BaseBlogIntegrationTest
             Title = "Sample Title 1",
             Description = "Sample Description 1",
             CreationDate = DateTime.Now.ToUniversalTime(),
-            ImageUrls = new List<string> { "sample_image1.jpg", "sample_image2.jpg" },
+            ImageNames = new List<string> { "sample_image1.jpg", "sample_image2.jpg" },
         };
 
-        var result = ((ObjectResult)controller.Update(updatedEntity).Result)?.Value as BlogPostDto;
+        var result = ((ObjectResult)controller.Update(-1, updatedEntity).Result)?.Value as BlogPostDto;
 
         result.ShouldNotBeNull();
         result.Id.ShouldBe(-1);
@@ -84,7 +84,7 @@ public class BlogPostCommandTests : BaseBlogIntegrationTest
         result.Title.ShouldBe(updatedEntity.Title);
         result.Description.ShouldBe(updatedEntity.Description);
         result.CreationDate.ShouldBe(updatedEntity.CreationDate);
-        result.ImageUrls.ShouldBe(updatedEntity.ImageUrls);
+        result.ImageNames.ShouldBe(updatedEntity.ImageNames);
 
         var storedEntity = dbContext.BlogPosts.FirstOrDefault(i => i.Title == updatedEntity.Title);
         storedEntity.ShouldNotBeNull();
@@ -106,10 +106,10 @@ public class BlogPostCommandTests : BaseBlogIntegrationTest
             Title = "Sample Title 1",
             Description = "Sample Description 1",
             CreationDate = DateTime.Now.ToUniversalTime(),
-            ImageUrls = new List<string> { "sample_image1.jpg", "sample_image2.jpg" }
+            ImageNames = new List<string> { "sample_image1.jpg", "sample_image2.jpg" }
         };
 
-        var result = (ObjectResult)controller.Update(updatedEntity).Result;
+        var result = (ObjectResult)controller.Update(-42, updatedEntity).Result;
 
         result.ShouldNotBeNull();
         result.StatusCode.ShouldBe(404);

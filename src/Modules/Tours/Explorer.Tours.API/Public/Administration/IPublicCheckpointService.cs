@@ -1,4 +1,5 @@
-﻿using Explorer.Tours.API.Dtos;
+﻿using Explorer.BuildingBlocks.Core.UseCases;
+using Explorer.Tours.API.Dtos;
 using FluentResults;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,7 @@ namespace Explorer.Tours.API.Public.Administration
         Result<PublicCheckpointDto> Create(PublicCheckpointDto publicCheckpoint);
         Result<PublicCheckpointDto> Update(PublicCheckpointDto publicCheckpoint);
         Result Delete(int id);
-        Result<PublicCheckpointDto> Create(int checkpointRequestId);
+        Result<PagedResult<PublicCheckpointDto>> GetPaged(int page, int pageSize);
+        Result<PublicCheckpointDto> Create(int checkpointRequestId, string notificationComment);
     }
 }

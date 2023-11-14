@@ -24,6 +24,7 @@ namespace Explorer.Tours.Tests.Integration.Administration
         {
             // Arrange
             using var scope = Factory.Services.CreateScope();
+            var status = "Private";
             var controller = CreateController(scope);
             var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
             var newEntity = new CheckpointDto
@@ -38,7 +39,7 @@ namespace Explorer.Tours.Tests.Integration.Administration
             };
 
             // Act
-            var result = ((ObjectResult)controller.Create(newEntity, 2).Result)?.Value as CheckpointDto;
+            var result = ((ObjectResult)controller.Create(newEntity, 2, status).Result)?.Value as CheckpointDto;
 
             // Assert - Response
             result.ShouldNotBeNull();
@@ -61,6 +62,7 @@ namespace Explorer.Tours.Tests.Integration.Administration
             // Arrange
             using var scope = Factory.Services.CreateScope();
             var controller = CreateController(scope);
+            var status = "Private";
             var updatedEntity = new CheckpointDto
             {
                 Name = "Test",
@@ -69,7 +71,7 @@ namespace Explorer.Tours.Tests.Integration.Administration
             };
 
             // Act
-            var result = (ObjectResult)controller.Create(updatedEntity, 2).Result;
+            var result = (ObjectResult)controller.Create(updatedEntity, 2, status).Result;
 
             // Assert
             result.ShouldNotBeNull();

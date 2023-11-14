@@ -46,6 +46,8 @@ public static class StakeholdersStartup
         services.AddScoped<IInternalUserService, UserService>();
         services.AddScoped<ICustomerService, CustomerService>();
         services.AddScoped<IShoppingCartService, ShoppingCartService>();
+        services.AddScoped<IInternalShoppingService, CustomerService>();
+        services.AddScoped<IInternalPersonService, InternalPersonService>();
     }
 
 

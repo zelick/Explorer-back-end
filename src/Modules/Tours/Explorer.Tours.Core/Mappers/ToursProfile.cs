@@ -19,7 +19,12 @@ public class ToursProfile : Profile
         CreateMap<TourPreferenceDto, TourPreference>().ReverseMap();
         CreateMap<TouristPositionDto, TouristPosition>().ReverseMap();
         CreateMap<CheckpointDto, Checkpoint>().ReverseMap();
-        CreateMap<ReportedIssueDto, ReportedIssue>().ReverseMap();
+        CreateMap<TourDto, Tour>().ReverseMap();
+        CreateMap<ReportedIssueDto, ReportedIssue>()
+                .ForMember(dest => dest.Comments, opt => opt.MapFrom(src => src.Comments))
+                .ReverseMap();
+        CreateMap<ReportedIssueCommentDto, ReportedIssueComment>().ReverseMap();
+        CreateMap<ReportedIssueNotificationDto, ReportedIssueNotification>().ReverseMap();
         CreateMap<TourRatingDto, TourRating>().ReverseMap();
         CreateMap<PublicCheckpointDto, PublicCheckpoint>().ReverseMap();
         CreateMap<PublicMapObjectDto, PublicMapObject>()

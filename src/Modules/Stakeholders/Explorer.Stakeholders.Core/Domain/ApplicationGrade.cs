@@ -14,9 +14,9 @@ namespace Explorer.Stakeholders.Core.Domain
         public int Rating { get; init; }
         public string? Comment { get; init; }
         public DateTime Created { get; init; }
-        public string UserId { get; init; }
+        public long UserId { get; init; }
 
-        public ApplicationGrade(int rating, string? comment, DateTime created, string userId)
+        public ApplicationGrade(int rating, string? comment, DateTime created, long userId)
         {
             if (rating < 1 || rating > 5) throw new ArgumentException("Invalid rating"); 
             else Rating = rating;
