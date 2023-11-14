@@ -32,8 +32,8 @@ namespace Explorer.Tours.Tests.Integration.Administration
 
             // Assert
             result.ShouldNotBeNull();
-            result.Results.Count.ShouldBe(4);
-            result.TotalCount.ShouldBe(4);
+            result.Results.Count.ShouldBe(5);
+            result.TotalCount.ShouldBe(5);
         }
 
         private static CheckpointController CreateController(IServiceScope scope)
