@@ -1,12 +1,10 @@
-﻿using Explorer.API.Controllers.Administrator.Administration;
-using Explorer.API.Controllers.Author.Administration;
-using Explorer.API.Controllers.Tourist;
+﻿using Explorer.API.Controllers.Tourist.Tourism;
 using Explorer.Stakeholders.API.Dtos;
+using Explorer.Stakeholders.API.Dtos.Shopping;
 using Explorer.Stakeholders.API.Public;
 using Explorer.Stakeholders.Infrastructure.Database;
-using Explorer.Tours.API.Dtos;
-using Explorer.Tours.API.Public.Administration;
-using Explorer.Tours.Infrastructure.Database;
+using FluentResults;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
@@ -19,9 +17,9 @@ using System.Threading.Tasks;
 namespace Explorer.Stakeholders.Tests.Integration.Tourist
 {
     [Collection("Sequential")]
-    public class ClubRequestCommandTests : BaseStakeholdersIntegrationTest
+    public class ShoppingCartCommandTests : BaseStakeholdersIntegrationTest
     {
-        public ClubRequestCommandTests(StakeholdersTestFactory factory) : base(factory) { }
+        public ShoppingCartCommandTests(StakeholdersTestFactory factory) : base(factory) { }
 
         [Fact]
         public void Creates()
@@ -30,48 +28,26 @@ namespace Explorer.Stakeholders.Tests.Integration.Tourist
             using var scope = Factory.Services.CreateScope();
             var controller = CreateController(scope);
             var dbContext = scope.ServiceProvider.GetRequiredService<StakeholdersContext>();
-            var newEntity = new ClubRequestDto
+            var newEntity = new ShoppingCartDto
             {
-                ClubId = -5, 
-                TouristId = -21, 
-                Status = "Processing"
+                TouristId = -23,
+                Items = null,
+                Price = 0.0
             };
 
             // Act
-            var result = ((ObjectResult)controller.Create(newEntity).Result)?.Value as ClubRequestDto;
+            var result = ((ObjectResult)controller.Create(newEntity).Result)?.Value as ShoppingCartDto;
 
             // Assert - Response
             result.ShouldNotBeNull();
             result.Id.ShouldNotBe(0);
-            result.ClubId.ShouldBe(newEntity.ClubId);
             result.TouristId.ShouldBe(newEntity.TouristId);
 
             // Assert - Database
-            var storedEntity = dbContext.Requests.FirstOrDefault(i => i.ClubId == newEntity.ClubId && i.TouristId == newEntity.TouristId);
+            var storedEntity = dbContext.ShoppingCarts.FirstOrDefault(i => i.TouristId == newEntity.TouristId);
             storedEntity.ShouldNotBeNull();
             storedEntity.Id.ShouldBe(result.Id);
         }
-
-      /*  [Fact]
-        public void Create_fails_invalid_data()
-        {
-            // Arrange
-            using var scope = Factory.Services.CreateScope();
-            var controller = CreateController(scope);
-            var updatedEntity = new ClubRequestDto
-            {
-                ClubId = -999,
-                TouristId = -777,
-                Status = "Processing"
-            };
-
-            // Act
-            var result = (ObjectResult)controller.Create(updatedEntity).Result;
-
-            // Assert
-            result.ShouldNotBeNull();
-            result.StatusCode.ShouldBe(400);
-        }*/
 
         [Fact]
         public void Updates()
@@ -81,30 +57,25 @@ namespace Explorer.Stakeholders.Tests.Integration.Tourist
             var controller = CreateController(scope);
             var dbContext = scope.ServiceProvider.GetRequiredService<StakeholdersContext>();
 
-            var updatedEntity = new ClubRequestDto
+            var updatedEntity = new ShoppingCartDto
             {
                 Id = -1,
-                ClubId = -1,
-                TouristId = -1,
-                Status = "Accepted"
+                TouristId = -23,
+                Items = null,
+                Price = 250.0
             };
 
             // Act
-            var result = ((ObjectResult)controller.Update(updatedEntity).Result)?.Value as ClubRequestDto;
+            var result = ((ObjectResult)controller.Update(updatedEntity).Result)?.Value as ShoppingCartDto;
 
             // Assert - Response
             result.ShouldNotBeNull();
             result.Id.ShouldBe(-1);
-            result.ClubId.ShouldBe(updatedEntity.ClubId);
             result.TouristId.ShouldBe(updatedEntity.TouristId);
-            result.Status.ShouldBe(updatedEntity.Status);
 
             // Assert - Database
-            var storedEntity = dbContext.Requests.FirstOrDefault(i => i.Status == "Accepted");
+            var storedEntity = dbContext.ShoppingCarts.FirstOrDefault(i => i.Price == 250.0);
             storedEntity.ShouldNotBeNull();
-            storedEntity.Status.ShouldBe(updatedEntity.Status);
-            var oldEntity = dbContext.Requests.FirstOrDefault(i => i.Status == "Processing" && i.Id == -1);
-            oldEntity.ShouldBeNull();
         }
 
         [Fact]
@@ -113,13 +84,12 @@ namespace Explorer.Stakeholders.Tests.Integration.Tourist
             // Arrange
             using var scope = Factory.Services.CreateScope();
             var controller = CreateController(scope);
-            var updatedEntity = new ClubRequestDto
+            var updatedEntity = new ShoppingCartDto
             {
                 Id = -1000,
-                ClubId = -1000,
-                TouristId = -1000,
-                Status = "nekiStatus"
-
+                TouristId = -21,
+                Items = null,
+                Price = 250.0
             };
 
             // Act
@@ -139,35 +109,71 @@ namespace Explorer.Stakeholders.Tests.Integration.Tourist
             var dbContext = scope.ServiceProvider.GetRequiredService<StakeholdersContext>();
 
             // Act
-            var result = (OkResult)controller.Delete(-3);
+            var result = (OkResult)controller.Delete(-1);
 
             // Assert - Response
             result.ShouldNotBeNull();
             result.StatusCode.ShouldBe(200);
 
             // Assert - Database
-            var storedCourse = dbContext.Requests.FirstOrDefault(i => i.Id == -3);
+            var storedCourse = dbContext.ShoppingCarts.FirstOrDefault(i => i.Id == -3);
             storedCourse.ShouldBeNull();
         }
 
         [Fact]
-        public void Delete_fails_invalid_id()
+        public void Check_if_exists()
         {
             // Arrange
             using var scope = Factory.Services.CreateScope();
             var controller = CreateController(scope);
+            var dbContext = scope.ServiceProvider.GetRequiredService<StakeholdersContext>();
 
             // Act
-            var result = (ObjectResult)controller.Delete(-1000);
+            var result = controller.CheckShoppingCart(-21) as OkObjectResult;
 
             // Assert
-            result.ShouldNotBeNull();
-            result.StatusCode.ShouldBe(404);
+            Assert.NotNull(result);
+            Assert.Equal(StatusCodes.Status200OK, result.StatusCode);
+
         }
 
-        private static ClubRequestController CreateController(IServiceScope scope)
+        [Fact]
+        public void Get_shopping_cart()
         {
-            return new ClubRequestController(scope.ServiceProvider.GetRequiredService<IClubRequestService>())
+            // Arrange
+            using var scope = Factory.Services.CreateScope();
+            var controller = CreateController(scope);
+            var dbContext = scope.ServiceProvider.GetRequiredService<StakeholdersContext>();
+
+            // Act
+            var result = ((ObjectResult)controller.GetShoppingCart(-21).Result)?.Value as ShoppingCartDto;
+
+            result.ShouldNotBeNull();
+            result.Id.ShouldNotBe(0);
+            result.TouristId.ShouldBe(-21);
+
+        }
+
+        [Fact]
+        public void Delete_order_item()
+        {
+            // Arrange
+            using var scope = Factory.Services.CreateScope();
+            var controller = CreateController(scope);
+            var dbContext = scope.ServiceProvider.GetRequiredService<StakeholdersContext>();
+
+            // Act
+            var result = ((ObjectResult)controller.DeleteOrderItems(-1).Result)?.Value as ShoppingCartDto;
+
+            result.ShouldNotBeNull();
+            result.Id.ShouldNotBe(0);
+            result.Items.Count.ShouldBe(0);
+
+        }
+
+        private static ShoppingCartController CreateController(IServiceScope scope)
+        {
+            return new ShoppingCartController(scope.ServiceProvider.GetRequiredService<IShoppingCartService>())
             {
                 ControllerContext = BuildContext("-1")
             };

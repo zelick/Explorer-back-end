@@ -93,11 +93,19 @@ public class StakeholdersContext : DbContext
         .HasForeignKey(s => s.TouristId)
         .IsRequired();
 
+        /*
         modelBuilder.Entity<Customer>()
         .HasOne<ShoppingCart>()
         .WithMany()
         .HasForeignKey(s => s.ShoppingCartId)
         .IsRequired();
+        */
+
+        /*modelBuilder.Entity<Customer>()
+           .HasOne<ShoppingCart>()
+           .WithOne()
+           .HasForeignKey<Customer>(s => s.ShoppingCartId);
+        */
 
         /*modelBuilder.Entity<OrderItem>() 
         .HasOne<Tour>()
