@@ -5,6 +5,7 @@ DELETE FROM stakeholders."SocialProfiles";
 DELETE FROM stakeholders."UserFollowers";
 DELETE FROM stakeholders."Clubs";
 DELETE FROM stakeholders."Requests";
+DELETE FROM stakeholders."Messages";
 DELETE FROM stakeholders."ClubInvitations";
 DELETE FROM stakeholders."ObjectRequests";
 DELETE FROM stakeholders."CheckpointRequests";

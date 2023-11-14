@@ -23,7 +23,10 @@ namespace Explorer.Stakeholders.Core.UseCases
 
         public Result<MessageDto> Send(MessageDto messageDto)
         {
-            if(!CanSend(messageDto) || messageDto.SenderId == messageDto.RecipientId) throw new InvalidOperationException("You cannot send message.");
+            if (!CanSend(messageDto) || messageDto.SenderId == messageDto.RecipientId)
+            {
+                return Result.Fail(FailureCode.InvalidArgument).WithError("You cannot send message.");
+            }
             messageDto.SenderUsername = _userRepository.GetUserById(messageDto.SenderId).Username;
             var message = _messageRepository.Send(MapToDomain(messageDto));
 
