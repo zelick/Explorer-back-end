@@ -36,8 +36,13 @@ namespace Explorer.API.Controllers.Author.Administration
         }
 
         [HttpPut("{id:int}")]
-        public ActionResult<MapObjectDto> Update([FromBody] MapObjectDto mapObject)
+        public ActionResult<MapObjectDto> Update([FromForm] MapObjectDto mapObject, IFormFile picture = null)
         {
+            if (picture != null)
+            {
+                var pictureUrl = _imageService.UploadImages(new List<IFormFile> { picture });
+                mapObject.PictureURL = pictureUrl[0];
+            }
             var result = _mapObjectService.Update(mapObject);
             return CreateResponse(result);
         }
