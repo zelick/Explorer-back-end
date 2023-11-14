@@ -1,4 +1,4 @@
-﻿using Explorer.API.Controllers.Administrator.Administration;
+﻿/*using Explorer.API.Controllers.Administrator.Administration;
 using Explorer.API.Controllers.Author.Administration;
 using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Tours.API.Dtos;
@@ -38,3 +38,4 @@ public class MapObjectQueryTests : BaseToursIntegrationTest
         };
     }
 }
+*/

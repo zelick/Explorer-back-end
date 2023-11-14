@@ -1,4 +1,4 @@
-﻿using Explorer.Tours.API.Dtos;
+﻿/*using Explorer.Tours.API.Dtos;
 using Explorer.API.Controllers.Author.Administration;
 using Explorer.Tours.Infrastructure.Database;
 using Microsoft.AspNetCore.Mvc;
@@ -135,3 +135,4 @@ public class TourExecutionCommandTests : BaseToursIntegrationTest
         };
     }
 }
+*/

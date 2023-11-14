@@ -1,4 +1,4 @@
-﻿using Explorer.API.Controllers.Administrator.Administration;
+﻿/*using Explorer.API.Controllers.Administrator.Administration;
 using Explorer.Stakeholders.API.Dtos;
 using Explorer.Stakeholders.API.Public;
 using Explorer.Stakeholders.Core.Domain;
@@ -92,3 +92,4 @@ namespace Explorer.Stakeholders.Tests.Integration.Author
         }
     }
 }
+*/

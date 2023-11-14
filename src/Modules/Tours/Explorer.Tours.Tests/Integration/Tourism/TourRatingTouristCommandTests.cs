@@ -26,8 +26,8 @@ public class TourRatingTouristCommandTests : BaseToursIntegrationTest
         {
             Rating = 4,
             Comment = "neki komentar",
-            TouristId = -2,
-            TourId = -1,
+            TouristId = -21,
+            TourId = -4,
             TourDate = new DateTime(),
             CreationDate = new DateTime(),
             Pictures = null

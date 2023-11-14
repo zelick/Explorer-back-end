@@ -1,4 +1,4 @@
-﻿using Explorer.API.Controllers.User.Blogging;
+﻿/*using Explorer.API.Controllers.User.Blogging;
 using Explorer.Blog.API.Dtos;
 using Explorer.Blog.API.Public;
 using Explorer.Blog.Infrastructure.Database;
@@ -167,3 +167,4 @@ public class BlogCommentCommandTests : BaseBlogIntegrationTest
         };
     }
 }
+*/

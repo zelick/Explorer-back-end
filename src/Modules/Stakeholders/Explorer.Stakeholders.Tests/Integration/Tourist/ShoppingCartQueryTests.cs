@@ -1,10 +1,9 @@
-﻿/*using Explorer.API.Controllers.Administrator.Administration;
-using Explorer.API.Controllers.Tourist;
+﻿using Explorer.API.Controllers.Tourist;
+using Explorer.API.Controllers.Tourist.Tourism;
 using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Stakeholders.API.Dtos;
+using Explorer.Stakeholders.API.Dtos.Shopping;
 using Explorer.Stakeholders.API.Public;
-using Explorer.Tours.API.Dtos;
-using Explorer.Tours.API.Public.Administration;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
@@ -14,14 +13,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-
 namespace Explorer.Stakeholders.Tests.Integration.Tourist
 {
-
     [Collection("Sequential")]
-    public class ClubRequestQueryTests : BaseStakeholdersIntegrationTest
+    public class ShoppingCartQueryTests : BaseStakeholdersIntegrationTest
     {
-        public ClubRequestQueryTests(StakeholdersTestFactory factory) : base(factory) { }
+        public ShoppingCartQueryTests(StakeholdersTestFactory factory) : base(factory) { }
 
         [Fact]
         public void Retrieves_all()
@@ -31,17 +28,17 @@ namespace Explorer.Stakeholders.Tests.Integration.Tourist
             var controller = CreateController(scope);
 
             // Act
-            var result = ((ObjectResult)controller.GetAll(0, 0).Result)?.Value as PagedResult<ClubRequestDto>;
+            var result = ((ObjectResult)controller.GetAll(0, 0).Result)?.Value as PagedResult<ShoppingCartDto>;
 
             // Assert
             result.ShouldNotBeNull();
-            result.Results.Count.ShouldBe(3);
-            result.TotalCount.ShouldBe(3);
+            result.Results.Count.ShouldBe(2);
+            result.TotalCount.ShouldBe(2);
         }
 
-        private static ClubRequestController CreateController(IServiceScope scope)
+        private static ShoppingCartController CreateController(IServiceScope scope)
         {
-            return new ClubRequestController(scope.ServiceProvider.GetRequiredService<IClubRequestService>())
+            return new ShoppingCartController(scope.ServiceProvider.GetRequiredService<IShoppingCartService>())
             {
                 ControllerContext = BuildContext("-1")
             };
@@ -49,4 +46,3 @@ namespace Explorer.Stakeholders.Tests.Integration.Tourist
 
     }
 }
-*/
