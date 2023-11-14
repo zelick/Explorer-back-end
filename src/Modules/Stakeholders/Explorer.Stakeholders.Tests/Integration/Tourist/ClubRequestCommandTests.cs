@@ -1,4 +1,4 @@
-﻿/*using Explorer.API.Controllers.Administrator.Administration;
+﻿using Explorer.API.Controllers.Administrator.Administration;
 using Explorer.API.Controllers.Author.Administration;
 using Explorer.API.Controllers.Tourist;
 using Explorer.Stakeholders.API.Dtos;
@@ -72,7 +72,6 @@ namespace Explorer.Stakeholders.Tests.Integration.Tourist
             result.ShouldNotBeNull();
             result.StatusCode.ShouldBe(400);
         }*/
-/*
 
         [Fact]
         public void Updates()
@@ -176,4 +175,3 @@ namespace Explorer.Stakeholders.Tests.Integration.Tourist
 
     }
 }
-*/

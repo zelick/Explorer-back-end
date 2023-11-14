@@ -1,10 +1,9 @@
-﻿/*using Explorer.API.Controllers.Administrator.Administration;
+﻿using Explorer.API.Controllers.Administrator.Administration;
 using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Stakeholders.API.Dtos;
 using Explorer.Stakeholders.API.Public;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
-using Shouldly;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,11 +25,12 @@ namespace Explorer.Stakeholders.Tests.Integration.Author
             var controller = CreateController(scope);
 
             // Act
-            var result = ((ObjectResult)controller.GetAll().Result)?.Value as List<ObjectRequestDto>;
+            var result = ((ObjectResult)controller.GetAll().Result)?.Value as PagedResult<ObjectRequestDto>;
 
             // Assert
             //result.ShouldNotBeNull();
-            //result.Count.ShouldBe(3);
+            //result.Results.Count.ShouldBe(3);
+            //result.TotalCount.ShouldBe(3);
         }
         private static CheckpointRequestController CreateController(IServiceScope scope)
         {
@@ -41,4 +41,3 @@ namespace Explorer.Stakeholders.Tests.Integration.Author
         }
     }
 }
-*/

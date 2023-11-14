@@ -1,4 +1,4 @@
-﻿/*using Explorer.API.Controllers.Administrator.Administration;
+﻿using Explorer.API.Controllers.Administrator.Administration;
 using Explorer.Stakeholders.API.Dtos;
 using Explorer.Stakeholders.API.Public;
 using Explorer.Stakeholders.Core.Domain;
@@ -55,7 +55,7 @@ namespace Explorer.Stakeholders.Tests.Integration.Author
             var dbContext = scope.ServiceProvider.GetRequiredService<StakeholdersContext>();
 
             // Act
-            var result = ((ObjectResult)controller.AcceptRequest(-1, "kom").Result)?.Value as ObjectRequestDto; ;
+            var result = ((ObjectResult)controller.AcceptRequest(-1).Result)?.Value as ObjectRequestDto; ;
 
             // Assert - Response
             result.ShouldNotBeNull();
@@ -75,7 +75,7 @@ namespace Explorer.Stakeholders.Tests.Integration.Author
             var dbContext = scope.ServiceProvider.GetRequiredService<StakeholdersContext>();
 
             // Act
-            var result = ((ObjectResult)controller.RejectRequest(-1, "kom").Result)?.Value as ObjectRequestDto; ;
+            var result = ((ObjectResult)controller.RejectRequest(-1).Result)?.Value as ObjectRequestDto; ;
 
             // Assert - Response
             result.ShouldNotBeNull();
@@ -95,4 +95,3 @@ namespace Explorer.Stakeholders.Tests.Integration.Author
         }
     }
 }
-*/

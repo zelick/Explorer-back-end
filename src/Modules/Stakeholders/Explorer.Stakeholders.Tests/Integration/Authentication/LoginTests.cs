@@ -1,4 +1,4 @@
-﻿/*using System.IdentityModel.Tokens.Jwt;
+﻿using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
@@ -68,4 +68,3 @@ public class LoginTests : BaseStakeholdersIntegrationTest
         return new AuthenticationController(scope.ServiceProvider.GetRequiredService<IAuthenticationService>());
     }
 }
-*/

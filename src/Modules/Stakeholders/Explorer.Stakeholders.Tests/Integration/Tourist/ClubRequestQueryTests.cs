@@ -1,4 +1,4 @@
-﻿/*using Explorer.API.Controllers.Administrator.Administration;
+﻿using Explorer.API.Controllers.Administrator.Administration;
 using Explorer.API.Controllers.Tourist;
 using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Stakeholders.API.Dtos;
@@ -49,4 +49,3 @@ namespace Explorer.Stakeholders.Tests.Integration.Tourist
 
     }
 }
-*/
