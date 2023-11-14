@@ -1,4 +1,4 @@
-﻿using Explorer.API.Services;
+using Explorer.API.Services;
 using Explorer.Blog.API.Dtos;
 using Explorer.Blog.API.Public;
 using Explorer.BuildingBlocks.Core.UseCases;
