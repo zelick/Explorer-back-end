@@ -1,4 +1,5 @@
 ﻿using Explorer.Tours.API.Dtos;
+using Explorer.Tours.Core.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;

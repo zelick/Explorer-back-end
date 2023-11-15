@@ -18,6 +18,7 @@ namespace Explorer.Tours.Core.Domain.Tours
         public List<PublishedTour>? PublishedTours { get; init; }
         public List<ArchivedTour>? ArchivedTours { get; init; }
         public List<TourTime>? TourTimes { get; private set; }
+        public List<PublicCheckpoint> PublicCheckpoints { get; init; }
         public List<TourRating>? TourRatings { get; init; }
         public bool Closed { get; private set; }
 
@@ -56,7 +57,8 @@ namespace Explorer.Tours.Core.Domain.Tours
             Tags = tags;
             Equipment = new List<Equipment>();
             Checkpoints = new List<Checkpoint>();
-            TourRatings = new List<TourRating>();
+            TourRatings=new List<TourRating>();
+            PublicCheckpoints = new List<PublicCheckpoint>(); 
             Closed= closed;
         }
 
@@ -146,6 +148,12 @@ namespace Explorer.Tours.Core.Domain.Tours
             return result;
         }
 
+        public PublicTour CreatePublicTour(Tour tour)
+        {
+            PublicTour publicTour = new PublicTour(tour);
+            return publicTour;
+        }
+        
         public PurchasedTourPreview FilterPurchasedTour(Tour tour)
         {
             PurchasedTourPreview result = null;
