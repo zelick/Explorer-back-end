@@ -30,22 +30,25 @@ public static class StakeholdersStartup
         services.AddScoped<IAuthenticationService, AuthenticationService>();
         services.AddScoped<ITokenGenerator, JwtGenerator>();
         services.AddScoped<IClubRequestService, ClubRequestService>();
-        services.AddScoped<IClubService, ClubService>(); 
+        services.AddScoped<IClubService, ClubService>();
         services.AddScoped<IClubInvitationService, ClubInvitationService>();
         services.AddScoped<IUserService, UserService>();
-        services.AddScoped<IInternalUserService, UserService>();
         services.AddScoped<IApplicationGradeService, ApplicationGradeService>();
         services.AddScoped<IPersonEditingService, PersonEditingService>();
         services.AddScoped<IAccountsManagementService, AccountsManagementService>();
+        services.AddScoped<ISocialProfileService, SocialProfileService>();
+        services.AddScoped<IMessageService, MessageService>();
         services.AddScoped<INotificationService, NotificationService>();
         services.AddScoped<IPersonRepository, PersonDatabaseRepository>();
         services.AddScoped<IObjectRequestService, ObjectRequestService>();
         services.AddScoped<ICheckpointRequestService, CheckpointRequestService>();
         services.AddScoped<IInternalObjectRequestService, ObjectRequestService>();
         services.AddScoped<IInternalCheckpointRequestService, CheckpointRequestService>();
-        services.AddScoped<IInternalUserService, UserService>();
         services.AddScoped<ICustomerService, CustomerService>();
         services.AddScoped<IShoppingCartService, ShoppingCartService>();
+        services.AddScoped<IInternalShoppingService, CustomerService>();
+        services.AddScoped<IInternalPersonService, InternalPersonService>();
+        services.AddScoped<IInternalUserService, UserService>();
     }
 
 
@@ -55,8 +58,8 @@ public static class StakeholdersStartup
         services.AddScoped(typeof(ICrudRepository<ApplicationGrade>), typeof(CrudDatabaseRepository<ApplicationGrade, StakeholdersContext>));
         services.AddScoped(typeof(ICrudRepository<User>), typeof(CrudDatabaseRepository<User, StakeholdersContext>));
         services.AddScoped<IUserRepository, UserDatabaseRepository>();
-		services.AddScoped<IUserClubRepository, UserClubDatabaseRepository>();
-		services.AddScoped(typeof(ICrudRepository<ClubInvitation>), typeof(CrudDatabaseRepository<ClubInvitation, StakeholdersContext>));
+        services.AddScoped<IUserClubRepository, UserClubDatabaseRepository>();
+        services.AddScoped(typeof(ICrudRepository<ClubInvitation>), typeof(CrudDatabaseRepository<ClubInvitation, StakeholdersContext>));
         services.AddScoped(typeof(ICrudRepository<ClubRequest>), typeof(CrudDatabaseRepository<ClubRequest, StakeholdersContext>));
         services.AddScoped(typeof(ICrudRepository<Club>), typeof(CrudDatabaseRepository<Club, StakeholdersContext>));
         services.AddScoped<IClubRepository, ClubDatabaseRepository>();
@@ -66,22 +69,15 @@ public static class StakeholdersStartup
         services.AddScoped(typeof(ICrudRepository<CheckpointRequest>), typeof(CrudDatabaseRepository<CheckpointRequest, StakeholdersContext>));
         services.AddScoped<IObjectRequestRepository, ObjectRequestDatabaseRepository>();
         services.AddScoped<ICheckpointRequestRepository, CheckpointRequestDatabaseRepository>();
-
-        services.AddScoped<ICustomerRepository, CustomerDatabaseRepository>(); 
-        //services.AddScoped(typ//eof(ICrudRepository<Customer>), typeof(CrudDatabaseRepository<Customer, StakeholdersContext>)); 
+        services.AddScoped<ICustomerRepository, CustomerDatabaseRepository>();
         services.AddScoped<IShoppingCartRepository, ShoppingCartDatabaseRepository>();
-
-        services.AddDbContext<StakeholdersContext>(opt =>
-        opt.UseNpgsql(DbConnectionStringBuilder.Build("stakeholders"),
-        x => x.MigrationsHistoryTable("__EFMigrationsHistory", "stakeholders")));
         services.AddScoped<IPersonRepository, PersonDatabaseRepository>();
-
-        services.AddScoped(typeof(ICrudRepository<Club>), typeof(CrudDatabaseRepository<Club, StakeholdersContext>));
-
+        services.AddScoped(typeof(ICrudRepository<Message>), typeof(CrudDatabaseRepository<Message, StakeholdersContext>));
+        services.AddScoped(typeof(IMessageRepository), typeof(MessageDatabaseRepository));
+        services.AddScoped(typeof(ISocialProfileRepository), typeof(SocialProfileDatabaseRepository));
 
         services.AddDbContext<StakeholdersContext>(opt =>
             opt.UseNpgsql(DbConnectionStringBuilder.Build("stakeholders"),
                 x => x.MigrationsHistoryTable("__EFMigrationsHistory", "stakeholders")));
-
     }
 }

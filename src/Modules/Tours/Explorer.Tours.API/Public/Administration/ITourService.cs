@@ -21,6 +21,9 @@ namespace Explorer.Tours.API.Public.Administration
         Result<TourDto> Archive(int id, int userId);
         Result<List<PurchasedTourPreviewDto>> GetToursByIds(List<long> tourIds);
         Result<PurchasedTourPreviewDto> getPurchasedTourById(long purchasedTourId);
+
+        Result<List<PublicTourDto>> GetPublicTours();
+
         double GetAverageRating(long tourId);
     }
 }

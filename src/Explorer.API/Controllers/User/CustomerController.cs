@@ -38,10 +38,10 @@ namespace Explorer.API.Controllers.User
         }
 
         //umesto id - TourDto
-        [HttpGet("cutomersPurchasedToursIds/{customerId:int}")]
-        public ActionResult<List<long>> getCustomersPurchasedToursIds(long customerId)
+        [HttpGet("cutomersPurchasedToursIds/{touristId:int}")]
+        public ActionResult<List<long>> getCustomersPurchasedToursIds(long touristId)
         {
-            var result = _customerService.getCustomersPurchasedTours(customerId);
+            var result = _customerService.getCustomersPurchasedTours(touristId);
 
             if(result != null)
             {
@@ -53,10 +53,10 @@ namespace Explorer.API.Controllers.User
             }
         }
 
-        [HttpGet("cutomersPurchasedTours/{customerId:int}")]
-        public ActionResult<List<PurchasedTourPreviewDto>> getCustomersPurchasedTours(long customerId)
+        [HttpGet("cutomersPurchasedTours/{touristId:int}")]
+        public ActionResult<List<PurchasedTourPreviewDto>> getCustomersPurchasedTours(long touristId)
         {
-            var result = _customerService.getCustomersPurchasedTours(customerId);
+            var result = _customerService.getCustomersPurchasedTours(touristId);
 
             var tours = _tourService.GetToursByIds(result);
 

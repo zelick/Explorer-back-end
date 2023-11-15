@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Explorer.BuildingBlocks.Core.UseCases;
+using Explorer.Stakeholders.API.Internal;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
 using Explorer.Tours.Core.Domain.RepositoryInterfaces;
@@ -20,11 +21,13 @@ namespace Explorer.Tours.Core.UseCases.Administration
         private readonly ITourExecutionRepository _tourExecutionRepository;
         private TourExecutionMapper _tourExecutionMapper;
         private readonly ITourRepository _tourRepository;
-        public TourExecutionService(ITourExecutionRepository repository, IMapper mapper, ITourRepository tourRepository) : base(repository, mapper)
+        private readonly IInternalShoppingService _shoppingService;
+        public TourExecutionService(ITourExecutionRepository repository, IMapper mapper, ITourRepository tourRepository, IInternalShoppingService shoppingService) : base(repository, mapper)
         {
             _tourExecutionRepository = repository;
             _tourRepository = tourRepository;
             _tourExecutionMapper = new TourExecutionMapper();
+            _shoppingService = shoppingService;
         }
 
         public Result<TourExecutionDto> CheckPosition(TouristPositionDto position, long id)
@@ -38,6 +41,8 @@ namespace Explorer.Tours.Core.UseCases.Administration
         {
             try
             {
+                if(!_shoppingService.IsTourPurchasedByUser(touristId, tourId))
+                    return Result.Fail(FailureCode.InvalidArgument).WithError("Tour not purchased");
                 var result = _tourExecutionRepository.Create(new TourExecution(touristId, tourId));
                 result.setTour(_tourRepository.Get(tourId));
                 return _tourExecutionMapper.createDto(result);

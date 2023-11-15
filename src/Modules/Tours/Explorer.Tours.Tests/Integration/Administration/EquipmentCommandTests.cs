@@ -41,25 +41,6 @@ public class EquipmentCommandTests : BaseToursIntegrationTest
     }
 
     [Fact]
-    public void Create_fails_invalid_user()
-    {
-        // Arrange
-        using var scope = Factory.Services.CreateScope();
-        var controller = CreateController(scope);
-        var updatedEntity = new EquipmentDto
-        {
-            Description = "Test"
-        };
-
-        // Act
-        var result = (ObjectResult)controller.Create(updatedEntity).Result;
-
-        // Assert
-        result.ShouldNotBeNull();
-        result.StatusCode.ShouldBe(400);
-    }
-
-    [Fact]
     public void Updates()
     {
         // Arrange

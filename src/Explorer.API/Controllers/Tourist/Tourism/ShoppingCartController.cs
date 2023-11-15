@@ -70,16 +70,8 @@ namespace Explorer.API.Controllers.Tourist.Tourism
             return CreateResponse(result);
         }
 
-        //dodaj Item u Korpu i update korpa 
-        [HttpPut("addItemToShoppingCart/{touristId}")]
-        public ActionResult<ShoppingCartDto> AddItemToShoppingCart(OrderItemDto item, int touristId)
-        {
-            var result = _shoppingCartService.AddItemToShoppingCart(item, touristId);
-            return CreateResponse(result);
-        }
-
         [HttpDelete("deleteOrderItems/{shoppingCartId:int}")]
-        public ActionResult DeleteOrderItems(long shoppingCartId)
+        public ActionResult<ShoppingCartDto> DeleteOrderItems(long shoppingCartId)
         {
             var result = _shoppingCartService.DeleteOrderItems(shoppingCartId);
             return CreateResponse(result);

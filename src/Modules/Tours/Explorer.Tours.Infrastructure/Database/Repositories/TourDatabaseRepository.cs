@@ -1,6 +1,7 @@
 ﻿using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.BuildingBlocks.Infrastructure.Database;
 using Explorer.Tours.Core.Domain.RepositoryInterfaces;
+using FluentResults;
 using Explorer.Tours.Core.Domain.Tours;
 using Microsoft.EntityFrameworkCore;
 
@@ -87,6 +88,23 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
             var entity = Get(id); 
             _dbContext.Tours.Remove(entity);
             _dbContext.SaveChanges();
+        }
+
+        public Tour Close(long id)
+        {
+            var entity = Get(id);
+            try
+            {
+                entity.Close();
+                _dbContext.Tours.Update(entity);
+                _dbContext.SaveChanges();
+            }
+            catch(DbUpdateException e)
+            {
+                throw new KeyNotFoundException(e.Message);
+            }
+            
+            return entity;
         }
 
         public List<Tour> GetToursByIds(List<long> tourIds)

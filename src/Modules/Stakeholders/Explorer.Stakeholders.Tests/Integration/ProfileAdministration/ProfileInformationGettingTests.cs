@@ -45,4 +45,3 @@ namespace Explorer.Stakeholders.Tests.Integration.ProfileAdministration
         }
     }
 }
-

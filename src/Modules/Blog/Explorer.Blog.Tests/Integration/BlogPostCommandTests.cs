@@ -151,5 +151,3 @@ public class BlogPostCommandTests : BaseBlogIntegrationTest
         };
     }
 }
-
-
