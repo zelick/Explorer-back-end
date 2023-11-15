@@ -45,8 +45,8 @@ public class TourExecutionCommandTests : BaseToursIntegrationTest
     public void Create_succeeds()
     {
         // Arrange - Input data
-        var touristId = 1;
-        var tourId = -3;
+        var touristId = -21;
+        var tourId = -4;
         var expectedResponseCode = 200;
         var expectedStatus = ExecutionStatus.InProgress;
         // Arrange - Controller and dbContext
