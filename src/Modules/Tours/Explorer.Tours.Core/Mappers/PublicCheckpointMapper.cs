@@ -15,7 +15,7 @@ namespace Explorer.Tours.Core.Mappers
         public PublicCheckpointDto createDto(CheckpointDto checkpoint)
         {
             PublicCheckpointDto publicCheckpointDto = new PublicCheckpointDto();
-            publicCheckpointDto.Id = checkpoint.Id;
+            //publicCheckpointDto.Id = checkpoint.Id;
             publicCheckpointDto.Name = checkpoint.Name;
             publicCheckpointDto.Description = checkpoint.Description;
             publicCheckpointDto.Pictures = checkpoint.Pictures;

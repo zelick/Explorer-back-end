@@ -134,7 +134,7 @@ namespace Explorer.Tours.Core.UseCases.Administration
                 CrudRepository.Delete(id);
                 var request = _internalCheckpointRequestService.GetRequestByCheckpointId(id);
                 if (request == null) throw new Exception($"Request for MapObject with ID {id} not found.");
-                _internalCheckpointRequestService.Delete(request.Value.Id);
+                if (request.Value != null)  _internalCheckpointRequestService.Delete(request.Value.Id);
                 return Result.Ok();
             }
             catch (KeyNotFoundException e)
