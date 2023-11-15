@@ -19,6 +19,8 @@ public class StakeholderProfile : Profile
         CreateMap<PersonDto, Person>().ReverseMap();
         CreateMap<ClubDto, Club>().ReverseMap();
         CreateMap<UserDto, User>().ReverseMap();
+        CreateMap<MessageDto,  Message>().ReverseMap();
+        CreateMap<SocialProfileDto, SocialProfile>().ReverseMap();
         CreateMap<NotificationDto, Notification>().ReverseMap();
         CreateMap<ObjectRequestDto, ObjectRequest>().ReverseMap();
         CreateMap<CheckpointRequestDto, CheckpointRequest>().ReverseMap();
@@ -26,6 +28,5 @@ public class StakeholderProfile : Profile
         CreateMap<TourPurchaseTokenDto, TourPurchaseToken>().ReverseMap();
         CreateMap<ShoppingCartDto, ShoppingCart>().ReverseMap();
         CreateMap<OrderItemDto, OrderItem>().ReverseMap();
-
     }
 }

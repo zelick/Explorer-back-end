@@ -10,11 +10,15 @@ namespace Explorer.Tours.API.Dtos
     {
         public long Id { get; set; }
         public long TourId { get; set; }
+        public long AuthorId { get; set; }
         public double Longitude { get; set; }
         public double Latitude { get; set; }
         public string Name { get; set; }
         public string? Description { get; set; }
         public List<string> Pictures { get; set; }
         public double RequiredTimeInSeconds { get; set; }
+        public CheckpointSecretDto? CheckpointSecret { get; set; }
+
+
     }
 }

@@ -1,7 +1,8 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Explorer.BuildingBlocks.Core.Domain;
 using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Stakeholders.API.Dtos;
+using Explorer.Stakeholders.API.Internal;
 using Explorer.Stakeholders.API.Public;
 using Explorer.Stakeholders.Core.Domain;
 using Explorer.Stakeholders.Core.Domain.RepositoryInterfaces;
@@ -17,10 +18,10 @@ using Explorer.Stakeholders.API.Internal;
 namespace Explorer.Stakeholders.Core.UseCases
 {
     public class UserService : CrudService<UserDto, User>, IUserService, IInternalUserService
-	{
+    {
         //rep za kupca 
         private readonly ICustomerRepository _customerRepository;
-		public UserService(ICrudRepository<User> repository, IMapper mapper, ICustomerRepository customerRepository) : base(repository, mapper) 
+        public UserService(ICrudRepository<User> repository, IMapper mapper, ICustomerRepository customerRepository) : base(repository, mapper) 
         {
             _customerRepository = customerRepository;
         }

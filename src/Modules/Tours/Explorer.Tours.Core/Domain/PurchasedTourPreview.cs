@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Explorer.Tours.Core.Domain.Tours;
 
 namespace Explorer.Tours.Core.Domain
 {
@@ -15,7 +16,7 @@ namespace Explorer.Tours.Core.Domain
         public double Price { get; init; }
         public List<string>? Tags { get; init; }
         public List<Equipment> Equipment { get; init; }
-        public List <CheckpointPreview> Checkpoints { get; init; }
+        public List <Checkpoint> Checkpoints { get; init; }
         public List<TourRatingPreview> TourRatings { get; init; }
         public List<TourTime> TourTimes { get; init; }
 
@@ -27,20 +28,23 @@ namespace Explorer.Tours.Core.Domain
             DemandignessLevel = tour.DemandignessLevel;
             Price = tour.Price;
             Tags = tour.Tags;
-            Equipment = tour.Equipment;
-            Checkpoints = new List<CheckpointPreview>();
+            if (tour.Equipment != null)
+                Equipment = tour.Equipment;
+            else
+                Equipment = new List<Equipment>();
+            Checkpoints = tour.Checkpoints;
             TourTimes = tour.TourTimes;
             TourRatings = new List<TourRatingPreview>();
 
-            foreach (TourRating tourRating in tour.TourRatings)
+            if (tour.TourRatings != null)
             {
-                TourRatings.Add(new TourRatingPreview(tourRating));
+                foreach (TourRating tourRating in tour.TourRatings)
+                {
+                    TourRatings.Add(new TourRatingPreview(tourRating));
+                }
             }
 
-            foreach (Checkpoint cp in tour.Checkpoints)
-            {
-                Checkpoints.Add(new CheckpointPreview(cp)); 
-            }
+            
         }
     }
 }

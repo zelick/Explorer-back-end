@@ -23,13 +23,17 @@ namespace Explorer.Tours.Core.UseCases.Administration
             var result = Create(mapObject);
             if (status.Equals("Public"))
             {
-                ObjectRequestDto objectRequest = new ObjectRequestDto();
-                objectRequest.AuthorId = userId;
-                objectRequest.MapObjectId = result.Value.Id;
-                objectRequest.Status = "OnHold";
-                _internalObjectRequestService.Create(objectRequest);
+                _internalObjectRequestService.Create(result.Value.Id, userId, "OnHold");
             }
             return result;
+        }
+
+        public Result DeleteObjectAndRequest(int mapObjectId)
+        {
+            var request = _internalObjectRequestService.GetRequestByMapObjectId(mapObjectId);
+            if (request == null) throw new Exception($"Request for MapObject with ID {mapObjectId} not found.");
+            _internalObjectRequestService.Delete(request.Value.Id);
+            return Delete(mapObjectId);
         }
     }
 }

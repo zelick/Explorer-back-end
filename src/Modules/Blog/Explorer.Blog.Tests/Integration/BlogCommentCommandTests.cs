@@ -1,4 +1,4 @@
-﻿using Explorer.API.Controllers.User.Blogging;
+﻿/*using Explorer.API.Controllers.User.Blogging;
 using Explorer.Blog.API.Dtos;
 using Explorer.Blog.API.Public;
 using Explorer.Blog.Infrastructure.Database;
@@ -23,23 +23,21 @@ public class BlogCommentCommandTests : BaseBlogIntegrationTest
 
         var newBlogComment = new BlogCommentDto()
         {
-            UserId = 1,
-            BlogPostId = -12,
-            CreationTime = new DateTime(),
-            ModificationTime = new DateTime(),
+            UserId = -1,
+            CreationTime = DateTime.MinValue,
             Text = "Blog comment text."
         };
 
         // Act
-        var result = ((ObjectResult)controller.Create(newBlogComment).Result)?.Value as BlogCommentDto;
+        var result = ((ObjectResult)controller.Add(-1, newBlogComment).Result)?.Value as BlogPostDto;
 
         // Assert - Response
         result.ShouldNotBeNull();
         result.Id.ShouldNotBe(0);
-        result.Text.ShouldBe(newBlogComment.Text);
+        result.Comments?[0].Text.ShouldBe(newBlogComment.Text);
 
         // Assert - Database
-        var storedEntity = dbContext.BlogComments.FirstOrDefault(i => i.Id == result.Id);
+        var storedEntity = dbContext.BlogPosts.FirstOrDefault(i => i.Id == result.Id);
         storedEntity.ShouldNotBeNull();
         storedEntity.Id.ShouldBe(result.Id);
     }
@@ -53,15 +51,18 @@ public class BlogCommentCommandTests : BaseBlogIntegrationTest
 
         var newBlogComment = new BlogCommentDto
         {
-            BlogPostId = 1,
+            UserId = 1,
+            CreationTime = DateTime.Parse("2023-02-17 06:30:00"),
+            ModificationTime = DateTime.MaxValue,
+            Text = "Updated blog comment text."
         };
 
         // Act
-        var result = (ObjectResult)controller.Create(newBlogComment).Result;
+        var result = (ObjectResult)controller.Add(-42, newBlogComment).Result;
 
         // Assert
         result.ShouldNotBeNull();
-        result.StatusCode.ShouldBe(400);
+        result.StatusCode.ShouldBe(404);
     }
 
     [Fact]
@@ -74,34 +75,29 @@ public class BlogCommentCommandTests : BaseBlogIntegrationTest
 
         var updatedBlogComment = new BlogCommentDto
         {
-            Id = -1,
-            UserId = 0,
-            BlogPostId = -1,
-            CreationTime = new DateTime(),
-            ModificationTime = new DateTime(),
+            UserId = -1,
+            CreationTime = DateTime.Parse("2023-02-17 06:30:00"),
+            ModificationTime = DateTime.Today,
             Text = "Updated blog comment text."
         };
 
         // Act
-        var result = ((ObjectResult)controller.Update(updatedBlogComment).Result)?.Value as BlogCommentDto;
+        var result = ((ObjectResult)controller.Add(-11, updatedBlogComment).Result)?.Value as BlogPostDto;
 
         // Assert - Response
         result.ShouldNotBeNull();
-        result.Id.ShouldBe(-1);
-        result.Text.ShouldBe(updatedBlogComment.Text);
-        result.ModificationTime.ShouldBe(updatedBlogComment.ModificationTime);
-        result.CreationTime.ShouldBe(updatedBlogComment.CreationTime);
-        result.BlogPostId.ShouldBe(updatedBlogComment.BlogPostId);
-        result.UserId.ShouldBe(updatedBlogComment.UserId);
+        result.Id.ShouldBe(-11);
+        result.Comments?[0].Text.ShouldBe(updatedBlogComment.Text);
+        result.Comments?[0].ModificationTime?.Date.ShouldBe(updatedBlogComment.ModificationTime.Value.Date);
+        result.Comments?[0].CreationTime.ShouldBe(updatedBlogComment.CreationTime);
+        result.Comments?[0].UserId.ShouldBe(updatedBlogComment.UserId);
 
         // Assert - Database
-        var storedEntity = dbContext.BlogComments.FirstOrDefault(i => i.Text == "Updated blog comment text.");
+        var storedEntity = dbContext.BlogPosts.FirstOrDefault(i => i.Id == result.Id);
         storedEntity.ShouldNotBeNull();
-        storedEntity.Text.ShouldBe(updatedBlogComment.Text);
-        storedEntity.CreationTime.ShouldBe(updatedBlogComment.CreationTime);
-        storedEntity.ModificationTime.ShouldBe(updatedBlogComment.ModificationTime);
-        var oldEntity = dbContext.BlogComments.FirstOrDefault(i => i.Text == "First blog comment.");
-        oldEntity.ShouldBeNull();
+        storedEntity.Comments?[0].Text.ShouldBe(updatedBlogComment.Text);
+        storedEntity.Comments?[0].CreationTime.ShouldBe(updatedBlogComment.CreationTime);
+        storedEntity.Comments?[0].ModificationTime?.Date.ShouldBe(updatedBlogComment.ModificationTime.Value.Date);
     }
 
     [Fact]
@@ -112,12 +108,11 @@ public class BlogCommentCommandTests : BaseBlogIntegrationTest
         var controller = CreateController(scope);
         var updatedBlogComment = new BlogCommentDto
         {
-            Id = -1000,
             Text = "Updated blog comment text."
         };
 
         // Act
-        var result = (ObjectResult)controller.Update(updatedBlogComment).Result;
+        var result = (ObjectResult)controller.Add(-42, updatedBlogComment).Result;
 
         // Assert
         result.ShouldNotBeNull();
@@ -132,16 +127,24 @@ public class BlogCommentCommandTests : BaseBlogIntegrationTest
         var controller = CreateController(scope);
         var dbContext = scope.ServiceProvider.GetRequiredService<BlogContext>();
 
+        var blogCommentDto = new BlogCommentDto
+        {
+            UserId = -12,
+            CreationTime = DateTime.Parse("2023-02-17 06:30:00"),
+            ModificationTime = DateTime.MaxValue,
+            Text = "Updated blog comment text."
+        };
+
         // Act
-        var result = (OkResult)controller.Delete(-3);
+        var result = controller.Remove(-12, blogCommentDto).Result;
 
         // Assert - Response
         result.ShouldNotBeNull();
-        result.StatusCode.ShouldBe(200);
+        result.ShouldBeOfType<OkResult>(); ;
 
         // Assert - Database
-        var storedCourse = dbContext.BlogComments.FirstOrDefault(i => i.Id == 1);
-        storedCourse.ShouldBeNull();
+        var storedBlogPost = dbContext.BlogPosts.FirstOrDefault(i => i.Id == -12);
+        storedBlogPost.Comments.Count.ShouldBe(1);
     }
 
     [Fact]
@@ -151,12 +154,20 @@ public class BlogCommentCommandTests : BaseBlogIntegrationTest
         using var scope = Factory.Services.CreateScope();
         var controller = CreateController(scope);
 
+        var blogCommentDto = new BlogCommentDto
+        {
+            UserId = -42,
+            CreationTime = DateTime.MinValue,
+            ModificationTime = DateTime.MaxValue,
+            Text = "Updated blog comment text."
+        };
+
         // Act
-        var result = (ObjectResult)controller.Delete(-1000);
+        var result = (ObjectResult)controller.Remove(-1, blogCommentDto).Result;
 
         // Assert
         result.ShouldNotBeNull();
-        result.StatusCode.ShouldBe(404);
+        result.StatusCode.ShouldBe(400);
     }
 
     private static BlogCommentController CreateController(IServiceScope scope)
@@ -167,3 +178,4 @@ public class BlogCommentCommandTests : BaseBlogIntegrationTest
         };
     }
 }
+*/

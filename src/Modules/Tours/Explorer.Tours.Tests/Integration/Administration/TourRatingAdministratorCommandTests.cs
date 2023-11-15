@@ -22,7 +22,7 @@ public class TourRatingAdministratorCommandTests : BaseToursIntegrationTest
         var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
 
         // Act
-        var result = (OkResult)controller.Delete(-3);
+        var result = (OkResult)controller.Delete(-1);
 
         // Assert - Response
         result.ShouldNotBeNull();

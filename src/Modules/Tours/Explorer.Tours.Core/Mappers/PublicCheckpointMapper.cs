@@ -12,27 +12,27 @@ namespace Explorer.Tours.Core.Mappers
     {
         public PublicCheckpointMapper() { }
 
-        public PublicCheckpointDto createDto(PublicCheckpoint publicCheckpoint)
+        public PublicCheckpointDto createDto(CheckpointDto checkpoint)
         {
-            var result = new PublicCheckpointDto();
-            result.Id = publicCheckpoint.Id;
-            result.TourId = publicCheckpoint.TourId;
-            result.Latitude = publicCheckpoint.Latitude;
-            result.Longitude = publicCheckpoint.Longitude; 
-            result.Name = publicCheckpoint.Name;
-            result.Description = publicCheckpoint.Description;
-            result.Pictures = publicCheckpoint.Pictures;
-            return result;
-        }
+            PublicCheckpointDto publicCheckpointDto = new PublicCheckpointDto();
+            publicCheckpointDto.Id = checkpoint.Id;
+            publicCheckpointDto.Name = checkpoint.Name;
+            publicCheckpointDto.Description = checkpoint.Description;
+            publicCheckpointDto.Pictures = checkpoint.Pictures;
+            publicCheckpointDto.Latitude = checkpoint.Latitude;
+            publicCheckpointDto.Longitude = checkpoint.Longitude;
 
-        public List<PublicCheckpointDto> createDtoList(List<PublicCheckpoint> publicCheckpoints)
+            return publicCheckpointDto;
+
+        }
+        public List<PublicCheckpointDto> createListDto(List<CheckpointDto> checkpointList)
         {
-            List<PublicCheckpointDto> publicCheckpointsDto = new List<PublicCheckpointDto>();
-            foreach (var publicCheckpoint in publicCheckpoints)
+            List<PublicCheckpointDto> result = new List<PublicCheckpointDto>();
+            foreach (CheckpointDto checkpoint in checkpointList)
             {
-                publicCheckpointsDto.Add(createDto(publicCheckpoint));
+                result.Add(createDto(checkpoint));
             }
-            return publicCheckpointsDto;
+            return result;
         }
     }
 }

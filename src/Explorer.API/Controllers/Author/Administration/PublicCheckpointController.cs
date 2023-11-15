@@ -1,4 +1,5 @@
-﻿using Explorer.Stakeholders.Core.Domain;
+﻿using Explorer.BuildingBlocks.Core.UseCases;
+using Explorer.Stakeholders.Core.Domain;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
 using Explorer.Tours.Core.UseCases.Administration;
@@ -7,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Explorer.API.Controllers.Author.Administration
 {
-    [Authorize(Policy = "authorPolicy")]
+    //[Authorize(Policy = "administratorAndAuthorPolicy")] //administratorAndAuthorPolicy authorPolicy
     [Route("api/administration/publicCheckpoint")]
     public class PublicCheckpointController : BaseApiController
     {
@@ -18,10 +19,10 @@ namespace Explorer.API.Controllers.Author.Administration
             _publicCheckpointService = publicCheckpointService;
         }
 
-        [HttpPost("create")]
-        public ActionResult<PublicCheckpointDto> Create([FromQuery] int checkpointRequestId)
+        [HttpPost("create/{checkpointRequestId:int}/{notificationComment}")]
+        public ActionResult<PublicCheckpointDto> Create(int checkpointRequestId, string notificationComment)
         {
-            var result = _publicCheckpointService.Create(checkpointRequestId);
+            var result = _publicCheckpointService.Create(checkpointRequestId, notificationComment);
             return CreateResponse(result);
         }
 
@@ -36,6 +37,13 @@ namespace Explorer.API.Controllers.Author.Administration
         public ActionResult Delete(int id)
         {
             var result = _publicCheckpointService.Delete(id);
+            return CreateResponse(result);
+        }
+
+        [HttpGet]
+        public ActionResult<PagedResult<PublicCheckpointDto>> GetAll()
+        {
+            var result = _publicCheckpointService.GetPaged(0,0);
             return CreateResponse(result);
         }
     }

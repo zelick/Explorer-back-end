@@ -13,7 +13,7 @@ namespace Explorer.Stakeholders.API.Public
         Result<ObjectRequestDto> Create(ObjectRequestDto request);
         Result<ObjectRequestDto> Update(ObjectRequestDto request);
         Result<List<ObjectRequestDto>> GetAll();
-        Result<ObjectRequestDto> AcceptRequest(int id);
-        Result<ObjectRequestDto> RejectRequest(int id);
+        Result<ObjectRequestDto> AcceptRequest(int id, string notificationComment);
+        Result<ObjectRequestDto> RejectRequest(int id, string notificationComment);
     }
 }
