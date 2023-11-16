@@ -1,10 +1,11 @@
 ﻿using Explorer.Stakeholders.API.Dtos;
 using Explorer.Stakeholders.API.Public;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Explorer.API.Controllers.User.SocialProfile
 {
-    //[Authorize(Policy = "userPolicy")]
+    [Authorize(Policy = "userPolicy")]
     [Route("api/profile-messaging")]
     public class MessageController : BaseApiController
     {
