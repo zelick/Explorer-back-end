@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Tours.API.Dtos;
+using Explorer.Tours.Core.Domain.Tours;
 using FluentResults;
 
 namespace Explorer.Tours.Core.Domain.RepositoryInterfaces

@@ -46,15 +46,6 @@ namespace Explorer.API.Controllers.Tourist
         [HttpPut("{id:int}")]
         public ActionResult<ClubDto> Update([FromBody] ClubDto club)
         {
-            //string userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-            //long loggedUser = long.Parse(userId);
-
-            //Console.WriteLine(loggedUser);
-
-            //var loggedInUserId = _userManager.GetUserId(User);
-
-
             var result = _clubService.Update(club);
             return CreateResponse(result);
         }

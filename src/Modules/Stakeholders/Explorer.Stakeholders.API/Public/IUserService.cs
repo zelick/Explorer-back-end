@@ -15,5 +15,7 @@ namespace Explorer.Stakeholders.API.Public
 		Result<UserDto> Create(UserDto user);
 		Result<UserDto> Update(UserDto user);
 		Result Delete(int id);
+
+
 	}
 }
