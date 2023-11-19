@@ -63,8 +63,10 @@ public static class StakeholdersStartup
         services.AddScoped(typeof(ICrudRepository<ClubRequest>), typeof(CrudDatabaseRepository<ClubRequest, StakeholdersContext>));
         services.AddScoped(typeof(ICrudRepository<Club>), typeof(CrudDatabaseRepository<Club, StakeholdersContext>));
         services.AddScoped<IClubRepository, ClubDatabaseRepository>();
+        
         services.AddScoped(typeof(ICrudRepository<Notification>), typeof(CrudDatabaseRepository<Notification, StakeholdersContext>));
-        services.AddScoped<INotificationRepository, NotificationDatabaseRepository>();
+        services.AddScoped(typeof(INotificationRepository), typeof(NotificationDatabaseRepository));
+        
         services.AddScoped(typeof(ICrudRepository<ObjectRequest>), typeof(CrudDatabaseRepository<ObjectRequest, StakeholdersContext>));
         services.AddScoped(typeof(ICrudRepository<CheckpointRequest>), typeof(CrudDatabaseRepository<CheckpointRequest, StakeholdersContext>));
         services.AddScoped<IObjectRequestRepository, ObjectRequestDatabaseRepository>();

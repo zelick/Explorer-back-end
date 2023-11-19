@@ -1,30 +1,47 @@
 ﻿using Explorer.BuildingBlocks.Core.Domain;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Explorer.Stakeholders.Core.Domain
 {
     public class Notification : Entity
     {
-        public bool IsRead { get; private set; }
-        public string Text { get; private set; }
-        public int UserId { get; private set; }
-        public int RequestId { get; private set; }
+        public string Description { get; init; }
+        public DateTime CreationTime { get; init; }
+        public bool IsRead { get; init; }
+        public long UserId { get; init; }
+        [ForeignKey("UserId")]
+        public User? User { get; set; }
+        public NotificationType Type { get; private set; }
+        public long? ForeignId { get; init; }
+        // if Type == OTHER             -> ForeignId = null
+        // if Type == REQUEST           -> ForeignId = RequestId
+        // if Type == REPORTED_ISSUE    -> ForeignId = ReportedIssueId
 
-        public Notification(string text, int userId, int requestId)
+        public Notification() { }
+        public Notification(string description, DateTime creationTime, NotificationType type,bool isRead, long userId, long? foreignId)
         {
-            IsRead = false;
-            Text = text;
+            Description = description;
+            CreationTime = creationTime;
+            Type = type;
+            IsRead = isRead;
             UserId = userId;
-            RequestId = requestId;
+            ForeignId = foreignId;
+
+            ValidateNotification();
         }
 
-        public void MarkAsRead() 
-        { 
-            IsRead = true;
+        private void ValidateNotification()
+        {
+            if (string.IsNullOrWhiteSpace(Description) || UserId == 0) 
+                throw new ArgumentException("Invalid notification.");
+            if (string.IsNullOrWhiteSpace(Type.ToString())) 
+                throw new ArgumentException("Invalid notification type.");
         }
     }
+}
+public enum NotificationType
+{
+    OTHER,
+    REQUEST,
+    REPORTED_ISSUE
 }

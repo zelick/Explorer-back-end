@@ -1,17 +1,19 @@
-﻿using Explorer.Stakeholders.API.Dtos;
+﻿using Explorer.BuildingBlocks.Core.UseCases;
+using Explorer.Stakeholders.API.Dtos;
 using FluentResults;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Explorer.Stakeholders.API.Public
 {
     public interface INotificationService
     {
-        Result<NotificationDto> AddNotification(NotificationDto notificationDto);
-        Result<List<NotificationDto>> GetAllUnread(int userId);
-        Result<NotificationDto> MarkAsRead(int id);
+        // CRUD
+        Result<NotificationDto> Get(int id);
+        Result<NotificationDto> Update(NotificationDto notificationDto);
+        Result Delete(int id);
+
+        // other
+        Result<NotificationDto> Create(string description, long userId, long? foreignId, int type);
+        Result<PagedResult<NotificationDto>> GetAllByUser(long id, int page, int pageSize);
+        Result<PagedResult<NotificationDto>> GetUnreadByUser(long id, int page, int pageSize);
     }
 }

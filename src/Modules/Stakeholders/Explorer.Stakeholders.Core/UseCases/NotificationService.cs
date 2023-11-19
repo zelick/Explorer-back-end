@@ -1,42 +1,60 @@
 ﻿using AutoMapper;
 using Explorer.BuildingBlocks.Core.UseCases;
-using Explorer.Stakeholders.API.Dtos;
 using Explorer.Stakeholders.API.Public;
+using Explorer.Stakeholders.API.Dtos;
 using Explorer.Stakeholders.Core.Domain;
 using Explorer.Stakeholders.Core.Domain.RepositoryInterfaces;
 using FluentResults;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Explorer.Stakeholders.Core.UseCases
 {
     public class NotificationService : CrudService<NotificationDto, Notification>, INotificationService
     {
         private readonly INotificationRepository _notificationRepository;
-        public NotificationService(ICrudRepository<Notification> repository, IMapper mapper, INotificationRepository notificationRepository) : base(repository, mapper) 
-        { 
-            _notificationRepository = notificationRepository;
+        public NotificationService(ICrudRepository<Notification> repository, IMapper mapper, INotificationRepository notifRepo) : base(repository, mapper)
+        {
+            _notificationRepository = notifRepo;
         }
 
-        public Result<NotificationDto> AddNotification(NotificationDto notificationDto)
+        public Result<NotificationDto> Create(string description, long userId, long? foreignId, int type)
         {
-            Notification notification = new Notification(notificationDto.Text, notificationDto.UserId, notificationDto.RequestId);
-            return MapToDto(_notificationRepository.AddNotification(notification));
+            try
+            {
+                var result = _notificationRepository.Create(description, userId, foreignId, type);
+                return MapToDto(result);
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
         }
 
-        public Result<List<NotificationDto>> GetAllUnread(int userId)
+        public Result<PagedResult<NotificationDto>> GetAllByUser(long id, int page, int pageSize)
         {
-            var unreadNotifications = _notificationRepository.GetAllUnread(userId);
-            return MapToDto(unreadNotifications);
+            try
+            {
+                var result = _notificationRepository.GetAllByUser(id);
+                var paged = new PagedResult<Notification>(result, result.Count());
+                return MapToDto(paged);
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
         }
 
-        public Result<NotificationDto> MarkAsRead(int id)
+        public Result<PagedResult<NotificationDto>> GetUnreadByUser(long id, int page, int pageSize)
         {
-            var notification = _notificationRepository.MarkAsRead(id);
-            return MapToDto(notification);
+            try
+            {
+                var result = _notificationRepository.GetUnreadByUser(id);
+                var paged = new PagedResult<Notification>(result, result.Count());
+                return MapToDto(paged);
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
         }
     }
 }
