@@ -4,15 +4,15 @@ using Explorer.Stakeholders.API.Public;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Explorer.API.Controllers.Administrator.Administration
+namespace Explorer.API.Controllers.Tourist
 {
-    [Authorize(Policy = "administratorAndAuthorPolicy")]
-    [Route("api/administrator/notifications")]
-    public class NotificationAdministratorController : BaseApiController
+    [Authorize(Policy = "touristPolicy")]
+    [Route("api/tourist/notifications")]
+    public class NotificationTouristController : BaseApiController
     {
         private readonly INotificationService _service;
 
-        public NotificationAdministratorController(INotificationService notificationService)
+        public NotificationTouristController(INotificationService notificationService)
         {
             _service = notificationService;
         }
@@ -51,5 +51,6 @@ namespace Explorer.API.Controllers.Administrator.Administration
             var result = _service.GetUnreadByUser(id, page, pageSize);
             return CreateResponse(result);
         }
+
     }
 }

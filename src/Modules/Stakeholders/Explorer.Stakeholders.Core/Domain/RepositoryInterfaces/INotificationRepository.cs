@@ -4,7 +4,9 @@ namespace Explorer.Stakeholders.Core.Domain.RepositoryInterfaces
 {
     public interface INotificationRepository : ICrudRepository<Notification>
     {
-        Notification Create(string description, long userId, long? foreignId, int type);
+        Notification CreateRequestNotification(string description, long userId, long? foreignId);
+        Notification CreateReportedIssueNotification(string description, long userId, long? foreignId);
+        Notification CreateNotification(string description, long userId);
         List<Notification> GetAllByUser(long id);
         List<Notification> GetUnreadByUser(long id);
     }

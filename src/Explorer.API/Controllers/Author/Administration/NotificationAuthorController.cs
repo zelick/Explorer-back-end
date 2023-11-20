@@ -4,15 +4,15 @@ using Explorer.Stakeholders.API.Public;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Explorer.API.Controllers.Administrator.Administration
+namespace Explorer.API.Controllers.Author.Administration
 {
-    [Authorize(Policy = "administratorAndAuthorPolicy")]
-    [Route("api/administrator/notifications")]
-    public class NotificationAdministratorController : BaseApiController
+    [Authorize(Policy = "authorPolicy")]
+    [Route("api/author/notifications")]
+    public class NotificationAuthorController : BaseApiController
     {
         private readonly INotificationService _service;
 
-        public NotificationAdministratorController(INotificationService notificationService)
+        public NotificationAuthorController(INotificationService notificationService)
         {
             _service = notificationService;
         }

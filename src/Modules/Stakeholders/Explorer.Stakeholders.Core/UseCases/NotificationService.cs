@@ -16,17 +16,27 @@ namespace Explorer.Stakeholders.Core.UseCases
             _notificationRepository = notifRepo;
         }
 
-        public Result<NotificationDto> Create(string description, long userId, long? foreignId, int type)
+        public Result<NotificationDto> Create(NotificationDto notificationDto)
         {
             try
             {
-                var result = _notificationRepository.Create(description, userId, foreignId, type);
-                return MapToDto(result);
+                if (!IsNewNotifValid(notificationDto))
+                    return Result.Fail("Description shouldn't be empty!");
+
+                if (!Enum.TryParse(notificationDto.Type, true, out NotificationType type))
+                    throw new ArgumentException("Invalid notification type.", nameof(notificationDto.Type));
+                Notification notification = new Notification(notificationDto.Description, notificationDto.CreationTime, type, notificationDto.IsRead, notificationDto.UserId, notificationDto.ForeignId);
+
+                return MapToDto(_notificationRepository.Create(notification));
             }
             catch (KeyNotFoundException e)
             {
                 return Result.Fail(FailureCode.NotFound).WithError(e.Message);
             }
+        }
+        private bool IsNewNotifValid(NotificationDto notification)
+        {
+            return (!string.IsNullOrWhiteSpace(notification.Description));
         }
 
         public Result<PagedResult<NotificationDto>> GetAllByUser(long id, int page, int pageSize)

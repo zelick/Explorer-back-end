@@ -36,7 +36,7 @@ namespace Explorer.Stakeholders.Core.UseCases
         public Result<CheckpointRequestDto> RejectRequest(int id, string notificationComment)
         {
             var request = CrudRepository.Get(id);
-            _notificationRepository.Create(notificationComment, request.AuthorId, id, (int)NotificationType.REQUEST);
+            _notificationRepository.CreateRequestNotification(notificationComment, request.AuthorId, id);
             var objectRequest = _checkpointRequestRepository.RejectRequest(id);
             return MapToDto(objectRequest);
         }
@@ -44,7 +44,7 @@ namespace Explorer.Stakeholders.Core.UseCases
         public Result<CheckpointRequestDto> AcceptRequest(int id, string notificationComment)
         {
             var request = CrudRepository.Get(id);
-            _notificationRepository.Create(notificationComment, request.AuthorId, id, (int)NotificationType.REQUEST);
+            _notificationRepository.CreateRequestNotification(notificationComment, request.AuthorId, id);
             var objectRequest = _checkpointRequestRepository.AcceptRequest(id);
             return MapToDto(objectRequest);
         }

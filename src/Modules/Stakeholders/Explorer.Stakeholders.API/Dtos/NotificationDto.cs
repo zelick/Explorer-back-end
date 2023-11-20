@@ -10,14 +10,7 @@ namespace Explorer.Stakeholders.API.Dtos
         public bool IsRead { get; set; }
         public long UserId { get; set; }
         public UserDto? User { get; set; }
-        public NotificationType Type { get; set; }
+        public string Type { get; set; }
         public long? ForeignId { get; set; }
-    }
-
-    public enum NotificationType
-    {
-        OTHER,
-        REQUEST,
-        REPORTED_ISSUE
     }
 }

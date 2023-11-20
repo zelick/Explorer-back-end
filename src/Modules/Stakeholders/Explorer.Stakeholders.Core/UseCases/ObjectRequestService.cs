@@ -25,7 +25,7 @@ namespace Explorer.Stakeholders.Core.UseCases
         public Result<ObjectRequestDto> AcceptRequest(int id, string notificationComment)
         {
             var request = CrudRepository.Get(id);
-            _notificationRepository.Create(notificationComment, request.AuthorId, id, (int)NotificationType.REQUEST);
+            _notificationRepository.CreateRequestNotification(notificationComment, request.AuthorId, id);
             var objectRequest = _objectRequestRepository.AcceptRequest(id);
             return MapToDto(objectRequest);
         }
@@ -50,7 +50,7 @@ namespace Explorer.Stakeholders.Core.UseCases
         public Result<ObjectRequestDto> RejectRequest(int id, string notificationComment)
         {
             var request = CrudRepository.Get(id);
-            _notificationRepository.Create(notificationComment, request.AuthorId, id, (int)NotificationType.REQUEST);
+            _notificationRepository.CreateRequestNotification(notificationComment, request.AuthorId, id);
             var objectRequest = _objectRequestRepository.RejectRequest(id);
             return MapToDto(objectRequest);
         }

@@ -3,11 +3,6 @@ using Explorer.BuildingBlocks.Infrastructure.Database;
 using Explorer.Stakeholders.Core.Domain;
 using Explorer.Stakeholders.Core.Domain.RepositoryInterfaces;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Explorer.Stakeholders.Infrastructure.Database.Repositories
 {
@@ -18,12 +13,26 @@ namespace Explorer.Stakeholders.Infrastructure.Database.Repositories
         {
             _dbContext = context;
         }
-
-
-        public Notification Create(string description, long userId, long? foreignId, int type)
+        public Notification CreateRequestNotification(string description, long userId, long? foreignId)
         {
-            var notif = new Notification(description,
-                DateTime.UtcNow, (NotificationType)type, false, userId, foreignId);
+            var notif = new Notification(description, userId, foreignId); 
+            notif.RequestType(); // NotificationType.REQUEST
+            _dbContext.Notifications.Add(notif);
+            _dbContext.SaveChanges();
+            return notif;
+        }
+        public Notification CreateReportedIssueNotification(string description, long userId, long? foreignId) 
+        {
+            var notif = new Notification(description, userId, foreignId);
+            notif.ReportedIssueType(); // NotificationType.REPORTED_ISSUE
+            _dbContext.Notifications.Add(notif);
+            _dbContext.SaveChanges();
+            return notif;
+        }
+        public Notification CreateNotification(string description, long userId) 
+        {
+            var notif = new Notification(description, userId, null); 
+            // NotificationType.OTHER
             _dbContext.Notifications.Add(notif);
             _dbContext.SaveChanges();
             return notif;
@@ -50,9 +59,7 @@ namespace Explorer.Stakeholders.Infrastructure.Database.Repositories
                        .Where(n => n.Id == id)
                        .FirstOrDefault();
             if (notif == null) throw new KeyNotFoundException("Not found: " + id);
-            if (notif.Type != NotificationType.OTHER && notif.ForeignId != null) 
-                throw new KeyNotFoundException("Invalid notification: " + id);
-
+            
             return notif;
         }
 
