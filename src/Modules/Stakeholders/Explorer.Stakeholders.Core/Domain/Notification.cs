@@ -7,7 +7,8 @@ namespace Explorer.Stakeholders.Core.Domain
     {
         OTHER,
         REQUEST,
-        REPORTED_ISSUE
+        REPORTED_ISSUE,
+        MESSAGE
     }
 
     public class Notification : Entity
@@ -71,6 +72,10 @@ namespace Explorer.Stakeholders.Core.Domain
         public void ReportedIssueType()
         {
             Type = NotificationType.REPORTED_ISSUE;
+        }
+        public void MessageType()
+        {
+            Type = NotificationType.MESSAGE;
         }
     }
 }

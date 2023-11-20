@@ -29,6 +29,14 @@ namespace Explorer.Stakeholders.Infrastructure.Database.Repositories
             _dbContext.SaveChanges();
             return notif;
         }
+        public Notification CreateMessageNotification(string description, long userId, long? foreignId)
+        {
+            var notif = new Notification(description, userId, foreignId);
+            notif.MessageType(); // NotificationType.MESSAGE
+            _dbContext.Notifications.Add(notif);
+            _dbContext.SaveChanges();
+            return notif;
+        }
         public Notification CreateNotification(string description, long userId) 
         {
             var notif = new Notification(description, userId, null); 

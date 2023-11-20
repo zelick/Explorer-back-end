@@ -13,12 +13,14 @@ namespace Explorer.Stakeholders.Core.UseCases
         private readonly IMessageRepository _messageRepository;
         private readonly IUserRepository _userRepository;
         private readonly ISocialProfileRepository _socialProfileRepository;
+        private readonly INotificationRepository _notificationRepository;
 
-        public MessageService(IMessageRepository messageRepository, IUserRepository userRepository, ISocialProfileRepository socialProfileRepository, IMapper mapper) : base(messageRepository, mapper)
+        public MessageService(IMessageRepository messageRepository, IUserRepository userRepository, ISocialProfileRepository socialProfileRepository, INotificationRepository notificationRepository, IMapper mapper) : base(messageRepository, mapper)
         {
             _messageRepository = messageRepository;
             _userRepository = userRepository;
             _socialProfileRepository = socialProfileRepository;
+            _notificationRepository = notificationRepository;
         }
 
         public Result<MessageDto> Send(MessageDto messageDto)
@@ -29,6 +31,7 @@ namespace Explorer.Stakeholders.Core.UseCases
             }
             messageDto.SenderUsername = _userRepository.GetUserById(messageDto.SenderId).Username;
             var message = _messageRepository.Send(MapToDomain(messageDto));
+            var notification = _notificationRepository.CreateMessageNotification("New message: " + messageDto.Title, messageDto.RecipientId, messageDto.Id);
 
             return MapToDto(message);
         }
