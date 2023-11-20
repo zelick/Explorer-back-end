@@ -31,7 +31,7 @@ namespace Explorer.Stakeholders.Core.UseCases
             }
             messageDto.SenderUsername = _userRepository.GetUserById(messageDto.SenderId).Username;
             var message = _messageRepository.Send(MapToDomain(messageDto));
-            var notification = _notificationRepository.CreateMessageNotification("New message: " + messageDto.Title, messageDto.RecipientId, messageDto.Id);
+            var notification = _notificationRepository.CreateMessageNotification("New message: " + message.Title, message.RecipientId, message.Id);
 
             return MapToDto(message);
         }
