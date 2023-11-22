@@ -99,11 +99,14 @@ public class BlogPostService : CrudService<BlogPostDto, BlogPost>, IBlogPostServ
         }
     }
 
-    public override Result<BlogPostDto> Update(BlogPostDto blogPostDto)
+    public Result<BlogPostDto> Update(BlogPostDto blogPostDto, int userId)
     {
         try
         {
             var blogPost = CrudRepository.Get(blogPostDto.Id);
+
+            if(!blogPost.IsCreatedByUser(userId))
+                throw new InvalidOperationException("Only the creator of the blog can update it.");
 
             if (blogPost.Status != BlogPostStatus.Draft)
                 throw new ArgumentException("Only Blog Posts with Draft Status can be updated.");
@@ -121,13 +124,21 @@ public class BlogPostService : CrudService<BlogPostDto, BlogPost>, IBlogPostServ
         {
             return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
         }
+        catch (InvalidOperationException e)
+        {
+            return Result.Fail(FailureCode.Forbidden).WithError(e.Message);
+        }
     }
 
-    public Result<BlogPostDto> Close(int id)
+    public Result<BlogPostDto> Close(int id, int userId)
     {
         try
         {
             var blogPost = _blogPostsRepository.Get(id);
+
+            if (!blogPost.IsCreatedByUser(userId))
+                throw new InvalidOperationException("Only the creator of the blog can close it.");
+
             blogPost.Close();
             var result = _blogPostsRepository.Update(blogPost);
 
@@ -140,6 +151,32 @@ public class BlogPostService : CrudService<BlogPostDto, BlogPost>, IBlogPostServ
         catch (KeyNotFoundException e)
         {
             return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+        }
+        catch (InvalidOperationException e)
+        {
+            return Result.Fail(FailureCode.Forbidden).WithError(e.Message);
+        }
+    }
+
+    public Result Delete(int id, int userId)
+    {
+        try
+        {
+            var blogPost = _blogPostsRepository.Get(id);
+
+            if (!blogPost.IsCreatedByUser(userId))
+                throw new InvalidOperationException("Only the creator of the blog can delete it.");
+
+            CrudRepository.Delete(id);
+            return Result.Ok();
+        }
+        catch (KeyNotFoundException e)
+        {
+            return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+        }
+        catch (InvalidOperationException e)
+        {
+            return Result.Fail(FailureCode.Forbidden).WithError(e.Message);
         }
     }
 

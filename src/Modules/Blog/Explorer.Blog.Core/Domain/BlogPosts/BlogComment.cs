@@ -5,9 +5,12 @@ namespace Explorer.Blog.Core.Domain.BlogPosts;
 
 public class BlogComment : ValueObject
 {
-    public BlogComment()
-    {
-    }
+    public long UserId { get; init; }
+    public DateTime CreationTime { get; init; }
+    public DateTime? ModificationTime { get; set; }
+    public string Text { get; set; }
+
+    BlogComment() { }
 
     [JsonConstructor]
     public BlogComment(long userId, DateTime creationTime, DateTime? modificationTime, string text)
@@ -19,14 +22,14 @@ public class BlogComment : ValueObject
         Validate();
     }
 
-    public long UserId { get; init; }
-    public DateTime CreationTime { get; init; }
-    public DateTime? ModificationTime { get; set; }
-    public string Text { get; set; }
-
     private void Validate()
     {
         if (string.IsNullOrWhiteSpace(Text)) throw new ArgumentException("Invalid Text");
+    }
+    
+    public bool IsCreatedByUser(int userId)
+    {
+        return UserId == userId;
     }
 
     protected override IEnumerable<object> GetEqualityComponents()

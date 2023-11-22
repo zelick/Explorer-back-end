@@ -40,12 +40,15 @@ public class BlogCommentService : BaseService<BlogPostDto, BlogPost>, IBlogComme
         }
     }
 
-    public Result Remove(int blogPostId, BlogCommentDto blogCommentDto)
+    public Result Remove(int blogPostId, BlogCommentDto blogCommentDto, int userId)
     {
         try
         {
             var blogPost = _blogPostsRepository.Get(blogPostId);
             var blogComment = _mapper.Map<BlogCommentDto, BlogComment>(blogCommentDto);
+
+            if (!blogComment.IsCreatedByUser(userId))
+                throw new InvalidOperationException("Only the creator of the comment can remove it.");
 
             blogPost.DeleteComment(blogComment);
             _blogPostsRepository.Update(blogPost);
@@ -58,6 +61,10 @@ public class BlogCommentService : BaseService<BlogPostDto, BlogPost>, IBlogComme
         catch (ArgumentException e)
         {
             return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+        }
+        catch (InvalidOperationException e)
+        {
+            return Result.Fail(FailureCode.Forbidden).WithError(e.Message);
         }
     }
 }

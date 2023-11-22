@@ -1,13 +1,15 @@
 using Explorer.API.Services;
 using Explorer.Blog.API.Dtos;
 using Explorer.Blog.API.Public;
+using Explorer.Blog.Core.Domain.BlogPosts;
 using Explorer.BuildingBlocks.Core.UseCases;
+using Explorer.Stakeholders.Infrastructure.Authentication;
+using FluentResults;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Explorer.API.Controllers.User.Blogging;
 
-[Authorize(Policy = "userPolicy")]
 [Route("api/blogging/blog-posts")]
 public class BlogPostController : BaseApiController
 {
@@ -37,8 +39,11 @@ public class BlogPostController : BaseApiController
     }
 
     [HttpPost]
+    [Authorize(Policy = "userPolicy")]
     public ActionResult<BlogPostDto> Create([FromForm] BlogPostDto blogPost, [FromForm] List<IFormFile>? images = null)
     {
+        if (User.PersonId() != blogPost.UserId) return CreateResponse(Result.Fail(FailureCode.Forbidden));
+
         if (images != null && images.Any())
         {
             var imageNames = _imageService.UploadImages(images);
@@ -49,16 +54,18 @@ public class BlogPostController : BaseApiController
         return CreateResponse(result);
     }
 
-    // TODO authorization
-    [HttpGet("user/{id:int}")]
-    public ActionResult<PagedResult<BlogPostDto>> GetAllByUser([FromQuery] int page, [FromQuery] int pageSize, int id)
+    [HttpGet("user/{userId:int}")]
+    [Authorize(Policy = "userPolicy")]
+    public ActionResult<PagedResult<BlogPostDto>> GetAllByUser([FromQuery] int page, [FromQuery] int pageSize, int userId)
     {
+        if (User.PersonId() != userId) return CreateResponse(Result.Fail(FailureCode.Forbidden));
 
-        var result = _blogPostService.GetAllByUser(page, pageSize, id);
+        var result = _blogPostService.GetAllByUser(page, pageSize, userId);
         return CreateResponse(result);
     }
 
     [HttpPut("{id:int}")]
+    [Authorize(Policy = "userPolicy")]
     public ActionResult<BlogPostDto> Update(int id, [FromForm] BlogPostDto blogPost, [FromForm] List<IFormFile>? images = null)
     {
         if (images != null && images.Any())
@@ -68,27 +75,32 @@ public class BlogPostController : BaseApiController
         }
 
         blogPost.Id = id;
-        var result = _blogPostService.Update(blogPost);
+        var result = _blogPostService.Update(blogPost, User.PersonId());
         return CreateResponse(result);
     }
 
     [HttpPatch("{id:int}/close")]
+    [Authorize(Policy = "userPolicy")]
     public ActionResult<BlogPostDto> Close(int id)
     {
-        var result = _blogPostService.Close(id);
+        var result = _blogPostService.Close(id, User.PersonId());
         return CreateResponse(result);
     }
 
     [HttpDelete("{id:int}")]
+    [Authorize(Policy = "userPolicy")]
     public ActionResult Delete(int id)
     {
-        var result = _blogPostService.Delete(id);
+        var result = _blogPostService.Delete(id, User.PersonId());
         return CreateResponse(result);
     }
 
     [HttpPut("{id:int}/ratings")]
+    [Authorize(Policy = "userPolicy")]
     public ActionResult<BlogPostDto> Rate(int id, [FromBody] BlogRatingDto blogRating)
     {
+        if (User.PersonId() != blogRating.UserId) return CreateResponse(Result.Fail(FailureCode.Forbidden));
+
         var result = _blogPostService.Rate(id, blogRating);
         return CreateResponse(result);
     }

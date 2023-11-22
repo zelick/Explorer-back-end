@@ -1,4 +1,5 @@
 using Explorer.BuildingBlocks.Core.Domain;
+using Explorer.Stakeholders.API.Dtos;
 
 namespace Explorer.Blog.Core.Domain.BlogPosts;
 
@@ -138,6 +139,11 @@ public class BlogPost : Entity
             Status = BlogPostStatus.Famous;
         else if (rating > ActiveRatingThreshold || commentCount > ActiveCommentThreshold)
             Status = BlogPostStatus.Active;
+    }
+
+    public bool IsCreatedByUser(int userId)
+    {
+        return UserId == userId;
     }
 }
 
