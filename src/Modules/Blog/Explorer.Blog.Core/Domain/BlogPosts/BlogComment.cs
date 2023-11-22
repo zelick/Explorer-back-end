@@ -1,16 +1,13 @@
-﻿using Explorer.BuildingBlocks.Core.Domain;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
+using Explorer.BuildingBlocks.Core.Domain;
 
 namespace Explorer.Blog.Core.Domain.BlogPosts;
 
 public class BlogComment : ValueObject
 {
-    public long UserId { get; init; }
-    public DateTime CreationTime { get; init; }
-    public DateTime? ModificationTime { get; set; }
-    public string Text { get; set; }
-
-    public BlogComment() { }
+    public BlogComment()
+    {
+    }
 
     [JsonConstructor]
     public BlogComment(long userId, DateTime creationTime, DateTime? modificationTime, string text)
@@ -21,6 +18,11 @@ public class BlogComment : ValueObject
         Text = text;
         Validate();
     }
+
+    public long UserId { get; init; }
+    public DateTime CreationTime { get; init; }
+    public DateTime? ModificationTime { get; set; }
+    public string Text { get; set; }
 
     private void Validate()
     {

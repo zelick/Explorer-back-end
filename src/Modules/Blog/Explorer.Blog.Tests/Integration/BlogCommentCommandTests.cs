@@ -11,7 +11,9 @@ namespace Explorer.Blog.Tests.Integration;
 [Collection("Sequential")]
 public class BlogCommentCommandTests : BaseBlogIntegrationTest
 {
-    public BlogCommentCommandTests(BlogTestFactory factory) : base(factory) { }
+    public BlogCommentCommandTests(BlogTestFactory factory) : base(factory)
+    {
+    }
 
     [Fact]
     public void Creates()
@@ -21,7 +23,7 @@ public class BlogCommentCommandTests : BaseBlogIntegrationTest
         var controller = CreateController(scope);
         var dbContext = scope.ServiceProvider.GetRequiredService<BlogContext>();
 
-        var newBlogComment = new BlogCommentDto()
+        var newBlogComment = new BlogCommentDto
         {
             UserId = -1,
             CreationTime = DateTime.MinValue,
@@ -140,7 +142,8 @@ public class BlogCommentCommandTests : BaseBlogIntegrationTest
 
         // Assert - Response
         result.ShouldNotBeNull();
-        result.ShouldBeOfType<OkResult>(); ;
+        result.ShouldBeOfType<OkResult>();
+        ;
 
         // Assert - Database
         var storedBlogPost = dbContext.BlogPosts.FirstOrDefault(i => i.Id == -12);

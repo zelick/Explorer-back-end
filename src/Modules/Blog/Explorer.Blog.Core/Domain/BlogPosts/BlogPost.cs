@@ -1,4 +1,3 @@
-using System.Data;
 using Explorer.BuildingBlocks.Core.Domain;
 
 namespace Explorer.Blog.Core.Domain.BlogPosts;
@@ -45,7 +44,7 @@ public class BlogPost : Entity
 
     public void Close()
     {
-        if (Status is BlogPostStatus.Draft or BlogPostStatus.Closed) 
+        if (Status is BlogPostStatus.Draft or BlogPostStatus.Closed)
             throw new ArgumentException("Invalid Status");
 
         Status = BlogPostStatus.Closed;
@@ -95,7 +94,8 @@ public class BlogPost : Entity
 
         Comments ??= new List<BlogComment>();
 
-        var existingComment = Comments.FirstOrDefault(c => c?.UserId == blogComment.UserId && c?.CreationTime == blogComment.CreationTime);
+        var existingComment = Comments.FirstOrDefault(c =>
+            c?.UserId == blogComment.UserId && c?.CreationTime == blogComment.CreationTime);
         if (existingComment is not null)
         {
             existingComment.ModificationTime = DateTime.Now;
@@ -114,7 +114,8 @@ public class BlogPost : Entity
 
         Comments ??= new List<BlogComment>();
 
-        var existingComment = Comments.FirstOrDefault(c => c?.UserId == blogComment.UserId && c?.CreationTime == blogComment.CreationTime);
+        var existingComment = Comments.FirstOrDefault(c =>
+            c?.UserId == blogComment.UserId && c?.CreationTime == blogComment.CreationTime);
         if (existingComment is null)
             throw new ArgumentException("Comment not found.");
 
@@ -132,17 +133,11 @@ public class BlogPost : Entity
         var commentCount = Comments.Count;
 
         if (rating < ClosedRatingThreshold)
-        {
             Status = BlogPostStatus.Closed;
-        }
         else if (rating > FamousRatingThreshold && commentCount > FamousCommentThreshold)
-        {
             Status = BlogPostStatus.Famous;
-        }
         else if (rating > ActiveRatingThreshold || commentCount > ActiveCommentThreshold)
-        {
             Status = BlogPostStatus.Active;
-        }
     }
 }
 

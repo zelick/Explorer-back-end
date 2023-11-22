@@ -1,17 +1,17 @@
-﻿using Explorer.Blog.API.Public;
+﻿using AutoMapper;
 using Explorer.Blog.API.Dtos;
-using Explorer.BuildingBlocks.Core.UseCases;
-using AutoMapper;
-using FluentResults;
-using Explorer.Blog.Core.Domain.RepositoryInterfaces;
+using Explorer.Blog.API.Public;
 using Explorer.Blog.Core.Domain.BlogPosts;
+using Explorer.Blog.Core.Domain.RepositoryInterfaces;
+using Explorer.BuildingBlocks.Core.UseCases;
+using FluentResults;
 
 namespace Explorer.Blog.Core.UseCases;
 
 public class BlogCommentService : BaseService<BlogPostDto, BlogPost>, IBlogCommentService
 {
-    private readonly IMapper _mapper;
     private readonly IBlogPostRepository _blogPostsRepository;
+    private readonly IMapper _mapper;
 
     public BlogCommentService(IBlogPostRepository repository, IMapper mapper) : base(mapper)
     {
