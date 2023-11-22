@@ -5,11 +5,6 @@ using Explorer.Stakeholders.API.Public;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Explorer.Stakeholders.Tests.Integration.Administration
 {
@@ -25,12 +20,12 @@ namespace Explorer.Stakeholders.Tests.Integration.Administration
             var controller = CreateController(scope);
 
             // Act
-            var result = ((ObjectResult)controller.GetAllByUser(-12, 0, 0).Result)?.Value as PagedResult<NotificationDto>;
+            var result = ((ObjectResult)controller.GetAllByUser(-1, 0, 0).Result)?.Value as PagedResult<NotificationDto>;
 
             // Assert
             result.ShouldNotBeNull();
-            result.Results.Count.ShouldBe(3);
-            result.TotalCount.ShouldBe(3);
+            result.Results.Count.ShouldBe(2);
+            result.TotalCount.ShouldBe(2);
         }
 
         [Fact]
@@ -41,7 +36,7 @@ namespace Explorer.Stakeholders.Tests.Integration.Administration
             var controller = CreateController(scope);
 
             // Act
-            var result = ((ObjectResult)controller.GetUnreadByUser(-12, 0, 0).Result)?.Value as PagedResult<NotificationDto>;
+            var result = ((ObjectResult)controller.GetUnreadByUser(-1, 0, 0).Result)?.Value as PagedResult<NotificationDto>;
 
             // Assert
             result.ShouldNotBeNull();

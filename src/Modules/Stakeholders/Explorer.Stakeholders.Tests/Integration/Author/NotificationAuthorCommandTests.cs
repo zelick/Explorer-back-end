@@ -1,16 +1,10 @@
-﻿using Explorer.API.Controllers.Administrator.Administration;
-using Explorer.API.Controllers.Author.Administration;
+﻿using Explorer.API.Controllers.Author.Administration;
 using Explorer.Stakeholders.API.Dtos;
 using Explorer.Stakeholders.API.Public;
 using Explorer.Stakeholders.Infrastructure.Database;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Explorer.Stakeholders.Tests.Integration.Author
 {
@@ -27,12 +21,12 @@ namespace Explorer.Stakeholders.Tests.Integration.Author
             var dbContext = scope.ServiceProvider.GetRequiredService<StakeholdersContext>();
             var updatedEntity = new NotificationDto
             {
-                Id = -1,
+                Id = -3,
                 Description = "Author old notification!!!",
                 IsRead = true,
                 CreationTime = DateTime.UtcNow,
                 UserId = -12,
-                ForeignId = -2
+                ForeignId = -1
             };
 
             // Act
@@ -40,7 +34,7 @@ namespace Explorer.Stakeholders.Tests.Integration.Author
 
             // Assert - Response
             result.ShouldNotBeNull();
-            result.Id.ShouldBe(-1);
+            result.Id.ShouldBe(-3);
             result.Description.ShouldBe(updatedEntity.Description);
             result.IsRead.ShouldBe(updatedEntity.IsRead);
 
@@ -48,7 +42,7 @@ namespace Explorer.Stakeholders.Tests.Integration.Author
             var storedEntity = dbContext.Notifications.FirstOrDefault(i => i.Description == "Author old notification!!!");
             storedEntity.ShouldNotBeNull();
             storedEntity.Description.ShouldBe(updatedEntity.Description);
-            var oldEntity = dbContext.Notifications.FirstOrDefault(i => i.Description == "New notification 1!");
+            var oldEntity = dbContext.Notifications.FirstOrDefault(i => i.Description == "Notification 2!");
             oldEntity.ShouldBeNull();
         }
 
@@ -61,14 +55,14 @@ namespace Explorer.Stakeholders.Tests.Integration.Author
             var dbContext = scope.ServiceProvider.GetRequiredService<StakeholdersContext>();
 
             // Act
-            var result = (OkResult)controller.Delete(-2);
+            var result = (OkResult)controller.Delete(-4);
 
             // Assert - Response
             result.ShouldNotBeNull();
             result.StatusCode.ShouldBe(200);
 
             // Assert - Database
-            var storedCourse = dbContext.Notifications.FirstOrDefault(i => i.Id == -2);
+            var storedCourse = dbContext.Notifications.FirstOrDefault(i => i.Id == -4);
             storedCourse.ShouldBeNull();
         }
 

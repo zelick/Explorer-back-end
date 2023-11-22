@@ -1,16 +1,10 @@
 ﻿using Explorer.API.Controllers.Administrator.Administration;
-using Explorer.API.Controllers.Tourist.Tour;
 using Explorer.Stakeholders.API.Dtos;
 using Explorer.Stakeholders.API.Public;
 using Explorer.Stakeholders.Infrastructure.Database;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Explorer.Stakeholders.Tests.Integration.Administration
 {
@@ -28,11 +22,11 @@ namespace Explorer.Stakeholders.Tests.Integration.Administration
             var updatedEntity = new NotificationDto
             {
                 Id = -1,
-                Description = "Author old notification!!!",
-                IsRead = true, 
+                Description = "Admins old notification!!!",
+                IsRead = true,
                 CreationTime = DateTime.UtcNow,
-                UserId = -12, 
-                ForeignId = -2
+                UserId = -1,
+                ForeignId = -1
             };
 
             // Act
@@ -45,16 +39,16 @@ namespace Explorer.Stakeholders.Tests.Integration.Administration
             result.IsRead.ShouldBe(updatedEntity.IsRead);
 
             // Assert - Database
-            var storedEntity = dbContext.Notifications.FirstOrDefault(i => i.Description == "Author old notification!!!");
+            var storedEntity = dbContext.Notifications.FirstOrDefault(i => i.Description == "Admins old notification!!!");
             storedEntity.ShouldNotBeNull();
             storedEntity.Description.ShouldBe(updatedEntity.Description);
-            var oldEntity = dbContext.Notifications.FirstOrDefault(i => i.Description == "New notification 1!");
+            var oldEntity = dbContext.Notifications.FirstOrDefault(i => i.Description == "Notification 1!");
             oldEntity.ShouldBeNull();
         }
 
         [Fact]
         public void Deletes()
-        { 
+        {
             // Arrange
             using var scope = Factory.Services.CreateScope();
             var controller = CreateController(scope);
