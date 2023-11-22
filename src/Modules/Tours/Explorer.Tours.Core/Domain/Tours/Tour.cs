@@ -1,6 +1,4 @@
 ﻿using Explorer.BuildingBlocks.Core.Domain;
-using System.ComponentModel.DataAnnotations;
-using System.Threading.Channels;
 
 namespace Explorer.Tours.Core.Domain.Tours
 {
@@ -180,8 +178,6 @@ namespace Explorer.Tours.Core.Domain.Tours
             return authorId == AuthorId;
         }
     }
-}
-
 public enum TourStatus
 {
     Draft,
@@ -195,3 +191,5 @@ public enum Demandigness
     Medium,
     Hard
 }
+}
+
