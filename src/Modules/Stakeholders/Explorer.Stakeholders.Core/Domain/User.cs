@@ -12,14 +12,18 @@ public class User : Entity
     public UserRole Role { get; private set; }
     public bool IsActive { get; set; }
     public List<Club> Clubs { get; set; }
+    public string VerificationToken { get;  set; }
+    public bool IsVerified { get;  set; }
 
 
-    public User(string username, string password, UserRole role, bool isActive)
+    public User(string username, string password, UserRole role, bool isActive, string verificationToken, bool isVerified)
 	{
 		Username = username;
 		Password = password;
 		Role = role;
 		IsActive = isActive;
+        VerificationToken = verificationToken;
+        IsVerified = isVerified;
         Validate();
     }
 

@@ -12,11 +12,13 @@ public class AuthenticationController : BaseApiController
 {
     private readonly IAuthenticationService _authenticationService;
     private readonly ImageService _imageService;
+    private readonly IEmailService _emailService;
 
-    public AuthenticationController(IAuthenticationService authenticationService)
+    public AuthenticationController(IAuthenticationService authenticationService, IEmailService emailService)
     {
         _authenticationService = authenticationService;
         _imageService = new ImageService();
+        _emailService = emailService;
     }
 
     [HttpPost]
@@ -27,8 +29,9 @@ public class AuthenticationController : BaseApiController
             var pictureUrl = _imageService.UploadImages(new List<IFormFile> { profilePicture });
             account.ProfilePictureUrl = pictureUrl[0];
         }
-
+        _emailService.GenerateVerificationToken(account);
         var result = _authenticationService.RegisterTourist(account);
+        _emailService.SendEmail(account);
         return CreateResponse(result);
     }
 
