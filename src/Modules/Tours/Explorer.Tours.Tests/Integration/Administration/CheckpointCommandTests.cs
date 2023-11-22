@@ -29,7 +29,7 @@ namespace Explorer.Tours.Tests.Integration.Administration
             var newEntity = new CheckpointDto
             {
                 TourId = -1,
-                AuthorId = 2,
+                AuthorId = -12,
                 Longitude = 45,
                 Latitude = 45,
                 Name = "Katedrala",
@@ -38,7 +38,7 @@ namespace Explorer.Tours.Tests.Integration.Administration
             };
 
             // Act
-            var result = ((ObjectResult)controller.Create(newEntity, 2, "Private").Result)?.Value as CheckpointDto;
+            var result = ((ObjectResult)controller.Create(newEntity, "Private").Result)?.Value as CheckpointDto;
 
             // Assert - Response
             result.ShouldNotBeNull();
@@ -87,7 +87,7 @@ namespace Explorer.Tours.Tests.Integration.Administration
             {
                 Id = -2,
                 TourId = -1,
-                AuthorId = 2,
+                AuthorId = -12,
                 Longitude = 45,
                 Latitude = 45,
                 Name = "Petrovaradin",
@@ -96,7 +96,7 @@ namespace Explorer.Tours.Tests.Integration.Administration
             };
 
             // Act
-            var result = ((ObjectResult)controller.Update(updatedEntity, 2).Result)?.Value as CheckpointDto;
+            var result = ((ObjectResult)controller.Update(updatedEntity).Result)?.Value as CheckpointDto;
 
             // Assert - Response
 
@@ -131,7 +131,7 @@ namespace Explorer.Tours.Tests.Integration.Administration
             {
                 Id = -1000,
                 TourId = -1,
-                AuthorId = 2,
+                AuthorId = -12,
                 Longitude = 45,
                 Latitude = 45,
                 Name = "Test",
@@ -140,7 +140,7 @@ namespace Explorer.Tours.Tests.Integration.Administration
             };
 
             // Act
-            var result = (ObjectResult)controller.Update(updatedEntity, 2).Result;
+            var result = (ObjectResult)controller.Update(updatedEntity).Result;
 
             // Assert
             result.ShouldNotBeNull();
@@ -156,7 +156,7 @@ namespace Explorer.Tours.Tests.Integration.Administration
             var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
 
             // Act
-            var result = (OkResult)controller.Delete(-1, 2);
+            var result = (OkResult)controller.Delete(-1);
 
             // Assert - Response
             result.ShouldNotBeNull();
@@ -175,7 +175,7 @@ namespace Explorer.Tours.Tests.Integration.Administration
             var controller = CreateController(scope);
 
             // Act
-            var result = (ObjectResult)controller.Delete(-1000, 2);
+            var result = (ObjectResult)controller.Delete(-1000);
 
             // Assert
             result.ShouldNotBeNull();
@@ -186,7 +186,7 @@ namespace Explorer.Tours.Tests.Integration.Administration
         {
             return new CheckpointController(scope.ServiceProvider.GetRequiredService<ICheckpointService>())
             {
-                ControllerContext = BuildContext("-1")
+                ControllerContext = BuildContext("-12")
             };
         }
     }

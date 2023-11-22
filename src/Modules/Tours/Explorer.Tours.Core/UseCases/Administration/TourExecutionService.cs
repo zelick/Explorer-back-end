@@ -5,6 +5,7 @@ using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
 using Explorer.Tours.Core.Domain.RepositoryInterfaces;
 using Explorer.Tours.Core.Domain.TourExecutions;
+using Explorer.Tours.Core.Domain.Tours;
 using Explorer.Tours.Core.Mappers;
 using FluentResults;
 using System;
@@ -61,12 +62,22 @@ namespace Explorer.Tours.Core.UseCases.Administration
             return new Result<TourExecutionDto>();
         }
 
-        public Result<TourExecutionDto> Abandon(long id)
+        public Result<TourExecutionDto> Abandon(long id, long touristId)
         {
-            TourExecution tourExecution = CrudRepository.Get(id);
-            tourExecution.Abandone(id);
-            TourExecution result = CrudRepository.Update(tourExecution);
-            return _tourExecutionMapper.createDto(result);
+            try
+            {
+                if (!_shoppingService.IsTourPurchasedByUser(touristId, id))
+                    return Result.Fail(FailureCode.InvalidArgument).WithError("Tour not purchased");
+
+                TourExecution tourExecution = CrudRepository.Get(id);
+                tourExecution.Abandone(id);
+                return _tourExecutionMapper.createDto(CrudRepository.Update(tourExecution));
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+            
         }
     }
 }
