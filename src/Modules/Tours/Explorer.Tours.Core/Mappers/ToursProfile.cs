@@ -24,7 +24,6 @@ public class ToursProfile : Profile
                 .ForMember(dest => dest.Comments, opt => opt.MapFrom(src => src.Comments))
                 .ReverseMap();
         CreateMap<ReportedIssueCommentDto, ReportedIssueComment>().ReverseMap();
-        CreateMap<ReportedIssueNotificationDto, ReportedIssueNotification>().ReverseMap();
         CreateMap<TourRatingDto, TourRating>().ReverseMap();
         CreateMap<PublicCheckpointDto, PublicCheckpoint>().ReverseMap();
         CreateMap<PublicMapObjectDto, PublicMapObject>()

@@ -72,8 +72,12 @@ public class StakeholdersContext : DbContext
             });
 
         ConfigureStakeholder(modelBuilder);
+        ConfigureNotificationss(modelBuilder);
     }
-
+    private static void ConfigureNotificationss(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Notification>().HasOne(n => n.User).WithMany().HasForeignKey(n => n.UserId);
+    }
     private static void ConfigureStakeholder(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Person>()
