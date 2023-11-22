@@ -13,12 +13,14 @@ public class AuthenticationController : BaseApiController
     private readonly IAuthenticationService _authenticationService;
     private readonly ImageService _imageService;
     private readonly IEmailService _emailService;
+    private readonly IVerificationService _verificationService;
 
-    public AuthenticationController(IAuthenticationService authenticationService, IEmailService emailService)
+    public AuthenticationController(IAuthenticationService authenticationService, IEmailService emailService, IVerificationService verificationService)
     {
         _authenticationService = authenticationService;
         _imageService = new ImageService();
         _emailService = emailService;
+        _verificationService = verificationService;
     }
 
     [HttpPost]
@@ -40,6 +42,13 @@ public class AuthenticationController : BaseApiController
     public ActionResult<AuthenticationTokensDto> Login([FromBody] CredentialsDto credentials)
     {
         var result = _authenticationService.Login(credentials);
+        return CreateResponse(result);
+    }
+
+    [HttpGet("verify/{verificationToken}")]
+    public ActionResult VerifyUser(string verificationToken)
+    {
+        var result = _verificationService.Verify(verificationToken);
         return CreateResponse(result);
     }
 }

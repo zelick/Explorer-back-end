@@ -42,7 +42,7 @@ namespace Explorer.Stakeholders.Core.UseCases
             private MimeMessage CreateEmailMessage(AccountRegistrationDto account)
             {
                 var message = new MimeMessage();
-                var senderName = "Your App Name"; // Možete ga dodati u appsettings.json ako se često menja
+                var senderName = "Explorer"; 
 
                 message.From.Add(new MailboxAddress(senderName, _configuration["SmtpSettings:SenderEmail"]));
                 message.To.Add(new MailboxAddress(account.Name, account.Email));
@@ -51,7 +51,7 @@ namespace Explorer.Stakeholders.Core.UseCases
                 var bodyBuilder = new BodyBuilder();
                 bodyBuilder.HtmlBody = $"<p>Dear {account.Name},</p>" +
                                       $"<p>Thank you for registering. Please click the following link to verify your email:</p>" +
-                                      $"<a href='https://your-app.com/verify/{ account.VerificationToken }'>Verify Email</a>";
+                                      $"<a href='https://localhost:44333/api/users/verify/{ account.VerificationToken }'>Verify Email</a>";
 
                 message.Body = bodyBuilder.ToMessageBody();
 

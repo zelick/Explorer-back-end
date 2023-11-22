@@ -50,6 +50,7 @@ public static class StakeholdersStartup
         services.AddScoped<IInternalPersonService, InternalPersonService>();
         services.AddScoped<IInternalUserService, UserService>();
         services.AddScoped<IEmailService, EmailService>();
+        services.AddScoped<IVerificationService, VerificationService>();
     }
 
 

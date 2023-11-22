@@ -65,6 +65,6 @@ public class LoginTests : BaseStakeholdersIntegrationTest
 
     private static AuthenticationController CreateController(IServiceScope scope)
     {
-        return new AuthenticationController(scope.ServiceProvider.GetRequiredService<IAuthenticationService>(), scope.ServiceProvider.GetRequiredService<IEmailService>());
+        return new AuthenticationController(scope.ServiceProvider.GetRequiredService<IAuthenticationService>(), scope.ServiceProvider.GetRequiredService<IEmailService>(), scope.ServiceProvider.GetRequiredService<IVerificationService>());
     }
 }
