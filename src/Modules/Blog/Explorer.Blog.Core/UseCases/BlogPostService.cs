@@ -177,4 +177,16 @@ public class BlogPostService : CrudService<BlogPostDto, BlogPost>, IBlogPostServ
         var user = _userService.Get(userId);
         return user.Value.Username;
     }
+
+    public Result<List<BlogPostDto>> GetTopRatedBlogPosts(int count)
+    {
+        var publishedBlogPosts = _blogPostsRepository.GetAllPublished();
+        var topRatedPosts = publishedBlogPosts
+            .Where(post => post.Status == BlogPostStatus.Published)
+            .OrderByDescending(post => post.Ratings?.Sum(rating => rating.Rating == Rating.Upvote ? 1 : -1)) 
+            .Take(count)
+            .ToList();
+
+        return MapToDto(topRatedPosts); ;
+    }
 }

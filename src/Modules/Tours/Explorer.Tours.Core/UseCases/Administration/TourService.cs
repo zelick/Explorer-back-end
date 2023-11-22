@@ -275,5 +275,15 @@ namespace Explorer.Tours.Core.UseCases.Administration
 
             return tour.CalculateAverageRating();
         }
+
+        public Result<List<TourDto>> GetTopRatedTours(int count)
+        {
+            var publishedTours = _tourRepository.GetPublishedTours();
+            var topRatedTours = publishedTours
+                .OrderByDescending(tour => tour.TourRatings?.Average(rating => rating.Rating))
+                .Take(count) 
+                .ToList();
+            return MapToDto(topRatedTours);
+        }
     }
 }

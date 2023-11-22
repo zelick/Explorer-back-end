@@ -15,4 +15,5 @@ public interface IBlogPostService
     Result<BlogPostDto> Close(int id);
     Result Delete(int id);
     Result<BlogPostDto> Rate(int id, BlogRatingDto blogRating);
+    Result<List<BlogPostDto>> GetTopRatedBlogPosts(int cout);
 }

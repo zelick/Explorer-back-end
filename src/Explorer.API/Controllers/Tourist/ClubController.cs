@@ -9,7 +9,7 @@ using System.Security.Claims;
 
 namespace Explorer.API.Controllers.Tourist
 {
-   // [Authorize(Policy = "touristPolicy")]
+    [Authorize(Policy = "touristPolicy")]
     [Route("api/club")]
     public class ClubController : BaseApiController
     {
