@@ -36,5 +36,11 @@ namespace Explorer.API.Controllers
         }
 
 
+        [HttpGet("get-all-tours-preview")]
+        public ActionResult<PagedResult<TourPreviewDto>> GetAllToursPreview([FromQuery] int page, [FromQuery] int pageSize)
+        {
+            var result = _tourService.GetFilteredPublishedTours(page, pageSize);
+            return CreateResponse(result);
+        }
     }
 }
