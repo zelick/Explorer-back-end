@@ -276,14 +276,32 @@ namespace Explorer.Tours.Core.UseCases.Administration
             return tour.CalculateAverageRating();
         }
 
-        public Result<List<TourDto>> GetTopRatedTours(int count)
+        /* public Result<List<TourDto>> GetTopRatedTours(int count)
+         {
+             var publishedTours = _tourRepository.GetPublishedTours();
+             var topRatedTours = publishedTours
+                 .OrderByDescending(tour => tour.TourRatings?.Average(rating => rating.Rating))
+                 .Take(count)
+                 .ToList();
+            return MapToDto(topRatedTours);
+         }*/
+
+        public Result<List<TourPreviewDto>> GetTopRatedTours(int count)
         {
             var publishedTours = _tourRepository.GetPublishedTours();
+
             var topRatedTours = publishedTours
+                .Where(tour => tour.TourRatings != null && tour.TourRatings.Any()) // Provera da li postoje ocene
                 .OrderByDescending(tour => tour.TourRatings?.Average(rating => rating.Rating))
-                .Take(count) 
+                .Take(count)
                 .ToList();
-            return MapToDto(topRatedTours);
+            List<TourPreview> publishedToursPreviews = new List<TourPreview>();
+            foreach (var tour in topRatedTours)
+            {
+                publishedToursPreviews.Add(tour.FilterView(tour));
+            }
+            return _tourPreviewMapper.createDtoList(publishedToursPreviews);
         }
+
     }
 }

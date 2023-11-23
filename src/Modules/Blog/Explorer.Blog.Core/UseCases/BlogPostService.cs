@@ -182,7 +182,6 @@ public class BlogPostService : CrudService<BlogPostDto, BlogPost>, IBlogPostServ
     {
         var publishedBlogPosts = _blogPostsRepository.GetAllPublished();
         var topRatedPosts = publishedBlogPosts
-            .Where(post => post.Status == BlogPostStatus.Published)
             .OrderByDescending(post => post.Ratings?.Sum(rating => rating.Rating == Rating.Upvote ? 1 : -1)) 
             .Take(count)
             .ToList();
