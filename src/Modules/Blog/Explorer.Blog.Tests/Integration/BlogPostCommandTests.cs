@@ -23,7 +23,7 @@ public class BlogPostCommandTests : BaseBlogIntegrationTest
         var dbContext = scope.ServiceProvider.GetRequiredService<BlogContext>();
         var newEntity = new BlogPostDto
         {
-            UserId = 42,
+            UserId = -1,
             Title = "Sample Title",
             Description = "Sample Description",
             CreationDate = DateTime.Now.ToUniversalTime(),
@@ -38,7 +38,7 @@ public class BlogPostCommandTests : BaseBlogIntegrationTest
         result.UserId.ShouldBe(newEntity.UserId);
         result.Title.ShouldBe(newEntity.Title);
 
-        var storedEntity = dbContext.BlogPosts.FirstOrDefault(i => i.UserId == newEntity.UserId);
+        var storedEntity = dbContext.BlogPosts.OrderBy(i => i.Id).LastOrDefault(i => i.UserId == newEntity.UserId);
         storedEntity.ShouldNotBeNull();
         storedEntity.Id.ShouldBe(result.Id);
     }
@@ -51,7 +51,7 @@ public class BlogPostCommandTests : BaseBlogIntegrationTest
         var dbContext = scope.ServiceProvider.GetRequiredService<BlogContext>();
         var newEntity = new BlogPostDto
         {
-            UserId = 42,
+            UserId = -1,
             Description = "I don't have a title...",
             ImageNames = new List<string> { "image1.jpg", "image2.jpg" }
         };

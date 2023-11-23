@@ -44,7 +44,7 @@ INSERT INTO blog."BlogPosts"(
     "Id", "UserId", "Title", "Description", "CreationDate", "ImageNames", "Status", "Comments")
 VALUES (
     -12,
-    -1,
+    -12,
     'Title 3',
     'Description 3',
     '2023-10-03 12:30:00',
@@ -55,7 +55,7 @@ VALUES (
         FROM (
             SELECT
                 JSONB_BUILD_OBJECT(
-                    'UserId', -12,
+                    'UserId', -1,
                     'CreationTime', '2023-02-17T06:30:00',
                     'Text', 'Sample comment'
                 ) AS comment_row
@@ -74,7 +74,7 @@ INSERT INTO blog."BlogPosts"(
     "Id", "UserId", "Title", "Description", "CreationDate", "ImageNames", "Status")
 VALUES (
     -2,
-    -12,
+    -1,
     'Title 4',
     'Description 4',
     '2023-10-04 15:15:00',

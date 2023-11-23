@@ -1,7 +1,6 @@
 using Explorer.API.Services;
 using Explorer.Blog.API.Dtos;
 using Explorer.Blog.API.Public;
-using Explorer.Blog.Core.Domain.BlogPosts;
 using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Stakeholders.Infrastructure.Authentication;
 using FluentResults;

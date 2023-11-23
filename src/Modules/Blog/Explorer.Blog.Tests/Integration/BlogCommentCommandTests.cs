@@ -53,18 +53,17 @@ public class BlogCommentCommandTests : BaseBlogIntegrationTest
 
         var newBlogComment = new BlogCommentDto
         {
-            UserId = 1,
+            UserId = -1,
             CreationTime = DateTime.Parse("2023-02-17 06:30:00"),
-            ModificationTime = DateTime.MaxValue,
-            Text = "Updated blog comment text."
+            ModificationTime = DateTime.MaxValue
         };
 
         // Act
-        var result = (ObjectResult)controller.Add(-42, newBlogComment).Result;
+        var result = (ObjectResult)controller.Add(-12, newBlogComment).Result;
 
         // Assert
         result.ShouldNotBeNull();
-        result.StatusCode.ShouldBe(404);
+        result.StatusCode.ShouldBe(400);
     }
 
     [Fact]
@@ -110,15 +109,15 @@ public class BlogCommentCommandTests : BaseBlogIntegrationTest
         var controller = CreateController(scope);
         var updatedBlogComment = new BlogCommentDto
         {
-            Text = "Updated blog comment text."
+            UserId = -1,
         };
 
         // Act
-        var result = (ObjectResult)controller.Add(-42, updatedBlogComment).Result;
+        var result = (ObjectResult)controller.Add(-11, updatedBlogComment).Result;
 
         // Assert
         result.ShouldNotBeNull();
-        result.StatusCode.ShouldBe(404);
+        result.StatusCode.ShouldBe(400);
     }
 
     [Fact]
@@ -131,7 +130,7 @@ public class BlogCommentCommandTests : BaseBlogIntegrationTest
 
         var blogCommentDto = new BlogCommentDto
         {
-            UserId = -12,
+            UserId = -1,
             CreationTime = DateTime.Parse("2023-02-17 06:30:00"),
             ModificationTime = DateTime.MaxValue,
             Text = "Updated blog comment text."
@@ -159,18 +158,18 @@ public class BlogCommentCommandTests : BaseBlogIntegrationTest
 
         var blogCommentDto = new BlogCommentDto
         {
-            UserId = -42,
+            UserId = -1,
             CreationTime = DateTime.MinValue,
             ModificationTime = DateTime.MaxValue,
             Text = "Updated blog comment text."
         };
 
         // Act
-        var result = (ObjectResult)controller.Remove(-1, blogCommentDto).Result;
+        var result = (ObjectResult)controller.Remove(-42, blogCommentDto).Result;
 
         // Assert
         result.ShouldNotBeNull();
-        result.StatusCode.ShouldBe(400);
+        result.StatusCode.ShouldBe(404);
     }
 
     private static BlogCommentController CreateController(IServiceScope scope)
