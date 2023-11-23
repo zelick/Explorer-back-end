@@ -11,7 +11,9 @@ namespace Explorer.Blog.Tests.Integration;
 [Collection("Sequential")]
 public class BlogPostCommandTests : BaseBlogIntegrationTest
 {
-    public BlogPostCommandTests(BlogTestFactory factory) : base(factory) { }
+    public BlogPostCommandTests(BlogTestFactory factory) : base(factory)
+    {
+    }
 
     [Fact]
     public void Creates()
@@ -19,9 +21,9 @@ public class BlogPostCommandTests : BaseBlogIntegrationTest
         using var scope = Factory.Services.CreateScope();
         var controller = CreateController(scope);
         var dbContext = scope.ServiceProvider.GetRequiredService<BlogContext>();
-        var newEntity = new BlogPostDto()
+        var newEntity = new BlogPostDto
         {
-            UserId = 42,
+            UserId = -1,
             Title = "Sample Title",
             Description = "Sample Description",
             CreationDate = DateTime.Now.ToUniversalTime(),
@@ -36,7 +38,7 @@ public class BlogPostCommandTests : BaseBlogIntegrationTest
         result.UserId.ShouldBe(newEntity.UserId);
         result.Title.ShouldBe(newEntity.Title);
 
-        var storedEntity = dbContext.BlogPosts.FirstOrDefault(i => i.UserId == newEntity.UserId);
+        var storedEntity = dbContext.BlogPosts.OrderBy(i => i.Id).LastOrDefault(i => i.UserId == newEntity.UserId);
         storedEntity.ShouldNotBeNull();
         storedEntity.Id.ShouldBe(result.Id);
     }
@@ -47,14 +49,14 @@ public class BlogPostCommandTests : BaseBlogIntegrationTest
         using var scope = Factory.Services.CreateScope();
         var controller = CreateController(scope);
         var dbContext = scope.ServiceProvider.GetRequiredService<BlogContext>();
-        var newEntity = new BlogPostDto()
+        var newEntity = new BlogPostDto
         {
-            UserId = 42,
+            UserId = -1,
             Description = "I don't have a title...",
-            ImageNames = new List<string> { "image1.jpg", "image2.jpg" },
+            ImageNames = new List<string> { "image1.jpg", "image2.jpg" }
         };
 
-        var result = ((ObjectResult)controller.Create(newEntity).Result);
+        var result = (ObjectResult)controller.Create(newEntity).Result;
 
         result.ShouldNotBeNull();
         result.StatusCode.ShouldBe(400);
@@ -66,14 +68,14 @@ public class BlogPostCommandTests : BaseBlogIntegrationTest
         using var scope = Factory.Services.CreateScope();
         var controller = CreateController(scope);
         var dbContext = scope.ServiceProvider.GetRequiredService<BlogContext>();
-        var updatedEntity = new BlogPostDto()
+        var updatedEntity = new BlogPostDto
         {
             Id = -1,
             UserId = -1,
             Title = "Sample Title 1",
             Description = "Sample Description 1",
             CreationDate = DateTime.Now.ToUniversalTime(),
-            ImageNames = new List<string> { "sample_image1.jpg", "sample_image2.jpg" },
+            ImageNames = new List<string> { "sample_image1.jpg", "sample_image2.jpg" }
         };
 
         var result = ((ObjectResult)controller.Update(-1, updatedEntity).Result)?.Value as BlogPostDto;
@@ -99,7 +101,7 @@ public class BlogPostCommandTests : BaseBlogIntegrationTest
         using var scope = Factory.Services.CreateScope();
         var controller = CreateController(scope);
         var dbContext = scope.ServiceProvider.GetRequiredService<BlogContext>();
-        var updatedEntity = new BlogPostDto()
+        var updatedEntity = new BlogPostDto
         {
             Id = -42,
             UserId = -1,
@@ -114,7 +116,7 @@ public class BlogPostCommandTests : BaseBlogIntegrationTest
         result.ShouldNotBeNull();
         result.StatusCode.ShouldBe(404);
     }
-    
+
     [Fact]
     public void Deletes()
     {
@@ -142,7 +144,7 @@ public class BlogPostCommandTests : BaseBlogIntegrationTest
         result.ShouldNotBeNull();
         result.StatusCode.ShouldBe(404);
     }
-    
+
     private static BlogPostController CreateController(IServiceScope scope)
     {
         return new BlogPostController(scope.ServiceProvider.GetRequiredService<IBlogPostService>())
