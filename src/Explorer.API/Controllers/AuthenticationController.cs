@@ -12,28 +12,24 @@ public class AuthenticationController : BaseApiController
 {
     private readonly IAuthenticationService _authenticationService;
     private readonly ImageService _imageService;
-    private readonly IEmailService _emailService;
     private readonly IVerificationService _verificationService;
 
-    public AuthenticationController(IAuthenticationService authenticationService, IEmailService emailService, IVerificationService verificationService)
+    public AuthenticationController(IAuthenticationService authenticationService, IVerificationService verificationService)
     {
         _authenticationService = authenticationService;
         _imageService = new ImageService();
-        _emailService = emailService;
         _verificationService = verificationService;
     }
 
     [HttpPost]
-    public ActionResult<AuthenticationTokensDto> RegisterTourist([FromForm] AccountRegistrationDto account, IFormFile profilePicture = null)
+    public ActionResult<AccountRegistrationDto> RegisterTourist([FromForm] AccountRegistrationDto account, IFormFile profilePicture = null)
     {
         if (profilePicture != null)
         {
             var pictureUrl = _imageService.UploadImages(new List<IFormFile> { profilePicture });
             account.ProfilePictureUrl = pictureUrl[0];
         }
-        _emailService.GenerateVerificationToken(account);
         var result = _authenticationService.RegisterTourist(account);
-        _emailService.SendEmail(account);
         return CreateResponse(result);
     }
 
@@ -45,10 +41,17 @@ public class AuthenticationController : BaseApiController
         return CreateResponse(result);
     }
 
-    [HttpGet("verify/{verificationToken}")]
-    public ActionResult VerifyUser(string verificationToken)
+    [HttpGet("verify/{verificationTokenData}")]
+    public ActionResult VerifyUser(string verificationTokenData)
     {
-        var result = _verificationService.Verify(verificationToken);
+        var result = _verificationService.Verify(verificationTokenData);
+        return CreateResponse(result);
+    }
+
+    [HttpGet("verificationStatus/{username}")]
+    public ActionResult<bool> IsUserVerified(string username)
+    {
+        var result = _verificationService.IsUserVerified(username);
         return CreateResponse(result);
     }
 }

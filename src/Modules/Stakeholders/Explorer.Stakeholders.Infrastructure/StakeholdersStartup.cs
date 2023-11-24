@@ -77,6 +77,7 @@ public static class StakeholdersStartup
         services.AddScoped(typeof(ICrudRepository<Message>), typeof(CrudDatabaseRepository<Message, StakeholdersContext>));
         services.AddScoped(typeof(IMessageRepository), typeof(MessageDatabaseRepository));
         services.AddScoped(typeof(ISocialProfileRepository), typeof(SocialProfileDatabaseRepository));
+        services.AddScoped(typeof(IVerificationTokenRepository), typeof(VerificationTokenDatabaseRepository));
 
         services.AddDbContext<StakeholdersContext>(opt =>
             opt.UseNpgsql(DbConnectionStringBuilder.Build("stakeholders"),

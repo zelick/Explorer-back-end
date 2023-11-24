@@ -9,7 +9,6 @@ namespace Explorer.Stakeholders.API.Public
 {
     public interface IEmailService
     {
-        void SendEmail(AccountRegistrationDto account);
-        void GenerateVerificationToken(AccountRegistrationDto account); 
+        void SendEmail(AccountRegistrationDto account, string tokenData);
     }
 }

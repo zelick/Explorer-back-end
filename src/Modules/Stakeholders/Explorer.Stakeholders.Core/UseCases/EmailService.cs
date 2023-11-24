@@ -20,7 +20,7 @@ namespace Explorer.Stakeholders.Core.UseCases
                 _configuration = configuration;
             }
 
-            public void SendEmail(AccountRegistrationDto account)
+            public void SendEmail(AccountRegistrationDto account, string tokenData)
             {
                 var smtpServer = _configuration["SmtpSettings:Server"];
                 var smtpPort = int.Parse(_configuration["SmtpSettings:Port"]);
@@ -28,7 +28,7 @@ namespace Explorer.Stakeholders.Core.UseCases
                 var smtpPassword = _configuration["SmtpSettings:Password"];
                 var senderEmail = _configuration["SmtpSettings:SenderEmail"];
 
-                var emailMessage = CreateEmailMessage(account);
+                var emailMessage = CreateEmailMessage(account, tokenData);
 
                 using (var client = new SmtpClient())
                 {
@@ -39,7 +39,7 @@ namespace Explorer.Stakeholders.Core.UseCases
                 }
             }
 
-            private MimeMessage CreateEmailMessage(AccountRegistrationDto account)
+            private MimeMessage CreateEmailMessage(AccountRegistrationDto account, string tokenData)
             {
                 var message = new MimeMessage();
                 var senderName = "Explorer"; 
@@ -51,16 +51,12 @@ namespace Explorer.Stakeholders.Core.UseCases
                 var bodyBuilder = new BodyBuilder();
                 bodyBuilder.HtmlBody = $"<p>Dear {account.Name},</p>" +
                                       $"<p>Thank you for registering. Please click the following link to verify your email:</p>" +
-                                      $"<a href='https://localhost:44333/api/users/verify/{ account.VerificationToken }'>Verify Email</a>";
+                                      $"<a href='https://localhost:44333/api/users/verify/{ tokenData }'>Verify Email</a>";
 
                 message.Body = bodyBuilder.ToMessageBody();
 
                 return message;
             }
 
-            public void GenerateVerificationToken(AccountRegistrationDto account)
-            {
-                account.VerificationToken = Guid.NewGuid().ToString();
-            }
         }
 }

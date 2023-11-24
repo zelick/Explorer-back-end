@@ -21,8 +21,8 @@ public class StakeholdersContext : DbContext
     public DbSet<Customer> Customers { get; set; }
     public DbSet<ShoppingCart> ShoppingCarts { get; set; }
     public DbSet<Message> Messages { get; set; }
-    public DbSet<SocialProfile> SocialProfiles { get; set; }
-    
+    public DbSet<SocialProfile> SocialProfiles { get; set; }   
+    public DbSet<VerificationToken> VerificationTokens { get; set; }
     
     public StakeholdersContext(DbContextOptions<StakeholdersContext> options) : base(options) { }
 

@@ -1,4 +1,5 @@
-﻿using Explorer.Stakeholders.API.Public;
+﻿using Explorer.Stakeholders.API.Dtos;
+using Explorer.Stakeholders.API.Public;
 using Explorer.Stakeholders.Core.Domain.RepositoryInterfaces;
 using FluentResults;
 using System;
@@ -12,13 +13,29 @@ namespace Explorer.Stakeholders.Core.UseCases
     public class VerificationService : IVerificationService
     {
         private readonly IUserRepository _userRepository;
-        public VerificationService(IUserRepository userRepository) 
+        private readonly IVerificationTokenRepository _verificationTokenRepository;
+        public VerificationService(IUserRepository userRepository, IVerificationTokenRepository verificationTokenRepository) 
         {
             _userRepository = userRepository;
+            _verificationTokenRepository = verificationTokenRepository;
         }
-        public Result Verify(string verificationToken)
+
+        public Result<VerificationTokenDto> createVerificationToken(int userId)
         {
-            var user = _userRepository.GetByVerificationToken(verificationToken);
+            throw new NotImplementedException();
+        }
+
+        public Result<bool> IsUserVerified(string username)
+        {
+            var user = _userRepository.GetUserByUsername(username);
+            if (user == null) { return Result.Fail("User not found"); }
+            return user.IsVerified;
+        }
+
+        public Result Verify(string verificationTokenData)
+        {
+            var token = _verificationTokenRepository.GetByTokenData(verificationTokenData);
+            var user = _userRepository.GetUserById(token.UserId);
 
             if (user == null)
             {

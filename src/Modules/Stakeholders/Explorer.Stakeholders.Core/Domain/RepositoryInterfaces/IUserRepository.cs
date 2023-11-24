@@ -9,5 +9,5 @@ public interface IUserRepository
     List<User> GetAll();
     User Update(User user);
     User GetUserById(long id);
-    User GetByVerificationToken(string verificationToken);
+    User GetUserByUsername(string username);
 }

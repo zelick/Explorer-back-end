@@ -7,5 +7,5 @@ public interface IAuthenticationService
 {
    // Result EditProfile(AccountEditingDto account);
     Result<AuthenticationTokensDto> Login(CredentialsDto credentials);
-    Result<AuthenticationTokensDto> RegisterTourist(AccountRegistrationDto account);
+    Result<AccountRegistrationDto> RegisterTourist(AccountRegistrationDto account);
 }

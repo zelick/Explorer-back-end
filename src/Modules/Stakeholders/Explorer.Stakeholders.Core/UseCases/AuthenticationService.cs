@@ -15,15 +15,19 @@ public class AuthenticationService : IAuthenticationService
     private readonly ITokenGenerator _tokenGenerator;
     private readonly IUserRepository _userRepository;
     private readonly ICrudRepository<Person> _personRepository;
+    private readonly IEmailService _emailService;
+    private readonly IVerificationTokenRepository _verificationTokenRepository;
     //customer rep 
     private readonly ICustomerRepository _customerRepository;
 
-    public AuthenticationService(IUserRepository userRepository, ICrudRepository<Person> personRepository, ITokenGenerator tokenGenerator, ICustomerRepository customerRepository)
+    public AuthenticationService(IUserRepository userRepository, ICrudRepository<Person> personRepository, ITokenGenerator tokenGenerator, ICustomerRepository customerRepository, IEmailService emailService, IVerificationTokenRepository verificationTokenRepository)
     {
         _tokenGenerator = tokenGenerator;
         _userRepository = userRepository;
         _personRepository = personRepository;
         _customerRepository = customerRepository;
+        _emailService = emailService;
+        _verificationTokenRepository = verificationTokenRepository;
     }
 
     public Result<AuthenticationTokensDto> Login(CredentialsDto credentials)
@@ -43,7 +47,7 @@ public class AuthenticationService : IAuthenticationService
         return _tokenGenerator.GenerateAccessToken(user, personId);
     }
 
-    public Result<AuthenticationTokensDto> RegisterTourist(AccountRegistrationDto account)
+    public Result<AccountRegistrationDto> RegisterTourist(AccountRegistrationDto account)
     {
         if(_userRepository.Exists(account.Username)) return Result.Fail(FailureCode.NonUniqueUsername);
 
@@ -67,14 +71,17 @@ public class AuthenticationService : IAuthenticationService
             }
             else userRole = Domain.UserRole.Tourist;
 
-            var user = _userRepository.Create(new User(account.Username, account.Password, userRole , true, account.VerificationToken, false));
+            var user = _userRepository.Create(new User(account.Username, account.Password, userRole , true, false));
             var person = _personRepository.Create(new Person(user.Id, account.Name, account.Surname, account.Email, account.ProfilePictureUrl, account.Biography, account.Motto));
+            _verificationTokenRepository.CreateVerificationToken(user.Id);
+            var token = _verificationTokenRepository.GetByUserId(user.Id); 
+            _emailService.SendEmail(account, token.TokenData);
             /*if(userRole.Equals(UserRole.Tourist))
             {
                 var customer = new Customer(user.Id);
                 _customerRepository.Create(customer);
             }*/
-            return _tokenGenerator.GenerateAccessToken(user, person.Id);
+            return account;
         }
         catch (ArgumentException e)
         {
