@@ -47,13 +47,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Explorer.Blog.Infrastructur
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Explorer.Blog.Tests", "Modules\Blog\Explorer.Blog.Tests\Explorer.Blog.Tests.csproj", "{DF1A942F-E72F-4C8F-9E92-21C35A98087D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Explorer.Encounters.API", "Explorer.Encounters.API\Explorer.Encounters.API.csproj", "{AC92E850-5F5E-4493-BEB4-3004F7DE3366}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Explorer.Encounters.API", "Modules\Encounters\Explorer.Encounters.API\Explorer.Encounters.API.csproj", "{AC92E850-5F5E-4493-BEB4-3004F7DE3366}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Explorer.Encounters.Core", "Explorer.Encounters.Core\Explorer.Encounters.Core.csproj", "{07A6144C-E249-493E-8336-D8C80AE0BADD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Explorer.Encounters.Core", "Modules\Encounters\Explorer.Encounters.Core\Explorer.Encounters.Core.csproj", "{07A6144C-E249-493E-8336-D8C80AE0BADD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Explorer.Encounters.Infrastructure", "Explorer.Encounters.Infrastructure\Explorer.Encounters.Infrastructure.csproj", "{E8512861-65E0-4CA0-A162-15F488FB9DF7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Explorer.Encounters.Infrastructure", "Modules\Encounters\Explorer.Encounters.Infrastructure\Explorer.Encounters.Infrastructure.csproj", "{E8512861-65E0-4CA0-A162-15F488FB9DF7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Explorer.Encounters.Tests", "Explorer.Encounters.Tests\Explorer.Encounters.Tests.csproj", "{662DE83E-B5C0-4230-BCAC-90243D7CF09A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Explorer.Encounters.Tests", "Modules\Encounters\Explorer.Encounters.Tests\Explorer.Encounters.Tests.csproj", "{662DE83E-B5C0-4230-BCAC-90243D7CF09A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Encounters", "Encounters", "{E52607D2-8DEF-48A9-BBE9-15AB88A0F78F}"
 EndProject
