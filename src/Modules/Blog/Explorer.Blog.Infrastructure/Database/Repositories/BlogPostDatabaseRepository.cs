@@ -48,4 +48,12 @@ public class BlogPostDatabaseRepository : CrudDatabaseRepository<BlogPost, BlogC
 
         return query.ToList();
     }
+    
+    public List<BlogPost> GetAllPublished()
+    {
+        return DbContext.BlogPosts
+            .Where(bp => bp.Status == BlogPostStatus.Published)
+            .ToList();
+    }
 }
+
