@@ -3,7 +3,7 @@ using Explorer.BuildingBlocks.Core.UseCases;
 
 namespace Explorer.Blog.Core.Domain.RepositoryInterfaces;
 
-public interface IBlogPostRepository: ICrudRepository<BlogPost>
+public interface IBlogPostRepository : ICrudRepository<BlogPost>
 {
     PagedResult<BlogPost> GetAllNonDraft(int page, int pageSize);
     PagedResult<BlogPost> GetAllByUser(int page, int pageSize, long userId);

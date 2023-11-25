@@ -1,4 +1,5 @@
 ﻿using Explorer.BuildingBlocks.Core.UseCases;
+using Explorer.Stakeholders.Infrastructure.Authentication;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
 using Explorer.Tours.Core.UseCases.Administration;
@@ -17,10 +18,10 @@ namespace Explorer.API.Controllers.Tourist.Tour
         {
             _tourExecutionService = tourExecutionService;
         }
-        [HttpPost("{touristId:int}/{tourId:int}")]
-        public ActionResult<TourExecutionDto> Create(long tourId, long touristId)
+        [HttpPost("{tourId:int}")]
+        public ActionResult<TourExecutionDto> Create(long tourId)
         {
-            var result = _tourExecutionService.Create(touristId, tourId);
+            var result = _tourExecutionService.Create(User.PersonId(), tourId);
             return CreateResponse(result);
         }
 
@@ -32,16 +33,16 @@ namespace Explorer.API.Controllers.Tourist.Tour
         }
 
         [HttpGet]
-        public ActionResult<TourExecutionDto> Get([FromQuery] long touristId, [FromQuery]long tourId)
+        public ActionResult<TourExecutionDto> Get([FromQuery] long tourId)
         {
-            var result = _tourExecutionService.GetInProgressByTourAndTourist(tourId, touristId);
+            var result = _tourExecutionService.GetInProgressByTourAndTourist(tourId, User.PersonId());
             return CreateResponse(result);
         }
 
         [HttpPut("abandoned")]
         public ActionResult<TourExecutionDto> Abandon([FromBody] long id)
         {
-            var result = _tourExecutionService.Abandon(id);
+            var result = _tourExecutionService.Abandon(id, User.PersonId());
             return CreateResponse(result);
         }
     }

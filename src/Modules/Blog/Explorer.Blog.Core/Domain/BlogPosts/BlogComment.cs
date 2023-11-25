@@ -1,5 +1,5 @@
-﻿using Explorer.BuildingBlocks.Core.Domain;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
+using Explorer.BuildingBlocks.Core.Domain;
 
 namespace Explorer.Blog.Core.Domain.BlogPosts;
 
@@ -10,7 +10,7 @@ public class BlogComment : ValueObject
     public DateTime? ModificationTime { get; set; }
     public string Text { get; set; }
 
-    public BlogComment() { }
+    BlogComment() { }
 
     [JsonConstructor]
     public BlogComment(long userId, DateTime creationTime, DateTime? modificationTime, string text)
@@ -25,6 +25,11 @@ public class BlogComment : ValueObject
     private void Validate()
     {
         if (string.IsNullOrWhiteSpace(Text)) throw new ArgumentException("Invalid Text");
+    }
+    
+    public bool IsCreatedByUser(int userId)
+    {
+        return UserId == userId;
     }
 
     protected override IEnumerable<object> GetEqualityComponents()

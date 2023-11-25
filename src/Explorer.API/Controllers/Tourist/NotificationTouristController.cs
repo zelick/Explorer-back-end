@@ -1,30 +1,31 @@
 ﻿using Explorer.BuildingBlocks.Core.UseCases;
-using Explorer.Tours.API.Dtos;
-using Explorer.Tours.API.Public.Administration;
+using Explorer.Stakeholders.API.Dtos;
+using Explorer.Stakeholders.API.Public;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Explorer.API.Controllers.Author.Administration
+namespace Explorer.API.Controllers.Tourist
 {
-    [Authorize(Policy = "authorPolicy")]
-    [Route("api/author/notifications")]
-    public class ReportedIssueAuthorNotificationController : BaseApiController
+    [Authorize(Policy = "touristPolicy")]
+    [Route("api/tourist/notifications")]
+    public class NotificationTouristController : BaseApiController
     {
-        private readonly IReportedIssueNotificationService _service;
-        public ReportedIssueAuthorNotificationController(IReportedIssueNotificationService service)
+        private readonly INotificationService _service;
+
+        public NotificationTouristController(INotificationService notificationService)
         {
-            _service = service;
+            _service = notificationService;
         }
 
         [HttpGet("{id:int}")]
-        public ActionResult<ReportedIssueNotificationDto> Get(int id)
+        public ActionResult<NotificationDto> Get(int id)
         {
             var result = _service.Get(id);
             return CreateResponse(result);
         }
 
         [HttpPut("{id:int}")]
-        public ActionResult<ReportedIssueNotificationDto> Update([FromBody] ReportedIssueNotificationDto notification)
+        public ActionResult<NotificationDto> Update([FromBody] NotificationDto notification)
         {
             var result = _service.Update(notification);
             return CreateResponse(result);
@@ -38,17 +39,18 @@ namespace Explorer.API.Controllers.Author.Administration
         }
 
         [HttpGet("get-all/{id:int}")]
-        public ActionResult<PagedResult<ReportedIssueNotificationDto>> GetAllByUser(int id, [FromQuery] int page, [FromQuery] int pageSize)
+        public ActionResult<PagedResult<NotificationDto>> GetAllByUser(int id, [FromQuery] int page, [FromQuery] int pageSize)
         {
             var result = _service.GetAllByUser(id, page, pageSize);
             return CreateResponse(result);
         }
 
         [HttpGet("get-unread/{id:int}")]
-        public ActionResult<PagedResult<ReportedIssueNotificationDto>> GetUnreadByUser(int id, [FromQuery] int page, [FromQuery] int pageSize)
+        public ActionResult<PagedResult<NotificationDto>> GetUnreadByUser(int id, [FromQuery] int page, [FromQuery] int pageSize)
         {
             var result = _service.GetUnreadByUser(id, page, pageSize);
             return CreateResponse(result);
         }
+
     }
 }

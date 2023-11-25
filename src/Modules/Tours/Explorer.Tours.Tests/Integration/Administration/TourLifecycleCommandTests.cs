@@ -35,7 +35,7 @@ namespace Explorer.Tours.Tests.Integration.Administration
             var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
 
             // Act
-            var result = (ObjectResult)controller.Publish(tourId, authorId).Result;
+            var result = (ObjectResult)controller.Publish(tourId).Result;
 
             // Assert - Response
             result.ShouldNotBeNull();
@@ -60,7 +60,7 @@ namespace Explorer.Tours.Tests.Integration.Administration
             var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
 
             // Act
-            var result = (ObjectResult)controller.Publish(tourId, authorId).Result;
+            var result = (ObjectResult)controller.Publish(tourId).Result;
 
             // Assert - Response
             result.ShouldNotBeNull();
@@ -84,7 +84,7 @@ namespace Explorer.Tours.Tests.Integration.Administration
             var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
 
             // Act
-            var result = (ObjectResult)controller.Publish(tourId, authorId).Result;
+            var result = (ObjectResult)controller.Publish(tourId).Result;
 
             // Assert - Response
             result.ShouldNotBeNull();
@@ -109,7 +109,7 @@ namespace Explorer.Tours.Tests.Integration.Administration
             var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
 
             // Act
-            var result = (ObjectResult)controller.Publish(tourId, authorId).Result;
+            var result = (ObjectResult)controller.Publish(tourId).Result;
 
             // Assert - Response
             result.ShouldNotBeNull();
@@ -134,7 +134,7 @@ namespace Explorer.Tours.Tests.Integration.Administration
             var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
 
             // Act
-            var result = (ObjectResult)controller.Archive(tourId, authorId).Result;
+            var result = (ObjectResult)controller.Archive(tourId).Result;
 
             // Assert - Response
             result.ShouldNotBeNull();
@@ -158,7 +158,7 @@ namespace Explorer.Tours.Tests.Integration.Administration
             var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
 
             // Act
-            var result = (ObjectResult)controller.Archive(tourId, authorId).Result;
+            var result = (ObjectResult)controller.Archive(tourId).Result;
 
             // Assert - Response
             result.ShouldNotBeNull();
@@ -183,7 +183,7 @@ namespace Explorer.Tours.Tests.Integration.Administration
             var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
 
             // Act
-            var result = (ObjectResult)controller.Archive(tourId, authorId).Result;
+            var result = (ObjectResult)controller.Archive(tourId).Result;
 
             // Assert - Response
             result.ShouldNotBeNull();
@@ -214,7 +214,7 @@ namespace Explorer.Tours.Tests.Integration.Administration
             var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
 
             // Act
-            var result = (ObjectResult)controller.AddTime(tourTimesDto, tourId, authorId).Result;
+            var result = (ObjectResult)controller.AddTime(tourTimesDto, tourId).Result;
 
             // Assert - Response
             result.ShouldNotBeNull();
@@ -245,7 +245,7 @@ namespace Explorer.Tours.Tests.Integration.Administration
             var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
 
             // Act
-            var result = (ObjectResult)controller.AddTime(tourTimesDto, tourId, authorId).Result;
+            var result = (ObjectResult)controller.AddTime(tourTimesDto, tourId).Result;
 
             // Assert - Response
             result.ShouldNotBeNull();
@@ -272,7 +272,7 @@ namespace Explorer.Tours.Tests.Integration.Administration
             var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
 
             // Act
-            var result = (ObjectResult)controller.AddEquipment(tourId, equipmentId, authorId).Result;
+            var result = (ObjectResult)controller.AddEquipment(tourId, equipmentId).Result;
 
             // Assert - Response
             result.ShouldNotBeNull();
@@ -298,7 +298,7 @@ namespace Explorer.Tours.Tests.Integration.Administration
             var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
 
             // Act
-            var result = (ObjectResult)controller.AddEquipment(tourId, equipmentId, authorId).Result;
+            var result = (ObjectResult)controller.AddEquipment(tourId, equipmentId).Result;
 
             // Assert - Response
             result.ShouldNotBeNull();
