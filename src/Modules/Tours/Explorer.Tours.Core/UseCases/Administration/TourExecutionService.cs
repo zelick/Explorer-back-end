@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Explorer.BuildingBlocks.Core.UseCases;
+using Explorer.Payments.API.Internal;
 using Explorer.Stakeholders.API.Internal;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
@@ -41,7 +42,7 @@ namespace Explorer.Tours.Core.UseCases.Administration
         {
             try
             {
-                if(!_shoppingService.IsTourPurchasedByUser(touristId, tourId))
+                if(!_shoppingService.IsTourPurchasedByUser(touristId, tourId).Value)
                     return Result.Fail(FailureCode.InvalidArgument).WithError("Tour not purchased");
                 var result = _tourExecutionRepository.Create(new TourExecution(touristId, tourId));
                 result.setTour(_tourRepository.Get(tourId));

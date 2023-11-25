@@ -3,6 +3,11 @@ using Explorer.Payments.Core.Mappers;
 using Explorer.BuildingBlocks.Infrastructure.Database;
 using Explorer.Payments.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
+using Explorer.Payments.API.Internal;
+using Explorer.Payments.API.Public;
+using Explorer.Payments.Core.UseCases;
+using Explorer.Payments.Core.Domain.RepositoryInterfaces;
+using Explorer.Payments.Infrastructure.Database.Repositories;
 
 namespace Explorer.Payments.Infrastructure;
 
@@ -18,16 +23,18 @@ public static class PaymentsStartup
 
     private static void SetupCore(IServiceCollection services)
     {
-        // DI for services
+        services.AddScoped<ICustomerService, CustomerService>();
+        services.AddScoped<IInternalShoppingService, CustomerService>();
+        services.AddScoped<IShoppingCartService, ShoppingCartService>();
     }
 
     private static void SetupInfrastructure(IServiceCollection services)
     {
-        // DI for repos
+        services.AddScoped<ICustomerRepository, CustomerDatabaseRepository>();
+        services.AddScoped<IShoppingCartRepository, ShoppingCartDatabaseRepository>();
 
         services.AddDbContext<PaymentsContext>(opt =>
             opt.UseNpgsql(DbConnectionStringBuilder.Build("payments"),
                 x => x.MigrationsHistoryTable("__EFMigrationsHistory", "payments")));
     }
 }
-

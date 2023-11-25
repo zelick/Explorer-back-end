@@ -1,15 +1,12 @@
 ﻿using Explorer.API.Services;
 using Explorer.BuildingBlocks.Core.UseCases;
-using Explorer.Stakeholders.API.Dtos;
-using Explorer.Stakeholders.API.Public;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
 using Explorer.Tours.Core.Domain.RepositoryInterfaces;
 using Explorer.Tours.Core.Domain.TourExecutions;
-using FluentResults;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
+using Explorer.Payments.API.Public;
 
 namespace Explorer.API.Controllers.Tourist
 {
@@ -51,7 +48,7 @@ namespace Explorer.API.Controllers.Tourist
             {
                 return BadRequest("Fill all the fields properly.");
             }
-            List<long> customerPurchasedToursIds = _customerService.getCustomersPurchasedTours(tourRating.TouristId);
+            List<long> customerPurchasedToursIds = _customerService.GetPurchasedToursByUser(tourRating.TouristId).Value;
 
             if (!customerPurchasedToursIds.Contains(tourRating.TourId))
             {
@@ -89,7 +86,7 @@ namespace Explorer.API.Controllers.Tourist
                 return BadRequest("Fill all the fields properly.");
             }
 
-            List<long> customerPurchasedToursIds = _customerService.getCustomersPurchasedTours(tourRating.TouristId);
+            List<long> customerPurchasedToursIds = _customerService.GetPurchasedToursByUser(tourRating.TouristId).Value;
 
             if (!customerPurchasedToursIds.Contains(tourRating.TourId))
             {

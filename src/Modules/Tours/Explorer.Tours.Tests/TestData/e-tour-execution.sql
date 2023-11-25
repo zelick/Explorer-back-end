@@ -16,4 +16,4 @@ INSERT INTO tours."TourExecution"(
 
 INSERT INTO tours."TourExecution"(
 	"Id", "TouristId", "TourId", "Start", "LastActivity", "ExecutionStatus")
-	VALUES (-5, -21, -4, '2023-11-11 02:37:10.351502+01', '2023-11-11 02:37:10.351502+01', 2);
+	VALUES (-5, -21, -4, '2023-11-11 02:37:10.351502+01', current_date, 2);
