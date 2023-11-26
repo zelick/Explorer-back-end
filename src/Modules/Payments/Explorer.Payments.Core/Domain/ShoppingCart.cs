@@ -31,5 +31,8 @@ public class ShoppingCart : Entity
 
         return purchasedItemsId;
     }
+    public bool IsOwnedByUser(int userId)
+    {
+        return UserId == userId;
+    }
 }
-

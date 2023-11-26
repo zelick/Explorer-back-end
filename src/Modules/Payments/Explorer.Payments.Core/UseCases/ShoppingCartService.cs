@@ -33,10 +33,15 @@ public class ShoppingCartService : BaseService<ShoppingCartDto, ShoppingCart>, I
         }
     }
 
-    public Result<ShoppingCartDto> Update(ShoppingCartDto shoppingCartDto)
+    public Result<ShoppingCartDto> Update(ShoppingCartDto shoppingCartDto, int userId)
     {
         try
         {
+            var cart = _shoppingCartRepository.Get(shoppingCartDto.Id);
+
+            if (!cart.IsOwnedByUser(userId))
+                throw new InvalidOperationException("Only the user whose cart it is can update it.");
+
             var shoppingCart = MapToDomain(shoppingCartDto);
             shoppingCart.CalculateTotalPrice();
 
