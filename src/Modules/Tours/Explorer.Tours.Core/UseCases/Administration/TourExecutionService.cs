@@ -67,7 +67,7 @@ namespace Explorer.Tours.Core.UseCases.Administration
         {
             try
             {
-                if (!_shoppingService.IsTourPurchasedByUser(touristId, id))
+                if (!_shoppingService.IsTourPurchasedByUser(touristId, id).Value)
                     return Result.Fail(FailureCode.InvalidArgument).WithError("Tour not purchased");
 
                 TourExecution tourExecution = CrudRepository.Get(id);
