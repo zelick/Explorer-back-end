@@ -20,7 +20,7 @@ namespace Explorer.Tours.API.Public.Administration
         Result<TourDto> AddTime(TourTimesDto tourTimesDto, int id, int userId);
         Result<TourDto> Archive(int id, int userId);
         Result<List<PurchasedTourPreviewDto>> GetToursByIds(List<long> tourIds);
-        Result<PurchasedTourPreviewDto> getPurchasedTourById(long purchasedTourId);
+        Result<PurchasedTourPreviewDto> GetPurchasedTourById(long purchasedTourId);
 
         Result<List<PublicTourDto>> GetPublicTours();
 

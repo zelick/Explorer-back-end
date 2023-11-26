@@ -4,7 +4,6 @@ using Explorer.Stakeholders.API.Internal;
 using Explorer.Stakeholders.API.Public;
 using Explorer.Stakeholders.Core.Domain;
 using Explorer.Stakeholders.Core.Domain.RepositoryInterfaces;
-using Explorer.Stakeholders.Core.Domain.Shopping;
 using Explorer.Stakeholders.Core.Mappers;
 using Explorer.Stakeholders.Core.UseCases;
 using Explorer.Stakeholders.Infrastructure.Authentication;
@@ -45,9 +44,6 @@ public static class StakeholdersStartup
         services.AddScoped<ICheckpointRequestService, CheckpointRequestService>();
         services.AddScoped<IInternalObjectRequestService, ObjectRequestService>();
         services.AddScoped<IInternalCheckpointRequestService, CheckpointRequestService>();
-        services.AddScoped<ICustomerService, CustomerService>();
-        services.AddScoped<IShoppingCartService, ShoppingCartService>();
-        services.AddScoped<IInternalShoppingService, CustomerService>();
         services.AddScoped<IInternalPersonService, InternalPersonService>();
         services.AddScoped<IInternalUserService, UserService>();
     }
@@ -70,8 +66,6 @@ public static class StakeholdersStartup
         services.AddScoped(typeof(ICrudRepository<CheckpointRequest>), typeof(CrudDatabaseRepository<CheckpointRequest, StakeholdersContext>));
         services.AddScoped<IObjectRequestRepository, ObjectRequestDatabaseRepository>();
         services.AddScoped<ICheckpointRequestRepository, CheckpointRequestDatabaseRepository>();
-        services.AddScoped<ICustomerRepository, CustomerDatabaseRepository>();
-        services.AddScoped<IShoppingCartRepository, ShoppingCartDatabaseRepository>();
         services.AddScoped<IPersonRepository, PersonDatabaseRepository>();
         services.AddScoped(typeof(ICrudRepository<Message>), typeof(CrudDatabaseRepository<Message, StakeholdersContext>));
         services.AddScoped(typeof(IMessageRepository), typeof(MessageDatabaseRepository));

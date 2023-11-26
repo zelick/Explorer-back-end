@@ -249,7 +249,7 @@ namespace Explorer.Tours.Core.UseCases.Administration
             return _purchasedTourPreviewMapper.createDtoList(foundTours);
         }
 
-        public Result<PurchasedTourPreviewDto> getPurchasedTourById(long purchasedTourId)
+        public Result<PurchasedTourPreviewDto> GetPurchasedTourById(long purchasedTourId)
         {
             var foundTour = _tourRepository.Get(purchasedTourId);
             PurchasedTourPreview foundPurchasedTour = foundTour.FilterPurchasedTour(foundTour);

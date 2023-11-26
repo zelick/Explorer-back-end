@@ -47,6 +47,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Explorer.Blog.Infrastructur
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Explorer.Blog.Tests", "Modules\Blog\Explorer.Blog.Tests\Explorer.Blog.Tests.csproj", "{DF1A942F-E72F-4C8F-9E92-21C35A98087D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Encounters", "Encounters", "{E52607D2-8DEF-48A9-BBE9-15AB88A0F78F}"
+EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Explorer.Encounters.API", "Modules\Encounters\Explorer.Encounters.API\Explorer.Encounters.API.csproj", "{AC92E850-5F5E-4493-BEB4-3004F7DE3366}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Explorer.Encounters.Core", "Modules\Encounters\Explorer.Encounters.Core\Explorer.Encounters.Core.csproj", "{07A6144C-E249-493E-8336-D8C80AE0BADD}"
@@ -55,7 +57,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Explorer.Encounters.Infrast
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Explorer.Encounters.Tests", "Modules\Encounters\Explorer.Encounters.Tests\Explorer.Encounters.Tests.csproj", "{662DE83E-B5C0-4230-BCAC-90243D7CF09A}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Encounters", "Encounters", "{E52607D2-8DEF-48A9-BBE9-15AB88A0F78F}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Payments", "Payments", "{38DBE481-AEC2-4103-BCAF-ACFF48B6D095}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Explorer.Payments.API", "Modules\Payments\Explorer.Payments.API\Explorer.Payments.API.csproj", "{E938EB29-3211-44DD-90BF-E7A479023FB5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Explorer.Payments.Core", "Modules\Payments\Explorer.Payments.Core\Explorer.Payments.Core.csproj", "{606E1C10-4CA0-40B2-BA17-7A96A07895C6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Explorer.Payments.Infrastructure", "Modules\Payments\Explorer.Payments.Infrastructure\Explorer.Payments.Infrastructure.csproj", "{95059E3C-134A-46CC-A653-80063FC9EBD9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Explorer.Payments.Tests", "Modules\Payments\Explorer.Payments.Tests\Explorer.Payments.Tests.csproj", "{F1E1B16B-47E3-4973-9011-84FD04A0A299}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -147,6 +157,22 @@ Global
 		{662DE83E-B5C0-4230-BCAC-90243D7CF09A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{662DE83E-B5C0-4230-BCAC-90243D7CF09A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{662DE83E-B5C0-4230-BCAC-90243D7CF09A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E938EB29-3211-44DD-90BF-E7A479023FB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E938EB29-3211-44DD-90BF-E7A479023FB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E938EB29-3211-44DD-90BF-E7A479023FB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E938EB29-3211-44DD-90BF-E7A479023FB5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{606E1C10-4CA0-40B2-BA17-7A96A07895C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{606E1C10-4CA0-40B2-BA17-7A96A07895C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{606E1C10-4CA0-40B2-BA17-7A96A07895C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{606E1C10-4CA0-40B2-BA17-7A96A07895C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{95059E3C-134A-46CC-A653-80063FC9EBD9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95059E3C-134A-46CC-A653-80063FC9EBD9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95059E3C-134A-46CC-A653-80063FC9EBD9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95059E3C-134A-46CC-A653-80063FC9EBD9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1E1B16B-47E3-4973-9011-84FD04A0A299}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1E1B16B-47E3-4973-9011-84FD04A0A299}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1E1B16B-47E3-4973-9011-84FD04A0A299}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1E1B16B-47E3-4973-9011-84FD04A0A299}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -175,6 +201,11 @@ Global
 		{E8512861-65E0-4CA0-A162-15F488FB9DF7} = {E52607D2-8DEF-48A9-BBE9-15AB88A0F78F}
 		{662DE83E-B5C0-4230-BCAC-90243D7CF09A} = {E52607D2-8DEF-48A9-BBE9-15AB88A0F78F}
 		{E52607D2-8DEF-48A9-BBE9-15AB88A0F78F} = {B8BD4B35-C40B-4BC6-9A8D-7FBE215FD1CE}
+		{38DBE481-AEC2-4103-BCAF-ACFF48B6D095} = {B8BD4B35-C40B-4BC6-9A8D-7FBE215FD1CE}
+		{E938EB29-3211-44DD-90BF-E7A479023FB5} = {38DBE481-AEC2-4103-BCAF-ACFF48B6D095}
+		{606E1C10-4CA0-40B2-BA17-7A96A07895C6} = {38DBE481-AEC2-4103-BCAF-ACFF48B6D095}
+		{95059E3C-134A-46CC-A653-80063FC9EBD9} = {38DBE481-AEC2-4103-BCAF-ACFF48B6D095}
+		{F1E1B16B-47E3-4973-9011-84FD04A0A299} = {38DBE481-AEC2-4103-BCAF-ACFF48B6D095}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C378FE87-3A2E-4BB0-8E39-FB8767789244}

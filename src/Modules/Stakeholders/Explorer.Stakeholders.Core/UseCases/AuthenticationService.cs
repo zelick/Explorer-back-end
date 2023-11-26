@@ -3,9 +3,7 @@ using Explorer.Stakeholders.API.Dtos;
 using Explorer.Stakeholders.API.Public;
 using Explorer.Stakeholders.Core.Domain;
 using Explorer.Stakeholders.Core.Domain.RepositoryInterfaces;
-using Explorer.Stakeholders.Core.Domain.Shopping;
 using FluentResults;
-using System.IdentityModel.Tokens.Jwt;
 using System.Net.Mail;
 
 namespace Explorer.Stakeholders.Core.UseCases;
@@ -15,15 +13,12 @@ public class AuthenticationService : IAuthenticationService
     private readonly ITokenGenerator _tokenGenerator;
     private readonly IUserRepository _userRepository;
     private readonly ICrudRepository<Person> _personRepository;
-    //customer rep 
-    private readonly ICustomerRepository _customerRepository;
 
-    public AuthenticationService(IUserRepository userRepository, ICrudRepository<Person> personRepository, ITokenGenerator tokenGenerator, ICustomerRepository customerRepository)
+    public AuthenticationService(IUserRepository userRepository, ICrudRepository<Person> personRepository, ITokenGenerator tokenGenerator)
     {
         _tokenGenerator = tokenGenerator;
         _userRepository = userRepository;
         _personRepository = personRepository;
-        _customerRepository = customerRepository;
     }
 
     public Result<AuthenticationTokensDto> Login(CredentialsDto credentials)
