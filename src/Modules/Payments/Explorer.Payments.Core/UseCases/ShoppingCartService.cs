@@ -42,10 +42,9 @@ public class ShoppingCartService : BaseService<ShoppingCartDto, ShoppingCart>, I
             if (!cart.IsOwnedByUser(userId))
                 throw new InvalidOperationException("Only the user whose cart it is can update it.");
 
-            var shoppingCart = MapToDomain(shoppingCartDto);
-            shoppingCart.CalculateTotalPrice();
+            cart.Update(MapToDomain(shoppingCartDto));
+            var result = _shoppingCartRepository.Update(cart);
 
-            var result = _shoppingCartRepository.Update(shoppingCart);
             return MapToDto(result);
         }
         catch (KeyNotFoundException e)

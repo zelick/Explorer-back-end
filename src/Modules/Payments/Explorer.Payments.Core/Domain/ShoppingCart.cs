@@ -5,7 +5,7 @@ namespace Explorer.Payments.Core.Domain;
 public class ShoppingCart : Entity
 {
     public long UserId { get; init; }
-    public List<OrderItem>? Items { get; init; }
+    public List<OrderItem>? Items { get; private set; }
     public double Price { get; private set; }
 
     public ShoppingCart(long userId, List<OrderItem>? items = null)
@@ -18,6 +18,12 @@ public class ShoppingCart : Entity
     public void CalculateTotalPrice()
     {
         Price = Items?.Sum(item => item.Price) ?? 0;
+    }
+
+    public void Update(ShoppingCart updatedCart)
+    {
+        Items = updatedCart.Items;
+        CalculateTotalPrice();
     }
 
     public List<long> CheckOut()
