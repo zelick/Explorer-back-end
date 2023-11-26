@@ -24,7 +24,7 @@ namespace Explorer.Payments.Tests.Integration
             var updatedEntity = new ShoppingCartDto
             {
                 Id = -1,
-                UserId = -23,
+                UserId = -21,
                 Items = new List<OrderItemDto>() { new() { ItemId = 1, Price = 250.0} },
                 Price = 250.0
             };
@@ -102,9 +102,8 @@ namespace Explorer.Payments.Tests.Integration
         {
             return new ShoppingCartController(scope.ServiceProvider.GetRequiredService<IShoppingCartService>())
             {
-                ControllerContext = BuildContext("-1")
+                ControllerContext = BuildContext("-21")
             };
         }
-
     }
 }

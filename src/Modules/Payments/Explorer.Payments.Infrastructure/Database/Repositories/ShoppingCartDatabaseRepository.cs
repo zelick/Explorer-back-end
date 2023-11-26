@@ -8,11 +8,6 @@ public class ShoppingCartDatabaseRepository : CrudDatabaseRepository<ShoppingCar
 {
     public ShoppingCartDatabaseRepository(PaymentsContext dbContext) : base(dbContext) { }
 
-    public bool ExistsByUser(long userId)
-    {
-        return DbContext.ShoppingCarts.Any(sc => sc.UserId == userId);
-    }
-
     public ShoppingCart GetByUser(long userId)
     {
         var shoppingCart = DbContext.ShoppingCarts.FirstOrDefault(c => c.UserId == userId);
@@ -20,4 +15,3 @@ public class ShoppingCartDatabaseRepository : CrudDatabaseRepository<ShoppingCar
         return shoppingCart;
     }
 }
-

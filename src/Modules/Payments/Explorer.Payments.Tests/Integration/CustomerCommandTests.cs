@@ -96,7 +96,7 @@ namespace Explorer.Payments.Tests.Integration
             return new CustomerController(scope.ServiceProvider.GetRequiredService<ICustomerService>(), 
                 scope.ServiceProvider.GetRequiredService<ITourService>())
             {
-                ControllerContext = BuildContext("-1")
+                ControllerContext = BuildContext("-21")
             };
         }
     }
