@@ -10,6 +10,7 @@ namespace Explorer.Encounters.API.Dtos
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public string Description { get; set; }
         public int XP { get; set; }
         public string? EncounterStatus { get; set; }
         public string EncounterType { get; set; }
