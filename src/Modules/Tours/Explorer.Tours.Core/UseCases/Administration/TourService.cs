@@ -14,7 +14,6 @@ namespace Explorer.Tours.Core.UseCases.Administration
 {
     public class TourService : CrudService<TourDto, Tour>, ITourService
     {
-        private readonly ITourEquipmentRepository _tourEquipmentRepository;
         private readonly ITourRepository _tourRepository;
         private readonly IEquipmentRepository _equipmentRepository;
         private TourPreviewMapper _tourPreviewMapper;
@@ -22,9 +21,8 @@ namespace Explorer.Tours.Core.UseCases.Administration
         private PublicTourMapper _publicTourMapper;
         private readonly IInternalShoppingService _shoppingService;
 
-        public TourService(ITourRepository tourRepository, IMapper mapper, ITourEquipmentRepository tourEquipmentRepository, IEquipmentRepository equipmentRepository, IInternalShoppingService shoppingService) : base(tourRepository, mapper)
+        public TourService(ITourRepository tourRepository, IMapper mapper, IEquipmentRepository equipmentRepository, IInternalShoppingService shoppingService) : base(tourRepository, mapper)
         {
-            _tourEquipmentRepository = tourEquipmentRepository;
             _tourRepository = tourRepository;
             _equipmentRepository = equipmentRepository;
             _tourPreviewMapper = new TourPreviewMapper();
