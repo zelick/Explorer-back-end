@@ -13,6 +13,7 @@ namespace Explorer.Encounters.Core.Domain.Encounters
         public double Longitude { get; init; }
         public SocialEncounter? SocialEncounter { get; init; }
         public HiddenLocationEncounter? HiddenLocationEncounter { get; init;}
+        public List<CompletedEncounter>? CompletedEncounter { get; init; }
 
         public Encounter() { }
 

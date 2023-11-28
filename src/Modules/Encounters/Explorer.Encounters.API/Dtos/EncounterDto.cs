@@ -17,6 +17,7 @@ namespace Explorer.Encounters.API.Dtos
         public double Latitude { get; set; }
         public SocialEncounterDto? SocialEncounter { get; set; }
         public HiddenLocationEncounterDto? HiddenLocationEncounter { get; set; }   
+        public List<CompletedEncounterDto>? CompletedEncounter { get; set; }
         
     }
 }
