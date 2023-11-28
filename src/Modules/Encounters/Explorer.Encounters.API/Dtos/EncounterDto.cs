@@ -8,6 +8,7 @@ namespace Explorer.Encounters.API.Dtos
 {
     public class EncounterDto
     {
+        public long AuthorId { get; set; }
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }

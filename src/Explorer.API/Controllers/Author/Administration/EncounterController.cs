@@ -27,6 +27,7 @@ namespace Explorer.API.Controllers.Author.Administration
         [Authorize(Policy = "authorPolicy")]
         public ActionResult<EncounterDto> Create([FromForm] EncounterDto encounter,[FromQuery] long checkpointId, [FromForm] List<IFormFile>? image = null)
         {
+            if(User.PersonId()!=encounter.AuthorId) { return CreateResponse(Result.Fail(FailureCode.Forbidden)); }
             throw new NotImplementedException();
         }
     }
