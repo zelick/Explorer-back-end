@@ -23,7 +23,7 @@ namespace Explorer.Tours.Tests.Integration.Administration
         {
             // Arrange
             using var scope = Factory.Services.CreateScope();
-            var controller = CreatePublicMapObjectController(scope);
+            var controller = CreatePublicCheckpointController(scope);
 
             // Act
             var result = ((ObjectResult)controller.GetAll().Result)?.Value as PagedResult<PublicCheckpointDto>;
@@ -34,7 +34,20 @@ namespace Explorer.Tours.Tests.Integration.Administration
             result.TotalCount.ShouldBe(3);
         }
 
-        private static PublicCheckpointController CreatePublicMapObjectController(IServiceScope scope)
+        [Fact]
+        public void FindAllAtPlace()
+        {
+            using var scope = Factory.Services.CreateScope();
+            var controller = CreatePublicCheckpointController(scope);
+
+            var result = ((ObjectResult)controller.GetAllAtPlace(45.0, 45.0).Result)?.Value as PagedResult<PublicCheckpointDto>;
+
+            result.ShouldNotBeNull();
+            result.Results.Count.ShouldBe(2);
+            result.TotalCount.ShouldBe(2);
+        }
+
+        private static PublicCheckpointController CreatePublicCheckpointController(IServiceScope scope)
         {
             return new PublicCheckpointController(scope.ServiceProvider.GetRequiredService<IPublicCheckpointService>())
             {
