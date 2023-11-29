@@ -3,7 +3,10 @@ using Explorer.API.Controllers.Author.Administration;
 using Explorer.API.Controllers.Tourist.Shopping;
 using Explorer.Payments.API.Dtos;
 using Explorer.Payments.API.Public;
+using Explorer.Payments.Infrastructure.Database;
 using Explorer.Payments.Tests;
+using Explorer.Stakeholders.API.Dtos;
+using Explorer.Stakeholders.Infrastructure.Database;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
 using Explorer.Tours.Infrastructure.Database;
@@ -40,12 +43,57 @@ namespace Explorer.Payments.Tests.Integration
             result.ShouldNotBeNull();
         }
 
+        [Fact]
+        public void Updates()
+        {
+            // Arrange
+            using var scope = Factory.Services.CreateScope();
+            var controller = CreateController(scope);
+            var dbContext = scope.ServiceProvider.GetRequiredService<PaymentsContext>();
+            var updatedEntity = new SaleDto
+            {
+                Id = -1,
+                Discount = 10
+            };
+
+            // Act
+            var result = ((ObjectResult)controller.Update(updatedEntity).Result)?.Value as SaleDto;
+
+            // Assert - Response
+            result.ShouldNotBeNull();
+            result.Id.ShouldBe(-1);
+
+            // Assert - Database
+            var storedEntity = dbContext.Sales.FirstOrDefault(i => i.Discount == 10);
+            storedEntity.ShouldNotBeNull();
+        }
+
         private static SaleController CreateController(IServiceScope scope)
         {
             return new SaleController(scope.ServiceProvider.GetRequiredService<ISaleService>())
             {
                 ControllerContext = BuildContext("-21")
             };
+        }
+
+        [Fact]
+        public void Deletes()
+        {
+            // Arrange
+            using var scope = Factory.Services.CreateScope();
+            var controller = CreateController(scope);
+            var dbContext = scope.ServiceProvider.GetRequiredService<PaymentsContext>();
+
+            // Act
+            var result = (OkResult)controller.Delete(-2);
+
+            // Assert - Response
+            result.ShouldNotBeNull();
+            result.StatusCode.ShouldBe(200);
+
+            // Assert - Database
+            var storedCourse = dbContext.Sales.FirstOrDefault(i => i.Id == -2);
+            storedCourse.ShouldBeNull();
         }
     }
 }

@@ -21,6 +21,12 @@ namespace Explorer.API.Controllers.Administrator.Administration
             _saleService = saleService;
         }
 
+        [HttpGet]
+        public ActionResult<PagedResult<SaleDto>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
+        {
+            throw new NotImplementedException();
+        }
+
         [HttpPost]
         public ActionResult<SaleDto> Create([FromBody] SaleDto saleDto)
         {
@@ -28,22 +34,17 @@ namespace Explorer.API.Controllers.Administrator.Administration
             return CreateResponse(result);
         }
 
-        /*
-        public SaleController(ISaleService saleService)
+        [HttpPut]
+        public ActionResult<SaleDto> Update([FromBody] SaleDto saleDto)
         {
-            _saleService = saleService;
-        }
-        */
-
-        /*
-        [HttpGet]
-        public ActionResult<PagedResult<SaleDto>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
-        {
-            var result = _saleService.GetPaged(page, pageSize);
-            return CreateResponse(result);
             throw new NotImplementedException();
         }
-        */
+
+        [HttpDelete("{id:int}")]
+        public ActionResult Delete(int id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
 
