@@ -26,6 +26,7 @@ public static class PaymentsStartup
         services.AddScoped<ICustomerService, CustomerService>();
         services.AddScoped<IInternalShoppingService, CustomerService>();
         services.AddScoped<IShoppingCartService, ShoppingCartService>();
+        services.AddScoped<ISaleService, SaleService>();
     }
 
     private static void SetupInfrastructure(IServiceCollection services)
