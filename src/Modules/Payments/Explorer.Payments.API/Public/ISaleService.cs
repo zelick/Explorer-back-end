@@ -15,5 +15,6 @@ namespace Explorer.Payments.API.Public
         Result<SaleDto> Create(SaleDto sale);
         Result<SaleDto> Update(SaleDto saleDto);
         Result Delete(int id);
+        Result<SaleDto> Get(int id);
     }
 }

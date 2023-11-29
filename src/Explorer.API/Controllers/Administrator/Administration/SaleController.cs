@@ -1,10 +1,12 @@
 ﻿using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Payments.API.Dtos;
 using Explorer.Payments.API.Public;
+using Explorer.Payments.Core.UseCases;
 using Explorer.Stakeholders.Infrastructure.Authentication;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
 using Explorer.Tours.Core.UseCases.Administration;
+using FluentResults;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,6 +17,7 @@ namespace Explorer.API.Controllers.Administrator.Administration
     public class SaleController : BaseApiController
     {
         private readonly ISaleService _saleService;
+        private readonly ITourService _tourService;
 
         public SaleController(ISaleService saleService) 
         {
@@ -48,6 +51,42 @@ namespace Explorer.API.Controllers.Administrator.Administration
             var result = _saleService.Delete(id);
             return CreateResponse(result);
         }
+
+        [HttpGet("{id:int}")]
+        public ActionResult<SaleDto> Get(int id)
+        {
+            /*
+            var result = _saleService.Get(id);
+            return CreateResponse(result);
+            */
+            throw new NotImplementedException();
+        }
+
+        [HttpGet("tours-on-sale/{saleId:int}")]
+        public ActionResult<List<PublishedTourDto>> GetToursFromSale([FromQuery] int saleId)
+        {
+            /*
+            var sale = _saleService.Get(saleId);
+            var tours = _tourService.GetToursFromSaleByIds(sale.Value.ToursIds);
+            return CreateResponse(tours);
+            */
+            throw new NotImplementedException();
+        }
+
+
+
+        /*
+        [HttpGet("tours-on-sale/{saleId:int}")]
+        public ActionResult<List<PublishedTourDto>> GetToursFromSale([FromQuery] long saleId)
+        {
+            var result = _saleService.GetToursFromSale(saleId);
+
+            var result = _customerService.GetPurchasedToursByUser(touristId);
+            if (result.IsFailed) return BadRequest("Purchased tours not found for the user.");
+            var tours = _tourService.GetToursByIds(result.Value);
+            return CreateResponse(tours);
+        }
+        */
     }
 }
 

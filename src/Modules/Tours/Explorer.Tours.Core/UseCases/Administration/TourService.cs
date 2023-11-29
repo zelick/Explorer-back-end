@@ -252,6 +252,21 @@ namespace Explorer.Tours.Core.UseCases.Administration
             return _purchasedTourPreviewMapper.createDtoList(foundTours);
         }
 
+        public Result<List<PublicTourDto>> GetToursFromSaleByIds(List<long> tourIds)
+        {
+            var foundTours = new List<PublicTour>();
+
+            foreach (var id in tourIds)
+            {
+                var tour = _tourRepository.Get(id);
+                PublicTour publicTour = tour.CreatePublicTour(tour);
+
+                foundTours.Add(publicTour);
+            }
+
+            return _publicTourMapper.createDtoList(foundTours);
+        }
+
         public Result<PurchasedTourPreviewDto> GetPurchasedTourById(long purchasedTourId, int userId)
         {
             if (!_shoppingService.IsTourPurchasedByUser(userId, purchasedTourId).Value)

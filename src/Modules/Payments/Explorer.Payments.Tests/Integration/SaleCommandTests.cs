@@ -27,6 +27,21 @@ namespace Explorer.Payments.Tests.Integration
         public SaleTests(PaymentsTestFactory factory) : base(factory) { }
 
         [Fact]
+        public void GetSale()
+        {
+            // Arrange
+            using var scope = Factory.Services.CreateScope();
+            var controller = CreateController(scope);
+            var dbContext = scope.ServiceProvider.GetRequiredService<PaymentsContext>();
+
+            // Act
+            var result = ((ObjectResult)controller.Get(-21).Result)?.Value as SaleDto;
+
+            result.ShouldNotBeNull();
+            result.Id.ShouldNotBe(0);
+        }
+
+        [Fact]
         public void Creates()
         {
             // Arrange
@@ -86,6 +101,26 @@ namespace Explorer.Payments.Tests.Integration
             // Assert - Database
             var sale = dbContext.Sales.FirstOrDefault(i => i.Id == -2);
             sale.ShouldBeNull();
+        }
+
+        [Fact]
+        public void GetToursFromSale_Test()
+        {
+            // Arrange
+            using var scope = Factory.Services.CreateScope();
+            var controller = CreateController(scope);
+            var dbContext = scope.ServiceProvider.GetRequiredService<PaymentsContext>();
+
+            // Act
+            var result = (ObjectResult)controller.GetToursFromSale(-2).Result;
+
+            // Assert - Response
+            result.ShouldNotBeNull();
+            result.StatusCode.ShouldBe(200);
+
+            // Assert - Database
+            //var sale = dbContext.Sales.FirstOrDefault(i => i.Id == -2);
+            //sale.ShouldBeNull();
         }
 
         private static SaleController CreateController(IServiceScope scope)
