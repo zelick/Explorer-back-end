@@ -1,6 +1,7 @@
 ﻿using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Encounters.Core.Domain.Encounters;
 using Explorer.Encounters.Core.Domain.RepositoryInterfaces;
+using Explorer.Tours.Core.Domain.Tours;
 
 namespace Explorer.Encounters.Infrastructure.Database.Repositories
 {
@@ -13,9 +14,12 @@ namespace Explorer.Encounters.Infrastructure.Database.Repositories
             _dbContext = encountersContext;
         }
 
-        public Encounter Create(Encounter entity)
+        public Encounter Create(Encounter encounter)
         {
-            throw new NotImplementedException();
+            _dbContext.Encounter.Add(encounter);
+            _dbContext.SaveChanges();
+
+            return encounter;
         }
 
         public void Delete(long id)
