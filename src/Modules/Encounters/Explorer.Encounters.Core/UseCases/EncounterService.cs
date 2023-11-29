@@ -1,34 +1,35 @@
 ﻿using AutoMapper;
 using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Encounters.API.Dtos;
+using Explorer.Encounters.API.Internal;
 using Explorer.Encounters.API.Public;
 using Explorer.Encounters.Core.Domain.Encounters;
 using Explorer.Encounters.Core.Domain.RepositoryInterfaces;
+using Explorer.Stakeholders.Core.Domain;
 using FluentResults;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Explorer.Encounters.Core.UseCases
 {
     public class EncounterService : CrudService<EncounterDto, Encounter>, IEncounterService
     {
         private readonly IEncounterRepository _encounterRepository;
-        public EncounterService(IEncounterRepository encounterRepository, IMapper mapper) : base(encounterRepository, mapper)
+        private readonly IInternalCheckpointService _internalCheckpointService;
+        public EncounterService(IEncounterRepository encounterRepository,IInternalCheckpointService internalCheckpointService, IMapper mapper) : base(encounterRepository, mapper)
         {
             _encounterRepository= encounterRepository;
+            _internalCheckpointService= internalCheckpointService;
         }
 
-        public Result<EncounterDto> Create(EncounterDto encounterDto)
+        public Result<EncounterDto> Create(EncounterDto encounterDto,long checkpointId,bool isSecretPrerequisite,long userId)
         {
             Encounter encounter = MapToDomain(encounterDto);
+            Encounter result;
+            if (!encounter.IsAuthor(userId)) 
+                return Result.Fail(FailureCode.Forbidden); 
 
             try
             {
-                var result = CrudRepository.Create(encounter);
-                return MapToDto(result);
+                result = _encounterRepository.Create(encounter);
             }
             catch (KeyNotFoundException e)
             {
@@ -38,15 +39,10 @@ namespace Explorer.Encounters.Core.UseCases
             {
                 return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
             }
-        }
-        public Result<EncounterDto> Update(EncounterDto encounterDto)
-        {
-            Encounter encounter = MapToDomain(encounterDto);
-           
+
             try
             {
-                var result = CrudRepository.Update(encounter);
-                return MapToDto(result);
+                _internalCheckpointService.SetEncounter((int)checkpointId, result.Id, isSecretPrerequisite, (int)result.AuthorId);
             }
             catch (KeyNotFoundException e)
             {
@@ -56,29 +52,12 @@ namespace Explorer.Encounters.Core.UseCases
             {
                 return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
             }
+            return MapToDto(result);
+
+
         }
-        public Result Delete(int id)
-        {
-            Encounter  encounter;
-            try
-            {
-                encounter = _encounterRepository.Get(id);
-            }
-            catch (KeyNotFoundException e)
-            {
-                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
-            }
-            
-            try
-            {
-                CrudRepository.Delete(id);
-                return Result.Ok();
-            }
-            catch (KeyNotFoundException e)
-            {
-                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
-            }
-        }
+
+
 
     }
 }

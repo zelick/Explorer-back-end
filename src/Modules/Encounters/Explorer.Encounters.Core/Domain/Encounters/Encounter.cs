@@ -43,6 +43,10 @@ namespace Explorer.Encounters.Core.Domain.Encounters
                 SocialEncounter = new SocialEncounter(socialEncounter.RequiredPeople, socialEncounter.Range);
         }
 
+        public bool IsAuthor(long userId)
+        {
+            return AuthorId == userId;
+        }
 
     }
     public enum EncounterStatus
