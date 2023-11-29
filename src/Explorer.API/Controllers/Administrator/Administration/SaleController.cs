@@ -1,6 +1,7 @@
 ﻿using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Payments.API.Dtos;
 using Explorer.Payments.API.Public;
+using Explorer.Stakeholders.Infrastructure.Authentication;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
 using Explorer.Tours.Core.UseCases.Administration;
@@ -15,12 +16,16 @@ namespace Explorer.API.Controllers.Administrator.Administration
     {
         private readonly ISaleService _saleService;
 
-        public SaleController() { }
+        public SaleController(ISaleService saleService) 
+        {
+            _saleService = saleService;
+        }
 
         [HttpPost]
-        public ActionResult<SaleDto> Create([FromBody] SaleDto sale)
+        public ActionResult<SaleDto> Create([FromBody] SaleDto saleDto)
         {
-            throw new NotImplementedException();
+            var result = _saleService.Create(saleDto);
+            return CreateResponse(result);
         }
 
         /*

@@ -8,6 +8,8 @@ using Explorer.Payments.API.Public;
 using Explorer.Payments.Core.UseCases;
 using Explorer.Payments.Core.Domain.RepositoryInterfaces;
 using Explorer.Payments.Infrastructure.Database.Repositories;
+using Explorer.BuildingBlocks.Core.UseCases;
+using Explorer.Payments.Core.Domain;
 
 namespace Explorer.Payments.Infrastructure;
 
@@ -33,6 +35,13 @@ public static class PaymentsStartup
     {
         services.AddScoped<ICustomerRepository, CustomerDatabaseRepository>();
         services.AddScoped<IShoppingCartRepository, ShoppingCartDatabaseRepository>();
+
+        services.AddScoped(typeof(ICrudRepository<Sale>), typeof(CrudDatabaseRepository<Sale, PaymentsContext>));
+        services.AddScoped<ISaleRepository, SaleDatabaseRepository>();
+
+
+
+
 
         services.AddDbContext<PaymentsContext>(opt =>
             opt.UseNpgsql(DbConnectionStringBuilder.Build("payments"),
