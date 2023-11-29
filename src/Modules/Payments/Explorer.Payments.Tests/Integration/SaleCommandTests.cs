@@ -68,14 +68,6 @@ namespace Explorer.Payments.Tests.Integration
             storedEntity.ShouldNotBeNull();
         }
 
-        private static SaleController CreateController(IServiceScope scope)
-        {
-            return new SaleController(scope.ServiceProvider.GetRequiredService<ISaleService>())
-            {
-                ControllerContext = BuildContext("-21")
-            };
-        }
-
         [Fact]
         public void Deletes()
         {
@@ -85,15 +77,24 @@ namespace Explorer.Payments.Tests.Integration
             var dbContext = scope.ServiceProvider.GetRequiredService<PaymentsContext>();
 
             // Act
-            var result = (OkResult)controller.Delete(-2);
+            var result = (ObjectResult)controller.Delete(-2);
 
             // Assert - Response
             result.ShouldNotBeNull();
             result.StatusCode.ShouldBe(200);
 
             // Assert - Database
-            var storedCourse = dbContext.Sales.FirstOrDefault(i => i.Id == -2);
-            storedCourse.ShouldBeNull();
+            var sale = dbContext.Sales.FirstOrDefault(i => i.Id == -2);
+            sale.ShouldBeNull();
         }
+
+        private static SaleController CreateController(IServiceScope scope)
+        {
+            return new SaleController(scope.ServiceProvider.GetRequiredService<ISaleService>())
+            {
+                ControllerContext = BuildContext("-21")
+            };
+        }
+
     }
 }

@@ -11,9 +11,9 @@ namespace Explorer.Payments.API.Public
 {
     public interface ISaleService
     {
-        //Result<PagedResult<SaleDto>> GetPaged(int page, int pageSize);
+        Result<PagedResult<SaleDto>> GetPaged(int page, int pageSize);
         Result<SaleDto> Create(SaleDto sale);
-
-
+        Result<SaleDto> Update(SaleDto saleDto);
+        Result Delete(int id);
     }
 }

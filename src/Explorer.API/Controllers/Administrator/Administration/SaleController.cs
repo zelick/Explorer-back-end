@@ -24,7 +24,8 @@ namespace Explorer.API.Controllers.Administrator.Administration
         [HttpGet]
         public ActionResult<PagedResult<SaleDto>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
         {
-            throw new NotImplementedException();
+            var result = _saleService.GetPaged(page, pageSize);
+            return CreateResponse(result);
         }
 
         [HttpPost]
@@ -37,13 +38,15 @@ namespace Explorer.API.Controllers.Administrator.Administration
         [HttpPut]
         public ActionResult<SaleDto> Update([FromBody] SaleDto saleDto)
         {
-            throw new NotImplementedException();
+            var result = _saleService.Update(saleDto);
+            return CreateResponse(result);
         }
 
         [HttpDelete("{id:int}")]
         public ActionResult Delete(int id)
         {
-            throw new NotImplementedException();
+            var result = _saleService.Delete(id);
+            return CreateResponse(result);
         }
     }
 }
