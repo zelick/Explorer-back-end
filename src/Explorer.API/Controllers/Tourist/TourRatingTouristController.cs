@@ -15,11 +15,11 @@ namespace Explorer.API.Controllers.Tourist
     public class TourRatingTouristController : BaseApiController
     {
         private readonly ITourRatingService _tourRatingService;
-        private readonly ICustomerService _customerService;
+        private readonly IItemOwnershipService _customerService;
         private readonly ITourExecutionRepository _executionRepository;
         private readonly ImageService _imageService;
 
-        public TourRatingTouristController(ITourRatingService tourRatingService, ICustomerService customerService, ITourExecutionRepository executionRepository)
+        public TourRatingTouristController(ITourRatingService tourRatingService, IItemOwnershipService customerService, ITourExecutionRepository executionRepository)
         {
             _tourRatingService = tourRatingService;
             _imageService = new ImageService();
