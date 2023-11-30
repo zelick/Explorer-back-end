@@ -20,14 +20,14 @@ public class TourExecutionQueryTests : BaseToursIntegrationTest
     [Fact]
     public void Retrieves_by_tour_and_user()
     {
-        var userId = 4;
+        var userId = 3;
         var tourId = -1;
         // Arrange
         using var scope = Factory.Services.CreateScope();
         var controller = CreateController(scope, userId.ToString());
 
         // Act
-        var result = ((ObjectResult)controller.Get(userId, tourId).Result)?.Value as TourExecutionDto;
+        var result = ((ObjectResult)controller.Get(tourId).Result)?.Value as TourExecutionDto;
 
         // Assert
         result.ShouldNotBeNull();

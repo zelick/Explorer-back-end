@@ -1,7 +1,7 @@
 ﻿using Explorer.API.Controllers.User.Blogging;
-using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Blog.API.Dtos;
 using Explorer.Blog.API.Public;
+using Explorer.BuildingBlocks.Core.UseCases;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
@@ -11,7 +11,9 @@ namespace Explorer.Blog.Tests.Integration;
 [Collection("Sequential")]
 public class BlogPostQueryTests : BaseBlogIntegrationTest
 {
-    public BlogPostQueryTests(BlogTestFactory factory) : base(factory) { }
+    public BlogPostQueryTests(BlogTestFactory factory) : base(factory)
+    {
+    }
 
     [Fact]
     public void Retrieves_all_non_draft()

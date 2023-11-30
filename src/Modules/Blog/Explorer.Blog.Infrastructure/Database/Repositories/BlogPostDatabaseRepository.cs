@@ -7,7 +7,9 @@ namespace Explorer.Blog.Infrastructure.Database.Repositories;
 
 public class BlogPostDatabaseRepository : CrudDatabaseRepository<BlogPost, BlogContext>, IBlogPostRepository
 {
-    public BlogPostDatabaseRepository(BlogContext blogContext) : base(blogContext) {}
+    public BlogPostDatabaseRepository(BlogContext blogContext) : base(blogContext)
+    {
+    }
 
     public PagedResult<BlogPost> GetAllNonDraft(int page, int pageSize)
     {
@@ -39,13 +41,19 @@ public class BlogPostDatabaseRepository : CrudDatabaseRepository<BlogPost, BlogC
     private List<BlogPost> PageResults(int page, int pageSize, IQueryable<BlogPost> query)
     {
         if (pageSize != 0 && page != 0)
-        {
             return query.OrderByDescending(bp => bp.Id)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToList();
-        }
 
         return query.ToList();
     }
+    
+    public List<BlogPost> GetAllPublished()
+    {
+        return DbContext.BlogPosts
+            .Where(bp => bp.Status == BlogPostStatus.Published)
+            .ToList();
+    }
 }
+

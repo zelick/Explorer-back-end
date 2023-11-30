@@ -1,17 +1,17 @@
-﻿using Explorer.Blog.API.Public;
+﻿using AutoMapper;
 using Explorer.Blog.API.Dtos;
-using Explorer.BuildingBlocks.Core.UseCases;
-using AutoMapper;
-using FluentResults;
-using Explorer.Blog.Core.Domain.RepositoryInterfaces;
+using Explorer.Blog.API.Public;
 using Explorer.Blog.Core.Domain.BlogPosts;
+using Explorer.Blog.Core.Domain.RepositoryInterfaces;
+using Explorer.BuildingBlocks.Core.UseCases;
+using FluentResults;
 
 namespace Explorer.Blog.Core.UseCases;
 
 public class BlogCommentService : BaseService<BlogPostDto, BlogPost>, IBlogCommentService
 {
-    private readonly IMapper _mapper;
     private readonly IBlogPostRepository _blogPostsRepository;
+    private readonly IMapper _mapper;
 
     public BlogCommentService(IBlogPostRepository repository, IMapper mapper) : base(mapper)
     {
@@ -40,12 +40,15 @@ public class BlogCommentService : BaseService<BlogPostDto, BlogPost>, IBlogComme
         }
     }
 
-    public Result Remove(int blogPostId, BlogCommentDto blogCommentDto)
+    public Result Remove(int blogPostId, BlogCommentDto blogCommentDto, int userId)
     {
         try
         {
             var blogPost = _blogPostsRepository.Get(blogPostId);
             var blogComment = _mapper.Map<BlogCommentDto, BlogComment>(blogCommentDto);
+
+            if (!blogComment.IsCreatedByUser(userId))
+                throw new InvalidOperationException("Only the creator of the comment can remove it.");
 
             blogPost.DeleteComment(blogComment);
             _blogPostsRepository.Update(blogPost);
@@ -58,6 +61,10 @@ public class BlogCommentService : BaseService<BlogPostDto, BlogPost>, IBlogComme
         catch (ArgumentException e)
         {
             return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+        }
+        catch (InvalidOperationException e)
+        {
+            return Result.Fail(FailureCode.Forbidden).WithError(e.Message);
         }
     }
 }

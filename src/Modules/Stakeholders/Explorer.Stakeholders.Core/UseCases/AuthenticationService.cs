@@ -3,9 +3,7 @@ using Explorer.Stakeholders.API.Dtos;
 using Explorer.Stakeholders.API.Public;
 using Explorer.Stakeholders.Core.Domain;
 using Explorer.Stakeholders.Core.Domain.RepositoryInterfaces;
-using Explorer.Stakeholders.Core.Domain.Shopping;
 using FluentResults;
-using System.IdentityModel.Tokens.Jwt;
 using System.Net.Mail;
 
 namespace Explorer.Stakeholders.Core.UseCases;
@@ -17,7 +15,6 @@ public class AuthenticationService : IAuthenticationService
     private readonly ICrudRepository<Person> _personRepository;
     private readonly IEmailService _emailService;
     private readonly IVerificationTokenRepository _verificationTokenRepository;
-    //customer rep 
     private readonly ICustomerRepository _customerRepository;
 
     public AuthenticationService(IUserRepository userRepository, ICrudRepository<Person> personRepository, ITokenGenerator tokenGenerator, ICustomerRepository customerRepository, IEmailService emailService, IVerificationTokenRepository verificationTokenRepository)

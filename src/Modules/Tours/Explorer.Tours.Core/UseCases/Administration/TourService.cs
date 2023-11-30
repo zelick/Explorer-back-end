@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Explorer.BuildingBlocks.Core.Domain;
 using Explorer.BuildingBlocks.Core.UseCases;
+using Explorer.Payments.API.Internal;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
 using Explorer.Tours.Core.Domain;
@@ -19,7 +20,9 @@ namespace Explorer.Tours.Core.UseCases.Administration
         private TourPreviewMapper _tourPreviewMapper;
         private PurchasedTourPreviewMapper _purchasedTourPreviewMapper;
         private PublicTourMapper _publicTourMapper;
-        public TourService(ITourRepository tourRepository, IMapper mapper, ITourEquipmentRepository tourEquipmentRepository, IEquipmentRepository equipmentRepository) : base(tourRepository, mapper)
+        private readonly IInternalShoppingService _shoppingService;
+
+        public TourService(ITourRepository tourRepository, IMapper mapper, ITourEquipmentRepository tourEquipmentRepository, IEquipmentRepository equipmentRepository, IInternalShoppingService shoppingService) : base(tourRepository, mapper)
         {
             _tourEquipmentRepository = tourEquipmentRepository;
             _tourRepository = tourRepository;
@@ -27,7 +30,7 @@ namespace Explorer.Tours.Core.UseCases.Administration
             _tourPreviewMapper = new TourPreviewMapper();
             _purchasedTourPreviewMapper = new PurchasedTourPreviewMapper();
             _publicTourMapper =  new PublicTourMapper();
-
+            _shoppingService = shoppingService;
         }
 
         public Result<TourDto> Update(TourDto tour, int authorId)
@@ -249,13 +252,16 @@ namespace Explorer.Tours.Core.UseCases.Administration
             return _purchasedTourPreviewMapper.createDtoList(foundTours);
         }
 
-        public Result<PurchasedTourPreviewDto> getPurchasedTourById(long purchasedTourId)
+        public Result<PurchasedTourPreviewDto> GetPurchasedTourById(long purchasedTourId, int userId)
         {
+            if (!_shoppingService.IsTourPurchasedByUser(userId, purchasedTourId).Value)
+                throw new InvalidOperationException("This tour is only accessible to customers who have purchased it.");
+
             var foundTour = _tourRepository.Get(purchasedTourId);
-            PurchasedTourPreview foundPurchasedTour = foundTour.FilterPurchasedTour(foundTour);
+
+            var foundPurchasedTour = foundTour.FilterPurchasedTour(foundTour);
 
             return _purchasedTourPreviewMapper.createDto(foundPurchasedTour);
-
         }
 
         public Result<List<PublicTourDto>> GetPublicTours()
@@ -275,5 +281,23 @@ namespace Explorer.Tours.Core.UseCases.Administration
 
             return tour.CalculateAverageRating();
         }
+
+        public Result<List<TourPreviewDto>> GetTopRatedTours(int count)
+        {
+            var publishedTours = _tourRepository.GetPublishedTours();
+
+            var topRatedTours = publishedTours
+                .Where(tour => tour.TourRatings != null && tour.TourRatings.Any()) // Provera da li postoje ocene
+                .OrderByDescending(tour => tour.TourRatings?.Average(rating => rating.Rating))
+                .Take(count)
+                .ToList();
+            List<TourPreview> publishedToursPreviews = new List<TourPreview>();
+            foreach (var tour in topRatedTours)
+            {
+                publishedToursPreviews.Add(tour.FilterView(tour));
+            }
+            return _tourPreviewMapper.createDtoList(publishedToursPreviews);
+        }
+
     }
 }

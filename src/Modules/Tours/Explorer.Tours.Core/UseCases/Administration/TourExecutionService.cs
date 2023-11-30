@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using Explorer.BuildingBlocks.Core.UseCases;
+using Explorer.Payments.API.Internal;
 using Explorer.Stakeholders.API.Internal;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
 using Explorer.Tours.Core.Domain.RepositoryInterfaces;
 using Explorer.Tours.Core.Domain.TourExecutions;
+using Explorer.Tours.Core.Domain.Tours;
 using Explorer.Tours.Core.Mappers;
 using FluentResults;
 using System;
@@ -41,7 +43,7 @@ namespace Explorer.Tours.Core.UseCases.Administration
         {
             try
             {
-                if(!_shoppingService.IsTourPurchasedByUser(touristId, tourId))
+                if(!_shoppingService.IsTourPurchasedByUser(touristId, tourId).Value)
                     return Result.Fail(FailureCode.InvalidArgument).WithError("Tour not purchased");
                 var result = _tourExecutionRepository.Create(new TourExecution(touristId, tourId));
                 result.setTour(_tourRepository.Get(tourId));
@@ -61,12 +63,22 @@ namespace Explorer.Tours.Core.UseCases.Administration
             return new Result<TourExecutionDto>();
         }
 
-        public Result<TourExecutionDto> Abandon(long id)
+        public Result<TourExecutionDto> Abandon(long id, long touristId)
         {
-            TourExecution tourExecution = CrudRepository.Get(id);
-            tourExecution.Abandone(id);
-            TourExecution result = CrudRepository.Update(tourExecution);
-            return _tourExecutionMapper.createDto(result);
+            try
+            {
+                if (!_shoppingService.IsTourPurchasedByUser(touristId, id).Value)
+                    return Result.Fail(FailureCode.InvalidArgument).WithError("Tour not purchased");
+
+                TourExecution tourExecution = CrudRepository.Get(id);
+                tourExecution.Abandone(id);
+                return _tourExecutionMapper.createDto(CrudRepository.Update(tourExecution));
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+            
         }
     }
 }
