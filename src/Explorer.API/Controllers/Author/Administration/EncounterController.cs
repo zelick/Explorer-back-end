@@ -15,6 +15,8 @@ using static System.Net.Mime.MediaTypeNames;
 namespace Explorer.API.Controllers.Author.Administration
 {
     [Route("api/administration/encounter")]
+    [Authorize(Policy = "authorPolicy")]
+
 
     public class EncounterController : BaseApiController
     {
@@ -31,7 +33,6 @@ namespace Explorer.API.Controllers.Author.Administration
 
 
         [HttpPost]
-        [Authorize(Policy = "authorPolicy")]
         public ActionResult<EncounterDto> Create([FromForm] EncounterDto encounter,[FromQuery] long checkpointId, [FromQuery] bool isSecretPrerequisite, [FromForm] List<IFormFile>? image = null)
         {
 
@@ -43,6 +44,21 @@ namespace Explorer.API.Controllers.Author.Administration
             }
 
             var result = _encounterService.Create(encounter, checkpointId, isSecretPrerequisite,User.PersonId());
+            return CreateResponse(result);
+        }
+
+        [HttpPut]
+        public ActionResult<EncounterDto> Update([FromForm] EncounterDto encounter, [FromForm] List<IFormFile>? image = null)
+        {
+
+            if (image != null && image.Any())
+            {
+                var imageNames = _imageService.UploadImages(image);
+                if (encounter.HiddenLocationEncounter != null)
+                    encounter.HiddenLocationEncounter.Image = imageNames[0];
+            }
+
+            var result = _encounterService.Update(encounter,User.PersonId());
             return CreateResponse(result);
         }
     }
