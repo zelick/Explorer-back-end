@@ -52,7 +52,8 @@ namespace Explorer.Encounters.Core.Domain.Encounters
     {
         Draft,
         Active,
-        Archived
+        Archived,
+        Published
     }
     public enum EncounterType
     {
