@@ -32,6 +32,7 @@ public static class PaymentsStartup
     {
         services.AddScoped<ICustomerRepository, CustomerDatabaseRepository>();
         services.AddScoped<IShoppingCartRepository, ShoppingCartDatabaseRepository>();
+        services.AddScoped<ICouponRepository, CouponDatabaseRepository>();
 
         services.AddDbContext<PaymentsContext>(opt =>
             opt.UseNpgsql(DbConnectionStringBuilder.Build("payments"),

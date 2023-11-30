@@ -11,8 +11,6 @@ namespace Explorer.Payments.Core.Domain
         public DateTime? ExpirationDate { get; init; }
         public bool IsGlobal { get; init; }
         public long? TourId { get; init; }
-        
-
 
         public Coupon() { }
 
