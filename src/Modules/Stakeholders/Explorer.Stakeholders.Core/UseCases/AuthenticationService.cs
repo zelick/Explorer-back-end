@@ -15,14 +15,12 @@ public class AuthenticationService : IAuthenticationService
     private readonly ICrudRepository<Person> _personRepository;
     private readonly IEmailService _emailService;
     private readonly IVerificationTokenRepository _verificationTokenRepository;
-    private readonly ICustomerRepository _customerRepository;
 
-    public AuthenticationService(IUserRepository userRepository, ICrudRepository<Person> personRepository, ITokenGenerator tokenGenerator, ICustomerRepository customerRepository, IEmailService emailService, IVerificationTokenRepository verificationTokenRepository)
+    public AuthenticationService(IUserRepository userRepository, ICrudRepository<Person> personRepository, ITokenGenerator tokenGenerator, IEmailService emailService, IVerificationTokenRepository verificationTokenRepository)
     {
         _tokenGenerator = tokenGenerator;
         _userRepository = userRepository;
         _personRepository = personRepository;
-        _customerRepository = customerRepository;
         _emailService = emailService;
         _verificationTokenRepository = verificationTokenRepository;
     }
