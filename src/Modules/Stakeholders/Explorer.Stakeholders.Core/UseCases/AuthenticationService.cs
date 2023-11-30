@@ -1,4 +1,5 @@
 ﻿using Explorer.BuildingBlocks.Core.UseCases;
+using Explorer.Payments.API.Internal;
 using Explorer.Stakeholders.API.Dtos;
 using Explorer.Stakeholders.API.Public;
 using Explorer.Stakeholders.Core.Domain;
@@ -13,12 +14,14 @@ public class AuthenticationService : IAuthenticationService
     private readonly ITokenGenerator _tokenGenerator;
     private readonly IUserRepository _userRepository;
     private readonly ICrudRepository<Person> _personRepository;
+    private readonly IInternalShoppingSetupService _shoppingSetupService;
 
-    public AuthenticationService(IUserRepository userRepository, ICrudRepository<Person> personRepository, ITokenGenerator tokenGenerator)
+    public AuthenticationService(IUserRepository userRepository, ICrudRepository<Person> personRepository, ITokenGenerator tokenGenerator, IInternalShoppingSetupService shoppingSetupService)
     {
         _tokenGenerator = tokenGenerator;
         _userRepository = userRepository;
         _personRepository = personRepository;
+        _shoppingSetupService = shoppingSetupService;
     }
 
     public Result<AuthenticationTokensDto> Login(CredentialsDto credentials)
@@ -60,15 +63,15 @@ public class AuthenticationService : IAuthenticationService
             {
                 userRole = Domain.UserRole.Author;
             }
-            else userRole = Domain.UserRole.Tourist;
+            else {userRole = Domain.UserRole.Tourist;}
 
             var user = _userRepository.Create(new User(account.Username, account.Password, userRole , true));
             var person = _personRepository.Create(new Person(user.Id, account.Name, account.Surname, account.Email, account.ProfilePictureUrl, account.Biography, account.Motto));
-            /*if(userRole.Equals(UserRole.Tourist))
+            
+            if (userRole.Equals(UserRole.Tourist))
             {
-                var customer = new Customer(user.Id);
-                _customerRepository.Create(customer);
-            }*/
+                _shoppingSetupService.InitializeShopperFeatures(user.Id);
+            }
             return _tokenGenerator.GenerateAccessToken(user, person.Id);
         }
         catch (ArgumentException e)

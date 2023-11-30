@@ -23,8 +23,8 @@ namespace Explorer.Tours.Core.UseCases.Administration
         private readonly ITourExecutionRepository _tourExecutionRepository;
         private TourExecutionMapper _tourExecutionMapper;
         private readonly ITourRepository _tourRepository;
-        private readonly IInternalShoppingService _shoppingService;
-        public TourExecutionService(ITourExecutionRepository repository, IMapper mapper, ITourRepository tourRepository, IInternalShoppingService shoppingService) : base(repository, mapper)
+        private readonly IInternalTourOwnershipService _shoppingService;
+        public TourExecutionService(ITourExecutionRepository repository, IMapper mapper, ITourRepository tourRepository, IInternalTourOwnershipService shoppingService) : base(repository, mapper)
         {
             _tourExecutionRepository = repository;
             _tourRepository = tourRepository;

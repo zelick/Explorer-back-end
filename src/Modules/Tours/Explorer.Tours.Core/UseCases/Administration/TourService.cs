@@ -20,9 +20,9 @@ namespace Explorer.Tours.Core.UseCases.Administration
         private TourPreviewMapper _tourPreviewMapper;
         private PurchasedTourPreviewMapper _purchasedTourPreviewMapper;
         private PublicTourMapper _publicTourMapper;
-        private readonly IInternalShoppingService _shoppingService;
+        private readonly IInternalTourOwnershipService _shoppingService;
 
-        public TourService(ITourRepository tourRepository, IMapper mapper, ITourEquipmentRepository tourEquipmentRepository, IEquipmentRepository equipmentRepository, IInternalShoppingService shoppingService) : base(tourRepository, mapper)
+        public TourService(ITourRepository tourRepository, IMapper mapper, ITourEquipmentRepository tourEquipmentRepository, IEquipmentRepository equipmentRepository, IInternalTourOwnershipService shoppingService) : base(tourRepository, mapper)
         {
             _tourEquipmentRepository = tourEquipmentRepository;
             _tourRepository = tourRepository;
@@ -254,14 +254,22 @@ namespace Explorer.Tours.Core.UseCases.Administration
 
         public Result<PurchasedTourPreviewDto> GetPurchasedTourById(long purchasedTourId, int userId)
         {
-            if (!_shoppingService.IsTourPurchasedByUser(userId, purchasedTourId).Value)
-                throw new InvalidOperationException("This tour is only accessible to customers who have purchased it.");
+            try
+            {
+                if (!_shoppingService.IsTourPurchasedByUser(userId, purchasedTourId).Value)
+                    throw new InvalidOperationException("This tour is only accessible to customers who have purchased it.");
 
-            var foundTour = _tourRepository.Get(purchasedTourId);
+                var foundTour = _tourRepository.Get(purchasedTourId);
 
-            var foundPurchasedTour = foundTour.FilterPurchasedTour(foundTour);
+                var foundPurchasedTour = foundTour.FilterPurchasedTour(foundTour);
 
-            return _purchasedTourPreviewMapper.createDto(foundPurchasedTour);
+                return _purchasedTourPreviewMapper.createDto(foundPurchasedTour);
+            }
+            catch (InvalidOperationException e)
+            {
+                return Result.Fail(FailureCode.Forbidden).WithError(e.Message);
+            }
+
         }
 
         public Result<List<PublicTourDto>> GetPublicTours()
