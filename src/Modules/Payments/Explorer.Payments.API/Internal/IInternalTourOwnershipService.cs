@@ -2,7 +2,7 @@
 
 namespace Explorer.Payments.API.Internal;
 
-public interface IInternalShoppingService
+public interface IInternalTourOwnershipService
 {
     Result<bool> IsTourPurchasedByUser(long userId, long tourId);
 }

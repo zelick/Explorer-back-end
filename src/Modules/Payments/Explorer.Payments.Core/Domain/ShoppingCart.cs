@@ -5,35 +5,37 @@ namespace Explorer.Payments.Core.Domain;
 public class ShoppingCart : Entity
 {
     public long UserId { get; init; }
-    public List<OrderItem>? Items { get; private set; }
-    public double Price { get; private set; }
+    public List<OrderItem> Items;
 
-    public ShoppingCart(long userId, List<OrderItem>? items = null)
+    public ShoppingCart(long userId)
     {
         UserId = userId;
-        Items = items;
-        CalculateTotalPrice();
+        Items = new List<OrderItem>();
     }
 
-    public void CalculateTotalPrice()
+    public double GetTotal()
     {
-        Price = Items?.Sum(item => item.Price) ?? 0;
+        return Items.Sum(item => item.Price);
     }
 
-    public void Update(ShoppingCart updatedCart)
+    public void AddItem(OrderItem item)
     {
-        Items = updatedCart.Items;
-        CalculateTotalPrice();
+        Items.Add(item);
     }
+
+    public void RemoveItem(OrderItem item)
+    {
+        Items.Remove(item);
+    }
+
 
     public List<long> CheckOut()
     {
-        if(Items is null) throw new InvalidOperationException("Can't check out because Shopping Cart is empty!");
+        if(Items.Count == 0) throw new InvalidOperationException("Can't check out because Shopping Cart is empty!");
 
         var purchasedItemsId = Items.Select(i => i.ItemId).ToList();
 
         Items.Clear();
-        Price = 0;
 
         return purchasedItemsId;
     }

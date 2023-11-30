@@ -28,11 +28,17 @@ public class ShoppingCartController : BaseApiController
         return CreateResponse(result);
     }
 
-    [HttpPut("{id:int}")]
-    public ActionResult<ShoppingCartDto> Update(int id, [FromBody] ShoppingCartDto shoppingCart)
+    [HttpPut("add")]
+    public ActionResult<ShoppingCartDto> AddItem([FromBody] OrderItemDto orderItem)
     {
-        shoppingCart.Id = id;
-        var result = _shoppingCartService.Update(shoppingCart, User.PersonId());
+        var result = _shoppingCartService.AddItem(orderItem, User.PersonId());
+        return CreateResponse(result);
+    }
+
+    [HttpPut("remove")]
+    public ActionResult<ShoppingCartDto> RemoveItem([FromBody] OrderItemDto orderItem)
+    {
+        var result = _shoppingCartService.RemoveItem(orderItem, User.PersonId());
         return CreateResponse(result);
     }
 
