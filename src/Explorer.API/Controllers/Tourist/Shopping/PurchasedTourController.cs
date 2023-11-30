@@ -13,12 +13,12 @@ namespace Explorer.API.Controllers.Tourist.Shopping;
 [Route("api/shopping/purchased-tours")]
 public class PurchasedTourController : BaseApiController
 {
-    private readonly IItemOwnershipService _customerService;
+    private readonly IItemOwnershipService _tourOwnershipService;
     private readonly ITourService _tourService;
 
-    public PurchasedTourController(IItemOwnershipService customerService, ITourService tourService)
+    public PurchasedTourController(IItemOwnershipService tourOwnershipService, ITourService tourService)
     {
-        _customerService = customerService;
+        _tourOwnershipService = tourOwnershipService;
         _tourService = tourService;
     }
 
@@ -27,7 +27,7 @@ public class PurchasedTourController : BaseApiController
     {
         if (User.PersonId() != touristId) return CreateResponse(Result.Fail(FailureCode.Forbidden));
 
-        var result = _customerService.GetPurchasedToursByUser(touristId);
+        var result = _tourOwnershipService.GetPurchasedToursByUser(touristId);
         if (result.IsFailed) return BadRequest("Purchased tours not found for the user.");
         var tours = _tourService.GetToursByIds(result.Value);
         return CreateResponse(tours);
