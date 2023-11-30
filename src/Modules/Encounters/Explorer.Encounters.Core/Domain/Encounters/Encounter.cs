@@ -1,5 +1,4 @@
 ﻿using Explorer.BuildingBlocks.Core.Domain;
-using Explorer.Encounters.API.Dtos;
 
 namespace Explorer.Encounters.Core.Domain.Encounters
 {
@@ -20,7 +19,7 @@ namespace Explorer.Encounters.Core.Domain.Encounters
         public Encounter() { }
 
         public Encounter(long authorId,string name, string description, int xP, EncounterType type,
-            double latitude, double longitude,HiddenLocationEncounterDto? hiddenLocation,SocialEncounterDto? socialEncounter)
+            double latitude, double longitude,HiddenLocationEncounter? hiddenLocation,SocialEncounter? socialEncounter)
         {
             if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("Invalid name.");
             if (string.IsNullOrWhiteSpace(description)) throw new ArgumentException("Invalid description");
@@ -38,9 +37,9 @@ namespace Explorer.Encounters.Core.Domain.Encounters
             Latitude = latitude;
             Longitude = longitude;
             if (hiddenLocation != null) 
-                HiddenLocationEncounter = new HiddenLocationEncounter(hiddenLocation.Longitude,hiddenLocation.Latitude,hiddenLocation.Image,hiddenLocation.Range);
+                HiddenLocationEncounter = hiddenLocation;
             if (socialEncounter != null)
-                SocialEncounter = new SocialEncounter(socialEncounter.RequiredPeople, socialEncounter.Range);
+                SocialEncounter = socialEncounter;
         }
 
         public bool IsAuthor(long userId)

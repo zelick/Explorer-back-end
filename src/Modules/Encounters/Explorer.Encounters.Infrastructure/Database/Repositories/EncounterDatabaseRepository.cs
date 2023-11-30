@@ -1,7 +1,6 @@
 ﻿using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Encounters.Core.Domain.Encounters;
 using Explorer.Encounters.Core.Domain.RepositoryInterfaces;
-using Explorer.Tours.Core.Domain.Tours;
 
 namespace Explorer.Encounters.Infrastructure.Database.Repositories
 {

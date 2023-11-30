@@ -1,14 +1,6 @@
-﻿using AutoMapper;
-using Explorer.BuildingBlocks.Core.UseCases;
-using Explorer.Encounters.API.Internal;
-using Explorer.Tours.API.Dtos;
-using Explorer.Tours.API.Public.Administration;
-using Explorer.Tours.Core.Domain.Tours;
-using FluentResults;
-
-namespace Explorer.Encounters.Core.UseCases
+﻿namespace Explorer.Encounters.Core.UseCases
 {
-    public class InternalCheckpointService: BaseService<CheckpointDto, Checkpoint>, IInternalCheckpointService
+    /*public class InternalCheckpointService: BaseService<CheckpointDto, Checkpoint>, IInternalCheckpointService
     {
         private readonly ICheckpointService _checkpointService;
 
@@ -50,5 +42,5 @@ namespace Explorer.Encounters.Core.UseCases
 
         }
     
-    }
+    }*/
 }
