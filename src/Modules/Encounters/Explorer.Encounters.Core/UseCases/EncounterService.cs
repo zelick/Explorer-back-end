@@ -80,5 +80,43 @@ namespace Explorer.Encounters.Core.UseCases
             }
         }
 
+        public Result<EncounterDto> Activate(int id, double touristLongitude, double touristLatitude, int touristId)
+        {
+            try
+            {
+                Encounter result = CrudRepository.Get(id);
+                bool res = result.ActivateSocial(touristLongitude, touristLatitude, touristId);
+                if (!res)
+                {
+                    return Result.Fail(FailureCode.Forbidden).WithError("Not allowed for this tourist");
+                }
+                return MapToDto(result);
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+            catch (ArgumentException e)
+            {
+                return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+            }
+        }
+
+        public Result<int> CheckIfInRange(int id, double touristLongitude, double touristLatitude, int touristId)
+        {
+            try
+            {
+                Encounter result = CrudRepository.Get(id);
+                return result.CheckIfInRange(touristLongitude, touristLatitude, touristId);
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+            catch (ArgumentException e)
+            {
+                return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+            }
+        }
     }
 }

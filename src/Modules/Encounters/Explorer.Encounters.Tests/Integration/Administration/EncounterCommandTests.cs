@@ -117,6 +117,8 @@ public class EncounterCommandTests : BaseEncountersIntegrationTest
         result.ShouldNotBeNull();
         result.StatusCode.ShouldBe(expectedResponseCode);
     }
+
+
     private static EncounterController CreateController(IServiceScope scope)
     {
         return new EncounterController(scope.ServiceProvider.GetRequiredService<IEncounterService>())
