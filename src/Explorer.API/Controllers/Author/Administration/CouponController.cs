@@ -1,4 +1,8 @@
 ﻿using Explorer.BuildingBlocks.Core.UseCases;
+using Explorer.Payments.API.Dtos;
+using Explorer.Payments.API.Public;
+using Explorer.Payments.Core.Domain;
+using Explorer.Payments.Core.UseCases;
 using FluentResults;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,30 +13,42 @@ namespace Explorer.API.Controllers.Author.Administration
     [Route("api/manipulation/coupon")]
     public class CouponController : BaseApiController
     {
-        public CouponController() { }
+        private readonly ICouponService _couponService;
+
+        public CouponController(ICouponService service)
+        {
+            _couponService = service;
+        }
 
         [HttpGet ("get-all")]
-        public ActionResult<PagedResult<Object>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
+        public ActionResult<PagedResult<CouponDto>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
         {
-            return CreateResponse(Result.Fail("Method is not implemented"));
+            var result = _couponService.GetPaged(page, pageSize);
+
+            return CreateResponse(result);
         }
 
         [HttpPost("create")]
-        public ActionResult<Object> Create([FromBody] Object coupon)
+        public ActionResult<CouponDto> Create([FromBody] CouponDto coupon)
         {
-            return CreateResponse(Result.Fail("Method is not implemented"));
+            var result = _couponService.Create(coupon);
+
+            return CreateResponse(result);
         }
 
         [HttpPut("update/{id:int}")]
-        public ActionResult<Object> Update([FromBody] Object equipment)
+        public ActionResult<CouponDto> Update([FromBody] CouponDto coupon)
         {
-            return CreateResponse(Result.Fail("Method is not implemented"));
+            var result = _couponService.Update(coupon);
+
+            return CreateResponse(result);
         }
 
         [HttpDelete("delete/{id:int}")]
         public ActionResult Delete(int id)
         {
-            return CreateResponse(Result.Fail("Method is not implemented"));
+            var result = _couponService.Delete(id);
+            return CreateResponse(result);
         }
 
     }

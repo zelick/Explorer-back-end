@@ -1,4 +1,6 @@
 ﻿using Explorer.API.Controllers.Author.Administration;
+using Explorer.Payments.API.Dtos;
+using Explorer.Payments.API.Public;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
@@ -16,7 +18,7 @@ namespace Explorer.Payments.Tests.Integration
             // Arrange
             using var scope = Factory.Services.CreateScope();
             var controller = CreateController(scope);
-            var coupon = new Object();
+            var coupon = new CouponDto();
 
             // Act
             var result = ((ObjectResult)controller.Create(coupon).Result).Value as Object;
@@ -32,7 +34,7 @@ namespace Explorer.Payments.Tests.Integration
             // Arrange
             using var scope = Factory.Services.CreateScope();
             var controller = CreateController(scope);
-            var coupon = new Object();
+            var coupon = new CouponDto();
 
             // Act
             var result = ((ObjectResult)controller.Create(coupon).Result).Value as Object;
@@ -48,7 +50,7 @@ namespace Explorer.Payments.Tests.Integration
             // Arrange
             using var scope = Factory.Services.CreateScope();
             var controller = CreateController(scope);
-            var updatedCoupon = new Object();
+            var updatedCoupon = new CouponDto();
 
             // Act
             var result = ((ObjectResult)controller.Update(updatedCoupon).Result).Value as Object;
@@ -64,7 +66,7 @@ namespace Explorer.Payments.Tests.Integration
             // Arrange
             using var scope = Factory.Services.CreateScope();
             var controller = CreateController(scope);
-            var updatedCoupon = new Object();
+            var updatedCoupon = new CouponDto();
 
             // Act
             var result = ((ObjectResult)controller.Update(updatedCoupon).Result).Value as Object;
@@ -109,7 +111,7 @@ namespace Explorer.Payments.Tests.Integration
 
         private static CouponController CreateController(IServiceScope scope)
         {
-            return new CouponController(/*scope.ServiceProvider.GetRequiredService<ICouponService>()*/)
+            return new CouponController(scope.ServiceProvider.GetRequiredService<ICouponService>())
             {
                 ControllerContext = BuildContext("-1")
             };

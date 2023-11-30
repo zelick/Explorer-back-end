@@ -1,5 +1,6 @@
 ﻿using Explorer.API.Controllers.Author.Administration;
 using Explorer.Blog.API.Dtos;
+using Explorer.Payments.API.Public;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
@@ -29,7 +30,7 @@ namespace Explorer.Payments.Tests.Integration
 
         private static CouponController CreateController(IServiceScope scope)
         {
-            return new CouponController(/*scope.ServiceProvider.GetRequiredService<ICouponService>()*/)
+            return new CouponController(scope.ServiceProvider.GetRequiredService<ICouponService>())
             {
                 ControllerContext = BuildContext("-1")
             };
