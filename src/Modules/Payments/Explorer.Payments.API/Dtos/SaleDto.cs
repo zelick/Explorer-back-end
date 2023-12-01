@@ -9,7 +9,7 @@ namespace Explorer.Payments.API.Dtos
     public class SaleDto
     {
         public long Id { get; set; }
-        public List<int> ToursIds { get; set; }
+        public List<long> ToursIds { get; set; }
         public DateTime Start { get; set; }
         public DateTime End { get; set; }
         public int Discount { get; set; }

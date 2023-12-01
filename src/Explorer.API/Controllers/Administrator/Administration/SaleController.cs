@@ -12,8 +12,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Explorer.API.Controllers.Administrator.Administration
 {
-    [Authorize(Policy = "administratorPolicy")]
-    [Route("api/administration/sale")]
+    [Authorize(Policy = "authorPolicy")]
+    [Route("api/author/sale")]
     public class SaleController : BaseApiController
     {
         private readonly ISaleService _saleService;
@@ -62,15 +62,13 @@ namespace Explorer.API.Controllers.Administrator.Administration
             throw new NotImplementedException();
         }
 
+        //ovo ce morati u neki touristPolicy
         [HttpGet("tours-on-sale/{saleId:int}")]
         public ActionResult<List<PublishedTourDto>> GetToursFromSale([FromQuery] int saleId)
         {
-            /*
             var sale = _saleService.Get(saleId);
             var tours = _tourService.GetToursFromSaleByIds(sale.Value.ToursIds);
             return CreateResponse(tours);
-            */
-            throw new NotImplementedException();
         }
 
 

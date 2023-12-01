@@ -9,14 +9,14 @@ namespace Explorer.Payments.Core.Domain
 {
     public class Sale: Entity
     {
-        public List<int> ToursIds { get; set; }
+        public List<long> ToursIds { get; set; }
         public DateTime Start { get; set; }
         public DateTime End { get; set; }
         public int Discount { get; set; }
 
         public Sale() { }
 
-        public Sale(List<int> toursIds, DateTime start, DateTime end, int discount)
+        public Sale(List<long> toursIds, DateTime start, DateTime end, int discount)
         {
             ToursIds = toursIds;
             Start = start;
