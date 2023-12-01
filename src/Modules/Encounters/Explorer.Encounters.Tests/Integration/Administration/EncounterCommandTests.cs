@@ -1,10 +1,7 @@
 ﻿using Explorer.API.Controllers.Author.Administration;
 using Explorer.Encounters.API.Dtos;
 using Explorer.Encounters.API.Public;
-using Explorer.Encounters.Core.Domain.Encounters;
 using Explorer.Encounters.Infrastructure.Database;
-using Explorer.Tours.API.Dtos;
-using Explorer.Tours.Core.Domain.Tours;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
@@ -39,10 +36,19 @@ public class EncounterCommandTests : BaseEncountersIntegrationTest
 
         // Act
         var result = (ObjectResult)controller.Create(newEntity,checkpointId, isSecretPrerequisite).Result;
+        var updatedObject = result?.Value as EncounterDto;
+
 
         //Assert
         result.ShouldNotBeNull();
         result.StatusCode.ShouldBe(expectedResponseCode);
+
+        updatedObject?.AuthorId.ShouldBe(-12);
+        updatedObject?.Name.ShouldBe(newEntity.Name);
+        updatedObject?.Description.ShouldBe(newEntity.Description);
+        updatedObject?.XP.ShouldBe(2);
+        updatedObject?.Longitude.ShouldBe(45);
+        updatedObject?.Latitude.ShouldBe(45);
     }
 
     [Fact]
@@ -80,10 +86,22 @@ public class EncounterCommandTests : BaseEncountersIntegrationTest
 
         // Act
         var result = (ObjectResult)controller.Create(newEntity, checkpointId,isSecretPrerequisite).Result;
+        var updatedObject = result?.Value as EncounterDto;
+
 
         //Assert
         result.ShouldNotBeNull();
         result.StatusCode.ShouldBe(expectedResponseCode);
+        updatedObject?.AuthorId.ShouldBe(-12);
+        updatedObject?.Name.ShouldBe(newEntity.Name);
+        updatedObject?.Description.ShouldBe(newEntity.Description);
+        updatedObject?.XP.ShouldBe(newEntity.XP);
+        updatedObject?.Longitude.ShouldBe(newEntity.Longitude);
+        updatedObject?.Latitude.ShouldBe(newEntity.Latitude);
+        updatedObject?.HiddenLocationEncounter?.Image.ShouldBe(newValueObject.Image);
+        updatedObject?.HiddenLocationEncounter?.Range.ShouldBe(newValueObject.Range);
+        updatedObject?.HiddenLocationEncounter?.Longitude.ShouldBe(newValueObject.Longitude);
+        updatedObject?.HiddenLocationEncounter?.Latitude.ShouldBe(newValueObject.Latitude);
 
 
     }
@@ -120,10 +138,18 @@ public class EncounterCommandTests : BaseEncountersIntegrationTest
 
         // Act
         var result = (ObjectResult)controller.Create(newEntity, checkpointId,isSecretPrerequisite).Result;
+        var updatedObject = result?.Value as EncounterDto;
+
 
         //Assert
         result.ShouldNotBeNull();
         result.StatusCode.ShouldBe(expectedResponseCode);
+        updatedObject?.AuthorId.ShouldBe(-12);
+        updatedObject?.Name.ShouldBe(newEntity.Name);
+        updatedObject?.Description.ShouldBe(newEntity.Description);
+        updatedObject?.XP.ShouldBe(newEntity.XP);
+        updatedObject?.Longitude.ShouldBe(newEntity.Longitude);
+        updatedObject?.Latitude.ShouldBe(newEntity.Latitude);
     }
 
     [Fact]
@@ -227,21 +253,32 @@ public class EncounterCommandTests : BaseEncountersIntegrationTest
 
         var newEntity = new EncounterDto
         {
+            Id = -1,
             AuthorId = -12,
             Name = "Misc Encounter",
             Description = "Potrebno je uraditi 80 sklekova.",
             XP = 20,
             EncounterType = "Misc",
             Longitude = 45,
-            Latitude = 45
+            Latitude = 45,
         };
 
         // Act
         var result = (ObjectResult)controller.Update(newEntity).Result;
+        var updatedObject = result?.Value as EncounterDto;
+
 
         //Assert
         result.ShouldNotBeNull();
         result.StatusCode.ShouldBe(expectedResponseCode);
+        updatedObject.Id.ShouldBe(-1);
+        updatedObject.AuthorId.ShouldBe(-12);
+        updatedObject.Name.ShouldBe(updatedObject.Name);
+        updatedObject.Description.ShouldBe(updatedObject.Description);
+        updatedObject.XP.ShouldBe(updatedObject.XP);
+        updatedObject.EncounterType.ShouldBe(updatedObject.EncounterType);
+        updatedObject.Longitude.ShouldBe(updatedObject.Longitude);
+        updatedObject.Latitude.ShouldBe(updatedObject.Latitude);
     }
 
     [Fact]
@@ -251,10 +288,11 @@ public class EncounterCommandTests : BaseEncountersIntegrationTest
         using var scope = Factory.Services.CreateScope();
         var controller = CreateController(scope);
         var dbContext = scope.ServiceProvider.GetRequiredService<EncountersContext>();
-        var expectedResponseCode = 200;
+        var expectedResponseCode = 403;
 
         var newEntity = new EncounterDto
         {
+            Id=-1,
             AuthorId = -16,
             Name = "Misc Encounter",
             Description = "Potrebno je uraditi 80 sklekova.",
@@ -270,18 +308,21 @@ public class EncounterCommandTests : BaseEncountersIntegrationTest
         //Assert
         result.ShouldNotBeNull();
         result.StatusCode.ShouldBe(expectedResponseCode);
+
     }
 
+    [Fact]
     public void InvalidArgumentOnUpdate()
     {
         // Arrange
         using var scope = Factory.Services.CreateScope();
         var controller = CreateController(scope);
         var dbContext = scope.ServiceProvider.GetRequiredService<EncountersContext>();
-        var expectedResponseCode = 200;
+        var expectedResponseCode = 400;
 
         var newEntity = new EncounterDto
         {
+            Id=-1,
             AuthorId = -12,
             Name = "",
             Description = "Potrebno je uraditi 80 sklekova.",
@@ -293,10 +334,48 @@ public class EncounterCommandTests : BaseEncountersIntegrationTest
 
         // Act
         var result = (ObjectResult)controller.Update(newEntity).Result;
+        var updatedObject = result?.Value as EncounterDto;
 
         //Assert
         result.ShouldNotBeNull();
         result.StatusCode.ShouldBe(expectedResponseCode);
+    }
+
+    [Fact]
+    public void Deletes()
+    {
+        // Arrange
+        using var scope = Factory.Services.CreateScope();
+        var controller = CreateController(scope);
+        var dbContext = scope.ServiceProvider.GetRequiredService<EncountersContext>();
+        var checkpointId = -1;
+
+        // Act
+        var result = (OkResult)controller.Delete(checkpointId);
+
+        // Assert - Response
+        result.ShouldNotBeNull();
+        result.StatusCode.ShouldBe(200);
+
+        // Assert - Database
+        var storedCourse = dbContext.Encounter.FirstOrDefault(i => i.Id == 1);
+        storedCourse.ShouldBeNull();
+    }
+
+    [Fact]
+    public void Delete_fails_invalid_id()
+    {
+        // Arrange
+        using var scope = Factory.Services.CreateScope();
+        var controller = CreateController(scope);
+        var checkpointId = -1000;
+
+        // Act
+        var result = (ObjectResult)controller.Delete(checkpointId);
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.StatusCode.ShouldBe(404);
     }
 
 
