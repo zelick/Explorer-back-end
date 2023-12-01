@@ -4,6 +4,6 @@
     {
         public int RequiredPeople { get; set; }
         public double Range { get; set; }
-        public List<int> ActiveTouristsIds { get; set; }
+        public List<int>? ActiveTouristsIds { get; set; }
     }
 }
