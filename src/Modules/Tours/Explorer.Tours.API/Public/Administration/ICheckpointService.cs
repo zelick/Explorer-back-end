@@ -20,5 +20,6 @@ namespace Explorer.Tours.API.Public.Administration
         Result<CheckpointDto> Get(int id);
         Result<CheckpointDto> CreateChechpointSecreat(CheckpointSecretDto secret, int id, int userId);
         Result<CheckpointDto> UpdateChechpointSecreat(CheckpointSecretDto secret, int id, int userId);
+
     }
 }

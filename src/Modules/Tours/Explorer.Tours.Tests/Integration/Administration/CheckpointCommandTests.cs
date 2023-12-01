@@ -34,7 +34,9 @@ namespace Explorer.Tours.Tests.Integration.Administration
                 Latitude = 45,
                 Name = "Katedrala",
                 Description = "Objekat se nalazi na centru Novog Sada",
-                Pictures = new List<string> { "https://www.google.com/url?sa=i&url=https%3A%2F%2Filovenovisad.com%2Fvodic%2Fsakralni-objekti%2Fkatolicka-crkva-ime-marijino%2F&psig=AOvVaw2UZQxIT-Z_WvM0CTWNA8yC&ust=1697737791159000&source=images&cd=vfe&opi=89978449&ved=0CA8QjRxqFwoTCNjjwaGUgIIDFQAAAAAdAAAAABAD" }
+                Pictures = new List<string> { "https://www.google.com/url?sa=i&url=https%3A%2F%2Filovenovisad.com%2Fvodic%2Fsakralni-objekti%2Fkatolicka-crkva-ime-marijino%2F&psig=AOvVaw2UZQxIT-Z_WvM0CTWNA8yC&ust=1697737791159000&source=images&cd=vfe&opi=89978449&ved=0CA8QjRxqFwoTCNjjwaGUgIIDFQAAAAAdAAAAABAD" },
+                EncounterId = 0,
+                IsSecretPrerequisite = false
             };
 
             // Act
@@ -92,7 +94,9 @@ namespace Explorer.Tours.Tests.Integration.Administration
                 Latitude = 45,
                 Name = "Petrovaradin",
                 Description = "Tvrdjava",
-                Pictures = new List<string> { "https://www.google.com/url?sa=i&url=https%3A%2F%2Fen.wikipedia.org%2Fwiki%2FPetrovaradin_Fortress&psig=AOvVaw0IqEUr-KgumgRwJuFwJfy5&ust=1697738244154000&source=images&cd=vfe&opi=89978449&ved=0CA8QjRxqFwoTCJiG3vmVgIIDFQAAAAAdAAAAABAD" }
+                Pictures = new List<string> { "https://www.google.com/url?sa=i&url=https%3A%2F%2Fen.wikipedia.org%2Fwiki%2FPetrovaradin_Fortress&psig=AOvVaw0IqEUr-KgumgRwJuFwJfy5&ust=1697738244154000&source=images&cd=vfe&opi=89978449&ved=0CA8QjRxqFwoTCJiG3vmVgIIDFQAAAAAdAAAAABAD" },
+                EncounterId = 0,
+                IsSecretPrerequisite = false
             };
 
             // Act

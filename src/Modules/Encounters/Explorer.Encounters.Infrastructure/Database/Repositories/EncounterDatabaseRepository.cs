@@ -13,9 +13,12 @@ namespace Explorer.Encounters.Infrastructure.Database.Repositories
             _dbContext = encountersContext;
         }
 
-        public Encounter Create(Encounter entity)
+        public Encounter Create(Encounter encounter)
         {
-            throw new NotImplementedException();
+            _dbContext.Encounter.Add(encounter);
+            _dbContext.SaveChanges();
+
+            return encounter;
         }
 
         public void Delete(long id)
@@ -25,7 +28,10 @@ namespace Explorer.Encounters.Infrastructure.Database.Repositories
 
         public Encounter Get(long id)
         {
-            throw new NotImplementedException();
+            var encounter = _dbContext.Encounter.FirstOrDefault(e => e.Id == id);
+            if (encounter == null) throw new KeyNotFoundException("Not found: " + id);
+
+            return encounter;
         }
 
         public PagedResult<Encounter> GetPaged(int page, int pageSize)

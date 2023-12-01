@@ -4,6 +4,7 @@ using Explorer.Encounters.API.Public;
 using Explorer.Encounters.Core.Domain.Encounters;
 using Explorer.Encounters.Infrastructure.Database;
 using Explorer.Tours.API.Dtos;
+using Explorer.Tours.Core.Domain.Tours;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
@@ -22,10 +23,12 @@ public class EncounterCommandTests : BaseEncountersIntegrationTest
         var controller = CreateController(scope);
         var dbContext = scope.ServiceProvider.GetRequiredService<EncountersContext>();
         var expectedResponseCode = 200;
-        var  checkpointId = -1;
+        var  checkpointId = -3;
+        bool isSecretPrerequisite = true;
 
         var newEntity = new EncounterDto
         {
+            AuthorId=-12,
             Name = "Izazov misc",
             Description = "Potrebno je uraditi 20 sklekova.",
             XP = 2,
@@ -35,7 +38,7 @@ public class EncounterCommandTests : BaseEncountersIntegrationTest
         };
 
         // Act
-        var result = (ObjectResult)controller.Create(newEntity,checkpointId).Result;
+        var result = (ObjectResult)controller.Create(newEntity,checkpointId, isSecretPrerequisite).Result;
 
         //Assert
         result.ShouldNotBeNull();
@@ -50,7 +53,9 @@ public class EncounterCommandTests : BaseEncountersIntegrationTest
         var controller = CreateController(scope);
         var dbContext = scope.ServiceProvider.GetRequiredService<EncountersContext>();
         var expectedResponseCode = 200;
-        var checkpointId = -1;
+        var checkpointId = -3;
+        bool isSecretPrerequisite = true;
+
 
         var newValueObject = new HiddenLocationEncounterDto
         {
@@ -62,6 +67,7 @@ public class EncounterCommandTests : BaseEncountersIntegrationTest
 
         var newEntity = new EncounterDto
         {
+            AuthorId = -12,
             Name = "Izazov hidden location",
             Description = "Pronadji gde je nastala slika.",
             XP = 2,
@@ -73,7 +79,7 @@ public class EncounterCommandTests : BaseEncountersIntegrationTest
         };
 
         // Act
-        var result = (ObjectResult)controller.Create(newEntity, checkpointId).Result;
+        var result = (ObjectResult)controller.Create(newEntity, checkpointId,isSecretPrerequisite).Result;
 
         //Assert
         result.ShouldNotBeNull();
@@ -90,7 +96,8 @@ public class EncounterCommandTests : BaseEncountersIntegrationTest
         var controller = CreateController(scope);
         var dbContext = scope.ServiceProvider.GetRequiredService<EncountersContext>();
         var expectedResponseCode = 200;
-        var checkpointId = -1;
+        var checkpointId = -3;
+        bool isSecretPrerequisite = false;
 
         var newValueObject = new SocialEncounterDto
         {
@@ -100,6 +107,7 @@ public class EncounterCommandTests : BaseEncountersIntegrationTest
 
         var newEntity = new EncounterDto
         {
+            AuthorId = -12,
             Name = "Social izazov",
             Description = "Potrebno je zajedno sa ostalim clanovima uraditi izazov.",
             XP = 2,
@@ -111,7 +119,180 @@ public class EncounterCommandTests : BaseEncountersIntegrationTest
         };
 
         // Act
-        var result = (ObjectResult)controller.Create(newEntity, checkpointId).Result;
+        var result = (ObjectResult)controller.Create(newEntity, checkpointId,isSecretPrerequisite).Result;
+
+        //Assert
+        result.ShouldNotBeNull();
+        result.StatusCode.ShouldBe(expectedResponseCode);
+    }
+
+    [Fact]
+    public void InvalidAuthor()
+    {
+        // Arrange
+        using var scope = Factory.Services.CreateScope();
+        var controller = CreateController(scope);
+        var dbContext = scope.ServiceProvider.GetRequiredService<EncountersContext>();
+        var expectedResponseCode = 403;
+        var checkpointId = -6;
+        bool isSecretPrerequisite = true;
+
+        var newEntity = new EncounterDto
+        {
+            AuthorId = -22,
+            Name = "Izazov misc",
+            Description = "Potrebno je uraditi 20 sklekova.",
+            XP = 2,
+            EncounterType = "Misc",
+            Longitude = 45,
+            Latitude = 45
+        };
+
+        // Act
+        var result = (ObjectResult)controller.Create(newEntity, checkpointId, isSecretPrerequisite).Result;
+
+        //Assert
+        result.ShouldNotBeNull();
+        result.StatusCode.ShouldBe(expectedResponseCode);
+    }
+
+    [Fact]
+    public void InvalidCheckpoint()
+    {
+        // Arrange
+        using var scope = Factory.Services.CreateScope();
+        var controller = CreateController(scope);
+        var dbContext = scope.ServiceProvider.GetRequiredService<EncountersContext>();
+        var expectedResponseCode = 404;
+        var checkpointId = -16;
+        bool isSecretPrerequisite = true;
+
+        var newEntity = new EncounterDto
+        {
+            AuthorId = -12,
+            Name = "Izazov misc",
+            Description = "Potrebno je uraditi 20 sklekova.",
+            XP = 2,
+            EncounterType = "Misc",
+            Longitude = 45,
+            Latitude = 45
+        };
+
+        // Act
+        var result = (ObjectResult)controller.Create(newEntity, checkpointId, isSecretPrerequisite).Result;
+
+        //Assert
+
+        result.StatusCode.ShouldBe(expectedResponseCode);
+    }
+
+    [Fact]
+    public void InvalidArgument()
+    {
+        // Arrange
+        using var scope = Factory.Services.CreateScope();
+        var controller = CreateController(scope);
+        var dbContext = scope.ServiceProvider.GetRequiredService<EncountersContext>();
+        var expectedResponseCode = 400;
+        var checkpointId = -3;
+        bool isSecretPrerequisite = true;
+
+        var newEntity = new EncounterDto
+        {
+            AuthorId = -12,
+            Name = "",
+            Description = "Potrebno je uraditi 20 sklekova.",
+            XP = -2,
+            EncounterType = "Misc",
+            Longitude = 45,
+            Latitude = 45
+        };
+
+        // Act
+        var result = (ObjectResult)controller.Create(newEntity, checkpointId, isSecretPrerequisite).Result;
+
+        //Assert
+        result.ShouldNotBeNull();
+        result.StatusCode.ShouldBe(expectedResponseCode);
+    }
+
+    [Fact]
+    public void UpdateSuccessfully()
+    {
+        // Arrange
+        using var scope = Factory.Services.CreateScope();
+        var controller = CreateController(scope);
+        var dbContext = scope.ServiceProvider.GetRequiredService<EncountersContext>();
+        var expectedResponseCode = 200;
+
+        var newEntity = new EncounterDto
+        {
+            AuthorId = -12,
+            Name = "Misc Encounter",
+            Description = "Potrebno je uraditi 80 sklekova.",
+            XP = 20,
+            EncounterType = "Misc",
+            Longitude = 45,
+            Latitude = 45
+        };
+
+        // Act
+        var result = (ObjectResult)controller.Update(newEntity).Result;
+
+        //Assert
+        result.ShouldNotBeNull();
+        result.StatusCode.ShouldBe(expectedResponseCode);
+    }
+
+    [Fact]
+    public void InvalidAuthorOnUpdate()
+    {
+        // Arrange
+        using var scope = Factory.Services.CreateScope();
+        var controller = CreateController(scope);
+        var dbContext = scope.ServiceProvider.GetRequiredService<EncountersContext>();
+        var expectedResponseCode = 200;
+
+        var newEntity = new EncounterDto
+        {
+            AuthorId = -16,
+            Name = "Misc Encounter",
+            Description = "Potrebno je uraditi 80 sklekova.",
+            XP = 20,
+            EncounterType = "Misc",
+            Longitude = 45,
+            Latitude = 45
+        };
+
+        // Act
+        var result = (ObjectResult)controller.Update(newEntity).Result;
+
+        //Assert
+        result.ShouldNotBeNull();
+        result.StatusCode.ShouldBe(expectedResponseCode);
+    }
+
+    public void InvalidArgumentOnUpdate()
+    {
+        // Arrange
+        using var scope = Factory.Services.CreateScope();
+        var controller = CreateController(scope);
+        var dbContext = scope.ServiceProvider.GetRequiredService<EncountersContext>();
+        var expectedResponseCode = 200;
+
+        var newEntity = new EncounterDto
+        {
+            AuthorId = -12,
+            Name = "",
+            Description = "Potrebno je uraditi 80 sklekova.",
+            XP = -20,
+            EncounterType = "Misc",
+            Longitude = 45,
+            Latitude = 45
+        };
+
+        // Act
+        var result = (ObjectResult)controller.Update(newEntity).Result;
 
         //Assert
         result.ShouldNotBeNull();

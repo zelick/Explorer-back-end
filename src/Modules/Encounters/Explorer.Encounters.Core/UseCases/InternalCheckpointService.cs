@@ -1,32 +1,19 @@
-﻿using AutoMapper;
-using Explorer.BuildingBlocks.Core.UseCases;
-using Explorer.Encounters.API.Internal;
-using Explorer.Tours.API.Dtos;
-using Explorer.Tours.Core.Domain.RepositoryInterfaces;
-using Explorer.Tours.Core.Domain.Tours;
-using FluentResults;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Explorer.Encounters.Core.UseCases
+﻿namespace Explorer.Encounters.Core.UseCases
 {
-    public class InternalCheckpointService: BaseService<CheckpointDto, Checkpoint>, IInternalCheckpointService
+    /*public class InternalCheckpointService: BaseService<CheckpointDto, Checkpoint>, IInternalCheckpointService
     {
-        private readonly ICheckpointRepository _checkpointRepository;
+        private readonly ICheckpointService _checkpointService;
 
-    public InternalCheckpointService(IMapper mapper, ICheckpointRepository checkpointRepository) : base(mapper)
+    public InternalCheckpointService(IMapper mapper, ICheckpointService checkpointService) : base(mapper)
     {
-            _checkpointRepository = checkpointRepository;
+            _checkpointService = checkpointService;
     }
-    public Result<CheckpointDto> UpdateEncounter(int id,long encounterId, bool isSecretPrerequisite)
+    public Result<CheckpointDto> SetEncounter(int id,long encounterId, bool isSecretPrerequisite, int userId)
     {
-        Checkpoint checkpoint;
+        CheckpointDto checkpoint;
         try
         {
-          checkpoint = _checkpointRepository.Get(id);   
+            checkpoint = _checkpointService.Get(id).Value;
         }
         catch (KeyNotFoundException e)
         {
@@ -41,7 +28,7 @@ namespace Explorer.Encounters.Core.UseCases
         {
             checkpoint.EncounterId= encounterId;
             checkpoint.IsSecretPrerequisite= isSecretPrerequisite;
-            return MapToDto( _checkpointRepository.Update(checkpoint));
+            return _checkpointService.Update(checkpoint,userId);
         }
         catch (KeyNotFoundException e)
         {
@@ -55,5 +42,5 @@ namespace Explorer.Encounters.Core.UseCases
 
         }
     
-    }
+    }*/
 }
