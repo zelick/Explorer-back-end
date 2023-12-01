@@ -21,13 +21,22 @@ namespace Explorer.API.Controllers.Tourist.Shopping
         [HttpGet("get-adventure-coins/{userId:long}")]
         public ActionResult<TouristWalletDto> GetAdventureCoins(long userId)
         {
-            throw new NotImplementedException();
+            var result = _service.GetAdventureCoins(userId);
+            return CreateResponse(result);
         }
 
         [HttpPut("payment-adventure-coins/{userId:long}/{adventureCoins:int}")]
         public ActionResult<TouristWalletDto> PaymentAdventureCoins(long userId, int adventureCoins)
         {
-            throw new NotImplementedException();
+            var result = _service.PaymentAdventureCoins(userId, adventureCoins);
+            return CreateResponse(result);
+        }
+
+        [HttpPost("create-wallet")]
+        public ActionResult<TouristWalletDto> GetAdventureCoins([FromBody] TouristWalletDto touristWalletDto)
+        {
+            var result = _service.Create(touristWalletDto);
+            return CreateResponse(result);
         }
     }
 }

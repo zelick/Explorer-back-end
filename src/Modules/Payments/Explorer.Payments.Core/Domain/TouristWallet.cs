@@ -9,13 +9,18 @@ namespace Explorer.Payments.Core.Domain
 {
     public class TouristWallet : Entity
     {
-        public int AdventureCoins { get; init; }
+        public int AdventureCoins { get; private set; }
         public long UserId { get; init; }
 
         public TouristWallet(long userId)
         {
             UserId = userId;
             AdventureCoins = 0;
+        }
+
+        public void PaymentAdventureCoins(int coins)
+        {
+            AdventureCoins += coins;
         }
     }
 }
