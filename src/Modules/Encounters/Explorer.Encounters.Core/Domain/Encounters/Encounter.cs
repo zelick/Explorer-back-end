@@ -18,17 +18,17 @@ namespace Explorer.Encounters.Core.Domain.Encounters
 
         public Encounter() { }
 
-        public Encounter(long authorId,string name, string description, int xP, EncounterType type,
+        public Encounter(long authorId,string name, string description, int xP, EncounterType type,EncounterStatus status,
             double latitude, double longitude,HiddenLocationEncounter? hiddenLocation,SocialEncounter? socialEncounter)
         {
-            if (IsValid(name, description, authorId, xP, longitude, latitude))
+            if (IsValid(name, description, authorId, xP, longitude, latitude,status))
             {
 
                 AuthorId = authorId;
                 Name = name;
                 Description = description;
                 XP = xP;
-                Status = EncounterStatus.Draft;
+                Status = status;
                 Type = type;
                 Latitude = latitude;
                 Longitude = longitude;
@@ -41,7 +41,7 @@ namespace Explorer.Encounters.Core.Domain.Encounters
 
         public Encounter(Encounter encounter)
         {
-            if (IsValid(encounter.Name, encounter.Description, encounter.AuthorId, encounter.XP, encounter.Longitude, encounter.Latitude))
+            if (IsValid(encounter.Name, encounter.Description, encounter.AuthorId, encounter.XP, encounter.Longitude, encounter.Latitude,encounter.Status))
             {
                 AuthorId = encounter.AuthorId;
                 Name = encounter.Name;
@@ -58,33 +58,33 @@ namespace Explorer.Encounters.Core.Domain.Encounters
             }
         }
 
-        bool IsValid(string name,string description,long authorId,int xp,double longitude,double latitude)
+        public bool IsValid(string name,string description,long authorId,int xp,double longitude,double latitude,EncounterStatus status)
         {
-            return IsNameValid(name) && IsDescriptionValid(description) && IsXpValid(xp) && IsAuthorIdValid(authorId) && 
-                IsLongitudeValid(longitude) && IsLatitudeValid(latitude);
+            return IsNameValid(name) && IsDescriptionValid(description) && IsXpValid(xp) && IsAuthorIdValid(authorId) &&
+                IsLongitudeValid(longitude) && IsLatitudeValid(latitude) && IsStatusValid(status); ;
         }
 
-        bool IsNameValid(string name)
+        private bool IsNameValid(string name)
         {
             bool isInvalid = string.IsNullOrWhiteSpace(name);
             if (isInvalid) throw new ArgumentException("Invalid name.");
             return !isInvalid;
         }
-        bool IsDescriptionValid(string name)
+        private bool IsDescriptionValid(string name)
         {
             bool isInvalid = string.IsNullOrWhiteSpace(name);
             if (isInvalid) throw new ArgumentException("Invalid description.");
             return !isInvalid;
         }
 
-        bool IsAuthorIdValid(long authorId)
+        private bool IsAuthorIdValid(long authorId)
         {
             bool isInvalid = authorId==0;
             if (isInvalid) throw new ArgumentException("Invalid author.");
             return !isInvalid;
         }
 
-        bool IsXpValid(int xp)
+        private bool IsXpValid(int xp)
         {
             bool isInvalid = xp < 0;
             if (isInvalid) throw new ArgumentException("Invalid xP");
@@ -95,17 +95,24 @@ namespace Explorer.Encounters.Core.Domain.Encounters
             return AuthorId == userId;
         }
 
-        public bool IsLongitudeValid(double longitude) 
+        private bool IsLongitudeValid(double longitude) 
         {
             bool isInvalid = longitude < -180 || longitude > 180;
             if (isInvalid) throw new ArgumentException("Invalid longitude");
             return !isInvalid;
         }
 
-        public bool IsLatitudeValid(double latitude)
+        private bool IsLatitudeValid(double latitude)
         {
             bool isInvalid = latitude < -90 || latitude > 90;
             if (isInvalid) throw new ArgumentException("Invalid latitude");
+            return !isInvalid;
+        }
+
+        private bool IsStatusValid(EncounterStatus status)
+        {
+            bool isInvalid = (status==EncounterStatus.Active || status==EncounterStatus.Archived);
+            if (isInvalid) throw new ArgumentException("Invalid status");
             return !isInvalid;
         }
 
@@ -114,7 +121,8 @@ namespace Explorer.Encounters.Core.Domain.Encounters
     {
         Draft,
         Active,
-        Archived
+        Archived,
+        Published
     }
     public enum EncounterType
     {

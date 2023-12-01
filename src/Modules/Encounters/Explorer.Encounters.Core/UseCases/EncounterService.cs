@@ -49,9 +49,27 @@ namespace Explorer.Encounters.Core.UseCases
             return MapToDto(result);
         }
 
-        public Result<EncounterDto> Update(EncounterDto encounter, long userId)
+        public Result<EncounterDto> Update(EncounterDto encounterDto, long userId)
         {
-            throw new NotImplementedException();
+            Encounter encounter = MapToDomain(encounterDto);
+            if (!encounter.IsAuthor(userId))
+                return Result.Fail(FailureCode.Forbidden).WithError("Not encounter author!");
+
+            try
+            {
+                encounter.IsValid(encounter.Name, encounter.Description, encounter.AuthorId, encounter.XP, encounter.Longitude, encounter.Latitude, encounter.Status);
+                var result = _encounterRepository.Update(encounter);
+                return MapToDto(result);
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+            catch (ArgumentException e)
+            {
+                return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+            }
+
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using Explorer.Encounters.API.Dtos;
 using FluentResults;
-using System.Diagnostics.Metrics;
 
 namespace Explorer.Encounters.API.Public
 {

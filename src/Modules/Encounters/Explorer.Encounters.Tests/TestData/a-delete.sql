@@ -1,0 +1,2 @@
+DELETE FROM encounters."Encounter";
+

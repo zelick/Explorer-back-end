@@ -1,6 +1,7 @@
 ﻿using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Encounters.Core.Domain.Encounters;
 using Explorer.Encounters.Core.Domain.RepositoryInterfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace Explorer.Encounters.Infrastructure.Database.Repositories
 {
@@ -15,8 +16,15 @@ namespace Explorer.Encounters.Infrastructure.Database.Repositories
 
         public Encounter Create(Encounter encounter)
         {
-            _dbContext.Encounter.Add(encounter);
-            _dbContext.SaveChanges();
+            try
+            {
+                _dbContext.Encounter.Add(encounter);
+                _dbContext.SaveChanges();
+            }
+            catch (DbUpdateException e)
+            {
+                throw new KeyNotFoundException(e.Message);
+            }
 
             return encounter;
         }
@@ -36,9 +44,18 @@ namespace Explorer.Encounters.Infrastructure.Database.Repositories
             throw new NotImplementedException();
         }
 
-        public Encounter Update(Encounter entity)
+        public Encounter Update(Encounter encounter)
         {
-            throw new NotImplementedException();
+            try
+            {
+                _dbContext.Encounter.Update(encounter);
+                _dbContext.SaveChanges();
+            }
+            catch (DbUpdateException e)
+            {
+                throw new KeyNotFoundException(e.Message);
+            }
+            return encounter;
         }
     }
 }
