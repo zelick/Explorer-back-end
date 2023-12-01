@@ -22,6 +22,13 @@ namespace Explorer.Payments.Core.UseCases
             _repository = repository;
         }
 
+        public Result<TouristWalletDto> Create(TouristWalletDto dto)
+        {
+            var wallet = MapToDomain(dto);
+            _repository.Create(wallet); 
+            return dto;
+        }
+
         public Result<TouristWalletDto> GetAdventureCoins(long userId)
         {
             var wallet = _repository.GetAdventureCoins(userId);
