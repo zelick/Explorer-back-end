@@ -31,12 +31,17 @@ namespace Explorer.Encounters.Infrastructure.Database.Repositories
 
         public void Delete(long id)
         {
-            throw new NotImplementedException();
+            var entity = Get(id);
+            _dbContext.Encounter.Remove(entity);
+            _dbContext.SaveChanges();
         }
 
         public Encounter Get(long id)
         {
-            throw new NotImplementedException();
+            var encounter = _dbContext.Encounter.FirstOrDefault(e => e.Id == id);
+            if (encounter == null) throw new KeyNotFoundException("Not found: " + id);
+
+            return encounter;
         }
 
         public PagedResult<Encounter> GetPaged(int page, int pageSize)

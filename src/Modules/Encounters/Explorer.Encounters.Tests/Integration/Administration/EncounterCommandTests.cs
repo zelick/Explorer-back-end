@@ -311,6 +311,7 @@ public class EncounterCommandTests : BaseEncountersIntegrationTest
 
     }
 
+    [Fact]
     public void InvalidArgumentOnUpdate()
     {
         // Arrange
@@ -340,7 +341,42 @@ public class EncounterCommandTests : BaseEncountersIntegrationTest
         result.StatusCode.ShouldBe(expectedResponseCode);
     }
 
+    [Fact]
+    public void Deletes()
+    {
+        // Arrange
+        using var scope = Factory.Services.CreateScope();
+        var controller = CreateController(scope);
+        var dbContext = scope.ServiceProvider.GetRequiredService<EncountersContext>();
+        var checkpointId = -1;
 
+        // Act
+        var result = (OkResult)controller.Delete(checkpointId);
+
+        // Assert - Response
+        result.ShouldNotBeNull();
+        result.StatusCode.ShouldBe(200);
+
+        // Assert - Database
+        var storedCourse = dbContext.Encounter.FirstOrDefault(i => i.Id == 1);
+        storedCourse.ShouldBeNull();
+    }
+
+    [Fact]
+    public void Delete_fails_invalid_id()
+    {
+        // Arrange
+        using var scope = Factory.Services.CreateScope();
+        var controller = CreateController(scope);
+        var checkpointId = -1000;
+
+        // Act
+        var result = (ObjectResult)controller.Delete(checkpointId);
+
+        // Assert
+        result.ShouldNotBeNull();
+        result.StatusCode.ShouldBe(404);
+    }
 
 
     private static EncounterController CreateController(IServiceScope scope)

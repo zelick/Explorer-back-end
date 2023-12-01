@@ -54,5 +54,12 @@ namespace Explorer.API.Controllers.Author.Administration
             var result = _encounterService.Update(encounter,User.PersonId());
             return CreateResponse(result);
         }
+
+        [HttpDelete("{id:int}")]
+        public ActionResult Delete(int id)
+        {
+            var result = _encounterService.Delete(id, User.PersonId());
+            return CreateResponse(result);
+        }
     }
 }

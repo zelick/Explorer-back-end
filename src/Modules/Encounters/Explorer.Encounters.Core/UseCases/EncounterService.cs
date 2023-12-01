@@ -49,6 +49,11 @@ namespace Explorer.Encounters.Core.UseCases
             return MapToDto(result);
         }
 
+        public Result Delete(int id, int userId)
+        {
+            throw new NotImplementedException();
+        }
+
         public Result<EncounterDto> Update(EncounterDto encounterDto, long userId)
         {
             Encounter encounter = MapToDomain(encounterDto);
