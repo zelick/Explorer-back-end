@@ -87,6 +87,7 @@ namespace Explorer.Encounters.Core.UseCases
                 {
                     return Result.Fail(FailureCode.Forbidden).WithError("Not allowed for this tourist");
                 }
+                CrudRepository.Update(result);
                 return MapToDto(result);
             }
             catch (KeyNotFoundException e)
@@ -104,7 +105,9 @@ namespace Explorer.Encounters.Core.UseCases
             try
             {
                 Encounter result = CrudRepository.Get(id);
-                return result.CheckIfInRange(touristLongitude, touristLatitude, touristId);
+                var numberOfTourists = result.CheckIfInRange(touristLongitude, touristLatitude, touristId);
+                CrudRepository.Update(result);
+                return numberOfTourists;
             }
             catch (KeyNotFoundException e)
             {
