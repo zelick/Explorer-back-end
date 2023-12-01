@@ -16,6 +16,24 @@ namespace Explorer.Tours.Core.UseCases.Administration
         {
             _checkpointService = checkpointService;
         }
+
+        public Result<CheckpointDto> Get(int id)
+        {
+            try
+            {
+                var result = _checkpointService.Get(id).Value;
+                return result;
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+            catch (ArgumentException e)
+            {
+                return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+            }
+        }
+
         public Result<CheckpointDto> SetEncounter(int id, long encounterId, bool isSecretPrerequisite, int userId)
         {
             CheckpointDto checkpoint;

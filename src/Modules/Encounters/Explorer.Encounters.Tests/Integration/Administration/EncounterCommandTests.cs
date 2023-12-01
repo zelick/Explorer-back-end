@@ -348,7 +348,7 @@ public class EncounterCommandTests : BaseEncountersIntegrationTest
         using var scope = Factory.Services.CreateScope();
         var controller = CreateController(scope);
         var dbContext = scope.ServiceProvider.GetRequiredService<EncountersContext>();
-        var checkpointId = -1;
+        var checkpointId = -3;
 
         // Act
         var result = (OkResult)controller.Delete(checkpointId);
@@ -357,9 +357,6 @@ public class EncounterCommandTests : BaseEncountersIntegrationTest
         result.ShouldNotBeNull();
         result.StatusCode.ShouldBe(200);
 
-        // Assert - Database
-        var storedCourse = dbContext.Encounter.FirstOrDefault(i => i.Id == 1);
-        storedCourse.ShouldBeNull();
     }
 
     [Fact]

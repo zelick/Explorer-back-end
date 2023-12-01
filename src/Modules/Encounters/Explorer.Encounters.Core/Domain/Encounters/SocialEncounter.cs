@@ -12,7 +12,7 @@ namespace Explorer.Encounters.Core.Domain.Encounters
     {
         public int RequiredPeople { get; init; }
         public double Range { get; init; }  
-        public List<int> ActiveTouristsIds { get; init; }
+        public List<int>? ActiveTouristsIds { get; init; }
         public SocialEncounter() { }
 
         [JsonConstructor]

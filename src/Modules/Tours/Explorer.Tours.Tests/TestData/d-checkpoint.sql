@@ -9,7 +9,7 @@ INSERT INTO tours."Checkpoints"(
 	
 INSERT INTO tours."Checkpoints"(
 	"Id", "TourId","AuthorId", "Longitude", "Latitude", "Name", "Description", "Pictures","RequiredTimeInSeconds","CheckpointSecret","EncounterId","IsSecretPrerequisite")
-	VALUES (-3, -1, -11, 45, 45, 'Promenada', 'Trzni centar', ARRAY ['https://www.google.com/url?sa=i&url=https%3A%2F%2Ffirestopsistem.rs%2Ftc-promenada-novi-sad%2F&psig=AOvVaw0Q0-xhx6cZMtna2IJrxZ4k&ust=1697739067875000&source=images&cd=vfe&opi=89978449&ved=0CA8QjRxqFwoTCOjcuoKZgIIDFQAAAAAdAAAAABAD'], 20900, null,0,false);
+	VALUES (-3, -1, -11, 45, 45, 'Promenada', 'Trzni centar', ARRAY ['https://www.google.com/url?sa=i&url=https%3A%2F%2Ffirestopsistem.rs%2Ftc-promenada-novi-sad%2F&psig=AOvVaw0Q0-xhx6cZMtna2IJrxZ4k&ust=1697739067875000&source=images&cd=vfe&opi=89978449&ved=0CA8QjRxqFwoTCOjcuoKZgIIDFQAAAAAdAAAAABAD'], 20900, null,-1,false);
 
 INSERT INTO tours."Checkpoints"(
 	"Id", "TourId","AuthorId", "Longitude", "Latitude", "Name", "Description", "Pictures","RequiredTimeInSeconds","CheckpointSecret","EncounterId","IsSecretPrerequisite")
