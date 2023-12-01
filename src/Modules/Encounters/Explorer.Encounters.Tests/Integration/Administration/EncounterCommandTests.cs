@@ -29,7 +29,7 @@ public class EncounterCommandTests : BaseEncountersIntegrationTest
             Name = "Izazov misc",
             Description = "Potrebno je uraditi 20 sklekova.",
             XP = 2,
-            EncounterType="Misc",
+            Type ="Misc",
             Longitude=45,
             Latitude=45
         };
@@ -63,26 +63,21 @@ public class EncounterCommandTests : BaseEncountersIntegrationTest
         bool isSecretPrerequisite = true;
 
 
-        var newValueObject = new HiddenLocationEncounterDto
-        {
-            Longitude = 45,
-            Latitude = 45,
-            Image="slika.jpg",
-            Range=15
-        };
-
         var newEntity = new EncounterDto
         {
             AuthorId = -12,
             Name = "Izazov hidden location",
             Description = "Pronadji gde je nastala slika.",
             XP = 2,
-            EncounterType = "Location",
+            Type = "Location",
             Longitude = 45,
             Latitude = 45,
-            HiddenLocationEncounter = newValueObject
+            LocationLongitude=45,
+            LocationLatitude=45,
+            Image="ttt",
+            Range=5
 
-        };
+};
 
         // Act
         var result = (ObjectResult)controller.Create(newEntity, checkpointId,isSecretPrerequisite).Result;
@@ -98,10 +93,10 @@ public class EncounterCommandTests : BaseEncountersIntegrationTest
         updatedObject?.XP.ShouldBe(newEntity.XP);
         updatedObject?.Longitude.ShouldBe(newEntity.Longitude);
         updatedObject?.Latitude.ShouldBe(newEntity.Latitude);
-        updatedObject?.HiddenLocationEncounter?.Image.ShouldBe(newValueObject.Image);
-        updatedObject?.HiddenLocationEncounter?.Range.ShouldBe(newValueObject.Range);
-        updatedObject?.HiddenLocationEncounter?.Longitude.ShouldBe(newValueObject.Longitude);
-        updatedObject?.HiddenLocationEncounter?.Latitude.ShouldBe(newValueObject.Latitude);
+        updatedObject?.Image.ShouldBe(newEntity.Image);
+        updatedObject?.Range.ShouldBe(newEntity.Range);
+        updatedObject?.LocationLongitude.ShouldBe(newEntity.LocationLongitude);
+        updatedObject?.LocationLatitude.ShouldBe(newEntity.LocationLatitude);
 
 
     }
@@ -117,11 +112,7 @@ public class EncounterCommandTests : BaseEncountersIntegrationTest
         var checkpointId = -3;
         bool isSecretPrerequisite = false;
 
-        var newValueObject = new SocialEncounterDto
-        {
-            Range = 15,
-            RequiredPeople=2
-        };
+
 
         var newEntity = new EncounterDto
         {
@@ -129,11 +120,11 @@ public class EncounterCommandTests : BaseEncountersIntegrationTest
             Name = "Social izazov",
             Description = "Potrebno je zajedno sa ostalim clanovima uraditi izazov.",
             XP = 2,
-            EncounterType = "Social",
+            Type = "Social",
             Longitude = 45,
             Latitude = 45,
-            SocialEncounter = newValueObject
-
+           Range =5,
+            RequiredPeople=5
         };
 
         // Act
@@ -169,7 +160,7 @@ public class EncounterCommandTests : BaseEncountersIntegrationTest
             Name = "Izazov misc",
             Description = "Potrebno je uraditi 20 sklekova.",
             XP = 2,
-            EncounterType = "Misc",
+            Type = "Misc",
             Longitude = 45,
             Latitude = 45
         };
@@ -199,7 +190,7 @@ public class EncounterCommandTests : BaseEncountersIntegrationTest
             Name = "Izazov misc",
             Description = "Potrebno je uraditi 20 sklekova.",
             XP = 2,
-            EncounterType = "Misc",
+            Type = "Misc",
             Longitude = 45,
             Latitude = 45
         };
@@ -212,38 +203,9 @@ public class EncounterCommandTests : BaseEncountersIntegrationTest
         result.StatusCode.ShouldBe(expectedResponseCode);
     }
 
-    [Fact]
-    public void InvalidArgument()
-    {
-        // Arrange
-        using var scope = Factory.Services.CreateScope();
-        var controller = CreateController(scope);
-        var dbContext = scope.ServiceProvider.GetRequiredService<EncountersContext>();
-        var expectedResponseCode = 400;
-        var checkpointId = -3;
-        bool isSecretPrerequisite = true;
-
-        var newEntity = new EncounterDto
-        {
-            AuthorId = -12,
-            Name = "",
-            Description = "Potrebno je uraditi 20 sklekova.",
-            XP = -2,
-            EncounterType = "Misc",
-            Longitude = 45,
-            Latitude = 45
-        };
-
-        // Act
-        var result = (ObjectResult)controller.Create(newEntity, checkpointId, isSecretPrerequisite).Result;
-
-        //Assert
-        result.ShouldNotBeNull();
-        result.StatusCode.ShouldBe(expectedResponseCode);
-    }
 
     [Fact]
-    public void UpdateSuccessfully()
+    public void UpdateMiscSuccessfully()
     {
         // Arrange
         using var scope = Factory.Services.CreateScope();
@@ -253,12 +215,12 @@ public class EncounterCommandTests : BaseEncountersIntegrationTest
 
         var newEntity = new EncounterDto
         {
-            Id = -1,
+            Id = -2,
             AuthorId = -12,
             Name = "Misc Encounter",
             Description = "Potrebno je uraditi 80 sklekova.",
             XP = 20,
-            EncounterType = "Misc",
+            Type = "Misc",
             Longitude = 45,
             Latitude = 45,
         };
@@ -271,75 +233,115 @@ public class EncounterCommandTests : BaseEncountersIntegrationTest
         //Assert
         result.ShouldNotBeNull();
         result.StatusCode.ShouldBe(expectedResponseCode);
-        updatedObject.Id.ShouldBe(-1);
+        updatedObject.Id.ShouldBe(-2);
         updatedObject.AuthorId.ShouldBe(-12);
         updatedObject.Name.ShouldBe(updatedObject.Name);
         updatedObject.Description.ShouldBe(updatedObject.Description);
         updatedObject.XP.ShouldBe(updatedObject.XP);
-        updatedObject.EncounterType.ShouldBe(updatedObject.EncounterType);
+        updatedObject.Type.ShouldBe(updatedObject.Type);
         updatedObject.Longitude.ShouldBe(updatedObject.Longitude);
         updatedObject.Latitude.ShouldBe(updatedObject.Latitude);
     }
 
     [Fact]
-    public void InvalidAuthorOnUpdate()
+    public void UpdateSocialSuccessfully()
     {
         // Arrange
         using var scope = Factory.Services.CreateScope();
         var controller = CreateController(scope);
         var dbContext = scope.ServiceProvider.GetRequiredService<EncountersContext>();
-        var expectedResponseCode = 403;
+        var expectedResponseCode = 200;
 
         var newEntity = new EncounterDto
         {
-            Id=-1,
-            AuthorId = -16,
+            Id = -3,
+            AuthorId = -12,
             Name = "Misc Encounter",
             Description = "Potrebno je uraditi 80 sklekova.",
             XP = 20,
-            EncounterType = "Misc",
+            Type = "Misc",
             Longitude = 45,
-            Latitude = 45
-        };
-
-        // Act
-        var result = (ObjectResult)controller.Update(newEntity).Result;
-
-        //Assert
-        result.ShouldNotBeNull();
-        result.StatusCode.ShouldBe(expectedResponseCode);
-
-    }
-
-    [Fact]
-    public void InvalidArgumentOnUpdate()
-    {
-        // Arrange
-        using var scope = Factory.Services.CreateScope();
-        var controller = CreateController(scope);
-        var dbContext = scope.ServiceProvider.GetRequiredService<EncountersContext>();
-        var expectedResponseCode = 400;
-
-        var newEntity = new EncounterDto
-        {
-            Id=-1,
-            AuthorId = -12,
-            Name = "",
-            Description = "Potrebno je uraditi 80 sklekova.",
-            XP = -20,
-            EncounterType = "Misc",
-            Longitude = 45,
-            Latitude = 45
+            Latitude = 45,
+            RequiredPeople=111,
+            Range=200
         };
 
         // Act
         var result = (ObjectResult)controller.Update(newEntity).Result;
         var updatedObject = result?.Value as EncounterDto;
 
+
         //Assert
         result.ShouldNotBeNull();
         result.StatusCode.ShouldBe(expectedResponseCode);
+        updatedObject?.Id.ShouldBe(-3);
+        updatedObject?.AuthorId.ShouldBe(-12);
+        updatedObject?.Name.ShouldBe(newEntity.Name);
+        updatedObject?.Description.ShouldBe(newEntity.Description);
+        updatedObject?.XP.ShouldBe(newEntity.XP);
+        updatedObject?.Longitude.ShouldBe(newEntity.Longitude);
+        updatedObject?.Latitude.ShouldBe(newEntity.Latitude);
     }
+
+    [Fact]
+      public void InvalidAuthorOnUpdate()
+      {
+          // Arrange
+          using var scope = Factory.Services.CreateScope();
+          var controller = CreateController(scope);
+          var dbContext = scope.ServiceProvider.GetRequiredService<EncountersContext>();
+          var expectedResponseCode = 403;
+
+          var newEntity = new EncounterDto
+          {
+              Id=-1,
+              AuthorId = -16,
+              Name = "Misc Encounter",
+              Description = "Potrebno je uraditi 80 sklekova.",
+              XP = 20,
+              Type = "Misc",
+              Longitude = 45,
+              Latitude = 45
+          };
+
+          // Act
+          var result = (ObjectResult)controller.Update(newEntity).Result;
+
+          //Assert
+          result.ShouldNotBeNull();
+          result.StatusCode.ShouldBe(expectedResponseCode);
+
+      }
+
+      [Fact]
+      public void InvalidArgumentOnUpdate()
+      {
+          // Arrange
+          using var scope = Factory.Services.CreateScope();
+          var controller = CreateController(scope);
+          var dbContext = scope.ServiceProvider.GetRequiredService<EncountersContext>();
+          var expectedResponseCode = 400;
+
+          var newEntity = new EncounterDto
+          {
+              Id=-1,
+              AuthorId = -12,
+              Name = "",
+              Description = "Potrebno je uraditi 80 sklekova.",
+              XP = -20,
+              Type = "Misc",
+              Longitude = 45,
+              Latitude = 45
+          };
+
+          // Act
+          var result = (ObjectResult)controller.Update(newEntity).Result;
+          var updatedObject = result?.Value as EncounterDto;
+
+          //Assert
+          result.ShouldNotBeNull();
+          result.StatusCode.ShouldBe(expectedResponseCode);
+      }
 
     [Fact]
     public void Deletes()

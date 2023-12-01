@@ -9,8 +9,8 @@ namespace Explorer.Encounters.Core.Mappers
         public EncountersProfile() 
         {
             CreateMap<EncounterDto, Encounter>().ReverseMap();
-            CreateMap<HiddenLocationEncounterDto, HiddenLocationEncounter>().ReverseMap();
-            CreateMap<SocialEncounterDto, SocialEncounter>().ReverseMap();
+            CreateMap<EncounterDto, HiddenLocationEncounter>().ReverseMap();
+            CreateMap<EncounterDto, SocialEncounter>().ReverseMap();
             CreateMap<CompletedEncounterDto, CompletedEncounter>().ReverseMap();
 
         }

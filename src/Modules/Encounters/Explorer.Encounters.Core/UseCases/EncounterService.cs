@@ -14,23 +14,55 @@ namespace Explorer.Encounters.Core.UseCases
     public class EncounterService : CrudService<EncounterDto, Encounter>, IEncounterService
     {
         private readonly IEncounterRepository _encounterRepository;
+        private readonly IMapper _mapper;
         private readonly IInternalCheckpointService _internalCheckpointService;
         public EncounterService(IEncounterRepository encounterRepository,IInternalCheckpointService internalCheckpointService, IMapper mapper) : base(encounterRepository, mapper)
         {
             _encounterRepository= encounterRepository;
             _internalCheckpointService= internalCheckpointService;
+            _mapper= mapper;
         }
 
         public Result<EncounterDto> Create(EncounterDto encounterDto,long checkpointId,bool isSecretPrerequisite,long userId)
         {
-            Encounter encounter = MapToDomain(encounterDto);
             Encounter result;
+            Encounter encounter =new Encounter();
+            if (encounterDto.Type == "Location")
+                try 
+                {
+                    encounter = _mapper.Map<EncounterDto, HiddenLocationEncounter>(encounterDto);
+                }
+                catch (ArgumentException e)
+                {
+                    return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+                }
+            else if (encounterDto.Type == "Social")
+                try
+                {
+                    encounter = _mapper.Map<EncounterDto, SocialEncounter>(encounterDto);
+                }
+                catch (ArgumentException e)
+                {
+                    return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+                }
+            else
+                try
+                {
+                    encounter = _mapper.Map<EncounterDto, Encounter>(encounterDto);
+                }
+                catch (ArgumentException e)
+                {
+                    return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+                }
+
+
             if (!encounter.IsAuthor(userId)) 
                 return Result.Fail(FailureCode.Forbidden); 
-
+            
             try
-            { 
-                result = _encounterRepository.Create(new Encounter(encounter));
+            {
+                encounter.IsValid(encounter.Name, encounter.Description, encounter.AuthorId, encounter.XP, encounter.Longitude, encounter.Latitude, encounter.Status);
+                result = _encounterRepository.Create(encounter);
             }
             catch (ArgumentException e)
             {
@@ -80,13 +112,40 @@ namespace Explorer.Encounters.Core.UseCases
 
         public Result<EncounterDto> Update(EncounterDto encounterDto, long userId)
         {
-            Encounter encounter = MapToDomain(encounterDto);
+            Encounter encounter = new Encounter();
+            if (encounterDto.Type == "Location")
+                try
+                {
+                    encounter = _mapper.Map<EncounterDto, HiddenLocationEncounter>(encounterDto);
+                }
+                catch (ArgumentException e)
+                {
+                    return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+                }
+            else if (encounterDto.Type == "Social")
+                try
+                {
+                    encounter = _mapper.Map<EncounterDto, SocialEncounter>(encounterDto);
+                }
+                catch (ArgumentException e)
+                {
+                    return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+                }
+            else
+                try
+                {
+                    encounter = _mapper.Map<EncounterDto, Encounter>(encounterDto);
+                }
+                catch (ArgumentException e)
+                {
+                    return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+                }
+
             if (!encounter.IsAuthor(userId))
                 return Result.Fail(FailureCode.Forbidden).WithError("Not encounter author!");
 
             try
             {
-                encounter.IsValid(encounter.Name, encounter.Description, encounter.AuthorId, encounter.XP, encounter.Longitude, encounter.Latitude, encounter.Status);
                 var result = _encounterRepository.Update(encounter);
                 return MapToDto(result);
             }

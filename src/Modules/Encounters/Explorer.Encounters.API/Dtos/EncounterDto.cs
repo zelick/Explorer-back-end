@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Explorer.Encounters.API.Dtos
+﻿namespace Explorer.Encounters.API.Dtos
 {
     public class EncounterDto
     {
@@ -17,8 +11,12 @@ namespace Explorer.Encounters.API.Dtos
         public string Type { get; set; }
         public double Longitude { get; set; }
         public double Latitude { get; set; }
-        public SocialEncounterDto? SocialEncounter { get; set; }
-        public HiddenLocationEncounterDto? HiddenLocationEncounter { get; set; }   
+        public double? LocationLongitude { get; set; }
+        public double? LocationLatitude { get; set; }
+        public string? Image { get; set; }
+        public double? Range { get; set; }
+        public int? RequiredPeople { get; set; }
+        public List<int>? ActiveTouristsIds { get; set; }
         public List<CompletedEncounterDto>? CompletedEncounter { get; set; }
         
     }

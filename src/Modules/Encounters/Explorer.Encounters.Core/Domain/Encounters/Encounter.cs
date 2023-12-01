@@ -12,14 +12,12 @@ namespace Explorer.Encounters.Core.Domain.Encounters
         public EncounterType Type { get; init; }
         public double Latitude { get; init; }
         public double Longitude { get; init; }
-        public SocialEncounter? SocialEncounter { get; init; }
-        public HiddenLocationEncounter? HiddenLocationEncounter { get; init;}
         public List<CompletedEncounter>? CompletedEncounter { get; init; }
 
         public Encounter() { }
 
         public Encounter(long authorId,string name, string description, int xP, EncounterType type,EncounterStatus status,
-            double latitude, double longitude,HiddenLocationEncounter? hiddenLocation,SocialEncounter? socialEncounter)
+            double latitude, double longitude)
         {
             if (IsValid(name, description, authorId, xP, longitude, latitude,status))
             {
@@ -32,10 +30,6 @@ namespace Explorer.Encounters.Core.Domain.Encounters
                 Type = type;
                 Latitude = latitude;
                 Longitude = longitude;
-                if (hiddenLocation != null)
-                    HiddenLocationEncounter = hiddenLocation;
-                if (socialEncounter != null)
-                    SocialEncounter = socialEncounter;
             }
         }
 
@@ -51,10 +45,6 @@ namespace Explorer.Encounters.Core.Domain.Encounters
                 Type = encounter.Type;
                 Latitude = encounter.Latitude;
                 Longitude = encounter.Longitude;
-                if (encounter.HiddenLocationEncounter != null)
-                    HiddenLocationEncounter = encounter.HiddenLocationEncounter;
-                if (encounter.SocialEncounter != null)
-                    SocialEncounter = encounter.SocialEncounter;
             }
         }
 

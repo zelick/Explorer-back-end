@@ -32,8 +32,8 @@ namespace Explorer.API.Controllers.Author.Administration
             if (image != null && image.Any())
             {
                 var imageNames = _imageService.UploadImages(image);
-                if (encounter.HiddenLocationEncounter !=null)
-                    encounter.HiddenLocationEncounter.Image = imageNames[0];
+                if (encounter.Type =="Location")
+                    encounter.Image = imageNames[0];
             }
 
             var result = _encounterService.Create(encounter, checkpointId, isSecretPrerequisite,User.PersonId());
@@ -47,8 +47,8 @@ namespace Explorer.API.Controllers.Author.Administration
             if (image != null && image.Any())
             {
                 var imageNames = _imageService.UploadImages(image);
-                if (encounter.HiddenLocationEncounter != null)
-                    encounter.HiddenLocationEncounter.Image = imageNames[0];
+                if (encounter.Type == "Location")
+                    encounter.Image = imageNames[0];
             }
 
             var result = _encounterService.Update(encounter,User.PersonId());
