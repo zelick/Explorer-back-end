@@ -12,7 +12,7 @@ namespace Explorer.Payments.API.Public
     public interface ICouponService
     {
         Result<PagedResult<CouponDto>> GetPaged(int page, int pageSize);
-        Result<CouponDto> Create(CouponDto coupon);
+        Result<CouponDto> Create(CreateCouponDto coupon);
         Result<CouponDto> Update(CouponDto coupon);
         Result Delete(int id);
     }

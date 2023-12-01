@@ -1,5 +1,7 @@
 ﻿using Explorer.API.Controllers.Author.Administration;
 using Explorer.Blog.API.Dtos;
+using Explorer.BuildingBlocks.Core.UseCases;
+using Explorer.Payments.API.Dtos;
 using Explorer.Payments.API.Public;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,11 +22,12 @@ namespace Explorer.Payments.Tests.Integration
             var controller = CreateController(scope);
 
             // Act
-            var result = (ObjectResult)controller.GetAll(0, 0).Result;
+            var result = ((ObjectResult)controller.GetAll(0, 0).Result)?.Value as PagedResult<CouponDto>;
 
             // Assert
             result.ShouldNotBeNull();
-            result.StatusCode.ShouldBe(200);
+            result.Results.Count.ShouldBe(3);
+            result.TotalCount.ShouldBe(3);
         }
 
 

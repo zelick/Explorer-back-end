@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Explorer.API.Controllers.Author.Administration
 {
-    [Authorize(Policy = "authorPolicy")]
+    //[Authorize(Policy = "authorPolicy")]
     [Route("api/manipulation/coupon")]
     public class CouponController : BaseApiController
     {
@@ -29,7 +29,7 @@ namespace Explorer.API.Controllers.Author.Administration
         }
 
         [HttpPost("create")]
-        public ActionResult<CouponDto> Create([FromBody] CouponDto coupon)
+        public ActionResult<CouponDto> Create([FromBody] CreateCouponDto coupon)
         {
             var result = _couponService.Create(coupon);
 

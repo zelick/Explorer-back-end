@@ -8,6 +8,8 @@ namespace Explorer.Payments.API.Dtos
 {
     public class CouponDto
     {
+        public int Id { get; set; }
+        public string Code { get; set; }
         public int DiscountPercentage { get; set; }
         public DateTime? ExpirationDate { get; set; }
         public bool IsGlobal { get; set; }
