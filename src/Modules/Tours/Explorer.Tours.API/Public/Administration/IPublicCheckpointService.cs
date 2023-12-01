@@ -15,6 +15,7 @@ namespace Explorer.Tours.API.Public.Administration
         Result<PublicCheckpointDto> Update(PublicCheckpointDto publicCheckpoint);
         Result Delete(int id);
         Result<PagedResult<PublicCheckpointDto>> GetPaged(int page, int pageSize);
+        Result<PagedResult<PublicCheckpointDto>> GetAllAtPlace(double longitude, double latitude);
         Result<PublicCheckpointDto> Create(int checkpointRequestId, string notificationComment);
     }
 }

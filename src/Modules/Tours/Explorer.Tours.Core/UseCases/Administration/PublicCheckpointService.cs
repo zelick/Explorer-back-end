@@ -28,5 +28,10 @@ namespace Explorer.Tours.Core.UseCases.Administration
             var checkpoint = _checkpointService.Get(Convert.ToInt32(request.Value.CheckpointId));
             return Create(_publicCheckpointMapper.createDto(checkpoint.Value));
         }
+        public Result<PagedResult<PublicCheckpointDto>> GetAllAtPlace(double longitude, double latitude)
+        {
+            List<PublicCheckpointDto> publicCheckpoints = GetPaged(0,0).Value.Results.ToList().Where(pc=>Math.Abs(pc.Latitude - latitude)<0.1 && Math.Abs(pc.Longitude - longitude)<0.1).ToList();
+            return new PagedResult<PublicCheckpointDto>(publicCheckpoints, publicCheckpoints.Count()).ToResult();
+        }
     }
 }
