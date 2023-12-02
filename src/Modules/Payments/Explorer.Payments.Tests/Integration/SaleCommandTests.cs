@@ -11,6 +11,7 @@ using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
 using Explorer.Tours.Infrastructure.Database;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using System;
@@ -35,10 +36,10 @@ namespace Explorer.Payments.Tests.Integration
             var dbContext = scope.ServiceProvider.GetRequiredService<PaymentsContext>();
 
             // Act
-            var result = ((ObjectResult)controller.Get(-21).Result)?.Value as SaleDto;
+            var result = ((ObjectResult)controller.Get(-1).Result)?.Value as SaleDto;
 
             result.ShouldNotBeNull();
-            result.Id.ShouldNotBe(0);
+            result.Id.ShouldBe(-1);
         }
 
         [Fact]
@@ -47,15 +48,28 @@ namespace Explorer.Payments.Tests.Integration
             // Arrange
             using var scope = Factory.Services.CreateScope();
             var controller = CreateController(scope);
-            var newEntity = new SaleDto();
+            var dbContext = scope.ServiceProvider.GetRequiredService<PaymentsContext>();
 
-            newEntity.Id = -1;
-            newEntity.Discount = 10;
+            var newEntity = new SaleDto()
+            {
+                Id = -4,
+                ToursIds = new List<long>(),
+                Discount = 50
+            };
+
+      
             // Act
             var result = ((ObjectResult)controller.Create(newEntity).Result)?.Value as SaleDto;
 
             // Assert - Response
             result.ShouldNotBeNull();
+            result.Id.ShouldBe(-4);
+            result.Discount.ShouldBe(50);
+
+            // Assert - Database
+            var storedEntity = dbContext.Sales.FirstOrDefault(i => i.Id == newEntity.Id);
+            storedEntity.ShouldNotBeNull();
+            storedEntity.Id.ShouldBe(result.Id);
         }
 
         [Fact]

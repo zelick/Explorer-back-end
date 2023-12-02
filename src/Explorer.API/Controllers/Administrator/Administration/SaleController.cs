@@ -19,9 +19,10 @@ namespace Explorer.API.Controllers.Administrator.Administration
         private readonly ISaleService _saleService;
         private readonly ITourService _tourService;
 
-        public SaleController(ISaleService saleService) 
+        public SaleController(ISaleService saleService, ITourService tourService) 
         {
             _saleService = saleService;
+            _tourService = tourService;
         }
 
         [HttpGet]
@@ -55,36 +56,25 @@ namespace Explorer.API.Controllers.Administrator.Administration
         [HttpGet("{id:int}")]
         public ActionResult<SaleDto> Get(int id)
         {
-            /*
             var result = _saleService.Get(id);
             return CreateResponse(result);
-            */
             throw new NotImplementedException();
         }
 
-        //ovo ce morati u neki touristPolicy
         [HttpGet("tours-on-sale/{saleId:int}")]
-        public ActionResult<List<PublishedTourDto>> GetToursFromSale([FromQuery] int saleId)
+        public ActionResult<List<TourDto>> GetToursFromSale(int saleId)
         {
             var sale = _saleService.Get(saleId);
-            var tours = _tourService.GetToursFromSaleByIds(sale.Value.ToursIds);
-            return CreateResponse(tours);
+            if (sale?.Value != null)
+            {
+                var tours = _tourService.GetToursFromSaleByIds(sale.Value.ToursIds);
+                return CreateResponse(tours);
+            }
+            else
+            {
+                return NotFound("Sale not found");
+            }
         }
-
-
-
-        /*
-        [HttpGet("tours-on-sale/{saleId:int}")]
-        public ActionResult<List<PublishedTourDto>> GetToursFromSale([FromQuery] long saleId)
-        {
-            var result = _saleService.GetToursFromSale(saleId);
-
-            var result = _customerService.GetPurchasedToursByUser(touristId);
-            if (result.IsFailed) return BadRequest("Purchased tours not found for the user.");
-            var tours = _tourService.GetToursByIds(result.Value);
-            return CreateResponse(tours);
-        }
-        */
     }
 }
 
