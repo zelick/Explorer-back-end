@@ -139,9 +139,11 @@ namespace Explorer.Encounters.Core.UseCases
                 {
                     execution.Activate();
                     execution = _encounterExecutionRepository.Update(execution);
+                    return MapToDto(execution);
                 }
-                return MapToDto(execution);
+                return Result.Fail(FailureCode.InvalidArgument).WithError("Tourist not in range");
             }
+                
             catch (KeyNotFoundException e)
             {
                 return Result.Fail(FailureCode.NotFound).WithError(e.Message);
