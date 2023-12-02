@@ -19,6 +19,7 @@ namespace Explorer.Tours.Core.Domain.Tours
         public List<PublicCheckpoint> PublicCheckpoints { get; init; }
         public List<TourRating>? TourRatings { get; init; }
         public bool Closed { get; private set; }
+        public List<TourBundle> TourBundles { get; init; }
 
         public Tour AddEquipment(Equipment equipment)
         {

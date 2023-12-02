@@ -14,11 +14,11 @@ namespace Explorer.Tours.Core.Domain
 		public double Price { get; init; }
 		public int AuthorId { get; init; }
 		public TourBundleStatus Status { get; init; }
-		public List<Tour>? Tours { get; init; }
+		public List<Tour> Tours { get; init; } = new List<Tour>(); // za vezu vise na vise
 
 		public TourBundle() { }
 
-		public TourBundle(string name, double price, int authorId, TourBundleStatus status = TourBundleStatus.Draft, List<Tour>? tours = null)
+		public TourBundle(string name, double price, int authorId, TourBundleStatus status = TourBundleStatus.Draft)
 		{
 			if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("Invalid name.");
 			if (authorId == 0) throw new ArgumentException("Invalid author.");
@@ -28,7 +28,6 @@ namespace Explorer.Tours.Core.Domain
 			Price = price;
 			AuthorId = authorId;
 			Status = status;
-			Tours = tours;
 		}
 	}
 
