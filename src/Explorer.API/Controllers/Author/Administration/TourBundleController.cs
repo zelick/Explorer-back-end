@@ -25,7 +25,8 @@ namespace Explorer.API.Controllers.Author.Administration
 		[HttpGet]
 		public ActionResult<PagedResult<CheckpointDto>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
 		{
-			throw new NotImplementedException();
+			var result = _tourBundleService.GetPaged(page, pageSize);
+			return CreateResponse(result);
 		}
 
 		[HttpPost]

@@ -60,7 +60,7 @@ namespace Explorer.Tours.Tests.Integration.Administration
 			var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
 			var updatedEntity = new TourBundleDto
 			{
-				Id = 3,
+				Id = -2,
 				Name = "Paketi tura 3",
 				Price = 252.0, 
 				AuthorId = 2,
@@ -70,7 +70,7 @@ namespace Explorer.Tours.Tests.Integration.Administration
 			var result = ((ObjectResult)controller.Update(updatedEntity).Result)?.Value as TourBundleDto;
 
 			result.ShouldNotBeNull();
-			result.Id.ShouldBe(3);
+			result.Id.ShouldBe(-2);
 			result.Name.ShouldBe(updatedEntity.Name);
 			result.Price.ShouldBe(updatedEntity.Price);
 			result.AuthorId.ShouldBe(updatedEntity.AuthorId);
@@ -90,7 +90,7 @@ namespace Explorer.Tours.Tests.Integration.Administration
 			var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
 
 			// Act
-			var result = (OkResult)controller.Delete(2);
+			var result = (OkResult)controller.Delete(-1);
 
 			// Assert - Response
 			result.ShouldNotBeNull();

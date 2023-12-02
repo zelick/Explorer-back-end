@@ -1,5 +1,7 @@
 ﻿INSERT INTO tours."TourBundles"(
-    "Id", "Name", "Price", "AuthorId", "Status")
-VALUES 
-  (-1, "Slatka tura 2", 250.0, 2, "Draft"),
-  (-2, "Slatka tura 3", 123.2, 1, "Draft");
+	"Id", "Name", "Price", "AuthorId", "Status")
+	VALUES (-1, 'Paket tura 1', 250.0, 1, 0);
+
+INSERT INTO tours."TourBundles"(
+	"Id", "Name", "Price", "AuthorId", "Status")
+	VALUES (-2, 'Paket tura 2', 250.0, 1, 0);
