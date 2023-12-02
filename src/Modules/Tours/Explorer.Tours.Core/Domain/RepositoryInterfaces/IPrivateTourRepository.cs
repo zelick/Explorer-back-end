@@ -12,5 +12,8 @@ namespace Explorer.Tours.Core.Domain.RepositoryInterfaces
     public interface IPrivateTourRepository : ICrudRepository<PrivateTour>
     {
         Result<List<PrivateTour>> GetAllByTourist(long touristId);
+        PrivateTour Start(PrivateTour privateTour);
+        PrivateTour Next(PrivateTour privateTour);
+        PrivateTour Finish(PrivateTour privateTour);
     }
 }

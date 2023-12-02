@@ -27,6 +27,11 @@ namespace Explorer.Tours.Core.UseCases.Administration
             return MapToDto(_repository.Create(MapToDomain(dto)));
         }
 
+        public Result<PrivateTourDto> Finish(PrivateTourDto dto)
+        {
+            return MapToDto(_repository.Finish(MapToDomain(dto)));
+        }
+
         public Result<List<PrivateTourDto>> GetAllByTourist(long id)
         {
             var tours = _repository.GetAllByTourist(id);
@@ -36,6 +41,16 @@ namespace Explorer.Tours.Core.UseCases.Administration
                 result.Add(MapToDto(tour));
             }
             return result;
+        }
+
+        public Result<PrivateTourDto> Next(PrivateTourDto dto)
+        {
+            return MapToDto(_repository.Next(MapToDomain(dto)));
+        }
+
+        public Result<PrivateTourDto> Start(PrivateTourDto dto)
+        {
+            return MapToDto(_repository.Start(MapToDomain(dto)));
         }
     }
 }

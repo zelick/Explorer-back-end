@@ -12,5 +12,8 @@ namespace Explorer.Tours.API.Public.Administration
     {
         Result<List<PrivateTourDto>> GetAllByTourist(long id);
         Result<PrivateTourDto> Add(PrivateTourDto dto);
+        Result<PrivateTourDto> Start(PrivateTourDto dto);
+        Result<PrivateTourDto> Next(PrivateTourDto dto);
+        Result<PrivateTourDto> Finish(PrivateTourDto dto);
     }
 }

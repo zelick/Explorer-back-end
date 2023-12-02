@@ -21,10 +21,29 @@ namespace Explorer.API.Controllers.Tourist.Tour
         {
             return CreateResponse(_tourService.GetAllByTourist(id));
         }
+
         [HttpPost("")]
         public ActionResult<List<PrivateTourDto>> CreatePrivateTour([FromBody] PrivateTourDto privateTourDto)
         {
             return CreateResponse(_tourService.Add(privateTourDto));
+        }
+
+        [HttpPut("start")]
+        public ActionResult<List<PrivateTourDto>> StartPrivateTour([FromBody] PrivateTourDto privateTourDto)
+        {
+            return CreateResponse(_tourService.Start(privateTourDto));
+        }
+
+        [HttpPut("next-checkpoint")]
+        public ActionResult<List<PrivateTourDto>> NextCheckpoint([FromBody] PrivateTourDto privateTourDto)
+        {
+            return CreateResponse(_tourService.Next(privateTourDto));
+        }
+
+        [HttpPut("finish")]
+        public ActionResult<List<PrivateTourDto>> FinishPrivateTour([FromBody] PrivateTourDto privateTourDto)
+        {
+            return CreateResponse(_tourService.Finish(privateTourDto));
         }
     }
 }

@@ -57,6 +57,7 @@ public class ToursContext : DbContext
 
         modelBuilder.Entity<ReportedIssue>().Property(item => item.Comments).HasColumnType("jsonb");
         modelBuilder.Entity<PrivateTour>().Property(item => item.Checkpoints).HasColumnType("jsonb");
+        modelBuilder.Entity<PrivateTour>().Property(item => item.Execution).HasColumnType("jsonb");
 
         modelBuilder.Entity<Tour>()
            .Property(item => item.PublishedTours).HasColumnType("jsonb");
