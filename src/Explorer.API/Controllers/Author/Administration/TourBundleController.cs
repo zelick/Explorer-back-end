@@ -32,7 +32,8 @@ namespace Explorer.API.Controllers.Author.Administration
 		[HttpPut("{id:int}")]
 		public ActionResult<ClubDto> Update([FromBody] TourBundleDto tourBundle)
 		{
-			throw new NotImplementedException();
+			var result = _tourBundleService.Update(tourBundle);
+			return CreateResponse(result);
 		}
 	}
 }

@@ -36,26 +36,22 @@ namespace Explorer.Tours.Core.UseCases.Administration
 				return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
 			}
 		}
-		/*public Result<CheckpointDto> Update(CheckpointDto checkpoint, int userId)
+		
+		public Result<TourBundleDto> Update(TourBundleDto tourBundleDto)
 		{
-			Checkpoint c = MapToDomain(checkpoint);
-			if (!c.IsAuthor(userId))
-				return Result.Fail(FailureCode.InvalidArgument).WithError("Not checkpoint author");
+			var tourBundle = MapToDomain(tourBundleDto);
 			try
 			{
-				var result = CrudRepository.Update(c);
+				var result = CrudRepository.Update(tourBundle);
 				return MapToDto(result);
-			}
-			catch (KeyNotFoundException e)
-			{
-				return Result.Fail(FailureCode.NotFound).WithError(e.Message);
 			}
 			catch (ArgumentException e)
 			{
 				return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
 			}
 		}
-		public Result Delete(int id, int userId)
+
+		/*public Result Delete(int id, int userId)
 		{
 			Checkpoint c;
 			try

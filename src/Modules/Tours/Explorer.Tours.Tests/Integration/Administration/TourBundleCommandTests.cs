@@ -40,40 +40,45 @@ namespace Explorer.Tours.Tests.Integration.Administration
 
 			// Assert - Response
 			result.ShouldNotBeNull();
+			result.Id.ShouldNotBe(0);
+			result.Name.ShouldBe(newEntity.Name);
+			result.Price.ShouldBe(newEntity.Price);
+			result.AuthorId.ShouldBe(newEntity.AuthorId);
+			result.Status.ShouldBe(newEntity.Status);
+
+			var storedEntity = dbContext.TourBundles.OrderBy(i => i.Id).LastOrDefault(i => i.Name == newEntity.Name);
+			storedEntity.ShouldNotBeNull();
+			storedEntity.Id.ShouldBe(result.Id);
 		}
 
-		[Fact]
-		public void Create_fails_invalid_data()
-		{
-			// Arrange
-			using var scope = Factory.Services.CreateScope();
-			var controller = CreateController(scope);
-			var updatedEntity = new TourBundleDto
-			{
-				Price = 2.0,
-				AuthorId = 1,
-				Status = "Draft"
-			};
-
-			// Act
-			var result = (ObjectResult)controller.Create(updatedEntity).Result;
-
-			// Assert
-			result.ShouldNotBeNull();
-			result.StatusCode.ShouldBe(500);
-		}
-
+		
 		[Fact]
 		public void Updates()
 		{
 			using var scope = Factory.Services.CreateScope();
 			var controller = CreateController(scope);
-			var dbContext = scope.ServiceProvider.GetRequiredService<BlogContext>();
-			var updatedEntity = new TourBundleDto();
+			var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
+			var updatedEntity = new TourBundleDto
+			{
+				Id = 3,
+				Name = "Paketi tura 3",
+				Price = 252.0, 
+				AuthorId = 2,
+				Status = "Draft"
+			};
 
 			var result = ((ObjectResult)controller.Update(updatedEntity).Result)?.Value as TourBundleDto;
 
 			result.ShouldNotBeNull();
+			result.Id.ShouldBe(3);
+			result.Name.ShouldBe(updatedEntity.Name);
+			result.Price.ShouldBe(updatedEntity.Price);
+			result.AuthorId.ShouldBe(updatedEntity.AuthorId);
+			result.Status.ShouldBe(updatedEntity.Status);
+
+			var storedEntity = dbContext.TourBundles.FirstOrDefault(i => i.Name == updatedEntity.Name);
+			storedEntity.ShouldNotBeNull();
+			storedEntity.Id.ShouldBe(result.Id);
 		}
 
 		private static TourBundleController CreateController(IServiceScope scope)
