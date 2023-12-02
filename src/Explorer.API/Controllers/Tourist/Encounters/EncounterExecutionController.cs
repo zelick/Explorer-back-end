@@ -60,5 +60,11 @@ namespace Explorer.API.Controllers.Tourist.Encounters
             var result = _encounterExecutionService.GetAllCompletedByTourist(id, page, pageSize);
             return CreateResponse(result);
         }
+        [HttpPut("activate/{id:int}")]
+        public ActionResult<EncounterExecutionDto> Activate([FromRoute] int id, [FromQuery] double touristLatitude, double touristLongitude)
+        {
+            var result = _encounterExecutionService.Activate(User.PersonId(), touristLatitude, touristLongitude, id);
+            return CreateResponse(result);
+        }
     }
 }

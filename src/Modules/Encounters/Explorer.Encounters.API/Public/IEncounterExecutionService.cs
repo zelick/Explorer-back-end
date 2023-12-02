@@ -13,5 +13,6 @@ namespace Explorer.Encounters.API.Public
 
         Result<PagedResult<EncounterExecutionDto>> GetAllByTourist(int touristId, int page, int pageSize);
         Result<PagedResult<EncounterExecutionDto>> GetAllCompletedByTourist(int touristId, int page, int pageSize);
+        Result<EncounterExecutionDto> Activate(int touristId, double touristLatitude, double touristLongitude, int executionId);
     }
 }

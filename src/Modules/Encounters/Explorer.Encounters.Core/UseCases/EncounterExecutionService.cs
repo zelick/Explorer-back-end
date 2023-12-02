@@ -4,6 +4,8 @@ using Explorer.Encounters.API.Dtos;
 using Explorer.Encounters.API.Public;
 using Explorer.Encounters.Core.Domain.Encounters;
 using Explorer.Encounters.Core.Domain.RepositoryInterfaces;
+using Explorer.Payments.API.Internal;
+using Explorer.Payments.API.Public;
 using FluentResults;
 
 namespace Explorer.Encounters.Core.UseCases
@@ -12,10 +14,12 @@ namespace Explorer.Encounters.Core.UseCases
     {
         private readonly IEncounterExecutionRepository _encounterExecutionRepository;
         private readonly IMapper _mapper;
-        public EncounterExecutionService(IEncounterExecutionRepository encounterExecutionRepository, IMapper mapper) : base(encounterExecutionRepository, mapper)
+        private readonly IInternalShoppingService _shoppingService;
+        public EncounterExecutionService(IEncounterExecutionRepository encounterExecutionRepository, IMapper mapper, IInternalShoppingService shoppingService) : base(encounterExecutionRepository, mapper)
         {
             _encounterExecutionRepository = encounterExecutionRepository;
             _mapper = mapper;
+            _shoppingService = shoppingService;
         }
 
         public Result<EncounterExecutionDto> Create(EncounterExecutionDto encounterExecutionDto, long touristId)
@@ -119,6 +123,27 @@ namespace Explorer.Encounters.Core.UseCases
                 var paged = new PagedResult<EncounterExecution>(result, result.Count());
                 return MapToDto(paged);
             }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+        }
+
+        public Result<EncounterExecutionDto> Activate(int touristId, double touristLatitude, double touristLongitude, int executionId)
+        {
+            try
+            {
+                //TODO purchased tour?
+                var execution = _encounterExecutionRepository.Get(executionId);
+                if(execution.IsInRange(touristLatitude, touristLongitude))
+                {
+                    execution.Activate();
+                    execution = _encounterExecutionRepository.Update(execution);
+                    return MapToDto(execution);
+                }
+                return Result.Fail(FailureCode.InvalidArgument).WithError("Tourist not in range");
+            }
+                
             catch (KeyNotFoundException e)
             {
                 return Result.Fail(FailureCode.NotFound).WithError(e.Message);
