@@ -40,7 +40,8 @@ namespace Explorer.Payments.Tests.Integration
 
         private static SaleController CreateController(IServiceScope scope)
         {
-            return new SaleController(scope.ServiceProvider.GetRequiredService<ISaleService>())
+            return new SaleController(scope.ServiceProvider.GetRequiredService<ISaleService>(),
+                scope.ServiceProvider.GetRequiredService<ITourService>())
             {
                 ControllerContext = BuildContext("-1")
             };

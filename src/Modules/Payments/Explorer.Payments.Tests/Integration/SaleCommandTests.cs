@@ -11,6 +11,7 @@ using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
 using Explorer.Tours.Infrastructure.Database;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
@@ -139,7 +140,8 @@ namespace Explorer.Payments.Tests.Integration
 
         private static SaleController CreateController(IServiceScope scope)
         {
-            return new SaleController(scope.ServiceProvider.GetRequiredService<ISaleService>())
+            return new SaleController(scope.ServiceProvider.GetRequiredService<ISaleService>(),
+                scope.ServiceProvider.GetRequiredService<ITourService>())
             {
                 ControllerContext = BuildContext("-21")
             };
