@@ -21,5 +21,6 @@ public class StakeholderProfile : Profile
         CreateMap<NotificationDto, Notification>().ReverseMap();
         CreateMap<ObjectRequestDto, ObjectRequest>().ReverseMap();
         CreateMap<CheckpointRequestDto, CheckpointRequest>().ReverseMap();
+        CreateMap<User, Tourist>().ReverseMap();
     }
 }
