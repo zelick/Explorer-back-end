@@ -22,6 +22,12 @@ namespace Explorer.API.Controllers.Author.Administration
 			_tourBundleService = tourBundleService;
 		}
 
+		[HttpGet]
+		public ActionResult<PagedResult<CheckpointDto>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
+		{
+			throw new NotImplementedException();
+		}
+
 		[HttpPost]
 		public ActionResult<TourBundleDto> Create([FromBody] TourBundleDto tourBundle)
 		{

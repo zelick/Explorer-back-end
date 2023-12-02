@@ -90,7 +90,7 @@ namespace Explorer.Tours.Tests.Integration.Administration
 			var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
 
 			// Act
-			var result = (OkResult)controller.Delete(1);
+			var result = (OkResult)controller.Delete(2);
 
 			// Assert - Response
 			result.ShouldNotBeNull();
