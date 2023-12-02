@@ -81,6 +81,22 @@ namespace Explorer.Tours.Tests.Integration.Administration
 			storedEntity.Id.ShouldBe(result.Id);
 		}
 
+		[Fact]
+		public void Deletes()
+		{
+			// Arrange
+			using var scope = Factory.Services.CreateScope();
+			var controller = CreateController(scope);
+			var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
+
+			// Act
+			var result = (OkResult)controller.Delete(-1);
+
+			// Assert - Response
+			result.ShouldNotBeNull();
+			result.StatusCode.ShouldBe(200);
+		}
+
 		private static TourBundleController CreateController(IServiceScope scope)
 		{
 			return new TourBundleController(scope.ServiceProvider.GetRequiredService<ITourBundleService>())

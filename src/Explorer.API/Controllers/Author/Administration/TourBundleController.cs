@@ -35,5 +35,11 @@ namespace Explorer.API.Controllers.Author.Administration
 			var result = _tourBundleService.Update(tourBundle);
 			return CreateResponse(result);
 		}
+
+		[HttpDelete("{id:int}")]
+		public ActionResult Delete(int id)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }
