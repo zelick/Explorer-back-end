@@ -1,9 +1,11 @@
-﻿using Explorer.BuildingBlocks.Core.UseCases;
+﻿using AutoMapper;
+using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Stakeholders.API.Dtos;
 using Explorer.Stakeholders.API.Public;
 using Explorer.Stakeholders.Core.Domain;
 using Explorer.Stakeholders.Core.Domain.RepositoryInterfaces;
 using FluentResults;
+using System.Diagnostics.Metrics;
 using System.Net.Mail;
 
 namespace Explorer.Stakeholders.Core.UseCases;
@@ -15,14 +17,16 @@ public class AuthenticationService : IAuthenticationService
     private readonly ICrudRepository<Person> _personRepository;
     private readonly IEmailService _emailService;
     private readonly IVerificationTokenRepository _verificationTokenRepository;
+    private readonly IMapper _mapper;
 
-    public AuthenticationService(IUserRepository userRepository, ICrudRepository<Person> personRepository, ITokenGenerator tokenGenerator, IEmailService emailService, IVerificationTokenRepository verificationTokenRepository)
+    public AuthenticationService(IUserRepository userRepository, ICrudRepository<Person> personRepository, ITokenGenerator tokenGenerator, IEmailService emailService, IVerificationTokenRepository verificationTokenRepository, IMapper mapper)
     {
         _tokenGenerator = tokenGenerator;
         _userRepository = userRepository;
         _personRepository = personRepository;
         _emailService = emailService;
         _verificationTokenRepository = verificationTokenRepository;
+        _mapper = mapper;
     }
 
     public Result<AuthenticationTokensDto> Login(CredentialsDto credentials)
@@ -66,16 +70,20 @@ public class AuthenticationService : IAuthenticationService
             }
             else userRole = Domain.UserRole.Tourist;
 
-            var user = _userRepository.Create(new User(account.Username, account.Password, userRole , true, false));
+            var newUser = new User(account.Username, account.Password, userRole, true, false);
+
+            if (newUser.Role == Domain.UserRole.Tourist)
+            {
+                newUser = _mapper.Map<User, Tourist>(newUser);
+            }
+
+            var user = _userRepository.Create(newUser);
+
             var person = _personRepository.Create(new Person(user.Id, account.Name, account.Surname, account.Email, account.ProfilePictureUrl, account.Biography, account.Motto));
             _verificationTokenRepository.CreateVerificationToken(user.Id);
             var token = _verificationTokenRepository.GetByUserId(user.Id); 
             _emailService.SendEmail(account, token.TokenData);
-            /*if(userRole.Equals(UserRole.Tourist))
-            {
-                var customer = new Customer(user.Id);
-                _customerRepository.Create(customer);
-            }*/
+           
             return account;
         }
         catch (ArgumentException e)
