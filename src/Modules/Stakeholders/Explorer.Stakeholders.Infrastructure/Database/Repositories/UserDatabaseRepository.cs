@@ -3,6 +3,7 @@ using Explorer.Stakeholders.Core.Domain;
 using Explorer.Stakeholders.Core.Domain.RepositoryInterfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Security.Principal;
 
 namespace Explorer.Stakeholders.Infrastructure.Database.Repositories;
 
@@ -26,6 +27,13 @@ public class UserDatabaseRepository : IUserRepository
     }
     public User Create(User user)
     {
+        /*if (user.Role == UserRole.Tourist)
+        {
+            var tourist = new Tourist(user.Username, user.Password, user.Role, user.IsActive, user.IsVerified);
+            _dbContext.Tourists.Add(tourist); 
+            _dbContext.SaveChanges(); 
+        }*/
+
         _dbContext.Users.Add(user);
         _dbContext.SaveChanges();
 
