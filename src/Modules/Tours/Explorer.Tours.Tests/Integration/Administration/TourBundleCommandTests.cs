@@ -1,4 +1,6 @@
 ﻿using Explorer.API.Controllers.Author.Administration;
+using Explorer.Blog.API.Dtos;
+using Explorer.Blog.Infrastructure.Database;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
 using Explorer.Tours.Infrastructure.Database;
@@ -22,8 +24,16 @@ namespace Explorer.Tours.Tests.Integration.Administration
 		public void Creates()
 		{
 			// Arrange
-			var controller = CreateController();
-			var newEntity = new TourBundleDto();
+			using var scope = Factory.Services.CreateScope();
+			var controller = CreateController(scope);
+			var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
+			var newEntity = new TourBundleDto
+			{
+				Name = "Paket tura 1",
+				Price = 250.0,
+				AuthorId = 2,
+				Status = "Draft"
+			};
 
 			// Act
 			var result = ((ObjectResult)controller.Create(newEntity).Result)?.Value as TourBundleDto;
@@ -32,9 +42,43 @@ namespace Explorer.Tours.Tests.Integration.Administration
 			result.ShouldNotBeNull();
 		}
 
-		private static TourBundleController CreateController()
+		[Fact]
+		public void Create_fails_invalid_data()
 		{
-			return new TourBundleController()
+			// Arrange
+			using var scope = Factory.Services.CreateScope();
+			var controller = CreateController(scope);
+			var updatedEntity = new TourBundleDto
+			{
+				Price = 2.0,
+				AuthorId = 1,
+				Status = "Draft"
+			};
+
+			// Act
+			var result = (ObjectResult)controller.Create(updatedEntity).Result;
+
+			// Assert
+			result.ShouldNotBeNull();
+			result.StatusCode.ShouldBe(500);
+		}
+
+		[Fact]
+		public void Updates()
+		{
+			using var scope = Factory.Services.CreateScope();
+			var controller = CreateController(scope);
+			var dbContext = scope.ServiceProvider.GetRequiredService<BlogContext>();
+			var updatedEntity = new TourBundleDto();
+
+			var result = ((ObjectResult)controller.Update(updatedEntity).Result)?.Value as TourBundleDto;
+
+			result.ShouldNotBeNull();
+		}
+
+		private static TourBundleController CreateController(IServiceScope scope)
+		{
+			return new TourBundleController(scope.ServiceProvider.GetRequiredService<ITourBundleService>())
 			{
 				ControllerContext = BuildContext("-12")
 			};

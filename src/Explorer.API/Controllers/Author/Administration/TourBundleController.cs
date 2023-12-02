@@ -1,6 +1,7 @@
 ﻿using Explorer.API.Services;
 using Explorer.Blog.Core.Domain.BlogPosts;
 using Explorer.BuildingBlocks.Core.UseCases;
+using Explorer.Stakeholders.API.Dtos;
 using Explorer.Stakeholders.Infrastructure.Authentication;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
@@ -10,14 +11,26 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Explorer.API.Controllers.Author.Administration
 {
-	[Authorize(Policy = "authorPolicy")]
+	//[Authorize(Policy = "authorPolicy")]
 	[Route("api/administration/tour-bundle")]
 	public class TourBundleController : BaseApiController
 	{
-		public TourBundleController() { }
+		private readonly ITourBundleService _tourBundleService;
+
+		public TourBundleController(ITourBundleService tourBundleService) 
+		{
+			_tourBundleService = tourBundleService;
+		}
 
 		[HttpPost]
 		public ActionResult<TourBundleDto> Create([FromBody] TourBundleDto tourBundle)
+		{
+			var result = _tourBundleService.Create(tourBundle);
+			return CreateResponse(result);
+		}
+
+		[HttpPut("{id:int}")]
+		public ActionResult<ClubDto> Update([FromBody] TourBundleDto tourBundle)
 		{
 			throw new NotImplementedException();
 		}
