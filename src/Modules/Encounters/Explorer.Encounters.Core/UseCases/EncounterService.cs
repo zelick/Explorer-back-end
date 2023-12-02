@@ -203,5 +203,27 @@ namespace Explorer.Encounters.Core.UseCases
                 return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
             }
         }
+
+        public Result<List<Encounter>> GetVisibleByTour(int tourId, double touristLongitude, double touristLatitude, int touristId)
+        {
+            try
+            {
+                List<long> encountersIds = _internalCheckpointService.GetEncountersByTour(tourId).Value;
+                List<Encounter> encounters = new List<Encounter>();
+                foreach( long encounterId in encountersIds )
+                {
+                    var encounter = CrudRepository.Get(encounterId);
+                }
+                return encounters;
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+            catch (ArgumentException e)
+            {
+                return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+            }
+        }
     }
 }

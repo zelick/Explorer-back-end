@@ -64,9 +64,31 @@ namespace Explorer.Tours.Core.UseCases.Administration
             {
                 return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
             }
-
-
         }
+
+        public Result<List<long>> GetEncountersByTour(int tourId)
+        {
+            List<long> encounters = new List<long>();
+            try
+            {
+                var checkpoints = _checkpointService.GetPagedByTour(tourId, 0, 0).Value;
+                foreach( var checkpoint in checkpoints.Results)
+                {
+                    if(checkpoint.EncounterId > 0 )
+                        encounters.Add(checkpoint.EncounterId);
+                }
+                return encounters;
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+            catch (ArgumentException e)
+            {
+                return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+            }
+        }
+
 
     }
 }

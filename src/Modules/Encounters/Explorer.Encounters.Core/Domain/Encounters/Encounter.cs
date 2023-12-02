@@ -103,6 +103,11 @@ namespace Explorer.Encounters.Core.Domain.Encounters
             if (isInvalid) throw new ArgumentException("Invalid latitude");
             return !isInvalid;
         }
+
+        public bool IsVisibleForTourist(int longitude, int latitiude)
+        {
+            return true;
+        }
     }
 
     public enum EncounterStatus
