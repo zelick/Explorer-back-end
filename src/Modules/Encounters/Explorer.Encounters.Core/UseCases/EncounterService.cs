@@ -16,11 +16,13 @@ namespace Explorer.Encounters.Core.UseCases
         private readonly IEncounterRepository _encounterRepository;
         private readonly IMapper _mapper;
         private readonly IInternalCheckpointService _internalCheckpointService;
-        public EncounterService(IEncounterRepository encounterRepository,IInternalCheckpointService internalCheckpointService, IMapper mapper) : base(encounterRepository, mapper)
+        private readonly ICrudRepository<SocialEncounter> _socialEncounterRepository;
+        public EncounterService(IEncounterRepository encounterRepository,IInternalCheckpointService internalCheckpointService, IMapper mapper, ICrudRepository<SocialEncounter> socialEncounterRepository) : base(encounterRepository, mapper)
         {
-            _encounterRepository= encounterRepository;
-            _internalCheckpointService= internalCheckpointService;
-            _mapper= mapper;
+            _encounterRepository = encounterRepository;
+            _internalCheckpointService = internalCheckpointService;
+            _mapper = mapper;
+            _socialEncounterRepository = socialEncounterRepository;
         }
 
         public Result<EncounterDto> Create(EncounterDto encounterDto,long checkpointId,bool isSecretPrerequisite,long userId)
@@ -164,7 +166,7 @@ namespace Explorer.Encounters.Core.UseCases
         {
             try
             {
-                Encounter result = CrudRepository.Get(id);
+                SocialEncounter result = _socialEncounterRepository.Get(id);
                 bool res = result.ActivateSocial(touristLongitude, touristLatitude, touristId);
                 if (!res)
                 {
@@ -187,7 +189,7 @@ namespace Explorer.Encounters.Core.UseCases
         {
             try
             {
-                Encounter result = CrudRepository.Get(id);
+                SocialEncounter result = _socialEncounterRepository.Get(id);
                 var numberOfTourists = result.CheckIfInRange(touristLongitude, touristLatitude, touristId);
                 CrudRepository.Update(result);
                 return numberOfTourists;
