@@ -22,8 +22,12 @@ namespace Explorer.Encounters.Infrastructure.Database
             modelBuilder.Entity<Encounter>().ToTable("Encounter");
             modelBuilder.Entity<HiddenLocationEncounter>().ToTable("HiddenLocationEncounter");
             modelBuilder.Entity<SocialEncounter>().ToTable("SocialEncounter");
-            modelBuilder.Entity<EncounterExecution>().ToTable("EncounterExecution");
-
+            modelBuilder.Entity<EncounterExecution>()
+                .ToTable("EncounterExecution")
+                .HasOne(e => e.Encounter)
+                .WithMany()
+                .HasForeignKey(e => e.EncounterId)
+                .IsRequired();
 
 
             // modelBuilder.Entity<Encounter>().Property(item => item.HiddenLocationEncounter).HasColumnType("jsonb");
