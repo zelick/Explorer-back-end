@@ -26,12 +26,12 @@ namespace Explorer.API.Controllers.Author.Administration
 
 
         [HttpPost]
-        public ActionResult<EncounterDto> Create([FromForm] EncounterDto encounter,[FromQuery] long checkpointId, [FromQuery] bool isSecretPrerequisite, [FromForm] List<IFormFile>? image = null)
+        public ActionResult<EncounterDto> Create([FromForm] EncounterDto encounter,[FromQuery] long checkpointId, [FromQuery] bool isSecretPrerequisite, [FromForm] List<IFormFile>? imageF = null)
         {
 
-            if (image != null && image.Any())
+            if (imageF != null && imageF.Any())
             {
-                var imageNames = _imageService.UploadImages(image);
+                var imageNames = _imageService.UploadImages(imageF);
                 if (encounter.Type =="Location")
                     encounter.Image = imageNames[0];
             }
