@@ -15,5 +15,6 @@ namespace Explorer.Tours.Core.Domain.RepositoryInterfaces
         PrivateTour Start(PrivateTour privateTour);
         PrivateTour Next(PrivateTour privateTour);
         PrivateTour Finish(PrivateTour privateTour);
+        PrivateTour GetOne(long id);
     }
 }

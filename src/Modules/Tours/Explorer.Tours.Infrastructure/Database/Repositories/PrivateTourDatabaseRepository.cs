@@ -34,6 +34,11 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
             return checkpoints;
         }
 
+        public PrivateTour GetOne(long id)
+        {
+            return _dbContext.PrivateTours.SingleOrDefault(n => n.Id == id);
+        }
+
         public PrivateTour Next(PrivateTour privateTour)
         {
             var entity = Get(privateTour.Id);

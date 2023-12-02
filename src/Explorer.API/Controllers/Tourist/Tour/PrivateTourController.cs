@@ -28,6 +28,12 @@ namespace Explorer.API.Controllers.Tourist.Tour
             return CreateResponse(_tourService.Add(privateTourDto));
         }
 
+        [HttpGet("tour/{id:long}")]
+        public ActionResult<PrivateTourDto> Get(long id)
+        {
+            return CreateResponse(_tourService.GetOne(id));
+        }
+
         [HttpPut("start")]
         public ActionResult<List<PrivateTourDto>> StartPrivateTour([FromBody] PrivateTourDto privateTourDto)
         {

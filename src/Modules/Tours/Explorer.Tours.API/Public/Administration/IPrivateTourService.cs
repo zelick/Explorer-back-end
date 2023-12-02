@@ -15,5 +15,6 @@ namespace Explorer.Tours.API.Public.Administration
         Result<PrivateTourDto> Start(PrivateTourDto dto);
         Result<PrivateTourDto> Next(PrivateTourDto dto);
         Result<PrivateTourDto> Finish(PrivateTourDto dto);
+        Result<PrivateTourDto> GetOne(long id);
     }
 }

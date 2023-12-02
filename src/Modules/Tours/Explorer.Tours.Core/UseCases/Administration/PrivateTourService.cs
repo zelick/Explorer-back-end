@@ -43,6 +43,11 @@ namespace Explorer.Tours.Core.UseCases.Administration
             return result;
         }
 
+        public Result<PrivateTourDto> GetOne(long id)
+        {
+            return MapToDto(_repository.GetOne(id));
+        }
+
         public Result<PrivateTourDto> Next(PrivateTourDto dto)
         {
             return MapToDto(_repository.Next(MapToDomain(dto)));
