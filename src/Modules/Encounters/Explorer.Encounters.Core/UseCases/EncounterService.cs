@@ -110,6 +110,12 @@ namespace Explorer.Encounters.Core.UseCases
             }
         }
 
+        public Result<EncounterDto> Get(long id)
+        {
+            return MapToDto(_encounterRepository.Get(id));
+  
+        }
+
         public Result<EncounterDto> Update(EncounterDto encounterDto, long userId)
         {
             Encounter encounter = new Encounter();

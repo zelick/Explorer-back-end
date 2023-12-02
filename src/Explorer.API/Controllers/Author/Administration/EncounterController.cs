@@ -2,6 +2,7 @@
 using Explorer.Encounters.API.Dtos;
 using Explorer.Encounters.API.Public;
 using Explorer.Stakeholders.Infrastructure.Authentication;
+using Explorer.Tours.API.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -41,12 +42,12 @@ namespace Explorer.API.Controllers.Author.Administration
         }
 
         [HttpPut]
-        public ActionResult<EncounterDto> Update([FromForm] EncounterDto encounter, [FromForm] List<IFormFile>? image = null)
+        public ActionResult<EncounterDto> Update([FromForm] EncounterDto encounter, [FromForm] List<IFormFile>? imageF = null)
         {
 
-            if (image != null && image.Any())
+            if (imageF != null && imageF.Any())
             {
-                var imageNames = _imageService.UploadImages(image);
+                var imageNames = _imageService.UploadImages(imageF);
                 if (encounter.Type == "Location")
                     encounter.Image = imageNames[0];
             }
@@ -59,6 +60,13 @@ namespace Explorer.API.Controllers.Author.Administration
         public ActionResult Delete(int id)
         {
             var result = _encounterService.Delete(id, User.PersonId());
+            return CreateResponse(result);
+        }
+
+        [HttpGet("{id:int}")]
+        public ActionResult<EncounterDto> GetById(int id)
+        {
+            var result = _encounterService.Get(id);
             return CreateResponse(result);
         }
     }
