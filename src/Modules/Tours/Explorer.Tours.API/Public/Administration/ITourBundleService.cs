@@ -14,6 +14,6 @@ namespace Explorer.Tours.API.Public.Administration
 		//Result<PagedResult<TourBundleDto>> GetPaged(int page, int pageSize);
 		Result<TourBundleDto> Create(TourBundleDto tourBundle);
 		Result<TourBundleDto> Update(TourBundleDto tourBundle);
-		//Result Delete(int id);
+		Result Delete(int id);
 	}
 }

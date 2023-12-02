@@ -11,3 +11,4 @@ DELETE FROM tours."PublicCheckpoint";
 DELETE FROM tours."CheckpointCompletition";
 DELETE FROM tours."TourExecution";
 DELETE FROM tours."Tours";
+DELETE FROM tours."TourBundles";

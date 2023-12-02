@@ -51,19 +51,8 @@ namespace Explorer.Tours.Core.UseCases.Administration
 			}
 		}
 
-		/*public Result Delete(int id, int userId)
+		public Result Delete(int id)
 		{
-			Checkpoint c;
-			try
-			{
-				c = _checkpointRepository.Get(id);
-			}
-			catch (KeyNotFoundException e)
-			{
-				return Result.Fail(FailureCode.NotFound).WithError(e.Message);
-			}
-			if (!c.IsAuthor(userId))
-				return Result.Fail(FailureCode.InvalidArgument).WithError("Not checkpoint author");
 			try
 			{
 				CrudRepository.Delete(id);
@@ -73,6 +62,6 @@ namespace Explorer.Tours.Core.UseCases.Administration
 			{
 				return Result.Fail(FailureCode.NotFound).WithError(e.Message);
 			}
-		}*/
+		}
 	}
 }

@@ -39,7 +39,8 @@ namespace Explorer.API.Controllers.Author.Administration
 		[HttpDelete("{id:int}")]
 		public ActionResult Delete(int id)
 		{
-			throw new NotImplementedException();
+			var result = _tourBundleService.Delete(id);
+			return CreateResponse(result);
 		}
 	}
 }
