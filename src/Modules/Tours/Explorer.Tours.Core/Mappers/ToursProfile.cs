@@ -36,8 +36,7 @@ public class ToursProfile : Profile
         CreateMap<TourExecutionDto, TourExecution>().ReverseMap();
         CreateMap<CheckpointCompletitionDto, CheckpointCompletition>().ReverseMap();
         CreateMap<CheckpointSecretDto, CheckpointSecret>().ReverseMap();
-
-
+        CreateMap<TourBundleDto, TourBundle>().ReverseMap();
     }
 
     private MapObjectType MapObjectTypeFromString(string category)
