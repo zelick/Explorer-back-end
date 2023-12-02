@@ -3,6 +3,7 @@ using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Internal;
 using Explorer.Tours.API.Public.Administration;
+using Explorer.Tours.Core.Domain.RepositoryInterfaces;
 using Explorer.Tours.Core.Domain.Tours;
 using FluentResults;
 
@@ -10,19 +11,24 @@ namespace Explorer.Tours.Core.UseCases.Administration
 {
     public class InternalCheckpointService : BaseService<CheckpointDto, Checkpoint>, IInternalCheckpointService
     {
-        private readonly ICheckpointService _checkpointService;
+        //private readonly ICheckpointService _checkpointService;
+        private readonly ICheckpointRepository _checkpointRepository;
 
-        public InternalCheckpointService(IMapper mapper, ICheckpointService checkpointService) : base(mapper)
+        public InternalCheckpointService(IMapper mapper/*, ICheckpointService checkpointService,*/,ICheckpointRepository checkpointRepository) : base(mapper)
         {
-            _checkpointService = checkpointService;
+            //_checkpointService = checkpointService;
+            _checkpointRepository = checkpointRepository;
+
         }
 
         public Result<CheckpointDto> Get(int id)
         {
             try
             {
-                var result = _checkpointService.Get(id).Value;
-                return result;
+                //var result = _checkpointService.Get(id).Value;
+
+                //return result;
+                return MapToDto(_checkpointRepository.Get(id));
             }
             catch (KeyNotFoundException e)
             {
@@ -36,10 +42,14 @@ namespace Explorer.Tours.Core.UseCases.Administration
 
         public Result<CheckpointDto> SetEncounter(int id, long encounterId, bool isSecretPrerequisite, int userId)
         {
-            CheckpointDto checkpoint;
+            //CheckpointDto checkpoint;
+            Checkpoint checkpoint;
             try
             {
-                checkpoint = _checkpointService.Get(id).Value;
+                //checkpoint = _checkpointService.Get(id).Value;
+                checkpoint=_checkpointRepository.Get(id);
+                checkpoint.EncounterId = encounterId;
+                checkpoint.IsSecretPrerequisite = isSecretPrerequisite;
             }
             catch (KeyNotFoundException e)
             {
@@ -52,9 +62,8 @@ namespace Explorer.Tours.Core.UseCases.Administration
 
             try
             {
-                checkpoint.EncounterId = encounterId;
-                checkpoint.IsSecretPrerequisite = isSecretPrerequisite;
-                return _checkpointService.Update(checkpoint, userId);
+                //return _checkpointService.Update(checkpoint, userId);
+                return MapToDto(_checkpointRepository.Update(checkpoint));
             }
             catch (KeyNotFoundException e)
             {

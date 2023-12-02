@@ -23,6 +23,7 @@ namespace Explorer.Tours.Core.Mappers
             result.Description = checkpoint.Description;
             result.Id = checkpoint.Id;
             result.RequiredTimeInSeconds = checkpoint.RequiredTimeInSeconds;
+            result.EncounterId= checkpoint.EncounterId;
             if(checkpoint.CheckpointSecret!=null)
                 result.CheckpointSecret = secretMapper.createDto(checkpoint.CheckpointSecret.Description, checkpoint.CheckpointSecret.Pictures);
             else

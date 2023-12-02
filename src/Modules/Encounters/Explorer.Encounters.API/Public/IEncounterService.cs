@@ -8,6 +8,7 @@ namespace Explorer.Encounters.API.Public
         Result<EncounterDto> Create(EncounterDto encounter, long checkpointId, bool isSecretPrerequisite,long userId);
         Result<EncounterDto> Update(EncounterDto encounter, long userId);
         Result Delete(int id, int userId);
+        Result<EncounterDto> Get(long id);
 
 
         Result<EncounterDto> Activate(int id, double touristLongitude, double touristLatitude, int touristId);

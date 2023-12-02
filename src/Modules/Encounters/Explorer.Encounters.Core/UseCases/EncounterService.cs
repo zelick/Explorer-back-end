@@ -112,6 +112,12 @@ namespace Explorer.Encounters.Core.UseCases
             }
         }
 
+        public Result<EncounterDto> Get(long id)
+        {
+            return MapToDto(_encounterRepository.Get(id));
+  
+        }
+
         public Result<EncounterDto> Update(EncounterDto encounterDto, long userId)
         {
             Encounter encounter = new Encounter();
@@ -210,7 +216,7 @@ namespace Explorer.Encounters.Core.UseCases
             {
                 List<long> encountersIds = _internalCheckpointService.GetEncountersByTour(tourId).Value;
                 List<Encounter> encounters = new List<Encounter>();
-                foreach( long encounterId in encountersIds )
+                foreach (long encounterId in encountersIds)
                 {
                     var encounter = CrudRepository.Get(encounterId);
                 }
