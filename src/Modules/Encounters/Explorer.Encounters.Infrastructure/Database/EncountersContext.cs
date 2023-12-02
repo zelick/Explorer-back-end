@@ -10,6 +10,7 @@ namespace Explorer.Encounters.Infrastructure.Database
         public DbSet<Encounter> Encounter { get; set; }
         public DbSet<HiddenLocationEncounter> HiddenLocationEncounter { get; set; }
         public DbSet<SocialEncounter> SocialEncounter { get; set; }
+        public DbSet<EncounterExecution> EncounterExecution { get; set; }
 
 
         public EncountersContext(DbContextOptions<EncountersContext> options) : base(options) { }
@@ -21,6 +22,7 @@ namespace Explorer.Encounters.Infrastructure.Database
             modelBuilder.Entity<Encounter>().ToTable("Encounter");
             modelBuilder.Entity<HiddenLocationEncounter>().ToTable("HiddenLocationEncounter");
             modelBuilder.Entity<SocialEncounter>().ToTable("SocialEncounter");
+            modelBuilder.Entity<EncounterExecution>().ToTable("EncounterExecution");
 
 
 

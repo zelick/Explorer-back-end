@@ -12,7 +12,7 @@ namespace Explorer.Encounters.Core.Mappers
             CreateMap<EncounterDto, HiddenLocationEncounter>().ReverseMap();
             CreateMap<EncounterDto, SocialEncounter>().ReverseMap();
             CreateMap<CompletedEncounterDto, CompletedEncounter>().ReverseMap();
-
+            CreateMap<EncounterExecutionDto, EncounterExecution>().ReverseMap();
         }
     }
 }

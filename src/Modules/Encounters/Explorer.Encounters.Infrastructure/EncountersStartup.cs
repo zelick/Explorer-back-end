@@ -24,13 +24,14 @@ namespace Explorer.Encounters.Infrastructure
         private static void SetupCore(IServiceCollection services)
         {
             services.AddScoped<IEncounterService, EncounterService>();
-          //  services.AddScoped<IInternalCheckpointService, InternalCheckpointService>();
-
+            //  services.AddScoped<IInternalCheckpointService, InternalCheckpointService>();
+            services.AddScoped<IEncounterExecutionService, EncounterExecutionService>();
         }
 
         private static void SetupInfrastructure(IServiceCollection services)
         {
             services.AddScoped(typeof(IEncounterRepository), typeof(EncounterDatabaseRepository));
+            services.AddScoped(typeof(IEncounterExecutionRepository), typeof(EncounterExecutionDatabaseRepository));
 
             services.AddDbContext<EncountersContext>(opt =>
                 opt.UseNpgsql(DbConnectionStringBuilder.Build("encounters"),
