@@ -36,6 +36,9 @@ public class ToursProfile : Profile
         CreateMap<TourExecutionDto, TourExecution>().ReverseMap();
         CreateMap<CheckpointCompletitionDto, CheckpointCompletition>().ReverseMap();
         CreateMap<CheckpointSecretDto, CheckpointSecret>().ReverseMap();
+        CreateMap<PrivateTourDto, PrivateTour>()
+                .ForMember(dest => dest.Checkpoints, opt => opt.MapFrom(src => src.Checkpoints))
+                .ReverseMap();
 
 
     }

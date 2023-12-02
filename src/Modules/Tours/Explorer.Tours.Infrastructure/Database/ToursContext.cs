@@ -7,6 +7,7 @@ namespace Explorer.Tours.Infrastructure.Database;
 
 public class ToursContext : DbContext
 {
+    
     public DbSet<Equipment> Equipment { get; set; }
     public DbSet<MapObject> MapObjects { get; set; }
     public DbSet<Checkpoint> Checkpoints { get; set; }
@@ -19,6 +20,7 @@ public class ToursContext : DbContext
     public DbSet<PublicMapObject> PublicMapObjects { get; set; }
     public DbSet<TouristPosition> TouristPosition { get; set; }
     public DbSet<TourExecution> TourExecution { get; set; }
+    public DbSet<PrivateTour> PrivateTours { get; set; }
 
 
     public ToursContext(DbContextOptions<ToursContext> options) : base(options) { }
@@ -54,6 +56,7 @@ public class ToursContext : DbContext
         ConfigureTourRatings(modelBuilder);
 
         modelBuilder.Entity<ReportedIssue>().Property(item => item.Comments).HasColumnType("jsonb");
+        modelBuilder.Entity<PrivateTour>().Property(item => item.Checkpoints).HasColumnType("jsonb");
 
         modelBuilder.Entity<Tour>()
            .Property(item => item.PublishedTours).HasColumnType("jsonb");
