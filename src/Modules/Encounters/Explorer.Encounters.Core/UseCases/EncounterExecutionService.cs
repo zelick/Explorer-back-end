@@ -6,6 +6,8 @@ using Explorer.Encounters.Core.Domain.Encounters;
 using Explorer.Encounters.Core.Domain.RepositoryInterfaces;
 using Explorer.Payments.API.Internal;
 using Explorer.Payments.API.Public;
+using Explorer.Tours.API.Internal;
+using Explorer.Tours.Core.UseCases.Administration;
 using FluentResults;
 
 namespace Explorer.Encounters.Core.UseCases
@@ -15,11 +17,15 @@ namespace Explorer.Encounters.Core.UseCases
         private readonly IEncounterExecutionRepository _encounterExecutionRepository;
         private readonly IMapper _mapper;
         private readonly IInternalShoppingService _shoppingService;
-        public EncounterExecutionService(IEncounterExecutionRepository encounterExecutionRepository, IMapper mapper, IInternalShoppingService shoppingService) : base(encounterExecutionRepository, mapper)
+        private readonly IInternalCheckpointService _internalCheckpointService;
+        private readonly IEncounterRepository _encounterRepository;
+        public EncounterExecutionService(IEncounterExecutionRepository encounterExecutionRepository, IMapper mapper, IInternalShoppingService shoppingService, IInternalCheckpointService internalCheckpointService, IEncounterRepository encounterRepository) : base(encounterExecutionRepository, mapper)
         {
             _encounterExecutionRepository = encounterExecutionRepository;
             _mapper = mapper;
             _shoppingService = shoppingService;
+            _internalCheckpointService = internalCheckpointService;
+            _encounterRepository = encounterRepository;
         }
 
         public Result<EncounterExecutionDto> Create(EncounterExecutionDto encounterExecutionDto, long touristId)
@@ -147,6 +153,47 @@ namespace Explorer.Encounters.Core.UseCases
             catch (KeyNotFoundException e)
             {
                 return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+        }
+
+        public Result<List<EncounterExecutionDto>> GetVisibleByTour(int tourId, double touristLongitude, double touristLatitude, int touristId)
+        {
+            try
+            {
+                List<long> encountersIds = _internalCheckpointService.GetEncountersByTour(tourId).Value;
+                List<EncounterExecutionDto> encounters = new List<EncounterExecutionDto>();
+                foreach (long encounterId in encountersIds)
+                {
+                    var encounter = _encounterRepository.Get(encounterId);
+                    if (encounter.IsVisibleForTourist(touristLatitude, touristLongitude))
+                    {
+                        var encounterDto = new EncounterExecutionDto();
+                        if(_encounterExecutionRepository.GetByEncounterAndTourist(touristId, encounterId) == null)
+                        {
+                            encounterDto.EncounterId = encounter.Id;
+                            encounterDto.TouristId = touristId;
+                            encounterDto.Status = "Draft";
+                            encounterDto.TouristLongitute = touristLongitude;
+                            encounterDto.TouristLatitude = touristLatitude;
+                            encounterDto.StartTime = DateTime.UtcNow;
+                        }
+                        else
+                        {
+                            encounterDto = MapToDto(_encounterExecutionRepository.GetByEncounterAndTourist(touristId, encounterId));
+                        }
+
+                        encounters.Add(encounterDto);
+                    }
+                }
+                return encounters;
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+            catch (ArgumentException e)
+            {
+                return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
             }
         }
     }

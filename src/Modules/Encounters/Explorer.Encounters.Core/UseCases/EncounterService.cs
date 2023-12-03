@@ -210,25 +210,19 @@ namespace Explorer.Encounters.Core.UseCases
             }
         }
 
-        public Result<List<Encounter>> GetVisibleByTour(int tourId, double touristLongitude, double touristLatitude, int touristId)
+        public Result<List<EncounterExecutionDto>> AddEncounters(List<EncounterExecutionDto> executions)
         {
             try
             {
-                List<long> encountersIds = _internalCheckpointService.GetEncountersByTour(tourId).Value;
-                List<Encounter> encounters = new List<Encounter>();
-                foreach (long encounterId in encountersIds)
+                foreach(EncounterExecutionDto execution in executions)
                 {
-                    var encounter = CrudRepository.Get(encounterId);
+                    execution.EncounterDto = MapToDto(_encounterRepository.Get(execution.EncounterId));
                 }
-                return encounters;
+                return executions;
             }
             catch (KeyNotFoundException e)
             {
                 return Result.Fail(FailureCode.NotFound).WithError(e.Message);
-            }
-            catch (ArgumentException e)
-            {
-                return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
             }
         }
     }

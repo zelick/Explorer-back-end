@@ -80,7 +80,7 @@ namespace Explorer.Tours.Core.UseCases.Administration
             List<long> encounters = new List<long>();
             try
             {
-                var checkpoints = _checkpointService.GetPagedByTour(tourId, 0, 0).Value;
+                var checkpoints = _checkpointRepository.GetPagedByTour(0, 0, tourId);
                 foreach( var checkpoint in checkpoints.Results)
                 {
                     if(checkpoint.EncounterId > 0 )

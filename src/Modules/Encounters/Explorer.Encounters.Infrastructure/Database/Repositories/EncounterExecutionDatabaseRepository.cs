@@ -76,5 +76,12 @@ namespace Explorer.Encounters.Infrastructure.Database.Repositories
                 .Where(e => (e.TouristId == touristId) && (e.Status == EncounterExecutionStatus.Completed))
                 .ToList();
         }
+
+        public EncounterExecution GetByEncounterAndTourist(long touristId, long encounterId)
+        {
+            return _dbContext.EncounterExecution
+                .Include(e => e.Encounter)
+                .Where(e => (e.TouristId == touristId) && (e.EncounterId == encounterId)).FirstOrDefault();
+        }
     }
 }

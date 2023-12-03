@@ -104,9 +104,11 @@ namespace Explorer.Encounters.Core.Domain.Encounters
             return !isInvalid;
         }
 
-        public bool IsVisibleForTourist(int longitude, int latitiude)
+        public bool IsVisibleForTourist(double longitude, double latitude)
         {
-            return true;
+            double a = Math.Abs(Math.Round(Longitude, 4) - Math.Round(longitude, 4));
+            double b = Math.Abs(Math.Round(Latitude, 4) - Math.Round(latitude, 4));
+            return a < 0.01 && b < 0.01;
         }
     }
 
