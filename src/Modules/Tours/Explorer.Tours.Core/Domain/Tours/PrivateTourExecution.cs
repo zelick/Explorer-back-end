@@ -17,11 +17,11 @@ namespace Explorer.Tours.Core.Domain.Tours
         public bool Finished { get; private set; }
 
         [JsonConstructor]
-        public PrivateTourExecution(DateTime startDate, DateTime? endDate, int last, bool finished)
+        public PrivateTourExecution(DateTime startDate, DateTime? endDate, int lastVisited, bool finished)
         {
             StartDate = startDate;
             EndDate = endDate;
-            LastVisited = last;
+            LastVisited = lastVisited;
             Finished = finished;
         }
         protected override IEnumerable<object> GetEqualityComponents()
@@ -31,6 +31,12 @@ namespace Explorer.Tours.Core.Domain.Tours
             yield return LastVisited;
             yield return Finished;
         }
+
+        public PrivateTourExecution()
+        {
+                    
+        }
+
         public void Next()
         {
             LastVisited++;

@@ -30,7 +30,7 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
 
         public Result<List<PrivateTour>> GetAllByTourist(long touristId)
         {
-            var checkpoints = DbContext.PrivateTours.Where(n => n.ToursitId == touristId).ToList().ToResult();
+            var checkpoints = DbContext.PrivateTours.Where(n => n.TouristId == touristId).ToList().ToResult();
             return checkpoints;
         }
 

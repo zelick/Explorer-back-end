@@ -10,20 +10,20 @@ namespace Explorer.Tours.Core.Domain.Tours
 {
     public class PrivateTour: Entity
     {
-        public int ToursitId { get; init; }
+        public int TouristId { get; init; }
         public string Name { get; init; }
         public List<PublicCheckpoint> Checkpoints { get; init; }
         public PrivateTourExecution? Execution { get; set; }
-        public PrivateTour(int touristId, string name, List<PublicCheckpoint> checkpoints, PrivateTourExecution execution)
+        public PrivateTour(int touristId, string name, List<PublicCheckpoint> checkpoints)
         {
             if (name.IsNullOrEmpty() || touristId == 0 || checkpoints==null || checkpoints.Count<2)
             {
                 throw new ArgumentException("Invalid arguments for private tour");
             }
             Name = name;
-            ToursitId = touristId;
+            TouristId = touristId;
             Checkpoints = checkpoints;
-            Execution = execution;
+            Execution = null;
         }
         public PrivateTour() { }
         public void Start()
