@@ -12,12 +12,14 @@ public class ShoppingCartService : BaseService<ShoppingCartDto, ShoppingCart>, I
 {
     private readonly IMapper _mapper;
     private readonly IShoppingCartRepository _shoppingCartRepository;
+    private readonly IItemRepository _itemRepository;
     private readonly ITourPurchaseTokenRepository _purchaseTokenRepository;
 
-    public ShoppingCartService(IShoppingCartRepository repository, ITourPurchaseTokenRepository purchaseTokenRepository, IMapper mapper) : base(mapper)
+    public ShoppingCartService(IShoppingCartRepository repository, IItemRepository itemRepository, ITourPurchaseTokenRepository purchaseTokenRepository, IMapper mapper) : base(mapper)
     {
         _mapper = mapper;
         _shoppingCartRepository = repository;
+        _itemRepository = itemRepository;
         _purchaseTokenRepository = purchaseTokenRepository;
     }
 
@@ -25,6 +27,7 @@ public class ShoppingCartService : BaseService<ShoppingCartDto, ShoppingCart>, I
     {
         try
         {
+            // TODO CHECK PRICES
             var result = _shoppingCartRepository.GetByUser(userId);
 
             return MapToDto(result);
@@ -35,14 +38,18 @@ public class ShoppingCartService : BaseService<ShoppingCartDto, ShoppingCart>, I
         }
     }
 
-    public Result<ShoppingCartDto> AddItem(OrderItemDto orderItemDto, int userId)
+    public Result<ShoppingCartDto> AddItem(ItemDto orderItemDto, int userId)
     {
         try
         {
             var cart = _shoppingCartRepository.GetByUser(userId);
 
-            var item = _mapper.Map<OrderItemDto, OrderItem>(orderItemDto);
-            cart.AddItem(item);
+            var orderItem = _mapper.Map<ItemDto, OrderItem>(orderItemDto);
+
+            var item = _itemRepository.GetByItemIdAndType(orderItem.ItemId, orderItem.Type);
+            if (item.Price != orderItem.Price) throw new ArgumentException("Item price is invalid.");
+
+            cart.AddItem(orderItem);
 
             var result = _shoppingCartRepository.Update(cart);
 
@@ -58,14 +65,14 @@ public class ShoppingCartService : BaseService<ShoppingCartDto, ShoppingCart>, I
         }
     }
 
-    public Result<ShoppingCartDto> RemoveItem(OrderItemDto orderItemDto, int userId)
+    public Result<ShoppingCartDto> RemoveItem(ItemDto orderItemDto, int userId)
     {
         try
         {
             var cart = _shoppingCartRepository.GetByUser(userId);
 
-            var item = _mapper.Map<OrderItemDto, OrderItem>(orderItemDto);
-            cart.RemoveItem(item);
+            var orderItem = _mapper.Map<ItemDto, OrderItem>(orderItemDto);
+            cart.RemoveItem(orderItem);
 
             var result = _shoppingCartRepository.Update(cart);
 

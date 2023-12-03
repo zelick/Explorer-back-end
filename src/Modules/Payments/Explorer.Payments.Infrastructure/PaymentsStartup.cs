@@ -27,6 +27,7 @@ public static class PaymentsStartup
     {
         services.AddScoped<IItemOwnershipService, ItemOwnershipService>();
         services.AddScoped<IInternalTourOwnershipService, ItemOwnershipService>();
+        services.AddScoped<IInternalItemService, ItemService>();
         services.AddScoped<IInternalShoppingSetupService, ShoppingSetupService>();
         services.AddScoped<IShoppingCartService, ShoppingCartService>();
         services.AddScoped<ICouponService, CouponService>();
@@ -36,6 +37,7 @@ public static class PaymentsStartup
     {
         services.AddScoped<ITourPurchaseTokenRepository, TourPurchaseTokenDatabaseRepository>();
         services.AddScoped<IShoppingCartRepository, ShoppingCartDatabaseRepository>();
+        services.AddScoped<IItemRepository, ItemDatabaseRepository>();
         services.AddScoped(typeof(ICrudRepository<Coupon>), typeof(CrudDatabaseRepository<Coupon, PaymentsContext>));
         services.AddScoped<ICouponRepository, CouponDatabaseRepository>();
 

@@ -29,14 +29,14 @@ public class ShoppingCartController : BaseApiController
     }
 
     [HttpPut("add")]
-    public ActionResult<ShoppingCartDto> AddItem([FromBody] OrderItemDto orderItem)
+    public ActionResult<ShoppingCartDto> AddItem([FromBody] ItemDto orderItem)
     {
         var result = _shoppingCartService.AddItem(orderItem, User.PersonId());
         return CreateResponse(result);
     }
 
     [HttpPut("remove")]
-    public ActionResult<ShoppingCartDto> RemoveItem([FromBody] OrderItemDto orderItem)
+    public ActionResult<ShoppingCartDto> RemoveItem([FromBody] ItemDto orderItem)
     {
         var result = _shoppingCartService.RemoveItem(orderItem, User.PersonId());
         return CreateResponse(result);
