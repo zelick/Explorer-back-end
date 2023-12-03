@@ -1,17 +1,10 @@
 ﻿using AutoMapper;
 using Explorer.BuildingBlocks.Core.UseCases;
-using Explorer.Stakeholders.API.Internal;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
 using Explorer.Tours.Core.Domain;
 using Explorer.Tours.Core.Domain.RepositoryInterfaces;
-using Explorer.Tours.Core.Domain.Tours;
 using FluentResults;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Explorer.Tours.Core.UseCases.Administration
 {
@@ -23,7 +16,22 @@ namespace Explorer.Tours.Core.UseCases.Administration
 			_tourBundleRepository = repository;
 		}
 
-		public Result<TourBundleDto> Create(TourBundleDto tourBundle)
+        public Result<PagedResult<TourBundleDto>> GetAllPublished(int page, int pageSize)
+        {
+            try
+            { 
+                var tourBundles = _tourBundleRepository.GetAllPublished(page, pageSize);
+                var tourBundleDtos = MapToDto(tourBundles);
+
+                return tourBundleDtos;
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+        }
+
+        public Result<TourBundleDto> Create(TourBundleDto tourBundle)
 		{
 			TourBundle tb = MapToDomain(tourBundle);
 			try
