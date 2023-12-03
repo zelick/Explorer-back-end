@@ -35,15 +35,45 @@ namespace Explorer.API.Controllers.Administrator.Administration
         [HttpPost]
         public ActionResult<SaleDto> Create([FromBody] SaleDto saleDto)
         {
-            var result = _saleService.Create(saleDto);
-            return CreateResponse(result);
+            if (saleDto.End < saleDto.Start)
+            {
+                return BadRequest("The sale end date cannot be before start date.");
+            }
+            if (saleDto.ToursIds.Count == 0)
+            {
+                return BadRequest("Please select at least one tour before creating a sale.");
+            }
+            if (!(saleDto.End - saleDto.Start > TimeSpan.FromDays(14)))
+            {
+                var result = _saleService.Create(saleDto);
+                return CreateResponse(result);
+            }
+            else
+            {
+                return BadRequest("The sale end date cannot be set more than two weeks after the start date. Please choose a valid end date within this timeframe.");
+            }
         }
 
         [HttpPut]
         public ActionResult<SaleDto> Update([FromBody] SaleDto saleDto)
         {
-            var result = _saleService.Update(saleDto);
-            return CreateResponse(result);
+            if (saleDto.End < saleDto.Start)
+            {
+                return BadRequest("The sale end date cannot be before start date.");
+            }
+            if (saleDto.ToursIds.Count == 0)
+            {
+                return BadRequest("Please select at least one tour before updating a sale.");
+            }
+            if (!(saleDto.End - saleDto.Start > TimeSpan.FromDays(14)))
+            {
+                var result = _saleService.Update(saleDto);
+                return CreateResponse(result);
+            }
+            else
+            {
+                return BadRequest("The sale end date cannot be set more than two weeks after the start date. Please choose a valid end date within this timeframe.");
+            }
         }
 
         [HttpDelete("{id:int}")]
