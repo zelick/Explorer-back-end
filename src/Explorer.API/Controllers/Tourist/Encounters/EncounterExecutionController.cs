@@ -63,14 +63,14 @@ namespace Explorer.API.Controllers.Tourist.Encounters
             return CreateResponse(result);
         }
         [HttpPut("activate/{id:int}")]
-        public ActionResult<EncounterExecutionDto> Activate([FromRoute] int id, [FromQuery] double touristLatitude, double touristLongitude)
+        public ActionResult<EncounterExecutionDto> Activate([FromRoute] int id, [FromForm] double touristLatitude, [FromForm] double touristLongitude, [FromQuery] int broj)
         {
             var result = _encounterExecutionService.Activate(User.PersonId(), touristLatitude, touristLongitude, id);
             return CreateResponse(result);
         }
 
         [HttpGet("get-by-tour/{id:int}")]
-        public ActionResult<List<EncounterExecutionDto>> GetByTour([FromRoute] int id, [FromQuery] double touristLatitude, double touristLongitude)
+        public ActionResult<List<EncounterExecutionDto>> GetByTour([FromRoute] int id, [FromQuery] double touristLatitude, [FromQuery] double touristLongitude)
         {
             var result = _encounterExecutionService.GetVisibleByTour(id, touristLongitude, touristLatitude, User.PersonId());
             result = _encounterService.AddEncounters(result.Value);

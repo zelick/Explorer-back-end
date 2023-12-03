@@ -33,8 +33,8 @@ namespace Explorer.Encounters.Core.Domain.Encounters
         {
             if (EncounterId == 0)
                 throw new ArgumentException("Invalid encounter Id.");
-            if (Encounter == null) 
-                throw new ArgumentException("Invalid encounter.");
+            //if (Encounter == null) 
+            //    throw new ArgumentException("Invalid encounter.");
             if (TouristId == 0)
                 throw new ArgumentException("Invalid tourist.");
             if (TouristLongitute < -180 || TouristLatitude > 180)

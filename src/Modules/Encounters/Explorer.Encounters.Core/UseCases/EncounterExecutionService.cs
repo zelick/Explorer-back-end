@@ -135,12 +135,12 @@ namespace Explorer.Encounters.Core.UseCases
             }
         }
 
-        public Result<EncounterExecutionDto> Activate(int touristId, double touristLatitude, double touristLongitude, int executionId)
+        public Result<EncounterExecutionDto> Activate(int touristId, double touristLatitude, double touristLongitude, int encounterId)
         {
             try
             {
                 //TODO purchased tour?
-                var execution = _encounterExecutionRepository.Get(executionId);
+                var execution = _encounterExecutionRepository.GetByEncounterAndTourist(touristId, encounterId);
                 if(execution.IsInRange(touristLatitude, touristLongitude))
                 {
                     execution.Activate();
@@ -172,10 +172,13 @@ namespace Explorer.Encounters.Core.UseCases
                         {
                             encounterDto.EncounterId = encounter.Id;
                             encounterDto.TouristId = touristId;
-                            encounterDto.Status = "Draft";
+                            encounterDto.Status = "Pending";
                             encounterDto.TouristLongitute = touristLongitude;
                             encounterDto.TouristLatitude = touristLatitude;
                             encounterDto.StartTime = DateTime.UtcNow;
+                            var encounterExecution = MapToDomain(encounterDto);
+                            encounterExecution.Validate();
+                            _encounterExecutionRepository.Create(encounterExecution);
                         }
                         else
                         {
