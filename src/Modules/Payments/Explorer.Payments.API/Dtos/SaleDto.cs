@@ -13,5 +13,6 @@ namespace Explorer.Payments.API.Dtos
         public DateTime Start { get; set; }
         public DateTime End { get; set; }
         public int Discount { get; set; }
+        public long AuthorId { get; set; }
     }
 }

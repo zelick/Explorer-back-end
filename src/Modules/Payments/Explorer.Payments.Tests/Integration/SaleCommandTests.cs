@@ -107,11 +107,11 @@ namespace Explorer.Payments.Tests.Integration
             var dbContext = scope.ServiceProvider.GetRequiredService<PaymentsContext>();
 
             // Act
-            var result = (ObjectResult)controller.Delete(-2);
+            var result = controller.Delete(-2);
 
             // Assert - Response
             result.ShouldNotBeNull();
-            result.StatusCode.ShouldBe(200);
+            result.ShouldBeOfType<OkResult>();
 
             // Assert - Database
             var sale = dbContext.Sales.FirstOrDefault(i => i.Id == -2);
