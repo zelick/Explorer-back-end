@@ -1,27 +1,25 @@
 ﻿using AutoMapper;
 using Explorer.BuildingBlocks.Core.UseCases;
-using Explorer.Stakeholders.API.Internal;
+using Explorer.Payments.API.Dtos;
+using Explorer.Payments.API.Internal;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
 using Explorer.Tours.Core.Domain;
 using Explorer.Tours.Core.Domain.RepositoryInterfaces;
-using Explorer.Tours.Core.Domain.Tours;
 using FluentResults;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Explorer.Tours.Core.UseCases.Administration
 {
-	public class TourBundleService : CrudService<TourBundleDto, TourBundle>, ITourBundleService
+    public class TourBundleService : CrudService<TourBundleDto, TourBundle>, ITourBundleService
 	{
 		private readonly ITourBundleRepository _tourBundleRepository;
-		public TourBundleService(ITourBundleRepository repository, IMapper mapper) : base(repository, mapper)
+        private readonly IInternalItemService _bundleItemService;
+
+        public TourBundleService(ITourBundleRepository repository, IInternalItemService bundleItemService, IMapper mapper) : base(repository, mapper)
 		{
 			_tourBundleRepository = repository;
-		}
+            _bundleItemService = bundleItemService;
+        }
 
 		public Result<TourBundleDto> Create(TourBundleDto tourBundle)
 		{
@@ -29,7 +27,15 @@ namespace Explorer.Tours.Core.UseCases.Administration
 			try
 			{
 				var result = CrudRepository.Create(tb);
-				return MapToDto(result);
+                var bundleItemDto = new ItemDto()
+                {
+                    ItemId = result.Id,
+                    Name = result.Name,
+                    Price = result.Price,
+                    Type = "Bundle"
+                };
+                _bundleItemService.Create(bundleItemDto);
+                return MapToDto(result);
 			}
 			catch (ArgumentException e)
 			{
@@ -43,7 +49,15 @@ namespace Explorer.Tours.Core.UseCases.Administration
 			try
 			{
 				var result = CrudRepository.Update(tourBundle);
-				return MapToDto(result);
+                var bundleItemDto = new ItemDto()
+                {
+                    ItemId = result.Id,
+                    Name = result.Name,
+                    Price = result.Price,
+                    Type = "Bundle"
+                };
+                _bundleItemService.Update(bundleItemDto);
+                return MapToDto(result);
 			}
 			catch (ArgumentException e)
 			{
@@ -55,8 +69,9 @@ namespace Explorer.Tours.Core.UseCases.Administration
 		{
 			try
 			{
-				CrudRepository.Delete(id);
-				return Result.Ok();
+                CrudRepository.Delete(id);
+                _bundleItemService.Delete(id, "Bundle");
+                return Result.Ok();
 			}
 			catch (KeyNotFoundException e)
 			{

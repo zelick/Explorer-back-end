@@ -17,3 +17,11 @@ INSERT INTO payments."Items"(
 INSERT INTO payments."Items"(
 	"Id", "ItemId", "Name", "Price", "Type")
 	VALUES (-5, -6, 'Letovanje na Drini', 0, 0);
+
+INSERT INTO payments."Items"(
+	"Id", "ItemId", "Name", "Price", "Type")
+	VALUES (-6, -1, 'Paket tura 1', 250, 1);
+
+INSERT INTO payments."Items"(
+	"Id", "ItemId", "Name", "Price", "Type")
+	VALUES (-7, -2, 'Paket tura 2', 250, 1);
