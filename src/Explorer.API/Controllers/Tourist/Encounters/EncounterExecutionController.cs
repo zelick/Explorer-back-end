@@ -63,7 +63,7 @@ namespace Explorer.API.Controllers.Tourist.Encounters
             return CreateResponse(result);
         }
         [HttpPut("activate/{id:int}")]
-        public ActionResult<EncounterExecutionDto> Activate([FromRoute] int id, [FromForm] double touristLatitude, [FromForm] double touristLongitude, [FromQuery] int broj)
+        public ActionResult<EncounterExecutionDto> Activate([FromRoute] int id, [FromForm] double touristLatitude, [FromForm] double touristLongitude)
         {
             var result = _encounterExecutionService.Activate(User.PersonId(), touristLatitude, touristLongitude, id);
             return CreateResponse(result);
@@ -73,6 +73,21 @@ namespace Explorer.API.Controllers.Tourist.Encounters
         public ActionResult<List<EncounterExecutionDto>> GetByTour([FromRoute] int id, [FromQuery] double touristLatitude, [FromQuery] double touristLongitude)
         {
             var result = _encounterExecutionService.GetVisibleByTour(id, touristLongitude, touristLatitude, User.PersonId());
+            result = _encounterService.AddEncounters(result.Value);
+            return CreateResponse(result);
+        }
+
+        [HttpGet("social/checkRange/{id:int}")]
+        public ActionResult<List<EncounterExecutionDto>> CheckPosition([FromRoute] int id, [FromQuery] double touristLatitude, [FromQuery] double touristLongitude)
+        {
+            var result = _encounterExecutionService.GetWithUpdatedLocation(id, touristLongitude, touristLatitude, User.PersonId());
+            return CreateResponse(result);
+        }
+
+        [HttpGet("active/by-tour/{id:int}")]
+        public ActionResult<List<EncounterExecutionDto>> GetActiveByTour([FromRoute] int id)
+        {
+            var result = _encounterExecutionService.GetActiveByTour(User.PersonId(), id);
             result = _encounterService.AddEncounters(result.Value);
             return CreateResponse(result);
         }

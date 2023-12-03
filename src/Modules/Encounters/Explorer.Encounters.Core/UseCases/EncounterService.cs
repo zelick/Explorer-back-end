@@ -168,48 +168,6 @@ namespace Explorer.Encounters.Core.UseCases
 
         }
 
-        public Result<EncounterDto> Activate(int id, double touristLongitude, double touristLatitude, int touristId)
-        {
-            try
-            {
-                SocialEncounter result = _socialEncounterRepository.Get(id);
-                bool res = result.ActivateSocial(touristLongitude, touristLatitude, touristId);
-                if (!res)
-                {
-                    return Result.Fail(FailureCode.Forbidden).WithError("Not allowed for this tourist");
-                }
-                CrudRepository.Update(result);
-                return MapToDto(result);
-            }
-            catch (KeyNotFoundException e)
-            {
-                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
-            }
-            catch (ArgumentException e)
-            {
-                return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
-            }
-        }
-
-        public Result<int> CheckIfInRange(int id, double touristLongitude, double touristLatitude, int touristId)
-        {
-            try
-            {
-                SocialEncounter result = _socialEncounterRepository.Get(id);
-                var numberOfTourists = result.CheckIfInRange(touristLongitude, touristLatitude, touristId);
-                CrudRepository.Update(result);
-                return numberOfTourists;
-            }
-            catch (KeyNotFoundException e)
-            {
-                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
-            }
-            catch (ArgumentException e)
-            {
-                return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
-            }
-        }
-
         public Result<List<EncounterExecutionDto>> AddEncounters(List<EncounterExecutionDto> executions)
         {
             try

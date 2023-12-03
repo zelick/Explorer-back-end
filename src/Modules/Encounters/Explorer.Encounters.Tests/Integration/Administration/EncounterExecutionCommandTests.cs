@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Explorer.API.Controllers.Author.Administration;
-using Explorer.API.Controllers.Tourist.Tour;
+﻿using Explorer.API.Controllers.Tourist.Encounters;
 using Explorer.Encounters.API.Public;
 using Explorer.Encounters.Infrastructure.Database;
-using Explorer.Tours.Core.Domain.Tours;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
@@ -51,7 +44,7 @@ namespace Explorer.Encounters.Tests.Integration.Administration
             var latitude = 45;
 
             // Act
-            var result = (ObjectResult)controller.CheckIfInRange(id, longitude, latitude).Result;
+            var result = (ObjectResult)controller.CheckPosition(id, longitude, latitude).Result;
 
             //Assert
             result.ShouldNotBeNull();
@@ -71,7 +64,7 @@ namespace Explorer.Encounters.Tests.Integration.Administration
             var latitude = 40;
 
             // Act
-            var result = (ObjectResult)controller.CheckIfInRange(id, longitude, latitude).Result;
+            var result = (ObjectResult)controller.CheckPosition(id, longitude, latitude).Result;
 
             //Assert
             result.ShouldNotBeNull();
@@ -81,9 +74,9 @@ namespace Explorer.Encounters.Tests.Integration.Administration
 
         private static EncounterExecutionController CreateController(IServiceScope scope)
         {
-            return new EncounterExecutionController(scope.ServiceProvider.GetRequiredService<IEncounterService>())
+            return new EncounterExecutionController(scope.ServiceProvider.GetRequiredService<IEncounterExecutionService>(), scope.ServiceProvider.GetRequiredService<IEncounterService>())
             {
-                ControllerContext = BuildContext("-12")
+                ControllerContext = BuildContext("-21")
             };
         }
     }

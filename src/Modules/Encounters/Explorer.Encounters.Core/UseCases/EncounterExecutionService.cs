@@ -19,13 +19,15 @@ namespace Explorer.Encounters.Core.UseCases
         private readonly IInternalShoppingService _shoppingService;
         private readonly IInternalCheckpointService _internalCheckpointService;
         private readonly IEncounterRepository _encounterRepository;
-        public EncounterExecutionService(IEncounterExecutionRepository encounterExecutionRepository, IMapper mapper, IInternalShoppingService shoppingService, IInternalCheckpointService internalCheckpointService, IEncounterRepository encounterRepository) : base(encounterExecutionRepository, mapper)
+        private readonly ICrudRepository<SocialEncounter> _socialEncounterRepository;
+        public EncounterExecutionService(IEncounterExecutionRepository encounterExecutionRepository, IMapper mapper, IInternalShoppingService shoppingService, IInternalCheckpointService internalCheckpointService, IEncounterRepository encounterRepository, ICrudRepository<SocialEncounter> socialEncounterRepository) : base(encounterExecutionRepository, mapper)
         {
             _encounterExecutionRepository = encounterExecutionRepository;
             _mapper = mapper;
             _shoppingService = shoppingService;
             _internalCheckpointService = internalCheckpointService;
             _encounterRepository = encounterRepository;
+            _socialEncounterRepository = socialEncounterRepository;
         }
 
         public Result<EncounterExecutionDto> Create(EncounterExecutionDto encounterExecutionDto, long touristId)
@@ -139,7 +141,6 @@ namespace Explorer.Encounters.Core.UseCases
         {
             try
             {
-                //TODO purchased tour?
                 var execution = _encounterExecutionRepository.GetByEncounterAndTourist(touristId, encounterId);
                 if(execution.IsInRange(touristLatitude, touristLongitude))
                 {
@@ -197,6 +198,58 @@ namespace Explorer.Encounters.Core.UseCases
             catch (ArgumentException e)
             {
                 return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+            }
+        }
+
+        public Result<int> CheckIfInRange(int id, double touristLongitude, double touristLatitude, int touristId)
+        {
+            try
+            {
+                SocialEncounter result = _socialEncounterRepository.Get(id);
+                var numberOfTourists = result.CheckIfInRange(touristLongitude, touristLatitude, touristId);
+                _socialEncounterRepository.Update(result);
+                return numberOfTourists;
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+            catch (ArgumentException e)
+            {
+                return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+            }
+        }
+
+        public Result<List<EncounterExecutionDto>> GetActiveByTour(int touristId, int tourId)
+        {
+            try
+            {
+                var result = _encounterExecutionRepository.GetActiveByTourist(touristId);
+                List<long> encountersIds = _internalCheckpointService.GetEncountersByTour(tourId).Value;
+                foreach(var r in result) 
+                {
+                    if (!encountersIds.Contains(r.EncounterId))
+                        result.Remove(r);
+                }
+
+                return MapToDto(result);
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+        }
+
+        public Result<List<EncounterExecutionDto>> GetWithUpdatedLocation(int id, double touristLongitude, double touristLatitude, int touristId)
+        {
+            try
+            {
+                CheckIfInRange(id, touristLongitude, touristLatitude, touristId);
+                return GetVisibleByTour(id, touristLongitude, touristLatitude, touristId);
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
             }
         }
     }

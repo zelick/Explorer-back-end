@@ -15,5 +15,8 @@ namespace Explorer.Encounters.API.Public
         Result<PagedResult<EncounterExecutionDto>> GetAllCompletedByTourist(int touristId, int page, int pageSize);
         Result<EncounterExecutionDto> Activate(int touristId, double touristLatitude, double touristLongitude, int executionId);
         Result<List<EncounterExecutionDto>> GetVisibleByTour(int tourId, double touristLongitude, double touristLatitude, int touristId);
+        Result<int> CheckIfInRange(int id, double touristLongitude, double touristLatitude, int touristId);
+        Result<List<EncounterExecutionDto>> GetActiveByTour(int touristId, int tourId);
+        Result<List<EncounterExecutionDto>> GetWithUpdatedLocation(int id, double touristLongitude, double touristLatitude, int touristId);
     }
 }

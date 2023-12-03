@@ -83,5 +83,13 @@ namespace Explorer.Encounters.Infrastructure.Database.Repositories
                 .Include(e => e.Encounter)
                 .Where(e => (e.TouristId == touristId) && (e.EncounterId == encounterId)).FirstOrDefault();
         }
+
+        public List<EncounterExecution> GetActiveByTourist(long touristId)
+        {
+            return _dbContext.EncounterExecution
+                .Include(e => e.Encounter)
+                .Where(e => (e.TouristId == touristId) && e.Status.Equals(EncounterExecutionStatus.Active))
+                .ToList();
+        }
     }
 }
