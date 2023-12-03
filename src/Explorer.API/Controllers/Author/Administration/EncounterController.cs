@@ -69,5 +69,12 @@ namespace Explorer.API.Controllers.Author.Administration
             var result = _encounterService.Get(id);
             return CreateResponse(result);
         }
+
+        [HttpPut("add/{encounterId:int}/{touristId:int}")]
+        public ActionResult<EncounterDto> FinishEncounter(int encounterId, int touristId)
+        {
+            throw new NotImplementedException("This method is not implemented yet.");
+        }
+
     }
 }
