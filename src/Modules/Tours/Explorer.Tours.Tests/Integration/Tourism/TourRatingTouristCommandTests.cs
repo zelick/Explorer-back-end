@@ -74,7 +74,7 @@ public class TourRatingTouristCommandTests : BaseToursIntegrationTest
     private static TourRatingTouristController CreateController(IServiceScope scope)
     {
         return new TourRatingTouristController(scope.ServiceProvider.GetRequiredService<ITourRatingService>(),
-            scope.ServiceProvider.GetRequiredService<ICustomerService>(),
+            scope.ServiceProvider.GetRequiredService<IItemOwnershipService>(),
             scope.ServiceProvider.GetRequiredService<ITourExecutionRepository>())
         {
             ControllerContext = BuildContext("-1")

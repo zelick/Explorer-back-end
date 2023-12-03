@@ -1,11 +1,10 @@
 ﻿INSERT INTO payments."ShoppingCarts"(
-	"Id", "UserId", "Items", "Price")
-	VALUES (-1, -21, '[{{ "Price": 100.0 }}]', 100.0);
+	"Id", "UserId", "Items")
+	VALUES (-1, -21, '[
+	{{ "ItemId": -6, "Name": "Letovanje na Drini", "Price": 0, "Type": 0 }}, 
+	{{ "ItemId": -2, "Name": "Obilazak beoradskih muzeja", "Price": 50, "Type": 0 }}
+	]');
 
 INSERT INTO payments."ShoppingCarts"(
-	"Id", "UserId", "Items", "Price")
-	VALUES (-2, -22, '[{{ }}]', 0.0);
-
-INSERT INTO payments."ShoppingCarts"(
-	"Id", "UserId", "Items", "Price")
-	VALUES (-3, -21, '[{{ }}]', 0.0);
+	"Id", "UserId", "Items")
+	VALUES (-2, -22, '[{{ }}]');
