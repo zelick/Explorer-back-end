@@ -19,7 +19,6 @@ namespace Explorer.Payments.Tests.Integration
             // Arrange
             using var scope = Factory.Services.CreateScope();
             var controller = CreateController(scope);
-            var dbContext = scope.ServiceProvider.GetRequiredService<PaymentsContext>();
 
             // Act
             var result = ((ObjectResult)controller.GetByUser(-21).Result)?.Value as ShoppingCartDto;
@@ -36,7 +35,6 @@ namespace Explorer.Payments.Tests.Integration
             // Arrange
             using var scope = Factory.Services.CreateScope();
             var controller = CreateController(scope);
-            var dbContext = scope.ServiceProvider.GetRequiredService<PaymentsContext>();
 
             // Act
             var result = (ObjectResult)controller.GetByUser(-1).Result;
