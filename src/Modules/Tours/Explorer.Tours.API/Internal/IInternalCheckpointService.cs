@@ -11,6 +11,8 @@ namespace Explorer.Tours.API.Internal
     public interface IInternalCheckpointService
     {
         Result<CheckpointDto> SetEncounter(int id, long encounterId, bool isSecretPrerequisite, int userId);
-
+        Result<CheckpointDto> Get(int id);
+        Result<List<long>> GetEncountersByTour(int tourId);
+        Result<long> GetEncounterId(int checkpointId);
     }
 }

@@ -1,35 +1,59 @@
 ﻿using Explorer.BuildingBlocks.Core.Domain;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
 namespace Explorer.Encounters.Core.Domain.Encounters
 {
-    public class SocialEncounter : ValueObject
+    public class SocialEncounter : Encounter
     {
         public int RequiredPeople { get; init; }
-        public double Range { get; init; }  
-        public List<int> ActiveTouristsIds { get; init; }
+        public double Range { get; init; }
+        public List<int>? ActiveTouristsIds { get; init; }
         public SocialEncounter() { }
 
-        [JsonConstructor]
-        public SocialEncounter(int requiredPeople,double range)
+        public SocialEncounter(SocialEncounter socialEncounter)
         {
-            RequiredPeople = requiredPeople;
-            Range = range;
-            ActiveTouristsIds = new List<int>();
         }
-        protected override IEnumerable<object> GetEqualityComponents()
+        public int CheckIfInRange(double touristLongitude, double touristLatitude, int touristId)
         {
-            yield return RequiredPeople;
-            yield return Range;
-            yield return ActiveTouristsIds;
+            double distance = Math.Acos(Math.Sin(Latitude) * Math.Sin(touristLatitude) + Math.Cos(Latitude) * Math.Cos(touristLatitude) * Math.Cos(touristLongitude - Longitude)) * 6371000;
+            if (distance > Range)
+            {
+                RemoveTourist(touristId);
+                return 0;
+            }
+            else AddTourist(touristId);
+            CompleteSocialEncounter();
+            return ActiveTouristsIds.Count();
         }
 
+        private void AddTourist(int touristId)
+        {
+            if(ActiveTouristsIds != null && !ActiveTouristsIds.Contains(touristId))
+                ActiveTouristsIds.Add(touristId);
+        }
 
+        private void RemoveTourist(int touristId)
+        {
+            if (ActiveTouristsIds != null && ActiveTouristsIds.Contains(touristId))
+                ActiveTouristsIds.Remove(touristId);
+        }
+        private bool IsRequiredPeopleNumber()
+        {
+            return ActiveTouristsIds.Count() >= RequiredPeople;
+        }
+
+        public void CompleteSocialEncounter()
+        {
+            if (IsRequiredPeopleNumber())
+            {
+                foreach (var touristId in ActiveTouristsIds)
+                {
+                    CompletedEncounter completedEncounter = new CompletedEncounter(touristId, DateTime.UtcNow);
+                    CompletedEncounter.Add(completedEncounter);
+                }
+                ActiveTouristsIds.Clear();
+            }
+        }
 
 
     }

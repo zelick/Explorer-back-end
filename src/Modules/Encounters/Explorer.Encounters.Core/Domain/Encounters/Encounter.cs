@@ -12,36 +12,73 @@ namespace Explorer.Encounters.Core.Domain.Encounters
         public EncounterType Type { get; init; }
         public double Latitude { get; init; }
         public double Longitude { get; init; }
-        public SocialEncounter? SocialEncounter { get; init; }
-        public HiddenLocationEncounter? HiddenLocationEncounter { get; init;}
         public List<CompletedEncounter>? CompletedEncounter { get; init; }
 
         public Encounter() { }
 
-        public Encounter(long authorId,string name, string description, int xP, EncounterType type,
-            double latitude, double longitude,HiddenLocationEncounter? hiddenLocation,SocialEncounter? socialEncounter)
+        public Encounter(long authorId,string name, string description, int xP, EncounterType type,EncounterStatus status,
+            double latitude, double longitude)
         {
-            if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("Invalid name.");
-            if (string.IsNullOrWhiteSpace(description)) throw new ArgumentException("Invalid description");
-            if (authorId==0) throw new ArgumentException("Invalid author");
-            if (xP < 0) throw new ArgumentException("Invalid xP");
-            if (latitude < -90 || latitude > 90) throw new ArgumentException("Invalid latitude");
-            if(longitude < -180 || longitude>180) throw new ArgumentException("Invalid longitude");
+            if (IsValid(name, description, authorId, xP, longitude, latitude,status))
+            {
 
-            AuthorId = authorId;
-            Name = name;
-            Description = description;
-            XP = xP;
-            Status = EncounterStatus.Draft;
-            Type = type;
-            Latitude = latitude;
-            Longitude = longitude;
-            if (hiddenLocation != null) 
-                HiddenLocationEncounter = hiddenLocation;
-            if (socialEncounter != null)
-                SocialEncounter = socialEncounter;
+                AuthorId = authorId;
+                Name = name;
+                Description = description;
+                XP = xP;
+                Status = status;
+                Type = type;
+                Latitude = latitude;
+                Longitude = longitude;
+            }
         }
 
+        public Encounter(Encounter encounter)
+        {
+            if (IsValid(encounter.Name, encounter.Description, encounter.AuthorId, encounter.XP, encounter.Longitude, encounter.Latitude,encounter.Status))
+            {
+                AuthorId = encounter.AuthorId;
+                Name = encounter.Name;
+                Description = encounter.Description;
+                XP = encounter.XP;
+                Status = EncounterStatus.Draft;
+                Type = encounter.Type;
+                Latitude = encounter.Latitude;
+                Longitude = encounter.Longitude;
+            }
+        }
+        public bool IsValid(string name,string description,long authorId,int xp,double longitude,double latitude,EncounterStatus status)
+        {
+            return IsNameValid(name) && IsDescriptionValid(description) && IsXpValid(xp) && IsAuthorIdValid(authorId) &&
+                IsLongitudeValid(longitude) && IsLatitudeValid(latitude) && IsStatusValid(status); ;
+        }
+
+        private bool IsNameValid(string name)
+        {
+            bool isInvalid = string.IsNullOrWhiteSpace(name);
+            if (isInvalid) throw new ArgumentException("Invalid name.");
+            return !isInvalid;
+        }
+        private bool IsDescriptionValid(string name)
+        {
+            bool isInvalid = string.IsNullOrWhiteSpace(name);
+            if (isInvalid) throw new ArgumentException("Invalid description.");
+            return !isInvalid;
+        }
+
+        private bool IsAuthorIdValid(long authorId)
+        {
+            bool isInvalid = authorId==0;
+            if (isInvalid) throw new ArgumentException("Invalid author.");
+            return !isInvalid;
+        }
+
+        private bool IsXpValid(int xp)
+        {
+            bool isInvalid = xp < 0;
+            if (isInvalid) throw new ArgumentException("Invalid xP");
+            return !isInvalid;
+        }
         public bool IsAuthor(long userId)
         {
             return AuthorId == userId;
@@ -52,7 +89,34 @@ namespace Explorer.Encounters.Core.Domain.Encounters
             Status = EncounterStatus.Published;
         }
 
+        private bool IsLongitudeValid(double longitude) 
+        {
+            bool isInvalid = longitude < -180 || longitude > 180;
+            if (isInvalid) throw new ArgumentException("Invalid longitude");
+            return !isInvalid;
+        }
+
+        private bool IsStatusValid(EncounterStatus status)
+        {
+            bool isInvalid = (status==EncounterStatus.Active || status==EncounterStatus.Archived);
+            if (isInvalid) throw new ArgumentException("Invalid status");
+            return !isInvalid;
+        }
+        public bool IsLatitudeValid(double latitude)
+        {
+            bool isInvalid = latitude < -90 || latitude > 90;
+            if (isInvalid) throw new ArgumentException("Invalid latitude");
+            return !isInvalid;
+        }
+
+        public bool IsVisibleForTourist(double longitude, double latitude)
+        {
+            double a = Math.Abs(Math.Round(Longitude, 4) - Math.Round(longitude, 4));
+            double b = Math.Abs(Math.Round(Latitude, 4) - Math.Round(latitude, 4));
+            return a < 0.01 && b < 0.01;
+        }
     }
+
     public enum EncounterStatus
     {
         Draft,

@@ -16,8 +16,9 @@ public class StakeholdersContext : DbContext
     public DbSet<ObjectRequest> ObjectRequests { get; set; }
     public DbSet<CheckpointRequest> CheckpointRequests { get; set; }
     public DbSet<Message> Messages { get; set; }
-    public DbSet<SocialProfile> SocialProfiles { get; set; }
-    
+    public DbSet<SocialProfile> SocialProfiles { get; set; }   
+    public DbSet<VerificationToken> VerificationTokens { get; set; }
+    public DbSet<Tourist> Tourists { get; set; }
     
     public StakeholdersContext(DbContextOptions<StakeholdersContext> options) : base(options) { }
 
@@ -25,6 +26,7 @@ public class StakeholdersContext : DbContext
     {
         modelBuilder.HasDefaultSchema("stakeholders");
 
+        modelBuilder.Entity<Tourist>().ToTable("Tourists");
         modelBuilder.Entity<User>().HasIndex(u => u.Username).IsUnique();
 
 

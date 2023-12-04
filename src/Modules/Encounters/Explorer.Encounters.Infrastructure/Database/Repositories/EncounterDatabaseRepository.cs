@@ -1,7 +1,7 @@
 ﻿using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Encounters.Core.Domain.Encounters;
 using Explorer.Encounters.Core.Domain.RepositoryInterfaces;
-using Explorer.Stakeholders.Core.Domain;
+using Microsoft.EntityFrameworkCore;
 
 namespace Explorer.Encounters.Infrastructure.Database.Repositories
 {
@@ -16,20 +16,32 @@ namespace Explorer.Encounters.Infrastructure.Database.Repositories
 
         public Encounter Create(Encounter encounter)
         {
-            _dbContext.Encounter.Add(encounter);
-            _dbContext.SaveChanges();
+            try
+            {
+                _dbContext.Encounter.Add(encounter);
+                _dbContext.SaveChanges();
+            }
+            catch (DbUpdateException e)
+            {
+                throw new KeyNotFoundException(e.Message);
+            }
 
             return encounter;
         }
 
         public void Delete(long id)
         {
-            throw new NotImplementedException();
+            var entity = Get(id);
+            _dbContext.Encounter.Remove(entity);
+            _dbContext.SaveChanges();
         }
 
         public Encounter Get(long id)
         {
-            throw new NotImplementedException();
+            var encounter = _dbContext.Encounter.FirstOrDefault(e => e.Id == id);
+            if (encounter == null) throw new KeyNotFoundException("Not found: " + id);
+
+            return encounter;
         }
 
         public PagedResult<Encounter> GetPaged(int page, int pageSize)
@@ -46,9 +58,18 @@ namespace Explorer.Encounters.Infrastructure.Database.Repositories
             return encounterToUpdate;
         }
 
-        public Encounter Update(Encounter entity)
+        public Encounter Update(Encounter encounter)
         {
-            throw new NotImplementedException();
+            try
+            {
+                _dbContext.Encounter.Update(encounter);
+                _dbContext.SaveChanges();
+            }
+            catch (DbUpdateException e)
+            {
+                throw new KeyNotFoundException(e.Message);
+            }
+            return encounter;
         }
     }
 }
