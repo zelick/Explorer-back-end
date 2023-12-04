@@ -18,5 +18,6 @@ namespace Explorer.Encounters.API.Public
         Result<int> CheckIfInRange(int id, double touristLongitude, double touristLatitude, int touristId);
         Result<List<EncounterExecutionDto>> GetActiveByTour(int touristId, int tourId);
         Result<EncounterExecutionDto> GetWithUpdatedLocation(int id, double touristLongitude, double touristLatitude, int touristId);
+        Result<EncounterExecutionDto> CompleteExecusion(long execusionId, long touristId);
     }
 }

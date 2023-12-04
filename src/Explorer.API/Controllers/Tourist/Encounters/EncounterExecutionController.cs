@@ -34,6 +34,14 @@ namespace Explorer.API.Controllers.Tourist.Encounters
             return CreateResponse(result);
         }
 
+        [HttpPut("completed/{id:int}")]
+        public ActionResult<EncounterExecutionDto> CompleteExecusion(int id)
+        {
+            var result = _encounterExecutionService.CompleteExecusion(id, User.PersonId());
+            return CreateResponse(result);
+        }
+
+
         [HttpDelete("{id:int}")]
         public ActionResult Delete(int id)
         {

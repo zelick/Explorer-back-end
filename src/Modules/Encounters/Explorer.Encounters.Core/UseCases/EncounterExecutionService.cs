@@ -292,5 +292,39 @@ namespace Explorer.Encounters.Core.UseCases
                 return Result.Fail(FailureCode.NotFound).WithError(e.Message);
             }
         }
+
+        public Result<EncounterExecutionDto> CompleteExecusion(long id, long touristId)
+        {
+            EncounterExecution encounterExecution;
+            try
+            {
+                encounterExecution = _encounterExecutionRepository.Get(id);
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+
+            if (touristId != encounterExecution.TouristId)
+                return Result.Fail(FailureCode.InvalidArgument).WithError("Not tourist encounter execution!");
+
+            if (encounterExecution.Status != EncounterExecutionStatus.Active)
+                return Result.Fail(FailureCode.InvalidArgument).WithError("Not valid status!");
+            // TODO - complete location encounter execution
+            try
+            {
+                encounterExecution.Completed();
+                var result = CrudRepository.Update(encounterExecution);
+                return MapToDto(result);
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+            catch (ArgumentException e)
+            {
+                return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+            }
+        }
     }
 }
