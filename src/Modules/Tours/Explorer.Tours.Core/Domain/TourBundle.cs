@@ -16,7 +16,7 @@ namespace Explorer.Tours.Core.Domain
 		public double Price { get; init; }
 		public int AuthorId { get; init; }
 		public TourBundleStatus Status { get; init; }
-		public List<Tour> Tours { get; init; } = new List<Tour>(); // za vezu vise na vise
+		public List<Tour> Tours { get; set; } = new List<Tour>(); // za vezu vise na vise
 
 		public TourBundle() { }
 

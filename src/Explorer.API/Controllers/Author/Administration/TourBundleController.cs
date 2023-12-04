@@ -29,6 +29,13 @@ namespace Explorer.API.Controllers.Author.Administration
 			return CreateResponse(result);
 		}
 
+		[HttpGet("{id:int}")]
+		public ActionResult<List<TourBundleDto>> GetAllByAuthor([FromQuery] int page, [FromQuery] int pageSize, int id)
+		{
+			var result = _tourBundleService.GetAllByAuthor(page, pageSize, id);
+			return CreateResponse(result);
+		}
+
 		[HttpPost]
 		public ActionResult<TourBundleDto> Create([FromBody] TourBundleDto tourBundle)
 		{
@@ -37,7 +44,7 @@ namespace Explorer.API.Controllers.Author.Administration
 		}
 
 		[HttpPut("{id:int}")]
-		public ActionResult<ClubDto> Update([FromBody] TourBundleDto tourBundle)
+		public ActionResult<TourBundleDto> Update([FromBody] TourBundleDto tourBundle)
 		{
 			var result = _tourBundleService.Update(tourBundle);
 			return CreateResponse(result);
@@ -49,5 +56,13 @@ namespace Explorer.API.Controllers.Author.Administration
 			var result = _tourBundleService.Delete(id);
 			return CreateResponse(result);
 		}
+
+		[HttpGet("canBePublished/{id:int}")]
+		public ActionResult<bool> CanBePublished(int id)
+		{
+			var result = _tourBundleService.BundleCanBePublished(id);
+			return Ok(result);
+		}
+
 	}
 }

@@ -10,5 +10,7 @@ namespace Explorer.Tours.Core.Domain.RepositoryInterfaces
 {
 	public interface ITourBundleRepository : ICrudRepository<TourBundle>
 	{
+		List<TourBundle> GetAllByAuthor(long id);
+		TourBundle GetBundleWithTours(long id);
 	}
 }

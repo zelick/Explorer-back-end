@@ -64,14 +64,14 @@ namespace Explorer.Tours.Core.UseCases.Administration
 			try
 			{
 				var result = CrudRepository.Update(tourBundle);
-                var bundleItemDto = new ItemDto()
+                /*var bundleItemDto = new ItemDto()
                 {
                     ItemId = result.Id,
                     Name = result.Name,
                     Price = result.Price,
                     Type = "Bundle"
-                };
-                _bundleItemService.Update(bundleItemDto);
+                };*/
+                //_bundleItemService.Update(bundleItemDto);
                 return MapToDto(result);
 			}
 			catch (ArgumentException e)
@@ -85,13 +85,41 @@ namespace Explorer.Tours.Core.UseCases.Administration
 			try
 			{
                 CrudRepository.Delete(id);
-                _bundleItemService.Delete(id, "Bundle");
+                //_bundleItemService.Delete(id, "Bundle");
                 return Result.Ok();
 			}
 			catch (KeyNotFoundException e)
 			{
 				return Result.Fail(FailureCode.NotFound).WithError(e.Message);
 			}
+		}
+
+		public Result<List<TourBundleDto>> GetAllByAuthor(int page, int pageSize, int id)
+		{
+			try
+			{
+				var result = _tourBundleRepository.GetAllByAuthor(id);
+				return MapToDto(result);
+			}
+			catch (KeyNotFoundException e)
+			{
+				return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+			}
+
+		}
+
+		public bool BundleCanBePublished(long bundleId)
+		{
+			var bundle = _tourBundleRepository.GetBundleWithTours(bundleId);
+			int publishedToursCount = 0;
+			foreach(Tour t in bundle.Tours)
+			{
+				if(t.Status == TourStatus.Published)
+				{
+					publishedToursCount++;
+				}
+			}
+			return publishedToursCount >= 2;
 		}
 	}
 }
