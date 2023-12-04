@@ -33,7 +33,7 @@ namespace Explorer.Payments.Tests.Integration
             using var scope = Factory.Services.CreateScope();
             var controller = CreateController(scope);
         
-            var tourId = -6;
+            var tourId = -4;
         
             // Act
             var result = (ObjectResult)controller.GetUsersPurchasedTourDetails(tourId).Result;
