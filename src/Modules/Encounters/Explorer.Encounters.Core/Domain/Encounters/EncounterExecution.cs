@@ -15,8 +15,8 @@ namespace Explorer.Encounters.Core.Domain.Encounters
         public double TouristLatitude { get; init; }
         public double TouristLongitute { get; init; }
         public EncounterExecutionStatus Status { get; private set; }
-        public DateTime StartTime { get; init; }
-        public DateTime EndTime { get; init; }
+        public DateTime StartTime { get; private set; }
+        public DateTime EndTime { get; private set; }
         public EncounterExecution() { }
         public EncounterExecution(long encounterId, Encounter encounter, long touristId, double touristLatitude, double touristLongitute, EncounterExecutionStatus status, DateTime startTime, DateTime endTime)
         {
@@ -47,12 +47,14 @@ namespace Explorer.Encounters.Core.Domain.Encounters
                 throw new ArgumentException("Invalid execution status.");
             if (StartTime.Date > DateTime.Now.Date)
                 throw new ArgumentException("Invalid StartTime.");
-
+            if (EndTime.Date > DateTime.Now.Date)
+                throw new ArgumentException("Invalid EndTime.");
         }
 
         public void Activate()
         {
             Status = EncounterExecutionStatus.Active;
+            this.StartTime = DateTime.UtcNow;
         }
         public void Abandone()
         {
@@ -61,6 +63,7 @@ namespace Explorer.Encounters.Core.Domain.Encounters
         public void Completed()
         {
             Status = EncounterExecutionStatus.Completed;
+            this.EndTime = DateTime.UtcNow;
         }
         
         public bool IsInRange(double touristLatitude, double touristLongitude)
