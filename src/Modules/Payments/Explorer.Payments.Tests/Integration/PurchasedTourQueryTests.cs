@@ -1,7 +1,5 @@
 ﻿using Explorer.API.Controllers.Tourist.Shopping;
-using Explorer.Payments.API.Dtos;
 using Explorer.Payments.API.Public;
-using Explorer.Payments.Infrastructure.Database;
 using Explorer.Tours.API.Public.Administration;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,7 +16,6 @@ namespace Explorer.Payments.Tests.Integration
         {
             using var scope = Factory.Services.CreateScope();
             var controller = CreateController(scope);
-            var dbContext = scope.ServiceProvider.GetRequiredService<PaymentsContext>();
         
             var touristId = -21;
         
@@ -35,9 +32,8 @@ namespace Explorer.Payments.Tests.Integration
             // Arrange
             using var scope = Factory.Services.CreateScope();
             var controller = CreateController(scope);
-            var dbContext = scope.ServiceProvider.GetRequiredService<PaymentsContext>();
         
-            var tourId = -4;
+            var tourId = -6;
         
             // Act
             var result = (ObjectResult)controller.GetUsersPurchasedTourDetails(tourId).Result;
@@ -51,7 +47,6 @@ namespace Explorer.Payments.Tests.Integration
             // Arrange
             using var scope = Factory.Services.CreateScope();
             var controller = CreateController(scope);
-            var dbContext = scope.ServiceProvider.GetRequiredService<PaymentsContext>();
 
             var tourId = -1;
 

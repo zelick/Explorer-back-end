@@ -21,10 +21,12 @@ namespace Explorer.Payments.Tests.Integration
             var controller = CreateController(scope);
             var dbContext = scope.ServiceProvider.GetRequiredService<PaymentsContext>();
 
-            var item = new OrderItemDto()
+            var item = new ItemDto()
             {
-                ItemId = -12,
-                Price = 250.0
+                ItemId = -3,
+                Name = "Zimovanje na Tari",
+                Price = 200,
+                Type = "Tour"
             };
 
             // Act
@@ -36,7 +38,7 @@ namespace Explorer.Payments.Tests.Integration
             result.UserId.ShouldBe(-21);
 
             // Assert - Database
-            var storedEntity = dbContext.ShoppingCarts.AsEnumerable().Where(c => c.Id ==-1 && c.GetTotal() == 500.0);
+            var storedEntity = dbContext.ShoppingCarts.AsEnumerable().Where(c => c.Id ==-1 && c.GetTotal() == 250);
             storedEntity.ShouldNotBeNull();
         }
 
@@ -48,10 +50,12 @@ namespace Explorer.Payments.Tests.Integration
             var controller = CreateController(scope);
             var dbContext = scope.ServiceProvider.GetRequiredService<PaymentsContext>();
 
-            var item = new OrderItemDto()
+            var item = new ItemDto()
             {
-                ItemId = -1,
-                Price = 100.0
+                ItemId = -2,
+                Name = "Obilazak beoradskih muzeja",
+                Price = 50,
+                Type = "Tour"
             };
 
             // Act
@@ -63,7 +67,7 @@ namespace Explorer.Payments.Tests.Integration
             result.UserId.ShouldBe(-21);
 
             // Assert - Database
-            var storedEntity = dbContext.ShoppingCarts.AsEnumerable().Where(c => c.Id == -1 && c.GetTotal() == 150.0);
+            var storedEntity = dbContext.ShoppingCarts.AsEnumerable().Where(c => c.Id == -1 && c.GetTotal() == 0);
             storedEntity.ShouldNotBeNull();
         }
 

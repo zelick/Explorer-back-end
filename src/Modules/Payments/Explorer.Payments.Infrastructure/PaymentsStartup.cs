@@ -10,6 +10,8 @@ using Explorer.Payments.Core.Domain;
 using Explorer.Payments.Core.UseCases;
 using Explorer.Payments.Core.Domain.RepositoryInterfaces;
 using Explorer.Payments.Infrastructure.Database.Repositories;
+using Explorer.BuildingBlocks.Core.UseCases;
+using Explorer.Payments.Core.Domain;
 
 namespace Explorer.Payments.Infrastructure;
 
@@ -27,8 +29,10 @@ public static class PaymentsStartup
     {
         services.AddScoped<IItemOwnershipService, ItemOwnershipService>();
         services.AddScoped<IInternalTourOwnershipService, ItemOwnershipService>();
+        services.AddScoped<IInternalItemService, ItemService>();
         services.AddScoped<IInternalShoppingSetupService, ShoppingSetupService>();
         services.AddScoped<IShoppingCartService, ShoppingCartService>();
+        services.AddScoped<ISaleService, SaleService>();
         services.AddScoped<ICouponService, CouponService>();
     }
 
@@ -36,8 +40,16 @@ public static class PaymentsStartup
     {
         services.AddScoped<ITourPurchaseTokenRepository, TourPurchaseTokenDatabaseRepository>();
         services.AddScoped<IShoppingCartRepository, ShoppingCartDatabaseRepository>();
+        services.AddScoped<IItemRepository, ItemDatabaseRepository>();
         services.AddScoped(typeof(ICrudRepository<Coupon>), typeof(CrudDatabaseRepository<Coupon, PaymentsContext>));
         services.AddScoped<ICouponRepository, CouponDatabaseRepository>();
+
+        services.AddScoped(typeof(ICrudRepository<Sale>), typeof(CrudDatabaseRepository<Sale, PaymentsContext>));
+        services.AddScoped<ISaleRepository, SaleDatabaseRepository>();
+
+
+
+
 
         services.AddDbContext<PaymentsContext>(opt =>
             opt.UseNpgsql(DbConnectionStringBuilder.Build("payments"),

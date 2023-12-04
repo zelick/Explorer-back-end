@@ -13,7 +13,7 @@ public class ShoppingCart : Entity
         Items = new List<OrderItem>();
     }
 
-    public double GetTotal()
+    public int GetTotal()
     {
         return Items.Sum(item => item.Price);
     }
@@ -28,19 +28,14 @@ public class ShoppingCart : Entity
         Items.Remove(item);
     }
 
-
     public List<long> CheckOut()
     {
-        if(Items.Count == 0) throw new InvalidOperationException("Can't check out because Shopping Cart is empty!");
+        if (Items.Count == 0) throw new InvalidOperationException("Can't check out because Shopping Cart is empty!");
 
         var purchasedItemsId = Items.Select(i => i.ItemId).ToList();
 
         Items.Clear();
 
         return purchasedItemsId;
-    }
-    public bool IsOwnedByUser(int userId)
-    {
-        return UserId == userId;
     }
 }
