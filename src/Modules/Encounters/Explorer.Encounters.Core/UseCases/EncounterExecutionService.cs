@@ -6,6 +6,8 @@ using Explorer.Encounters.Core.Domain.Encounters;
 using Explorer.Encounters.Core.Domain.RepositoryInterfaces;
 using Explorer.Payments.API.Internal;
 using Explorer.Payments.API.Public;
+using Explorer.Tours.API.Internal;
+using Explorer.Tours.Core.UseCases.Administration;
 using FluentResults;
 
 namespace Explorer.Encounters.Core.UseCases
@@ -15,11 +17,17 @@ namespace Explorer.Encounters.Core.UseCases
         private readonly IEncounterExecutionRepository _encounterExecutionRepository;
         private readonly IMapper _mapper;
         private readonly IInternalShoppingService _shoppingService;
-        public EncounterExecutionService(IEncounterExecutionRepository encounterExecutionRepository, IMapper mapper, IInternalShoppingService shoppingService) : base(encounterExecutionRepository, mapper)
+        private readonly IInternalCheckpointService _internalCheckpointService;
+        private readonly IEncounterRepository _encounterRepository;
+        private readonly ICrudRepository<SocialEncounter> _socialEncounterRepository;
+        public EncounterExecutionService(IEncounterExecutionRepository encounterExecutionRepository, IMapper mapper, IInternalShoppingService shoppingService, IInternalCheckpointService internalCheckpointService, IEncounterRepository encounterRepository, ICrudRepository<SocialEncounter> socialEncounterRepository) : base(encounterExecutionRepository, mapper)
         {
             _encounterExecutionRepository = encounterExecutionRepository;
             _mapper = mapper;
             _shoppingService = shoppingService;
+            _internalCheckpointService = internalCheckpointService;
+            _encounterRepository = encounterRepository;
+            _socialEncounterRepository = socialEncounterRepository;
         }
 
         public Result<EncounterExecutionDto> Create(EncounterExecutionDto encounterExecutionDto, long touristId)
@@ -129,12 +137,11 @@ namespace Explorer.Encounters.Core.UseCases
             }
         }
 
-        public Result<EncounterExecutionDto> Activate(int touristId, double touristLatitude, double touristLongitude, int executionId)
+        public Result<EncounterExecutionDto> Activate(int touristId, double touristLatitude, double touristLongitude, int encounterId)
         {
             try
             {
-                //TODO purchased tour?
-                var execution = _encounterExecutionRepository.Get(executionId);
+                var execution = _encounterExecutionRepository.GetByEncounterAndTourist(touristId, encounterId);
                 if(execution.IsInRange(touristLatitude, touristLongitude))
                 {
                     execution.Activate();
@@ -144,6 +151,142 @@ namespace Explorer.Encounters.Core.UseCases
                 return Result.Fail(FailureCode.InvalidArgument).WithError("Tourist not in range");
             }
                 
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+        }
+
+        //public Result<List<EncounterExecutionDto>> GetVisibleByTour(int tourId, double touristLongitude, double touristLatitude, int touristId)
+        //{
+        //    try
+        //    {
+        //        List<long> encountersIds = _internalCheckpointService.GetEncountersByTour(tourId).Value;
+        //        List<EncounterExecutionDto> encounters = new List<EncounterExecutionDto>();
+        //        foreach (long encounterId in encountersIds)
+        //        {
+        //            var encounter = _encounterRepository.Get(encounterId);
+        //            if (encounter.IsVisibleForTourist(touristLatitude, touristLongitude))
+        //            {
+        //                var encounterDto = new EncounterExecutionDto();
+        //                if(_encounterExecutionRepository.GetByEncounterAndTourist(touristId, encounterId) == null)
+        //                {
+        //                    encounterDto.EncounterId = encounter.Id;
+        //                    encounterDto.TouristId = touristId;
+        //                    encounterDto.Status = "Pending";
+        //                    encounterDto.TouristLongitute = touristLongitude;
+        //                    encounterDto.TouristLatitude = touristLatitude;
+        //                    encounterDto.StartTime = DateTime.UtcNow;
+        //                    var encounterExecution = MapToDomain(encounterDto);
+        //                    encounterExecution.Validate();
+        //                    _encounterExecutionRepository.Create(encounterExecution);
+        //                }
+        //                else
+        //                {
+        //                    encounterDto = MapToDto(_encounterExecutionRepository.GetByEncounterAndTourist(touristId, encounterId));
+        //                }
+
+        //                encounters.Add(encounterDto);
+        //            }
+        //        }
+        //        return encounters;
+        //    }
+        //    catch (KeyNotFoundException e)
+        //    {
+        //        return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+        //    }
+        //    catch (ArgumentException e)
+        //    {
+        //        return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+        //    }
+        //}
+        public Result<EncounterExecutionDto> GetVisibleByTour(int tourId, double touristLongitude, double touristLatitude, int touristId)
+        {
+            try
+            {
+                List<long> encounterIds = _internalCheckpointService.GetEncountersByTour(tourId).Value;
+                foreach(var encounterId in encounterIds)
+                {
+                    var encounter = _encounterRepository.Get(encounterId);
+                    if (encounter.IsVisibleForTourist(touristLongitude, touristLatitude))
+                    {
+                        var encounterDto = new EncounterExecutionDto();
+                        if (_encounterExecutionRepository.GetByEncounterAndTourist(touristId, encounterId) == null)
+                        {
+                            encounterDto.EncounterId = encounter.Id;
+                            encounterDto.TouristId = touristId;
+                            encounterDto.Status = "Pending";
+                            encounterDto.TouristLongitute = touristLongitude;
+                            encounterDto.TouristLatitude = touristLatitude;
+                            encounterDto.StartTime = DateTime.UtcNow;
+                            var encounterExecution = MapToDomain(encounterDto);
+                            encounterExecution.Validate();
+                            _encounterExecutionRepository.Create(encounterExecution);
+                        }
+                        else
+                        {
+                            encounterDto = MapToDto(_encounterExecutionRepository.GetByEncounterAndTourist(touristId, encounterId));
+                        }
+                        return encounterDto;
+                    }
+                }
+                return Result.Fail(FailureCode.InvalidArgument).WithError("No near encounter");
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+            catch (ArgumentException e)
+            {
+                return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+            }
+        }
+
+        public Result<int> CheckIfInRange(int id, double touristLongitude, double touristLatitude, int touristId)
+        {
+            try
+            {
+                SocialEncounter result = _socialEncounterRepository.Get(id);
+                var numberOfTourists = result.CheckIfInRange(touristLongitude, touristLatitude, touristId);
+                _socialEncounterRepository.Update(result);
+                return numberOfTourists;
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+            catch (ArgumentException e)
+            {
+                return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+            }
+        }
+
+        public Result<List<EncounterExecutionDto>> GetActiveByTour(int touristId, int tourId)
+        {
+            try
+            {
+                var result = _encounterExecutionRepository.GetActiveByTourist(touristId);
+                List<long> encountersIds = _internalCheckpointService.GetEncountersByTour(tourId).Value;
+                foreach(var r in result) 
+                {
+                    if (!encountersIds.Contains(r.EncounterId))
+                        result.Remove(r);
+                }
+                return MapToDto(result);
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+        }
+
+        public Result<EncounterExecutionDto> GetWithUpdatedLocation(int id, double touristLongitude, double touristLatitude, int touristId)
+        {
+            try
+            {
+                CheckIfInRange(id, touristLongitude, touristLatitude, touristId);
+                return GetVisibleByTour(id, touristLongitude, touristLatitude, touristId);
+            }
             catch (KeyNotFoundException e)
             {
                 return Result.Fail(FailureCode.NotFound).WithError(e.Message);

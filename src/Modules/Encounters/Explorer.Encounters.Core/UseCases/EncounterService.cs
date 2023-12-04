@@ -20,13 +20,16 @@ namespace Explorer.Encounters.Core.UseCases
         private readonly IInternalCheckpointService _internalCheckpointService;
         private readonly IEncounterExecutionRepository _encounterExecutionRepository;
         private readonly IInternalTouristService _internalTouristService;
-        public EncounterService(IEncounterRepository encounterRepository,IInternalCheckpointService internalCheckpointService, IEncounterExecutionRepository encounterExecutionRepository, IInternalTouristService internalTouristService, IMapper mapper) : base(encounterRepository, mapper)
+        private readonly ICrudRepository<SocialEncounter> _socialEncounterRepository;
+
+        public EncounterService(IEncounterRepository encounterRepository,IInternalCheckpointService internalCheckpointService, IEncounterExecutionRepository encounterExecutionRepository, IInternalTouristService internalTouristService,ICrudRepository<SocialEncounter> socialEncounterRepository, IMapper mapper) : base(encounterRepository, mapper)
         {
             _encounterRepository = encounterRepository;
             _internalCheckpointService = internalCheckpointService;
             _mapper = mapper;
             _encounterExecutionRepository = encounterExecutionRepository;
             _internalTouristService = internalTouristService;
+            _socialEncounterRepository = socialEncounterRepository;
         }
 
         public Result<EncounterDto> Create(EncounterDto encounterDto,long checkpointId,bool isSecretPrerequisite,long userId)
@@ -189,6 +192,34 @@ namespace Explorer.Encounters.Core.UseCases
             var toruistDto = _internalTouristService.UpdateTouristXpAndLevel(touristId, encounter.XP);
 
             return MapToDto(updatedEncounter);
+        }
+
+        public EncounterExecutionDto AddEncounter(EncounterExecutionDto execution)
+        {
+            try
+            {
+                execution.EncounterDto = MapToDto(_encounterRepository.Get(execution.EncounterId));
+                return execution;
+            }
+            catch (KeyNotFoundException e)
+            {
+                return null;
+            }
+        }
+        public List<EncounterExecutionDto> AddEncounters(List<EncounterExecutionDto> executions)
+        {
+            try
+            {
+                foreach(var execution in executions)
+                {
+                    execution.EncounterDto = MapToDto(_encounterRepository.Get(execution.EncounterId));
+                }
+                return executions;
+            }
+            catch (KeyNotFoundException e)
+            {
+                return null;
+            }
         }
 
     }

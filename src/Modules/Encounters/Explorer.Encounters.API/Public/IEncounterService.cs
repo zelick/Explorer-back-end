@@ -10,6 +10,8 @@ namespace Explorer.Encounters.API.Public
         Result Delete(int id, int userId);
         Result<EncounterDto> Get(long id);
         Result<EncounterDto> FinishEncounter(long encounterId, long touristId);
+        List<EncounterExecutionDto> AddEncounters(List<EncounterExecutionDto> executions);
+        EncounterExecutionDto AddEncounter(EncounterExecutionDto execution);
     }
 
 }

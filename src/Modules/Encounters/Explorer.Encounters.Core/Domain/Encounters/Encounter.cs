@@ -48,7 +48,6 @@ namespace Explorer.Encounters.Core.Domain.Encounters
                 CompletedEncounter = new List<CompletedEncounter>();
             }
         }
-
         public bool IsValid(string name,string description,long authorId,int xp,double longitude,double latitude,EncounterStatus status)
         {
             return IsNameValid(name) && IsDescriptionValid(description) && IsXpValid(xp) && IsAuthorIdValid(authorId) &&
@@ -93,19 +92,13 @@ namespace Explorer.Encounters.Core.Domain.Encounters
             return !isInvalid;
         }
 
-        private bool IsLatitudeValid(double latitude)
-        {
-            bool isInvalid = latitude < -90 || latitude > 90;
-            if (isInvalid) throw new ArgumentException("Invalid latitude");
-            return !isInvalid;
-        }
-
         private bool IsStatusValid(EncounterStatus status)
         {
             bool isInvalid = (status==EncounterStatus.Active || status==EncounterStatus.Archived);
             if (isInvalid) throw new ArgumentException("Invalid status");
             return !isInvalid;
         }
+
         public void FinishEncounter(long toruistId)
         {
            this.Status = EncounterStatus.Archived;
@@ -116,8 +109,21 @@ namespace Explorer.Encounters.Core.Domain.Encounters
            CompletedEncounter ce = new CompletedEncounter(toruistId, DateTime.Now);
            this.CompletedEncounter.Add(ce);
         }
+        public bool IsLatitudeValid(double latitude)
+        {
+            bool isInvalid = latitude < -90 || latitude > 90;
+            if (isInvalid) throw new ArgumentException("Invalid latitude");
+            return !isInvalid;
+        }
 
+        public bool IsVisibleForTourist(double longitude, double latitude)
+        {
+            double a = Math.Abs(Math.Round(Longitude, 4) - Math.Round(longitude, 4));
+            double b = Math.Abs(Math.Round(Latitude, 4) - Math.Round(latitude, 4));
+            return a < 0.01 && b < 0.01;
+        }
     }
+
     public enum EncounterStatus
     {
         Draft,
