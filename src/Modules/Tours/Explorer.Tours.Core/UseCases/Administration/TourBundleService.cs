@@ -5,6 +5,8 @@ using Explorer.Tours.API.Public.Administration;
 using Explorer.Tours.Core.Domain;
 using Explorer.Tours.Core.Domain.RepositoryInterfaces;
 using FluentResults;
+using Explorer.Payments.API.Dtos;
+using Explorer.Payments.API.Internal;
 
 namespace Explorer.Tours.Core.UseCases.Administration
 {
