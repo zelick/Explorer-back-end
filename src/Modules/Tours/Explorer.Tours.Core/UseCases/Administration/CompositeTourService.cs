@@ -27,8 +27,25 @@ namespace Explorer.Tours.Core.UseCases.Administration
 
         }
 
+        public Result<CompositeTourCreationDto> Create(CompositeTourCreationDto entity)
+        {
+            if (entity.TourIds is null || !entity.TourIds.Any()) return Result.Fail(FailureCode.InvalidArgument);
+
+
+            try
+            {
+                var result = CrudRepository.Create(MapToDomain(entity));
+                return MapToDto(result);
+            }
+            catch (ArgumentException e)
+            {
+                return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+            }
+        }
+
         public Result<CompositeTourDto> GetDetailed(int id)
         {
+
             try
             {
                 var result = CrudRepository.Get(id);

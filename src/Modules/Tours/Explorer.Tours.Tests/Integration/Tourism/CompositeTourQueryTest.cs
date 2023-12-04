@@ -22,12 +22,12 @@ public class CompositeTourQueryTest : BaseToursIntegrationTest
         var controller = CreateController(scope);
 
         // ActD
-        var result = ((ObjectResult)controller.GetAllComposite(0, 0).Result)?.Value as PagedResult<CompositeTourDto>;
+        var result = ((ObjectResult)controller.GetPaged(0, 0).Result)?.Value as PagedResult<CompositeTourDto>;
 
         // Assert
         result.ShouldNotBeNull();
-        result.Results.Count.ShouldBe(2);
-        result.TotalCount.ShouldBe(2);
+        result.Results.Count.ShouldBe(3);
+        result.TotalCount.ShouldBe(3);
     }
 
     private static CompositeTourController CreateController(IServiceScope scope)

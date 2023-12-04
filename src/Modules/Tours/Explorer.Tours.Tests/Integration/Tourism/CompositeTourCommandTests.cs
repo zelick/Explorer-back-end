@@ -29,21 +29,22 @@ public class CompositeTourCommandTests : BaseToursIntegrationTest
         var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
         var newEntity = new CompositeTourCreationDto
         {
-           
+            Id = 1,
+            OwnerId = -23,
+            Name = "Example Tour",
+            Description = "This is an example tour description.",
+            TourIds = new List<long> { -1, -5 }
         };
 
         // Act
-        var result = ((ObjectResult)controller.CreateComposite(newEntity).Result)?.Value as CompositeTourDto;
+        var result = ((ObjectResult)controller.CreateComposite(newEntity).Result)?.Value as CompositeTourCreationDto;
 
         // Assert - Response
         result.ShouldNotBeNull();
-        //result.Id.ShouldNotBe(0);
-        //result.Name.ShouldBe(newEntity.Name);
-        //result.AuthorId.ShouldBe(newEntity.AuthorId);
-        //result.AuthorId.ShouldNotBe(0);
+
 
         // Assert - Database
-        var storedEntity = dbContext.Tours.FirstOrDefault(i => i.Name == newEntity.Name);
+        var storedEntity = dbContext.CompositeTours.FirstOrDefault(i => i.Name == newEntity.Name);
         storedEntity.ShouldNotBeNull();
         storedEntity.Id.ShouldBe(result.Id);
     }
@@ -54,13 +55,17 @@ public class CompositeTourCommandTests : BaseToursIntegrationTest
         // Arrange
         using var scope = Factory.Services.CreateScope();
         var controller = CreateController(scope);
-        var entity = new CompositeTourCreationDto
+        var newEntity = new CompositeTourCreationDto
         {
-            
+            Id = 1,
+            OwnerId = -23,
+            Name = "Example Tour",
+            Description = "This is an example tour description.",
+            TourIds = new List<long> { }
         };
 
         // Act
-        var result = (ObjectResult)controller.CreateComposite(entity).Result;
+        var result = (ObjectResult)controller.CreateComposite(newEntity).Result;
 
         // Assert
         result.ShouldNotBeNull();
@@ -76,14 +81,14 @@ public class CompositeTourCommandTests : BaseToursIntegrationTest
         var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
 
         // Act
-        var result = (OkResult)controller.DeleteComposite(-2);
+        var result = (OkResult)controller.DeleteComposite(-3);
 
         // Assert - Response
         result.ShouldNotBeNull();
         result.StatusCode.ShouldBe(200);
 
         // Assert - Database
-        var storedCourse = dbContext.Tours.FirstOrDefault(i => i.Id == -2);
+        var storedCourse = dbContext.CompositeTours.FirstOrDefault(i => i.Id == -3);
         storedCourse.ShouldBeNull();
     }
 
