@@ -1,4 +1,5 @@
 ﻿using Explorer.API.Controllers.Author.Administration;
+using Explorer.API.Controllers.Tourist.Tour;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
 using Explorer.Tours.Infrastructure.Database;
@@ -26,7 +27,7 @@ public class CompositeTourCommandTests : BaseToursIntegrationTest
         using var scope = Factory.Services.CreateScope();
         var controller = CreateController(scope);
         var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
-        var newEntity = new CompositeTourDto
+        var newEntity = new CompositeTourCreationDto
         {
            
         };
@@ -53,7 +54,7 @@ public class CompositeTourCommandTests : BaseToursIntegrationTest
         // Arrange
         using var scope = Factory.Services.CreateScope();
         var controller = CreateController(scope);
-        var entity = new CompositeTourDto
+        var entity = new CompositeTourCreationDto
         {
             
         };
@@ -101,9 +102,9 @@ public class CompositeTourCommandTests : BaseToursIntegrationTest
         result.StatusCode.ShouldBe(404);
     }
 
-    private static TourController CreateController(IServiceScope scope)
+    private static CompositeTourController CreateController(IServiceScope scope)
     {
-        return new TourController(scope.ServiceProvider.GetRequiredService<ITourService>())
+        return new CompositeTourController(scope.ServiceProvider.GetRequiredService<ICompositeTourService>())
         {
             ControllerContext = BuildContext("-12")
         };

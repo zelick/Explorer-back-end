@@ -42,6 +42,7 @@ public static class ToursStartup
         services.AddScoped<IPublicCheckpointService, PublicCheckpointService>();
         services.AddScoped<IPublicObjectService, PublicMapObjectService>();
         services.AddScoped<ITourExecutionService, TourExecutionService>();
+        services.AddScoped<ICompositeTourService, CompositeTourService>();
     }
     private static void SetupInfrastructure(IServiceCollection services)
     {
@@ -58,6 +59,7 @@ public static class ToursStartup
         services.AddScoped(typeof(ICrudRepository<ReportedIssue>), typeof(CrudDatabaseRepository<ReportedIssue, ToursContext>));
         services.AddScoped(typeof(ICrudRepository<PublicMapObject>), typeof(CrudDatabaseRepository<PublicMapObject, ToursContext>));
         services.AddScoped(typeof(ICrudRepository<PublicCheckpoint>), typeof(CrudDatabaseRepository<PublicCheckpoint, ToursContext>));
+        services.AddScoped(typeof(ICompositeTourRepository), typeof(CompositeTourDatabaseRepository));
 
 
         services.AddScoped(typeof(ITourExecutionRepository),typeof(TourExecutionDatabaseRepository));

@@ -19,6 +19,7 @@ public class ToursContext : DbContext
     public DbSet<PublicMapObject> PublicMapObjects { get; set; }
     public DbSet<TouristPosition> TouristPosition { get; set; }
     public DbSet<TourExecution> TourExecution { get; set; }
+    public DbSet<CompositeTour> CompositeTours { get; set; }
 
 
     public ToursContext(DbContextOptions<ToursContext> options) : base(options) { }
@@ -63,6 +64,8 @@ public class ToursContext : DbContext
            .Property(item => item.TourTimes).HasColumnType("jsonb");
         modelBuilder.Entity<Checkpoint>()
           .Property(item => item.CheckpointSecret).HasColumnType("jsonb");
+        modelBuilder.Entity<CompositeTour>()
+          .Property(item => item.TourIds).HasColumnType("jsonb");
     }
 
     private static void ConfigureReportedIssues(ModelBuilder modelBuilder)

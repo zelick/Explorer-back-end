@@ -96,23 +96,5 @@ namespace Explorer.API.Controllers.Author.Administration
             return CreateResponse(result);
         }
 
-        [HttpGet]
-        public ActionResult<PagedResult<TourDto>> GetAllComposite([FromQuery] int page, [FromQuery] int pageSize)
-        {
-            throw new NotImplementedException();
-        }
-
-        [HttpPost]
-        public ActionResult<TourDto> CreateComposite([FromBody] CompositeTourDto tour)
-        {
-            throw new NotImplementedException();
-        }
-
-        [HttpDelete("{id:int}")]
-        public ActionResult DeleteComposite(int id)
-        {
-            throw new NotImplementedException();
-        }
-
     }
 }

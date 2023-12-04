@@ -1,4 +1,5 @@
-﻿using Explorer.Tours.API.Dtos;
+﻿using Explorer.BuildingBlocks.Core.Domain;
+using Explorer.Tours.API.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,14 +8,11 @@ using System.Threading.Tasks;
 
 namespace Explorer.Tours.Core.Domain.Tours
 {
-    public class CompositeTour
+    public class CompositeTour : Entity
     {
         public int OwnerId { get; init; }
         public string Name { get; init; }
         public string? Description { get; init; }
-        public Demandigness? DemandignessLevel { get; init; }
-        public List<string>? Tags { get; init; }
-        public List<Equipment>? Equipment { get; init; }
-        public List<Checkpoint>? Checkpoints { get; init; }
+        public List<long>? TourIds { get; init; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Explorer.API.Controllers.Author.Administration;
+using Explorer.API.Controllers.Tourist.Tour;
 using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
@@ -29,9 +30,9 @@ public class CompositeTourQueryTest : BaseToursIntegrationTest
         result.TotalCount.ShouldBe(2);
     }
 
-    private static TourController CreateController(IServiceScope scope)
+    private static CompositeTourController CreateController(IServiceScope scope)
     {
-        return new TourController(scope.ServiceProvider.GetRequiredService<ITourService>())
+        return new CompositeTourController(scope.ServiceProvider.GetRequiredService<ICompositeTourService>())
         {
             ControllerContext = BuildContext("-1")
         };

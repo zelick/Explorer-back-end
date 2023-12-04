@@ -6,14 +6,12 @@ using System.Threading.Tasks;
 
 namespace Explorer.Tours.API.Dtos
 {
-    public class CompositeTourDto
+    public class CompositeTourCreationDto
     {
         public int Id { get; set; }
+        public int OwnerId { get; set; }
         public string Name { get; set; }
         public string? Description { get; set; }
-        public int OwnerId { get; set; }
-        public string? DemandignessLevel { get; set; }
-        public List<EquipmentDto>? Equipment { get; set; }
-        public List<CheckpointDto>? Checkpoints { get; set; }
+        public List<long>? TourIds { get; set; }
     }
 }
