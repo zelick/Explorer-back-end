@@ -8,7 +8,7 @@ namespace Explorer.Encounters.Core.Domain.Encounters
         public string Name { get; init; }    
         public string Description { get; init; }
         public int XP { get; init; }
-        public EncounterStatus Status { get; init; }
+        public EncounterStatus Status { get; private set; }
         public EncounterType Type { get; init; }
         public double Latitude { get; init; }
         public double Longitude { get; init; }
@@ -104,6 +104,12 @@ namespace Explorer.Encounters.Core.Domain.Encounters
             bool isInvalid = (status==EncounterStatus.Active || status==EncounterStatus.Archived);
             if (isInvalid) throw new ArgumentException("Invalid status");
             return !isInvalid;
+        }
+        public void FinishEncounter(long toruistId)
+        {
+           this.Status = EncounterStatus.Archived;
+           CompletedEncounter ce = new CompletedEncounter(toruistId, DateTime.Now);
+           this.CompletedEncounter?.Add(ce);
         }
 
     }

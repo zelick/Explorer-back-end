@@ -8,5 +8,6 @@ namespace Explorer.Encounters.Core.Domain.RepositoryInterfaces
     {
         List<EncounterExecution> GetAllByTourist(long touristId);
         List<EncounterExecution> GetAllCompletedByTourist(long touristId);
+        EncounterExecution FindByEncounterId(long encounterId);
     }
 }

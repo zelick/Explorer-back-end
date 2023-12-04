@@ -70,11 +70,11 @@ namespace Explorer.API.Controllers.Author.Administration
             return CreateResponse(result);
         }
 
-        [HttpPut("add/{encounterId:int}/{touristId:int}")]
+        [HttpPut("{encounterId:int}/{touristId:int}")]
         public ActionResult<EncounterDto> FinishEncounter(int encounterId, int touristId)
         {
-            throw new NotImplementedException("This method is not implemented yet.");
+            var result = _encounterService.FinishEncounter(encounterId, touristId);
+            return CreateResponse(result);
         }
-
     }
 }

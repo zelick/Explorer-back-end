@@ -4,10 +4,12 @@ using Explorer.Encounters.API.Dtos;
 using Explorer.Encounters.API.Public;
 using Explorer.Encounters.Core.Domain.Encounters;
 using Explorer.Encounters.Core.Domain.RepositoryInterfaces;
+using Explorer.Stakeholders.API.Internal;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Internal;
 using Explorer.Tours.Core.Domain.Tours;
 using FluentResults;
+using System.Diagnostics.Metrics;
 
 namespace Explorer.Encounters.Core.UseCases
 {
@@ -16,11 +18,15 @@ namespace Explorer.Encounters.Core.UseCases
         private readonly IEncounterRepository _encounterRepository;
         private readonly IMapper _mapper;
         private readonly IInternalCheckpointService _internalCheckpointService;
-        public EncounterService(IEncounterRepository encounterRepository,IInternalCheckpointService internalCheckpointService, IMapper mapper) : base(encounterRepository, mapper)
+        private readonly IEncounterExecutionRepository _encounterExecutionRepository;
+        private readonly IInternalTouristService _internalTouristService;
+        public EncounterService(IEncounterRepository encounterRepository,IInternalCheckpointService internalCheckpointService, IEncounterExecutionRepository encounterExecutionRepository, IInternalTouristService internalTouristService, IMapper mapper) : base(encounterRepository, mapper)
         {
-            _encounterRepository= encounterRepository;
-            _internalCheckpointService= internalCheckpointService;
-            _mapper= mapper;
+            _encounterRepository = encounterRepository;
+            _internalCheckpointService = internalCheckpointService;
+            _mapper = mapper;
+            _encounterExecutionRepository = encounterExecutionRepository;
+            _internalTouristService = internalTouristService;
         }
 
         public Result<EncounterDto> Create(EncounterDto encounterDto,long checkpointId,bool isSecretPrerequisite,long userId)
@@ -163,7 +169,26 @@ namespace Explorer.Encounters.Core.UseCases
             {
                 return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
             }
-
         }
+
+        public Result<EncounterDto> FinishEncounter(long encounterId, long touristId)
+        {
+            //update Encounter
+            Encounter encounter = new Encounter();
+            encounter.FinishEncounter(touristId);
+            var updatedEncounter = _encounterRepository.Update(encounter);
+            //update EncounterExecution 
+            var encounterExecution = _encounterExecutionRepository.FindByEncounterId(encounterId);
+            if (encounterExecution != null)
+            {
+                encounterExecution.FinishEncounter();
+                _encounterExecutionRepository.Update(encounterExecution);
+            }
+            //update Tourist
+            var toruistDto = _internalTouristService.UpdateTouristXpAndLevel(touristId, encounter.XP);
+
+            return MapToDto(updatedEncounter);
+        }
+
     }
 }
