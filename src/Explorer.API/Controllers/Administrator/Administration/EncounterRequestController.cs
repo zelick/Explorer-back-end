@@ -43,5 +43,6 @@ namespace Explorer.API.Controllers.Administrator.Administration
             var result = _encounterRequestService.RejectRequest(id);
             return CreateResponse(result);
         }
+
     }
 }

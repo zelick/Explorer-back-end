@@ -40,5 +40,6 @@ namespace Explorer.Encounters.Core.UseCases
             var reuestAccepted = _encounterRequestRepository.RejectRequest(id);
             return MapToDto(reuestAccepted);
         }
+
     }
 }

@@ -32,10 +32,10 @@ namespace Explorer.Tours.Tests.Integration.Administration
             // Assert - Response
             result.ShouldNotBeNull();
             result.Id.ShouldNotBe(0);
-            result.Name.ShouldBe("Bulevar oslobodjenja");
+            result.Name.ShouldBe("uuuu");
 
             // Assert - Database
-            var storedMapObject = dbContext.PublicCheckpoint.FirstOrDefault(i => i.Name == "Bulevar oslobodjenja");
+            var storedMapObject = dbContext.PublicCheckpoint.FirstOrDefault(i => i.Name == "uuuu");
             storedMapObject.ShouldNotBeNull();
             storedMapObject.Id.ShouldBe(result.Id);
         }

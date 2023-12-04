@@ -40,6 +40,9 @@ namespace Explorer.Encounters.Infrastructure
             services.AddScoped<IEncounterRequestRepository, EncounterRequestDatabaseRepository>();
             services.AddScoped(typeof(IEncounterExecutionRepository), typeof(EncounterExecutionDatabaseRepository));
             services.AddScoped(typeof(ICrudRepository<SocialEncounter>), typeof(CrudDatabaseRepository<SocialEncounter, EncountersContext>));
+            services.AddScoped(typeof(ICrudRepository<HiddenLocationEncounter>), typeof(CrudDatabaseRepository<HiddenLocationEncounter, EncountersContext>));
+            services.AddScoped(typeof(ISocialEncounterRepository), typeof(SocialEncounterDatabaseRepository));
+            services.AddScoped(typeof(IHiddenLocationEncounterRepository), typeof(HiddenLocationEncounterDatabaseRepository));
 
             services.AddDbContext<EncountersContext>(opt =>
                 opt.UseNpgsql(DbConnectionStringBuilder.Build("encounters"),

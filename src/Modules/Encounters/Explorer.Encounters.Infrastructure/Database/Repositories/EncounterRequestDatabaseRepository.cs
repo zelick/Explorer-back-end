@@ -33,7 +33,7 @@ namespace Explorer.Encounters.Infrastructure.Database.Repositories
         {
             EncounterRequest requestToUpdate = _dbContext.EncounterRequests.FirstOrDefault(o => o.Id == id);
             if (requestToUpdate == null) throw new KeyNotFoundException("Not found " + id);
-            requestToUpdate.AcceptRequest();
+            requestToUpdate.RejectRequest();
             _dbContext.SaveChanges();
             return requestToUpdate;
         }
