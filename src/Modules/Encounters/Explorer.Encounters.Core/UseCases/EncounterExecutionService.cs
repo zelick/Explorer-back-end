@@ -157,19 +157,61 @@ namespace Explorer.Encounters.Core.UseCases
             }
         }
 
-        public Result<List<EncounterExecutionDto>> GetVisibleByTour(int tourId, double touristLongitude, double touristLatitude, int touristId)
+        //public Result<List<EncounterExecutionDto>> GetVisibleByTour(int tourId, double touristLongitude, double touristLatitude, int touristId)
+        //{
+        //    try
+        //    {
+        //        List<long> encountersIds = _internalCheckpointService.GetEncountersByTour(tourId).Value;
+        //        List<EncounterExecutionDto> encounters = new List<EncounterExecutionDto>();
+        //        foreach (long encounterId in encountersIds)
+        //        {
+        //            var encounter = _encounterRepository.Get(encounterId);
+        //            if (encounter.IsVisibleForTourist(touristLatitude, touristLongitude))
+        //            {
+        //                var encounterDto = new EncounterExecutionDto();
+        //                if(_encounterExecutionRepository.GetByEncounterAndTourist(touristId, encounterId) == null)
+        //                {
+        //                    encounterDto.EncounterId = encounter.Id;
+        //                    encounterDto.TouristId = touristId;
+        //                    encounterDto.Status = "Pending";
+        //                    encounterDto.TouristLongitute = touristLongitude;
+        //                    encounterDto.TouristLatitude = touristLatitude;
+        //                    encounterDto.StartTime = DateTime.UtcNow;
+        //                    var encounterExecution = MapToDomain(encounterDto);
+        //                    encounterExecution.Validate();
+        //                    _encounterExecutionRepository.Create(encounterExecution);
+        //                }
+        //                else
+        //                {
+        //                    encounterDto = MapToDto(_encounterExecutionRepository.GetByEncounterAndTourist(touristId, encounterId));
+        //                }
+
+        //                encounters.Add(encounterDto);
+        //            }
+        //        }
+        //        return encounters;
+        //    }
+        //    catch (KeyNotFoundException e)
+        //    {
+        //        return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+        //    }
+        //    catch (ArgumentException e)
+        //    {
+        //        return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+        //    }
+        //}
+        public Result<EncounterExecutionDto> GetVisibleByTour(int tourId, double touristLongitude, double touristLatitude, int touristId)
         {
             try
             {
-                List<long> encountersIds = _internalCheckpointService.GetEncountersByTour(tourId).Value;
-                List<EncounterExecutionDto> encounters = new List<EncounterExecutionDto>();
-                foreach (long encounterId in encountersIds)
+                List<long> encounterIds = _internalCheckpointService.GetEncountersByTour(tourId).Value;
+                foreach(var encounterId in encounterIds)
                 {
                     var encounter = _encounterRepository.Get(encounterId);
-                    if (encounter.IsVisibleForTourist(touristLatitude, touristLongitude))
+                    if (encounter.IsVisibleForTourist(touristLongitude, touristLatitude))
                     {
                         var encounterDto = new EncounterExecutionDto();
-                        if(_encounterExecutionRepository.GetByEncounterAndTourist(touristId, encounterId) == null)
+                        if (_encounterExecutionRepository.GetByEncounterAndTourist(touristId, encounterId) == null)
                         {
                             encounterDto.EncounterId = encounter.Id;
                             encounterDto.TouristId = touristId;
@@ -185,11 +227,10 @@ namespace Explorer.Encounters.Core.UseCases
                         {
                             encounterDto = MapToDto(_encounterExecutionRepository.GetByEncounterAndTourist(touristId, encounterId));
                         }
-
-                        encounters.Add(encounterDto);
+                        return encounterDto;
                     }
                 }
-                return encounters;
+                return Result.Fail(FailureCode.InvalidArgument).WithError("No near encounter");
             }
             catch (KeyNotFoundException e)
             {
@@ -231,7 +272,6 @@ namespace Explorer.Encounters.Core.UseCases
                     if (!encountersIds.Contains(r.EncounterId))
                         result.Remove(r);
                 }
-
                 return MapToDto(result);
             }
             catch (KeyNotFoundException e)
@@ -240,7 +280,7 @@ namespace Explorer.Encounters.Core.UseCases
             }
         }
 
-        public Result<List<EncounterExecutionDto>> GetWithUpdatedLocation(int id, double touristLongitude, double touristLatitude, int touristId)
+        public Result<EncounterExecutionDto> GetWithUpdatedLocation(int id, double touristLongitude, double touristLatitude, int touristId)
         {
             try
             {

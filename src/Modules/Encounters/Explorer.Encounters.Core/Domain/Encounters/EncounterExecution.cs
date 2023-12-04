@@ -16,8 +16,9 @@ namespace Explorer.Encounters.Core.Domain.Encounters
         public double TouristLongitute { get; init; }
         public EncounterExecutionStatus Status { get; private set; }
         public DateTime StartTime { get; init; }
+        public DateTime EndTime { get; init; }
         public EncounterExecution() { }
-        public EncounterExecution(long encounterId, Encounter encounter, long touristId, double touristLatitude, double touristLongitute, EncounterExecutionStatus status, DateTime startTime)
+        public EncounterExecution(long encounterId, Encounter encounter, long touristId, double touristLatitude, double touristLongitute, EncounterExecutionStatus status, DateTime startTime, DateTime endTime)
         {
             EncounterId = encounterId;
             Encounter = encounter;
@@ -26,6 +27,7 @@ namespace Explorer.Encounters.Core.Domain.Encounters
             TouristLongitute = touristLongitute;
             Status = status;
             StartTime = startTime;
+            EndTime = endTime;
             Validate();
         }
 
@@ -45,6 +47,7 @@ namespace Explorer.Encounters.Core.Domain.Encounters
                 throw new ArgumentException("Invalid execution status.");
             if (StartTime.Date > DateTime.Now.Date)
                 throw new ArgumentException("Invalid StartTime.");
+
         }
 
         public void Activate()

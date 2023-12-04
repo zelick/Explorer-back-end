@@ -98,6 +98,17 @@ namespace Explorer.Tours.Core.UseCases.Administration
             }
         }
 
+        public Result<long> GetEncounterId(int checkpointId)
+        {
+            try
+            {
+                return _checkpointRepository.Get(checkpointId).EncounterId.ToResult<long>();
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+        }
 
     }
 }

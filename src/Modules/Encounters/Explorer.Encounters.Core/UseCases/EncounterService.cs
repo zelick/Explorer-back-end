@@ -168,11 +168,23 @@ namespace Explorer.Encounters.Core.UseCases
 
         }
 
-        public Result<List<EncounterExecutionDto>> AddEncounters(List<EncounterExecutionDto> executions)
+        public EncounterExecutionDto AddEncounter(EncounterExecutionDto execution)
         {
             try
             {
-                foreach(EncounterExecutionDto execution in executions)
+                execution.EncounterDto = MapToDto(_encounterRepository.Get(execution.EncounterId));
+                return execution;
+            }
+            catch (KeyNotFoundException e)
+            {
+                return null;
+            }
+        }
+        public List<EncounterExecutionDto> AddEncounters(List<EncounterExecutionDto> executions)
+        {
+            try
+            {
+                foreach(var execution in executions)
                 {
                     execution.EncounterDto = MapToDto(_encounterRepository.Get(execution.EncounterId));
                 }
@@ -180,7 +192,7 @@ namespace Explorer.Encounters.Core.UseCases
             }
             catch (KeyNotFoundException e)
             {
-                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+                return null;
             }
         }
     }

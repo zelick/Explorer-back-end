@@ -70,10 +70,11 @@ namespace Explorer.API.Controllers.Tourist.Encounters
         }
 
         [HttpGet("get-by-tour/{id:int}")]
-        public ActionResult<List<EncounterExecutionDto>> GetByTour([FromRoute] int id, [FromQuery] double touristLatitude, [FromQuery] double touristLongitude)
+        public ActionResult<EncounterExecutionDto> GetByTour([FromRoute] int id, [FromQuery] double touristLatitude, [FromQuery] double touristLongitude)
         {
             var result = _encounterExecutionService.GetVisibleByTour(id, touristLongitude, touristLatitude, User.PersonId());
-            result = _encounterService.AddEncounters(result.Value);
+            if(result.IsSuccess)
+                result = _encounterService.AddEncounter(result.Value);
             return CreateResponse(result);
         }
 
@@ -81,6 +82,8 @@ namespace Explorer.API.Controllers.Tourist.Encounters
         public ActionResult<List<EncounterExecutionDto>> CheckPosition([FromRoute] int id, [FromQuery] double touristLatitude, [FromQuery] double touristLongitude)
         {
             var result = _encounterExecutionService.GetWithUpdatedLocation(id, touristLongitude, touristLatitude, User.PersonId());
+            if (result.IsSuccess)
+                result = _encounterService.AddEncounter(result.Value);
             return CreateResponse(result);
         }
 
@@ -88,7 +91,8 @@ namespace Explorer.API.Controllers.Tourist.Encounters
         public ActionResult<List<EncounterExecutionDto>> GetActiveByTour([FromRoute] int id)
         {
             var result = _encounterExecutionService.GetActiveByTour(User.PersonId(), id);
-            result = _encounterService.AddEncounters(result.Value);
+            if (result.IsSuccess)
+                result = _encounterService.AddEncounters(result.Value);
             return CreateResponse(result);
         }
     }
