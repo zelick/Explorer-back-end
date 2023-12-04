@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Explorer.API.Controllers.Administrator.Administration
 {
-    [Authorize(Policy = "administratorAndAuthorPolicy")]
+    [Authorize(Policy = "touristAndAdministratorPolicy")]
     [Route("api/administration/encounterRequests")]
     public class EncounterRequestController : BaseApiController
     {
@@ -37,7 +37,7 @@ namespace Explorer.API.Controllers.Administrator.Administration
             return CreateResponse(result);
         }
 
-        [HttpPut("reject/{id:int}/{notificationComment}")]
+        [HttpPut("reject/{id:int}")]
         public ActionResult<EncounterRequestDto> RejectRequest(int id)
         {
             var result = _encounterRequestService.RejectRequest(id);

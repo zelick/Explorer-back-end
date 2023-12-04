@@ -9,7 +9,8 @@ namespace Explorer.Encounters.API.Dtos
     public class EncounterRequestDto
     {
         public int Id { get; set; }
+        public int TouristId { get; set; }
         public long EncounterId { get; set; }
-        public string RequestStatus { get; set; }
+        public string Status { get; set; }
     }
 }

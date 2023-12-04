@@ -16,14 +16,16 @@ namespace Explorer.Encounters.Core.Domain.Encounters
     public class EncounterRequest : Entity
     {
         public long EncounterId { get; init; }
+        public int TouristId { get; init; }
         public RequestStatus Status { get; private set; }
 
         public EncounterRequest() { }
 
-        public EncounterRequest(long encounterId, RequestStatus requestStatus)
+        public EncounterRequest(long encounterId, RequestStatus requestStatus, int touristId)
         {
             EncounterId = encounterId;
             Status = requestStatus;
+            TouristId = touristId;
         }
 
         public void AcceptRequest()
