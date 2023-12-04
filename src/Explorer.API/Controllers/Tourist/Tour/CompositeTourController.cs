@@ -21,9 +21,15 @@ namespace Explorer.API.Controllers.Tourist.Tour
         }
 
         [HttpGet]
-        public ActionResult<PagedResult<CompositeTourDto>> GetAllComposite([FromQuery] int page, [FromQuery] int pageSize)
+        public ActionResult<PagedResult<CompositeTourDto>> GetPaged([FromQuery] int page, [FromQuery] int pageSize)
         {
-            throw new NotImplementedException();
+            return CreateResponse(_tourService.GetDetailedPaged(page, pageSize));
+        }
+        
+        [HttpGet("{id:int}")]
+        public ActionResult<PagedResult<CompositeTourDto>> Get(int id)
+        {
+            return CreateResponse(_tourService.GetDetailed(id));
         }
 
         [HttpPost]
@@ -35,7 +41,7 @@ namespace Explorer.API.Controllers.Tourist.Tour
         [HttpDelete("{id:int}")]
         public ActionResult DeleteComposite(int id)
         {
-            throw new NotImplementedException();
+            return CreateResponse(_tourService.Delete(id));
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Explorer.BuildingBlocks.Core.UseCases;
+using Explorer.BuildingBlocks.Infrastructure.Database;
 using Explorer.Tours.Core.Domain.RepositoryInterfaces;
 using Explorer.Tours.Core.Domain.Tours;
 using System;
@@ -9,33 +10,14 @@ using System.Threading.Tasks;
 
 namespace Explorer.Tours.Infrastructure.Database.Repositories
 {
-    public class CompositeTourDatabaseRepository : ICompositeTourRepository
+    public class CompositeTourDatabaseRepository : CrudDatabaseRepository<CompositeTour, ToursContext>, ICompositeTourRepository
     {
         private readonly ToursContext _dbContext;
 
-        public CompositeTour Create(CompositeTour entity)
+        public CompositeTourDatabaseRepository(ToursContext dbContext) : base(dbContext)
         {
-            throw new NotImplementedException();
+            _dbContext = dbContext;
         }
 
-        public void Delete(long id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public CompositeTour Get(long id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public PagedResult<CompositeTour> GetPaged(int page, int pageSize)
-        {
-            throw new NotImplementedException();
-        }
-
-        public CompositeTour Update(CompositeTour entity)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

@@ -10,7 +10,7 @@ namespace Explorer.Tours.Core.Domain.Tours
 {
     public class CompositeTour : Entity
     {
-        public int OwnerId { get; init; }
+        public long OwnerId { get; init; }
         public string Name { get; init; }
         public string? Description { get; init; }
         public List<long>? TourIds { get; init; }

@@ -8,8 +8,8 @@ namespace Explorer.Tours.API.Dtos
 {
     public class CompositeTourCreationDto
     {
-        public int Id { get; set; }
-        public int OwnerId { get; set; }
+        public long Id { get; set; }
+        public long OwnerId { get; set; }
         public string Name { get; set; }
         public string? Description { get; set; }
         public List<long>? TourIds { get; set; }
