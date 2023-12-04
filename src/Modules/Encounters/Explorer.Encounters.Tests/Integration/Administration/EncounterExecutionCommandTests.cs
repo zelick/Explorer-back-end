@@ -44,7 +44,7 @@ namespace Explorer.Encounters.Tests.Integration.Administration
             var latitude = 45;
 
             // Act
-            var result = (ObjectResult)controller.CheckPosition(id, longitude, latitude).Result;
+            var result = (ObjectResult)controller.CheckPosition(-1, id, longitude, latitude).Result;
 
             //Assert
             result.ShouldNotBeNull();
@@ -64,7 +64,7 @@ namespace Explorer.Encounters.Tests.Integration.Administration
             var latitude = 40;
 
             // Act
-            var result = (ObjectResult)controller.CheckPosition(id, longitude, latitude).Result;
+            var result = (ObjectResult)controller.CheckPosition(-1, id, longitude, latitude).Result;
 
             //Assert
             result.ShouldNotBeNull();

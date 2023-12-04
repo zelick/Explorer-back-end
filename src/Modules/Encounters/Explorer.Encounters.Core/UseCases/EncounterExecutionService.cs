@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Diagnostics.Metrics;
+using AutoMapper;
 using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Encounters.API.Dtos;
 using Explorer.Encounters.API.Public;
@@ -159,78 +160,38 @@ namespace Explorer.Encounters.Core.UseCases
             }
         }
 
-        //public Result<List<EncounterExecutionDto>> GetVisibleByTour(int tourId, double touristLongitude, double touristLatitude, int touristId)
-        //{
-        //    try
-        //    {
-        //        List<long> encountersIds = _internalCheckpointService.GetEncountersByTour(tourId).Value;
-        //        List<EncounterExecutionDto> encounters = new List<EncounterExecutionDto>();
-        //        foreach (long encounterId in encountersIds)
-        //        {
-        //            var encounter = _encounterRepository.Get(encounterId);
-        //            if (encounter.IsVisibleForTourist(touristLatitude, touristLongitude))
-        //            {
-        //                var encounterDto = new EncounterExecutionDto();
-        //                if(_encounterExecutionRepository.GetByEncounterAndTourist(touristId, encounterId) == null)
-        //                {
-        //                    encounterDto.EncounterId = encounter.Id;
-        //                    encounterDto.TouristId = touristId;
-        //                    encounterDto.Status = "Pending";
-        //                    encounterDto.TouristLongitute = touristLongitude;
-        //                    encounterDto.TouristLatitude = touristLatitude;
-        //                    encounterDto.StartTime = DateTime.UtcNow;
-        //                    var encounterExecution = MapToDomain(encounterDto);
-        //                    encounterExecution.Validate();
-        //                    _encounterExecutionRepository.Create(encounterExecution);
-        //                }
-        //                else
-        //                {
-        //                    encounterDto = MapToDto(_encounterExecutionRepository.GetByEncounterAndTourist(touristId, encounterId));
-        //                }
-
-        //                encounters.Add(encounterDto);
-        //            }
-        //        }
-        //        return encounters;
-        //    }
-        //    catch (KeyNotFoundException e)
-        //    {
-        //        return Result.Fail(FailureCode.NotFound).WithError(e.Message);
-        //    }
-        //    catch (ArgumentException e)
-        //    {
-        //        return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
-        //    }
-        //}
+       
         public Result<EncounterExecutionDto> GetVisibleByTour(int tourId, double touristLongitude, double touristLatitude, int touristId)
         {
             try
             {
                 List<long> encounterIds = _internalCheckpointService.GetEncountersByTour(tourId).Value;
-                foreach(var encounterId in encounterIds)
+                List<Encounter> encounters = _encounterRepository.GetByIds(encounterIds);
+                if(encounters.Count > 0)
                 {
-                    var encounter = _encounterRepository.Get(encounterId);
-                    if (encounter.IsVisibleForTourist(touristLongitude, touristLatitude))
+                    Encounter closestEncounter = encounters.Find(e => e.IsCloseEnough(touristLongitude, touristLatitude) == true);
+                    
+                    if(closestEncounter == null) return Result.Fail(FailureCode.InvalidArgument).WithError("No near encounter");
+                    
+                    double best_distance = closestEncounter.GetDistanceFromEncounter(touristLongitude, touristLatitude); 
+                    foreach(Encounter encounter in encounters)
                     {
-                        var encounterDto = new EncounterExecutionDto();
-                        if (_encounterExecutionRepository.GetByEncounterAndTourist(touristId, encounterId) == null)
+                        if(encounter.GetDistanceFromEncounter(touristLongitude, touristLatitude) < best_distance && encounter.IsCloseEnough(touristLongitude, touristLatitude))
                         {
-                            encounterDto.EncounterId = encounter.Id;
-                            encounterDto.TouristId = touristId;
-                            encounterDto.Status = "Pending";
-                            encounterDto.TouristLongitute = touristLongitude;
-                            encounterDto.TouristLatitude = touristLatitude;
-                            encounterDto.StartTime = DateTime.UtcNow;
-                            var encounterExecution = MapToDomain(encounterDto);
-                            encounterExecution.Validate();
-                            _encounterExecutionRepository.Create(encounterExecution);
+                            best_distance = encounter.GetDistanceFromEncounter(touristLongitude, touristLatitude);
+                            closestEncounter = encounter;
                         }
-                        else
-                        {
-                            encounterDto = MapToDto(_encounterExecutionRepository.GetByEncounterAndTourist(touristId, encounterId));
-                        }
-                        return encounterDto;
                     }
+                    var encounterDto = new EncounterExecutionDto();
+                    if (_encounterExecutionRepository.GetByEncounterAndTourist(touristId, closestEncounter.Id) == null)
+                    {
+                        CreateNewEcounterExecution(touristLongitude, touristLatitude, touristId, closestEncounter, encounterDto);
+                    }
+                    else
+                    {
+                        encounterDto = MapToDto(_encounterExecutionRepository.GetByEncounterAndTourist(touristId, closestEncounter.Id));
+                    }
+                    return encounterDto;
                 }
                 return Result.Fail(FailureCode.InvalidArgument).WithError("No near encounter");
             }
@@ -242,6 +203,19 @@ namespace Explorer.Encounters.Core.UseCases
             {
                 return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
             }
+        }
+
+        private void CreateNewEcounterExecution(double touristLongitude, double touristLatitude, int touristId, Encounter encounter, EncounterExecutionDto encounterDto)
+        {
+            encounterDto.EncounterId = encounter.Id;
+            encounterDto.TouristId = touristId;
+            encounterDto.Status = "Pending";
+            encounterDto.TouristLongitute = touristLongitude;
+            encounterDto.TouristLatitude = touristLatitude;
+            encounterDto.StartTime = DateTime.UtcNow;
+            var encounterExecution = MapToDomain(encounterDto);
+            encounterExecution.Validate();
+            _encounterExecutionRepository.Create(encounterExecution);
         }
 
         public Result<EncounterExecutionDto> CheckIfInRange(int id, double touristLongitude, double touristLatitude, int touristId)
@@ -326,6 +300,8 @@ namespace Explorer.Encounters.Core.UseCases
             try
             {
                 encounterExecution.Completed();
+                if (_encounterRepository.Get(encounterExecution.EncounterId).Type == EncounterType.Social)
+                    UpdateAllCompletedSocial(encounterExecution.EncounterId);
                 var result = CrudRepository.Update(encounterExecution);
                 return MapToDto(result);
             }
@@ -337,6 +313,17 @@ namespace Explorer.Encounters.Core.UseCases
             {
                 return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
             }
+        }
+
+        private void UpdateAllCompletedSocial(long socialEncounterId)
+        {
+            List<EncounterExecution> completed = new List<EncounterExecution>();
+            foreach(var e in _encounterExecutionRepository.GetBySocialEncounter(socialEncounterId))
+            {
+                e.Completed();
+                completed.Add(e);
+            }
+            _encounterExecutionRepository.UpdateRange(completed);
         }
     }
 }

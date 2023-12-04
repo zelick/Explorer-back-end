@@ -10,5 +10,7 @@ namespace Explorer.Encounters.Core.Domain.RepositoryInterfaces
         List<EncounterExecution> GetAllCompletedByTourist(long touristId);
         EncounterExecution GetByEncounterAndTourist(long touristId, long encounterId);
         List<EncounterExecution> GetActiveByTourist(long touristId);
+        List<EncounterExecution> UpdateRange(List<EncounterExecution> encounters);
+        List<EncounterExecution> GetBySocialEncounter(long socialEncounterId);
     }
 }
