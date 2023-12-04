@@ -142,7 +142,9 @@ namespace Explorer.Encounters.Core.UseCases
             try
             {
                 var execution = _encounterExecutionRepository.GetByEncounterAndTourist(touristId, encounterId);
-                if(execution.IsInRange(touristLatitude, touristLongitude))
+                if(execution.Status == EncounterExecutionStatus.Completed)
+                    return Result.Fail(FailureCode.InvalidArgument).WithError("Encounter already completed");
+                if (execution.IsInRange(touristLatitude, touristLongitude))
                 {
                     execution.Activate();
                     execution = _encounterExecutionRepository.Update(execution);
@@ -242,14 +244,21 @@ namespace Explorer.Encounters.Core.UseCases
             }
         }
 
-        public Result<int> CheckIfInRange(int id, double touristLongitude, double touristLatitude, int touristId)
+        public Result<EncounterExecutionDto> CheckIfInRange(int id, double touristLongitude, double touristLatitude, int touristId)
         {
             try
             {
-                SocialEncounter result = _socialEncounterRepository.Get(id);
+                var oldExecution = _encounterExecutionRepository.Get(id);
+                SocialEncounter result = _socialEncounterRepository.Get(oldExecution.EncounterId);
                 var numberOfTourists = result.CheckIfInRange(touristLongitude, touristLatitude, touristId);
                 _socialEncounterRepository.Update(result);
-                return numberOfTourists;
+                if (result.IsRequiredPeopleNumber())
+                {
+                    var execution = CompleteExecusion(id, touristId);
+                    if (execution.IsSuccess)
+                        return execution;
+                }
+                return MapToDto(oldExecution);
             }
             catch (KeyNotFoundException e)
             {
@@ -270,7 +279,10 @@ namespace Explorer.Encounters.Core.UseCases
                 foreach(var r in result) 
                 {
                     if (!encountersIds.Contains(r.EncounterId))
+                    {
                         result.Remove(r);
+                        break;
+                    }
                 }
                 return MapToDto(result);
             }
@@ -280,12 +292,12 @@ namespace Explorer.Encounters.Core.UseCases
             }
         }
 
-        public Result<EncounterExecutionDto> GetWithUpdatedLocation(int id, double touristLongitude, double touristLatitude, int touristId)
+        public Result<EncounterExecutionDto> GetWithUpdatedLocation(int tourId, int id, double touristLongitude, double touristLatitude, int touristId)
         {
             try
             {
                 CheckIfInRange(id, touristLongitude, touristLatitude, touristId);
-                return GetVisibleByTour(id, touristLongitude, touristLatitude, touristId);
+                return GetVisibleByTour(tourId, touristLongitude, touristLatitude, touristId);
             }
             catch (KeyNotFoundException e)
             {

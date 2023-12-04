@@ -86,10 +86,10 @@ namespace Explorer.API.Controllers.Tourist.Encounters
             return CreateResponse(result);
         }
 
-        [HttpGet("social/checkRange/{id:int}")]
-        public ActionResult<List<EncounterExecutionDto>> CheckPosition([FromRoute] int id, [FromQuery] double touristLatitude, [FromQuery] double touristLongitude)
+        [HttpGet("social/checkRange/{id:int}/{tourId:int}")]
+        public ActionResult<EncounterExecutionDto> CheckPosition([FromRoute] int tourId, [FromRoute] int id, [FromQuery] double touristLatitude, [FromQuery] double touristLongitude)
         {
-            var result = _encounterExecutionService.GetWithUpdatedLocation(id, touristLongitude, touristLatitude, User.PersonId());
+            var result = _encounterExecutionService.GetWithUpdatedLocation(tourId, id, touristLongitude, touristLatitude, User.PersonId());
             if (result.IsSuccess)
                 result = _encounterService.AddEncounter(result.Value);
             return CreateResponse(result);
