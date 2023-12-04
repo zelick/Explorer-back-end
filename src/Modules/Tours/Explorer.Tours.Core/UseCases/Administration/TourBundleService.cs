@@ -6,6 +6,7 @@ using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
 using Explorer.Tours.Core.Domain;
 using Explorer.Tours.Core.Domain.RepositoryInterfaces;
+using Explorer.Tours.Core.Domain.Tours;
 using FluentResults;
 
 namespace Explorer.Tours.Core.UseCases.Administration
@@ -14,32 +15,46 @@ namespace Explorer.Tours.Core.UseCases.Administration
 	{
 		private readonly ITourBundleRepository _tourBundleRepository;
         private readonly IInternalItemService _bundleItemService;
+		private readonly ITourTourBundleRepository _tourTourBundleRepository;
 
-        public TourBundleService(ITourBundleRepository repository, IInternalItemService bundleItemService, IMapper mapper) : base(repository, mapper)
+        public TourBundleService(ITourBundleRepository repository, IInternalItemService bundleItemService, ITourTourBundleRepository tourTourBundleRepository, IMapper mapper) : base(repository, mapper)
 		{
 			_tourBundleRepository = repository;
             _bundleItemService = bundleItemService;
-        }
+			_tourTourBundleRepository = tourTourBundleRepository;
+
+		}
 
 		public Result<TourBundleDto> Create(TourBundleDto tourBundle)
 		{
 			TourBundle tb = MapToDomain(tourBundle);
+			List<Tour> bundleTours = new List<Tour>(tb.Tours);
+			tb.Tours.Clear();
 			try
 			{
-				var result = CrudRepository.Create(tb);
-                var bundleItemDto = new ItemDto()
+				var result = _tourBundleRepository.Create(tb);
+				AddToursToBundle(bundleTours, result.Id);
+				/*var bundleItemDto = new ItemDto()
                 {
                     ItemId = result.Id,
                     Name = result.Name,
                     Price = result.Price,
                     Type = "Bundle"
                 };
-                _bundleItemService.Create(bundleItemDto);
-                return MapToDto(result);
+                //_bundleItemService.Create(bundleItemDto);*/
+				return MapToDto(result);
 			}
 			catch (ArgumentException e)
 			{
 				return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+			}
+		}
+
+		public void AddToursToBundle(List<Tour> tours, long tbId)
+		{
+			foreach(Tour t in tours)
+			{
+				_tourTourBundleRepository.AddTourToBundle(tbId, t.Id);
 			}
 		}
 		

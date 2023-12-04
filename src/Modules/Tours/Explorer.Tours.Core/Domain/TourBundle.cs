@@ -20,7 +20,7 @@ namespace Explorer.Tours.Core.Domain
 
 		public TourBundle() { }
 
-		public TourBundle(string name, double price, int authorId, TourBundleStatus status = TourBundleStatus.Draft)
+		public TourBundle(string name, double price, int authorId, TourBundleStatus status)
 		{
 			Name = name;
 			Price = price;

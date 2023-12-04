@@ -13,6 +13,6 @@ namespace Explorer.Tours.API.Dtos
 		public double Price { get; set; }
 		public int AuthorId { get; set; }
 		public string Status { get; set; }
-		//public List<TourDto> Tours { get; set; }
+		public List<TourDto> Tours { get; set; }
 	}
 }

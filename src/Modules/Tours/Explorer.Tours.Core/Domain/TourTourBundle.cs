@@ -12,5 +12,11 @@ namespace Explorer.Tours.Core.Domain
 		public long TourId { get; set; }
 
 		public TourTourBundle() { }
+
+		public TourTourBundle(long tourBundleId, long tourId)
+		{
+			TourBundleId = tourBundleId;
+			TourId = tourId;
+		}
 	}
 }
