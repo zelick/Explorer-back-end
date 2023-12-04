@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Explorer.API.Controllers.Author.Administration
 {
     [Route("api/administration/encounter")]
-    [Authorize(Policy = "authorPolicy")]
+    //[Authorize(Policy = "authorPolicy")]
 
 
     public class EncounterController : BaseApiController

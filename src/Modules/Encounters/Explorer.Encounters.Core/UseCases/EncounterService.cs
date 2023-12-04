@@ -175,6 +175,7 @@ namespace Explorer.Encounters.Core.UseCases
         {
             //update Encounter
             Encounter encounter = new Encounter();
+            encounter = _encounterRepository.Get(encounterId);
             encounter.FinishEncounter(touristId);
             var updatedEncounter = _encounterRepository.Update(encounter);
             //update EncounterExecution 

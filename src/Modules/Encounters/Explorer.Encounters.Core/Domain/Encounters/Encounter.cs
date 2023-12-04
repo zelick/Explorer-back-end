@@ -12,7 +12,7 @@ namespace Explorer.Encounters.Core.Domain.Encounters
         public EncounterType Type { get; init; }
         public double Latitude { get; init; }
         public double Longitude { get; init; }
-        public List<CompletedEncounter>? CompletedEncounter { get; init; }
+        public List<CompletedEncounter>? CompletedEncounter { get; private set; } = new List<CompletedEncounter>();
 
         public Encounter() { }
 
@@ -45,6 +45,7 @@ namespace Explorer.Encounters.Core.Domain.Encounters
                 Type = encounter.Type;
                 Latitude = encounter.Latitude;
                 Longitude = encounter.Longitude;
+                CompletedEncounter = new List<CompletedEncounter>();
             }
         }
 
@@ -108,8 +109,12 @@ namespace Explorer.Encounters.Core.Domain.Encounters
         public void FinishEncounter(long toruistId)
         {
            this.Status = EncounterStatus.Archived;
+           if (this.CompletedEncounter == null)
+           { 
+                this.CompletedEncounter = new List<CompletedEncounter>();
+           }
            CompletedEncounter ce = new CompletedEncounter(toruistId, DateTime.Now);
-           this.CompletedEncounter?.Add(ce);
+           this.CompletedEncounter.Add(ce);
         }
 
     }
