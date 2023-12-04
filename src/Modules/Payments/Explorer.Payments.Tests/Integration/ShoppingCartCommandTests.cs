@@ -72,7 +72,33 @@ namespace Explorer.Payments.Tests.Integration
         }
 
         [Fact]
-        public void Shopping_cart_check_out()
+        public void Shopping_cart_check_out_succeeds()
+        {
+            // Arrange
+            using var scope = Factory.Services.CreateScope();
+            var controller = CreateController(scope);
+            var dbContext = scope.ServiceProvider.GetRequiredService<PaymentsContext>();
+
+            var touristId = -21;
+            var couponDto = new CouponDto()
+            {
+                Id = -1,
+                Code = "ABC123BC",
+                DiscountPercentage = 10
+            };
+
+            // Act
+            var result = (ObjectResult)controller.Checkout(touristId, couponDto).Result;
+
+            // Assert - Response
+            result.ShouldNotBeNull();
+            result.StatusCode.ShouldBe(200);
+
+            // Assert - Database
+        }
+
+        [Fact]
+        public void Shopping_cart_check_out_fails_insufficient_funds()
         {
             // Arrange
             using var scope = Factory.Services.CreateScope();
@@ -83,15 +109,36 @@ namespace Explorer.Payments.Tests.Integration
 
             // Act
             var result = (ObjectResult)controller.Checkout(touristId).Result;
+
+            // Assert - Response
             result.ShouldNotBeNull();
-            result.StatusCode.ShouldBe(200);
+            result.StatusCode.ShouldBe(402);
         }
 
-        private static ShoppingCartController CreateController(IServiceScope scope)
+
+        [Fact]
+        public void Shopping_cart_check_out_fails_empty()
+        {
+            // Arrange
+            using var scope = Factory.Services.CreateScope();
+            var controller = CreateController(scope, "-22");
+            var dbContext = scope.ServiceProvider.GetRequiredService<PaymentsContext>();
+
+            var touristId = -22;
+
+            // Act
+            var result = (ObjectResult)controller.Checkout(touristId).Result;
+
+            // Assert - Response
+            result.ShouldNotBeNull();
+            result.StatusCode.ShouldBe(400);
+        }
+
+        private static ShoppingCartController CreateController(IServiceScope scope, string personId = "-21")
         {
             return new ShoppingCartController(scope.ServiceProvider.GetRequiredService<IShoppingCartService>())
             {
-                ControllerContext = BuildContext("-21")
+                ControllerContext = BuildContext(personId)
             };
         }
     }
