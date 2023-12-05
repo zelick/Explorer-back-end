@@ -113,5 +113,14 @@ namespace Explorer.Stakeholders.Infrastructure.Database.Repositories
             _dbContext.Notifications.Remove(entity);
             _dbContext.SaveChanges();
         }
+
+        public Notification CreateWalletNotification(string description, long userId)
+        {
+            var notif = new Notification(description, userId, 0);
+            notif.WalletType(); // NotificationType.MESSAGE
+            _dbContext.Notifications.Add(notif);
+            _dbContext.SaveChanges();
+            return notif;
+        }
     }
 }
