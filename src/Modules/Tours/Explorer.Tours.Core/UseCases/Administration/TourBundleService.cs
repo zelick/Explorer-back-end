@@ -44,10 +44,12 @@ namespace Explorer.Tours.Core.UseCases.Administration
 				var result = CrudRepository.Create(tb);
                 var bundleItemDto = new ItemDto()
                 {
+                    SellerId = result.AuthorId,
                     ItemId = result.Id,
                     Name = result.Name,
                     Price = result.Price,
-                    Type = "Bundle"
+                    Type = "Bundle",
+                    BundleItemIds = result.Tours.Select(t => t.Id).ToList()
                 };
                 _bundleItemService.Create(bundleItemDto);
                 return MapToDto(result);
@@ -66,10 +68,12 @@ namespace Explorer.Tours.Core.UseCases.Administration
 				var result = CrudRepository.Update(tourBundle);
                 var bundleItemDto = new ItemDto()
                 {
+                    SellerId = result.AuthorId,
                     ItemId = result.Id,
                     Name = result.Name,
                     Price = result.Price,
-                    Type = "Bundle"
+                    Type = "Bundle",
+                    BundleItemIds = result.Tours.Select(t => t.Id).ToList()
                 };
                 _bundleItemService.Update(bundleItemDto);
                 return MapToDto(result);

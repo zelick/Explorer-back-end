@@ -9,6 +9,6 @@ namespace Explorer.Payments.Core.Domain.RepositoryInterfaces
 {
     public interface ISaleRepository : ICrudRepository<Sale>
     {
-
+        List<Sale> GetActiveSalesForTour(long tourId);
     }
 }

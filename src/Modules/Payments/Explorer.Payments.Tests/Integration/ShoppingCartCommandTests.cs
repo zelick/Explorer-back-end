@@ -80,15 +80,10 @@ namespace Explorer.Payments.Tests.Integration
             var dbContext = scope.ServiceProvider.GetRequiredService<PaymentsContext>();
 
             var touristId = -21;
-            var couponDto = new CouponDto()
-            {
-                Id = -1,
-                Code = "ABC123BC",
-                DiscountPercentage = 10
-            };
+            var couponCode = "ABC123BC";
 
             // Act
-            var result = (ObjectResult)controller.Checkout(touristId, couponDto).Result;
+            var result = (ObjectResult)controller.Checkout(touristId, couponCode).Result;
 
             // Assert - Response
             result.ShouldNotBeNull();
@@ -108,7 +103,7 @@ namespace Explorer.Payments.Tests.Integration
             var touristId = -21;
 
             // Act
-            var result = (ObjectResult)controller.Checkout(touristId).Result;
+            var result = (ObjectResult)controller.Checkout(touristId, "").Result;
 
             // Assert - Response
             result.ShouldNotBeNull();
@@ -127,7 +122,7 @@ namespace Explorer.Payments.Tests.Integration
             var touristId = -22;
 
             // Act
-            var result = (ObjectResult)controller.Checkout(touristId).Result;
+            var result = (ObjectResult)controller.Checkout(touristId, "").Result;
 
             // Assert - Response
             result.ShouldNotBeNull();
