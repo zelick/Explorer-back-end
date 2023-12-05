@@ -1,16 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Explorer.BuildingBlocks.Infrastructure.Database;
+﻿using Explorer.BuildingBlocks.Infrastructure.Database;
 using Explorer.Payments.Core.Domain;
 using Explorer.Payments.Core.Domain.RepositoryInterfaces;
 
-namespace Explorer.Payments.Infrastructure.Database.Repositories
+namespace Explorer.Payments.Infrastructure.Database.Repositories;
+
+public class CouponDatabaseRepository : CrudDatabaseRepository<Coupon, PaymentsContext>, ICouponRepository
 {
-    public class CouponDatabaseRepository : CrudDatabaseRepository<Coupon, PaymentsContext>, ICouponRepository
+    public CouponDatabaseRepository(PaymentsContext dbContext) : base(dbContext) { }
+
+    public Coupon GetByCode(string couponCode)
     {
-        public CouponDatabaseRepository(PaymentsContext dbContext) : base(dbContext) { }
+        var coupon = DbContext.Coupons.FirstOrDefault(c => c.Code.Equals(couponCode));
+        if (coupon == null) throw new KeyNotFoundException("Not found: " + couponCode);
+        return coupon;
     }
 }

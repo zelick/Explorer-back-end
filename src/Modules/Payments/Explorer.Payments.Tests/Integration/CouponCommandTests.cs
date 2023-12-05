@@ -24,6 +24,7 @@ namespace Explorer.Payments.Tests.Integration
             var dbContext = scope.ServiceProvider.GetRequiredService<PaymentsContext>();
             var newCoupon = new CreateCouponDto
             {
+                SellerId = -12,
                 DiscountPercentage = 25,
                 ExpirationDate = DateTime.UtcNow.AddYears(1),
                 IsGlobal = true,
@@ -78,6 +79,7 @@ namespace Explorer.Payments.Tests.Integration
             var updatedCoupon = new CouponDto
             {
                 Id = -1,
+                SellerId = -12,
                 Code = "EEE1G3PS",
                 DiscountPercentage = 50,
                 ExpirationDate = DateTime.UtcNow.AddYears(2),
@@ -168,7 +170,7 @@ namespace Explorer.Payments.Tests.Integration
         {
             return new CouponController(scope.ServiceProvider.GetRequiredService<ICouponService>())
             {
-                ControllerContext = BuildContext("-1")
+                ControllerContext = BuildContext("-12")
             };
         }
     }
