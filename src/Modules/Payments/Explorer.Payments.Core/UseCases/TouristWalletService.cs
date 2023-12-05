@@ -35,7 +35,7 @@ namespace Explorer.Payments.Core.UseCases
 
         public Result<TouristWalletDto> GetAdventureCoins(long userId)
         {
-            var wallet = _repository.GetAdventureCoins(userId);
+            var wallet = _repository.GetByUser(userId);
             return MapToDto(wallet);
         }
 
@@ -43,7 +43,7 @@ namespace Explorer.Payments.Core.UseCases
         {
             var wallet = _repository.PaymentAdventureCoins(userId, coins);
             string description = "Uplaćeno Vam je " + coins + "AC.";
-            _internalNotificationService.CreateWalletNotification(description, userId);
+            _internalNotificationService.CreatePaymentNotification(description, userId);
             return MapToDto(wallet);
         }
     }

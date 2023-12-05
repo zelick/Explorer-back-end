@@ -9,7 +9,7 @@ namespace Explorer.Payments.Core.Domain.RepositoryInterfaces
 {
     public interface ITouristWalletRepository : ICrudRepository<TouristWallet>
     {
-        public TouristWallet GetAdventureCoins(long userId);
+        public TouristWallet GetByUser(long userId);
         public TouristWallet PaymentAdventureCoins(long userId, int coins);
     }
 }

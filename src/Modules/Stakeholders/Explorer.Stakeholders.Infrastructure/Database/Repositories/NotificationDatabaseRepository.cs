@@ -114,13 +114,11 @@ namespace Explorer.Stakeholders.Infrastructure.Database.Repositories
             _dbContext.SaveChanges();
         }
 
-        public Notification CreateWalletNotification(string description, long userId)
+        public Notification CreatePaymentNotification(Notification notification)
         {
-            var notif = new Notification(description, userId, 0);
-            notif.WalletType(); // NotificationType.MESSAGE
-            _dbContext.Notifications.Add(notif);
+            _dbContext.Notifications.Add(notification);
             _dbContext.SaveChanges();
-            return notif;
+            return notification;
         }
     }
 }

@@ -27,11 +27,11 @@ namespace Explorer.Payments.Tests.Integration
             int newAdventureCoins = 3;
 
             // Act
-            var result = ((ObjectResult)controller.PaymentAdventureCoins(-1, newAdventureCoins).Result)?.Value as TouristWalletDto;
+            var result = ((ObjectResult)controller.PaymentAdventureCoins(-23, newAdventureCoins).Result)?.Value as TouristWalletDto;
 
             // Assert - Response
             result.ShouldNotBeNull();
-            result.AdventureCoins.ShouldBe(5);
+            result.AdventureCoins.ShouldBe(3);
 
         }
 

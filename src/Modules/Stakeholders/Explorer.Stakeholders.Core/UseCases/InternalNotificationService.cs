@@ -40,10 +40,11 @@ namespace Explorer.Stakeholders.Core.UseCases
             }
         }
 
-        public NotificationDto CreateWalletNotification(string description, long userId)
+        public NotificationDto CreatePaymentNotification(string description, long userId)
         {
-            NotificationDto notification = MapToDto(_notificationRepository.CreateWalletNotification(description, userId));
-            return notification;
+            var notification = new Notification(description, userId, null, NotificationType.PAYMENT);
+            var result = _notificationRepository.CreatePaymentNotification(notification);
+            return MapToDto(result);
         }
     }
 }
