@@ -55,7 +55,9 @@ namespace Explorer.Payments.Tests.Integration
             {
                 Id = -4,
                 ToursIds = new List<long> { -1, -2, -3 },
-                Discount = 50
+                Discount = 50,
+                Start = DateTime.UtcNow,
+                End = DateTime.UtcNow.AddDays(7)
             };
 
       
@@ -86,7 +88,9 @@ namespace Explorer.Payments.Tests.Integration
                 Id = -1,
                 ToursIds = new List<long> { -1, -2, -3 },
                 Discount = 90,
-                AuthorId = -11            
+                AuthorId = -11,
+                Start = DateTime.UtcNow,
+                End = DateTime.UtcNow.AddDays(7)
             };
 
             // Act
