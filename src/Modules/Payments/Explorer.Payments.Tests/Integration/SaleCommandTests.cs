@@ -143,7 +143,7 @@ namespace Explorer.Payments.Tests.Integration
             return new SaleController(scope.ServiceProvider.GetRequiredService<ISaleService>(),
                 scope.ServiceProvider.GetRequiredService<ITourService>())
             {
-                ControllerContext = BuildContext("-21")
+                ControllerContext = BuildContext("-11")
             };
         }
 
