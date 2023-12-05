@@ -4,10 +4,12 @@ using Explorer.Encounters.API.Dtos;
 using Explorer.Encounters.API.Public;
 using Explorer.Encounters.Core.Domain.Encounters;
 using Explorer.Encounters.Core.Domain.RepositoryInterfaces;
+using Explorer.Stakeholders.API.Internal;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Internal;
 using Explorer.Tours.Core.Domain.Tours;
 using FluentResults;
+using System.Diagnostics.Metrics;
 
 namespace Explorer.Encounters.Core.UseCases
 {
@@ -16,12 +18,17 @@ namespace Explorer.Encounters.Core.UseCases
         private readonly IEncounterRepository _encounterRepository;
         private readonly IMapper _mapper;
         private readonly IInternalCheckpointService _internalCheckpointService;
+        private readonly IEncounterExecutionRepository _encounterExecutionRepository;
+        private readonly IInternalTouristService _internalTouristService;
         private readonly ICrudRepository<SocialEncounter> _socialEncounterRepository;
-        public EncounterService(IEncounterRepository encounterRepository,IInternalCheckpointService internalCheckpointService, IMapper mapper, ICrudRepository<SocialEncounter> socialEncounterRepository) : base(encounterRepository, mapper)
+
+        public EncounterService(IEncounterRepository encounterRepository,IInternalCheckpointService internalCheckpointService, IEncounterExecutionRepository encounterExecutionRepository, IInternalTouristService internalTouristService,ICrudRepository<SocialEncounter> socialEncounterRepository, IMapper mapper) : base(encounterRepository, mapper)
         {
             _encounterRepository = encounterRepository;
             _internalCheckpointService = internalCheckpointService;
             _mapper = mapper;
+            _encounterExecutionRepository = encounterExecutionRepository;
+            _internalTouristService = internalTouristService;
             _socialEncounterRepository = socialEncounterRepository;
         }
 
@@ -165,8 +172,8 @@ namespace Explorer.Encounters.Core.UseCases
             {
                 return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
             }
-
         }
+
 
         public EncounterExecutionDto AddEncounter(EncounterExecutionDto execution)
         {
@@ -195,5 +202,6 @@ namespace Explorer.Encounters.Core.UseCases
                 return null;
             }
         }
+
     }
 }

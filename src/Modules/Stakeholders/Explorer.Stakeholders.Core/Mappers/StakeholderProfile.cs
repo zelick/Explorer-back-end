@@ -22,5 +22,6 @@ public class StakeholderProfile : Profile
         CreateMap<ObjectRequestDto, ObjectRequest>().ReverseMap();
         CreateMap<CheckpointRequestDto, CheckpointRequest>().ReverseMap();
         CreateMap<User, Tourist>().ReverseMap();
+        CreateMap<Tourist, TouristDto>();
     }
 }

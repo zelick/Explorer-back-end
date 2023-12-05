@@ -377,6 +377,27 @@ public class EncounterCommandTests : BaseEncountersIntegrationTest
         result.StatusCode.ShouldBe(404);
     }
 
+    [Fact]
+    public void FinishEncounterSuccessfully()
+    {
+        // Arrange
+        using var scope = Factory.Services.CreateScope();
+        var controller = CreateController(scope);
+        var dbContext = scope.ServiceProvider.GetRequiredService<EncountersContext>();
+        var expectedResponseCode = 200;
+        var encounterId = -1;
+        var touristId = -21;
+
+        // Act
+        var result = (ObjectResult)controller.FinishEncounter(encounterId, touristId).Result;
+
+        //Assert
+        result.ShouldNotBeNull();
+        result.StatusCode.ShouldBe(expectedResponseCode);
+    }
+
+
+
 
     private static EncounterController CreateController(IServiceScope scope)
     {

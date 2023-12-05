@@ -77,6 +77,15 @@ namespace Explorer.Encounters.Infrastructure.Database.Repositories
                 .ToList();
         }
 
+        public EncounterExecution FindByEncounterId(long encounterId)
+        {
+            var encounterExecution = _dbContext.EncounterExecution
+            .Include(e => e.Encounter)
+            .FirstOrDefault(e => e.Encounter.Id == encounterId);
+
+            return encounterExecution;
+        }
+
         public EncounterExecution GetByEncounterAndTourist(long touristId, long encounterId)
         {
             return _dbContext.EncounterExecution
