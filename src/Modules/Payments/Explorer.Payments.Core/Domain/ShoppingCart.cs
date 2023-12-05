@@ -28,14 +28,19 @@ public class ShoppingCart : Entity
         Items.Remove(item);
     }
 
-    public List<long> CheckOut()
+    public void CheckOut()
     {
         if (Items.Count == 0) throw new InvalidOperationException("Can't check out because Shopping Cart is empty!");
-
-        var purchasedItemsId = Items.Select(i => i.ItemId).ToList();
-
         Items.Clear();
+    }
 
-        return purchasedItemsId;
+    public void UpdateItem(OrderItem orderItem, Item item)
+    {
+        var index = Items.FindIndex(i => i.ItemId == orderItem.ItemId);
+
+        if (index == -1) throw new ArgumentException("Order item not found in cart.");
+
+        var updatedItem = new OrderItem(item.ItemId, item.Name, item.Price, item.Type);
+        Items[index] = updatedItem;
     }
 }

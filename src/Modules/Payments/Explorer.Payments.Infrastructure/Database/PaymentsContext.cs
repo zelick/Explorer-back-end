@@ -10,6 +10,7 @@ public class PaymentsContext : DbContext
     public DbSet<Sale> Sales { get; set; }
     public DbSet<Coupon> Coupons { get; set; }
     public DbSet<Item> Items { get; set; }
+    public DbSet<PaymentRecord> PaymentRecords { get; set; }
 
     public PaymentsContext(DbContextOptions<PaymentsContext> options) : base(options) { }
 
