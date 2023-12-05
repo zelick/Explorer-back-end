@@ -174,25 +174,6 @@ namespace Explorer.Encounters.Core.UseCases
             }
         }
 
-        public Result<EncounterDto> FinishEncounter(long encounterId, long touristId)
-        {
-            //update Encounter
-            Encounter encounter = new Encounter();
-            encounter = _encounterRepository.Get(encounterId);
-            encounter.FinishEncounter(touristId);
-            var updatedEncounter = _encounterRepository.Update(encounter);
-            //update EncounterExecution 
-            var encounterExecution = _encounterExecutionRepository.FindByEncounterId(encounterId);
-            if (encounterExecution != null)
-            {
-                encounterExecution.FinishEncounter();
-                _encounterExecutionRepository.Update(encounterExecution);
-            }
-            //update Tourist
-            var toruistDto = _internalTouristService.UpdateTouristXpAndLevel(touristId, encounter.XP);
-
-            return MapToDto(updatedEncounter);
-        }
 
         public EncounterExecutionDto AddEncounter(EncounterExecutionDto execution)
         {

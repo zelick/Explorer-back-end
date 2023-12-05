@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Explorer.API.Controllers.Author.Administration
 {
     [Route("api/administration/encounter")]
-    //[Authorize(Policy = "authorPolicy")]
+    [Authorize(Policy = "authorPolicy")]
 
 
     public class EncounterController : BaseApiController
@@ -70,6 +70,7 @@ namespace Explorer.API.Controllers.Author.Administration
             return CreateResponse(result);
         }
 
+        //obrisi ovo 
         [HttpPut("{encounterId:int}/{touristId:int}")]
         public ActionResult<EncounterDto> FinishEncounter(int encounterId, int touristId)
         {

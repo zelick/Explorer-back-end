@@ -7,6 +7,8 @@ using Explorer.Encounters.Core.Domain.Encounters;
 using Explorer.Encounters.Core.Domain.RepositoryInterfaces;
 using Explorer.Payments.API.Internal;
 using Explorer.Payments.API.Public;
+using Explorer.Stakeholders.API.Internal;
+using Explorer.Stakeholders.Core.Domain;
 using Explorer.Tours.API.Internal;
 using Explorer.Tours.Core.UseCases.Administration;
 using FluentResults;
@@ -20,8 +22,9 @@ namespace Explorer.Encounters.Core.UseCases
         private readonly IInternalShoppingService _shoppingService;
         private readonly IInternalCheckpointService _internalCheckpointService;
         private readonly IEncounterRepository _encounterRepository;
+        private readonly IInternalTouristService _internalTouristService;
         private readonly ICrudRepository<SocialEncounter> _socialEncounterRepository;
-        public EncounterExecutionService(IEncounterExecutionRepository encounterExecutionRepository, IMapper mapper, IInternalShoppingService shoppingService, IInternalCheckpointService internalCheckpointService, IEncounterRepository encounterRepository, ICrudRepository<SocialEncounter> socialEncounterRepository) : base(encounterExecutionRepository, mapper)
+        public EncounterExecutionService(IEncounterExecutionRepository encounterExecutionRepository, IMapper mapper, IInternalShoppingService shoppingService, IInternalCheckpointService internalCheckpointService, IEncounterRepository encounterRepository, ICrudRepository<SocialEncounter> socialEncounterRepository, IInternalTouristService internalTouristService) : base(encounterExecutionRepository, mapper)
         {
             _encounterExecutionRepository = encounterExecutionRepository;
             _mapper = mapper;
@@ -29,6 +32,7 @@ namespace Explorer.Encounters.Core.UseCases
             _internalCheckpointService = internalCheckpointService;
             _encounterRepository = encounterRepository;
             _socialEncounterRepository = socialEncounterRepository;
+            _internalTouristService = internalTouristService;
         }
 
         public Result<EncounterExecutionDto> Create(EncounterExecutionDto encounterExecutionDto, long touristId)
@@ -300,6 +304,8 @@ namespace Explorer.Encounters.Core.UseCases
             try
             {
                 encounterExecution.Completed();
+                //da se turista update xp i level
+                _internalTouristService.UpdateTouristXpAndLevel(touristId, encounterExecution.Encounter.XP);
                 if (_encounterRepository.Get(encounterExecution.EncounterId).Type == EncounterType.Social)
                     UpdateAllCompletedSocial(encounterExecution.EncounterId);
                 var result = CrudRepository.Update(encounterExecution);
@@ -317,11 +323,13 @@ namespace Explorer.Encounters.Core.UseCases
 
         private void UpdateAllCompletedSocial(long socialEncounterId)
         {
-            List<EncounterExecution> completed = new List<EncounterExecution>();
+            List<EncounterExecution> completed = new List<EncounterExecution>(); 
             foreach(var e in _encounterExecutionRepository.GetBySocialEncounter(socialEncounterId))
             {
                 e.Completed();
                 completed.Add(e);
+                //ovde za turistu 
+                _internalTouristService.UpdateTouristXpAndLevel(e.TouristId, e.Encounter.XP);
             }
             _encounterExecutionRepository.UpdateRange(completed);
         }
