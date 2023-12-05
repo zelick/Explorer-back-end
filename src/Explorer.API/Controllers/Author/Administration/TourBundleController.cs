@@ -5,13 +5,15 @@ using Explorer.Stakeholders.API.Dtos;
 using Explorer.Stakeholders.Infrastructure.Authentication;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
+using Explorer.Tours.Core.Domain;
 using Explorer.Tours.Core.UseCases.Administration;
+using FluentResults;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Explorer.API.Controllers.Author.Administration
 {
-	//[Authorize(Policy = "authorPolicy")]
+	[Authorize(Policy = "authorPolicy")]
 	[Route("api/administration/tour-bundle")]
 	public class TourBundleController : BaseApiController
 	{
@@ -29,7 +31,7 @@ namespace Explorer.API.Controllers.Author.Administration
 			return CreateResponse(result);
 		}
 
-		[HttpGet("{id:int}")]
+		[HttpGet("by-author/{id:int}")]
 		public ActionResult<List<TourBundleDto>> GetAllByAuthor([FromQuery] int page, [FromQuery] int pageSize, int id)
 		{
 			var result = _tourBundleService.GetAllByAuthor(page, pageSize, id);
@@ -39,6 +41,7 @@ namespace Explorer.API.Controllers.Author.Administration
 		[HttpPost]
 		public ActionResult<TourBundleDto> Create([FromBody] TourBundleDto tourBundle)
 		{
+			if (User.PersonId() != tourBundle.AuthorId) return CreateResponse(Result.Fail(FailureCode.Forbidden));
 			var result = _tourBundleService.Create(tourBundle);
 			return CreateResponse(result);
 		}
@@ -46,6 +49,7 @@ namespace Explorer.API.Controllers.Author.Administration
 		[HttpPut("{id:int}")]
 		public ActionResult<TourBundleDto> Update([FromBody] TourBundleDto tourBundle)
 		{
+			if (User.PersonId() != tourBundle.AuthorId) return CreateResponse(Result.Fail(FailureCode.Forbidden));
 			var result = _tourBundleService.Update(tourBundle);
 			return CreateResponse(result);
 		}
@@ -57,12 +61,25 @@ namespace Explorer.API.Controllers.Author.Administration
 			return CreateResponse(result);
 		}
 
-		[HttpGet("canBePublished/{id:int}")]
-		public ActionResult<bool> CanBePublished(int id)
+		[HttpGet("{id:int}")]
+		public ActionResult<TourBundleDto> GetById(int id)
 		{
-			var result = _tourBundleService.BundleCanBePublished(id);
-			return Ok(result);
+			var result = _tourBundleService.GetBundleById(id);
+			return CreateResponse(result);
 		}
 
+		[HttpPut("remove-tour/{bundleId:int}/{tourId:int}")]
+		public ActionResult<TourBundleDto> RemoveTourFromBundle(int bundleId, int tourId)
+		{
+			var result = _tourBundleService.RemoveTourFromBundle(bundleId, tourId);
+			return CreateResponse(result);
+		}
+
+		[HttpPut("add-tour/{bundleId:int}/{tourId:int}")]
+		public ActionResult<TourBundleDto> AddTourToBundle(int bundleId, int tourId)
+		{
+			var result = _tourBundleService.AddTourToBundle(bundleId, tourId);
+			return CreateResponse(result);
+		}
 	}
 }

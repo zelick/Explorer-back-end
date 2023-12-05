@@ -55,7 +55,7 @@ public class ToursContext : DbContext
         ConfigureReportedIssues(modelBuilder);
         ConfigureTourRatings(modelBuilder);
 
-		modelBuilder.Entity<TourTourBundle>()
+        /*modelBuilder.Entity<TourTourBundle>()
 			.HasKey(ttb => new { ttb.TourBundleId, ttb.TourId });
 
 		modelBuilder.Entity<TourTourBundle>()
@@ -66,7 +66,12 @@ public class ToursContext : DbContext
 		modelBuilder.Entity<TourTourBundle>()
 			.HasOne<Tour>()
 			.WithMany()
-			.HasForeignKey(ttb => ttb.TourId);
+			.HasForeignKey(ttb => ttb.TourId);*/
+
+        modelBuilder.Entity<TourBundle>()
+            .HasMany(tb => tb.Tours)
+            .WithMany(t => t.TourBundles)
+            .UsingEntity<TourTourBundle>();
 
 		modelBuilder.Entity<ReportedIssue>().Property(item => item.Comments).HasColumnType("jsonb");
 

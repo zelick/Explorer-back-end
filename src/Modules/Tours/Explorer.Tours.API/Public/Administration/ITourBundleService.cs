@@ -16,6 +16,8 @@ namespace Explorer.Tours.API.Public.Administration
 		Result<TourBundleDto> Update(TourBundleDto tourBundle);
 		Result Delete(int id);
 		Result<List<TourBundleDto>> GetAllByAuthor(int page, int pageSize, int id);
-		bool BundleCanBePublished(long bundleId);
+		Result<TourBundleDto> GetBundleById(long bundleId);
+		Result<TourBundleDto> RemoveTourFromBundle(int bundleId, int tourId);
+		Result<TourBundleDto> AddTourToBundle(int bundleId, int tourId);
 	}
 }

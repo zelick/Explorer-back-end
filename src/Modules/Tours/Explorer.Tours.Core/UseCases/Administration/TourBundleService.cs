@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
+using AutoMapper.Execution;
 using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Payments.API.Dtos;
 using Explorer.Payments.API.Internal;
+using Explorer.Stakeholders.Core.Domain.RepositoryInterfaces;
+using Explorer.Stakeholders.Core.Domain;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
 using Explorer.Tours.Core.Domain;
@@ -63,7 +66,7 @@ namespace Explorer.Tours.Core.UseCases.Administration
 			var tourBundle = MapToDomain(tourBundleDto);
 			try
 			{
-				var result = CrudRepository.Update(tourBundle);
+				var result = _tourBundleRepository.Update(tourBundle);
                 /*var bundleItemDto = new ItemDto()
                 {
                     ItemId = result.Id,
@@ -108,18 +111,46 @@ namespace Explorer.Tours.Core.UseCases.Administration
 
 		}
 
-		public bool BundleCanBePublished(long bundleId)
+
+		public Result<TourBundleDto> GetBundleById(long bundleId)
 		{
-			var bundle = _tourBundleRepository.GetBundleWithTours(bundleId);
-			int publishedToursCount = 0;
-			foreach(Tour t in bundle.Tours)
+			try
 			{
-				if(t.Status == TourStatus.Published)
-				{
-					publishedToursCount++;
-				}
+				var result = _tourBundleRepository.GetBundleWithTours(bundleId);
+				return MapToDto(result);
 			}
-			return publishedToursCount >= 2;
+			catch (KeyNotFoundException e)
+			{
+				return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+			}
+		}
+
+		public Result<TourBundleDto> RemoveTourFromBundle(int bundleId, int tourId)
+		{
+			try
+			{
+				var result = _tourTourBundleRepository.RemoveTourFromBundle(bundleId, tourId);
+				var updatedBundle = GetBundleById((int)result.TourBundleId);
+				return updatedBundle;
+			}
+			catch (KeyNotFoundException e)
+			{
+				return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+			}
+		}
+
+		public Result<TourBundleDto> AddTourToBundle(int bundleId, int tourId)
+		{
+			try
+			{
+				var result = _tourTourBundleRepository.AddTourToBundle(bundleId, tourId);
+				var updatedBundle = GetBundleById((int)result.TourBundleId);
+				return updatedBundle;
+			}
+			catch (KeyNotFoundException e)
+			{
+				return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+			}
 		}
 	}
 }

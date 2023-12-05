@@ -27,5 +27,13 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
 			return ttb;
 		}
 
+		public TourTourBundle RemoveTourFromBundle(long bundleId, long tourId)
+		{
+			var ttb = new TourTourBundle(bundleId, tourId);
+			_dbContext.TourTourBundles.Remove(ttb);
+			_dbContext.SaveChanges();
+			return ttb;
+		}
+
 	}
 }

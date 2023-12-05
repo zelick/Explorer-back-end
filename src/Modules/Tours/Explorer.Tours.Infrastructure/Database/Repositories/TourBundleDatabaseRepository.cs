@@ -55,5 +55,27 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
 
 			return tourBundle;
 		}
+
+		public TourBundle Update(TourBundle updatedBundle)
+		{
+			try
+			{
+				_dbContext.Attach(updatedBundle);
+				_dbContext.Entry(updatedBundle).Collection(b => b.Tours).Load();
+				foreach (var tour in updatedBundle.Tours.ToList())
+				{
+					_dbContext.Entry(tour).State = EntityState.Detached;
+				}
+
+				_dbContext.Attach(updatedBundle);
+				_dbContext.Entry(updatedBundle).State = EntityState.Modified;
+				_dbContext.SaveChanges();
+			}
+			catch (DbUpdateException e)
+			{
+				throw new KeyNotFoundException(e.Message);
+			}
+			return updatedBundle;
+		}
 	}
 }
