@@ -24,7 +24,8 @@ namespace Explorer.Encounters.Core.UseCases
         private readonly IEncounterRepository _encounterRepository;
         private readonly IInternalTouristService _internalTouristService;
         private readonly ICrudRepository<SocialEncounter> _socialEncounterRepository;
-        public EncounterExecutionService(IEncounterExecutionRepository encounterExecutionRepository, IMapper mapper, IInternalShoppingService shoppingService, IInternalCheckpointService internalCheckpointService, IEncounterRepository encounterRepository, ICrudRepository<SocialEncounter> socialEncounterRepository, IInternalTouristService internalTouristService) : base(encounterExecutionRepository, mapper)
+        private readonly ICrudRepository<HiddenLocationEncounter> _hiddenLocationEncounterRepository;
+        public EncounterExecutionService(IEncounterExecutionRepository encounterExecutionRepository, IMapper mapper, IInternalShoppingService shoppingService, IInternalCheckpointService internalCheckpointService, IEncounterRepository encounterRepository, ICrudRepository<SocialEncounter> socialEncounterRepository, ICrudRepository<HiddenLocationEncounter> hiddenLocationEncounterRepository,IInternalTouristService internalTouristService) : base(encounterExecutionRepository, mapper)
         {
             _encounterExecutionRepository = encounterExecutionRepository;
             _mapper = mapper;
@@ -32,6 +33,7 @@ namespace Explorer.Encounters.Core.UseCases
             _internalCheckpointService = internalCheckpointService;
             _encounterRepository = encounterRepository;
             _socialEncounterRepository = socialEncounterRepository;
+            _hiddenLocationEncounterRepository = hiddenLocationEncounterRepository;
             _internalTouristService = internalTouristService;
         }
 
@@ -243,6 +245,37 @@ namespace Explorer.Encounters.Core.UseCases
             }
         }
 
+        public Result<EncounterExecutionDto> CheckIfInRangeLocation(int id, double touristLongitude, double touristLatitude, int touristId)
+        {
+            try
+            {
+                var oldExecution = _encounterExecutionRepository.Get(id);
+                if (oldExecution.Status != EncounterExecutionStatus.Active)
+                    return Result.Fail(FailureCode.InvalidArgument).WithError("Encounter not activated");
+                HiddenLocationEncounter result = _hiddenLocationEncounterRepository.Get(oldExecution.EncounterId);
+                if (result.CheckIfInRangeLocation(touristLongitude, touristLatitude))
+                {
+                    _hiddenLocationEncounterRepository.Update(result);
+                    if (result.CheckIfLocationFound(touristLongitude, touristLatitude))
+                    {
+                        var execution = CompleteExecusion(id, touristId);
+                        if (execution.IsSuccess)
+                            return execution;
+                    }
+                }
+                
+                return MapToDto(oldExecution);
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+            catch (ArgumentException e)
+            {
+                return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+            }
+        }
+
         public Result<List<EncounterExecutionDto>> GetActiveByTour(int touristId, int tourId)
         {
             try
@@ -295,7 +328,6 @@ namespace Explorer.Encounters.Core.UseCases
 
             if (encounterExecution.Status != EncounterExecutionStatus.Active)
                 return Result.Fail(FailureCode.InvalidArgument).WithError("Not valid status!");
-            // TODO - complete location encounter execution
             try
             {
                 encounterExecution.Completed();
@@ -303,6 +335,8 @@ namespace Explorer.Encounters.Core.UseCases
                 _internalTouristService.UpdateTouristXpAndLevel(touristId, encounterExecution.Encounter.XP);
                 if (_encounterRepository.Get(encounterExecution.EncounterId).Type == EncounterType.Social)
                     UpdateAllCompletedSocial(encounterExecution.EncounterId);
+                if (_encounterRepository.Get(encounterExecution.EncounterId).Type == EncounterType.Location)
+                    UpdateAllCompletedLocation(encounterExecution.EncounterId);
                 var result = CrudRepository.Update(encounterExecution);
                 return MapToDto(result);
             }
@@ -324,6 +358,18 @@ namespace Explorer.Encounters.Core.UseCases
                 e.Completed();
                 completed.Add(e);
                 //ovde za turistu 
+                _internalTouristService.UpdateTouristXpAndLevel(e.TouristId, e.Encounter.XP);
+            }
+            _encounterExecutionRepository.UpdateRange(completed);
+        }
+
+        private void UpdateAllCompletedLocation(long locationEncounterId)
+        {
+            List<EncounterExecution> completed = new List<EncounterExecution>();
+            foreach (var e in _encounterExecutionRepository.GetByLocationEncounter(locationEncounterId))
+            {
+                e.Completed();
+                completed.Add(e);
                 _internalTouristService.UpdateTouristXpAndLevel(e.TouristId, e.Encounter.XP);
             }
             _encounterExecutionRepository.UpdateRange(completed);

@@ -122,5 +122,13 @@ namespace Explorer.Encounters.Infrastructure.Database.Repositories
                 .Where(e => (e.EncounterId == socialEncounterId) && e.Encounter.Type == EncounterType.Social)
                 .ToList();
         }
+
+        public List<EncounterExecution> GetByLocationEncounter(long locationEncounterId)
+        {
+            return _dbContext.EncounterExecution
+                .Include(e => e.Encounter)
+                .Where(e => (e.EncounterId == locationEncounterId) && e.Encounter.Type == EncounterType.Location)
+                .ToList();
+        }
     }
 }
