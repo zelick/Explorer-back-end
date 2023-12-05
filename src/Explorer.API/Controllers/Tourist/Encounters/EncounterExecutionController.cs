@@ -60,14 +60,10 @@ namespace Explorer.API.Controllers.Tourist.Encounters
             return CreateResponse(result);
         }
 
-        [HttpGet("get-all-completed/{id:int}")]
-        public ActionResult<PagedResult<EncounterExecutionDto>> GetAllCompletedByTourist(int id, [FromQuery] int page, [FromQuery] int pageSize)
+        [HttpGet("get-all-completed")]
+        public ActionResult<PagedResult<EncounterExecutionDto>> GetAllCompletedByTourist([FromQuery] int page, [FromQuery] int pageSize)
         {
-            if (id != User.PersonId())
-            {
-                return Unauthorized();
-            }
-            var result = _encounterExecutionService.GetAllCompletedByTourist(id, page, pageSize);
+            var result = _encounterExecutionService.GetAllCompletedByTourist(User.PersonId(), page, pageSize);
             return CreateResponse(result);
         }
         [HttpPut("activate/{id:int}")]
