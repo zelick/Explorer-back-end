@@ -1,12 +1,7 @@
-﻿using Explorer.API.Services;
-using Explorer.Blog.Core.Domain.BlogPosts;
-using Explorer.BuildingBlocks.Core.UseCases;
+﻿using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Stakeholders.API.Dtos;
-using Explorer.Stakeholders.Infrastructure.Authentication;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
-using Explorer.Tours.Core.UseCases.Administration;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Explorer.API.Controllers.Author.Administration
@@ -22,14 +17,22 @@ namespace Explorer.API.Controllers.Author.Administration
 			_tourBundleService = tourBundleService;
 		}
 
-		[HttpGet]
+        [HttpGet("published")]
+        public ActionResult<PagedResult<TourBundleDto>> GetAllPublished([FromQuery] int page, [FromQuery] int pageSize)
+        {
+            var result = _tourBundleService.GetAllPublished(page, pageSize);
+            return CreateResponse(result);
+        }
+
+        
+        [HttpGet]
 		public ActionResult<PagedResult<CheckpointDto>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
 		{
 			var result = _tourBundleService.GetPaged(page, pageSize);
 			return CreateResponse(result);
 		}
 
-		[HttpPost]
+        [HttpPost]
 		public ActionResult<TourBundleDto> Create([FromBody] TourBundleDto tourBundle)
 		{
 			var result = _tourBundleService.Create(tourBundle);

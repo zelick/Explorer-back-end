@@ -30,10 +30,25 @@ namespace Explorer.Tours.Tests.Integration.Administration
 
 			// Assert
 			result.ShouldNotBeNull();
-			result.Results.Count.ShouldBe(2);
+			result.Results.Count.ShouldBe(3);
 		}
 
-		private static TourBundleController CreateController(IServiceScope scope)
+        [Fact]
+        public void Retrieves_all_published()
+        {
+            // Arrange
+            using var scope = Factory.Services.CreateScope();
+            var controller = CreateController(scope);
+
+            // Act
+            var result = ((ObjectResult)controller.GetAllPublished(0, 0).Result)?.Value as PagedResult<TourBundleDto>;
+
+            // Assert
+            result.ShouldNotBeNull();
+            result.Results.Count.ShouldBe(1);
+        }
+
+        private static TourBundleController CreateController(IServiceScope scope)
 		{
 			return new TourBundleController(scope.ServiceProvider.GetRequiredService<ITourBundleService>())
 			{

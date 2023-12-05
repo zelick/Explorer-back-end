@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Reflection.Metadata.Ecma335;
+using AutoMapper;
 using Explorer.BuildingBlocks.Core.Domain;
 using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Payments.API.Dtos;
@@ -44,7 +45,7 @@ namespace Explorer.Tours.Core.UseCases.Administration
             try
             {
                var result = CrudRepository.Update(t);
-               if (result.Status != TourStatus.Published) MapToDto(result);
+               if (result.Status != TourStatus.Published) return MapToDto(result);
                var tourItemDto = new ItemDto()
                {
                    ItemId = result.Id,
