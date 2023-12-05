@@ -34,6 +34,7 @@ public static class PaymentsStartup
         services.AddScoped<IShoppingCartService, ShoppingCartService>();
         services.AddScoped<ISaleService, SaleService>();
         services.AddScoped<ICouponService, CouponService>();
+        services.AddScoped<ITouristWalletService, TouristWalletService>();
     }
 
     private static void SetupInfrastructure(IServiceCollection services)
@@ -50,6 +51,7 @@ public static class PaymentsStartup
 
 
 
+        services.AddScoped<ITouristWalletRepository, TouristWalletDatabaseRepository>();
 
         services.AddDbContext<PaymentsContext>(opt =>
             opt.UseNpgsql(DbConnectionStringBuilder.Build("payments"),
