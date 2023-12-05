@@ -39,5 +39,11 @@ namespace Explorer.Stakeholders.Core.UseCases
                 return null;
             }
         }
+
+        public NotificationDto CreateWalletNotification(string description, long userId)
+        {
+            NotificationDto notification = MapToDto(_notificationRepository.CreateWalletNotification(description, userId));
+            return notification;
+        }
     }
 }

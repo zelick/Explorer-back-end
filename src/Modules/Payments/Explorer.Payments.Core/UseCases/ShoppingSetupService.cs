@@ -9,10 +9,12 @@ namespace Explorer.Payments.Core.UseCases;
 public class ShoppingSetupService : IInternalShoppingSetupService
 {
     private readonly IShoppingCartRepository _shoppingCartRepository;
+    private readonly ITouristWalletRepository _touristWalletRepository;
 
-    public ShoppingSetupService(IShoppingCartRepository shoppingCartRepository)
+    public ShoppingSetupService(IShoppingCartRepository shoppingCartRepository, ITouristWalletRepository touristWalletRepository)
     {
         _shoppingCartRepository = shoppingCartRepository;
+        _touristWalletRepository = touristWalletRepository;
     }
 
     public Result InitializeShopperFeatures(long userId)
@@ -20,7 +22,7 @@ public class ShoppingSetupService : IInternalShoppingSetupService
         try
         {
             _shoppingCartRepository.Create(new ShoppingCart(userId));
-            // TODO create wallet
+            _touristWalletRepository.Create(new TouristWallet(userId));
             return Result.Ok();
         }
         catch (ArgumentException e)
