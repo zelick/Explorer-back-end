@@ -4,7 +4,9 @@ using Explorer.Payments.API.Dtos;
 using Explorer.Payments.API.Public;
 using Explorer.Payments.Core.Domain;
 using Explorer.Payments.Core.Domain.RepositoryInterfaces;
+using Explorer.Stakeholders.API.Internal;
 using FluentResults;
+using System.Drawing;
 
 namespace Explorer.Payments.Core.UseCases;
 
@@ -17,10 +19,12 @@ public class ShoppingCartService : BaseService<ShoppingCartDto, ShoppingCart>, I
     private readonly ICouponRepository _couponRepository;
     private readonly ITourPurchaseTokenRepository _purchaseTokenRepository;
     private readonly ICrudRepository<PaymentRecord> _paymentRecordRepository;
+    private readonly ITouristWalletRepository _walletRepository;
+    private readonly IInternalNotificationService _internalNotificationService;
 
-    public ShoppingCartService(IShoppingCartRepository repository, IItemRepository itemRepository,
-        ISaleRepository saleRepository, ICouponRepository couponRepository,
-        ITourPurchaseTokenRepository purchaseTokenRepository, ICrudRepository<PaymentRecord> paymentRecordRepository, IMapper mapper) : base(mapper)
+    public ShoppingCartService(IShoppingCartRepository repository, IItemRepository itemRepository, ISaleRepository saleRepository, 
+        ICouponRepository couponRepository, ITourPurchaseTokenRepository purchaseTokenRepository, ICrudRepository<PaymentRecord> paymentRecordRepository, 
+        ITouristWalletRepository walletRepository, IInternalNotificationService internalNotificationService, IMapper mapper) : base(mapper)
     {
         _mapper = mapper;
         _shoppingCartRepository = repository;
@@ -29,6 +33,8 @@ public class ShoppingCartService : BaseService<ShoppingCartDto, ShoppingCart>, I
         _couponRepository = couponRepository;
         _purchaseTokenRepository = purchaseTokenRepository;
         _paymentRecordRepository = paymentRecordRepository;
+        _walletRepository = walletRepository;
+        _internalNotificationService = internalNotificationService;
     }
 
     public Result<ShoppingCartDto> GetByUser(long userId)
@@ -102,6 +108,10 @@ public class ShoppingCartService : BaseService<ShoppingCartDto, ShoppingCart>, I
         try
         {
             var shoppingCart = _shoppingCartRepository.GetByUser(userId);
+            if (shoppingCart.IsEmpty()) throw new ArgumentException("Can't proceed, shopping cart is empty!");
+
+            var wallet = _walletRepository.GetByUser(userId);
+
             UpdateShoppingCart(shoppingCart, true);
 
             var purchasedItems = GetPurchasedItems(shoppingCart);
@@ -109,9 +119,7 @@ public class ShoppingCartService : BaseService<ShoppingCartDto, ShoppingCart>, I
             ApplySale(purchasedItems);
             ApplyCoupon(purchasedItems, couponCode);
 
-            var total = purchasedItems.Sum(i => i.Price);
-            // TODO 1: check wallet balance and deduct
-            // if (total > 0) return Result.Fail(FailureCode.PaymentRequired);
+            Purchase(wallet, purchasedItems);
 
             CreatePaymentRecords(userId, purchasedItems);
             CreatePurchaseTokens(userId, purchasedItems);
@@ -119,7 +127,7 @@ public class ShoppingCartService : BaseService<ShoppingCartDto, ShoppingCart>, I
             shoppingCart.CheckOut();
             var result = _shoppingCartRepository.Update(shoppingCart);
 
-            // TODO 2: send notification
+            SendNotification(userId, purchasedItems);
 
             return MapToDto(result);
         }
@@ -129,12 +137,18 @@ public class ShoppingCartService : BaseService<ShoppingCartDto, ShoppingCart>, I
         }
         catch (InvalidOperationException e)
         {
-            return Result.Fail(FailureCode.Conflict).WithError(e.Message);
+            return Result.Fail(FailureCode.PaymentRequired).WithError(e.Message);
         }
         catch (ArgumentException e)
         {
             return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
         }
+    }
+
+    private static void Purchase(TouristWallet wallet, List<Item> purchasedItems)
+    {
+        var total = purchasedItems.Sum(i => i.Price);
+        wallet.Pay(total);
     }
 
     private void ApplySale(List<Item> purchasedItems)
@@ -148,7 +162,6 @@ public class ShoppingCartService : BaseService<ShoppingCartDto, ShoppingCart>, I
             item.UpdatePrice(finalDiscountedPrice);
         }
     }
-
 
     private void ApplyCoupon(List<Item> purchasedItems, string couponCode)
     {
@@ -166,7 +179,7 @@ public class ShoppingCartService : BaseService<ShoppingCartDto, ShoppingCart>, I
         foreach (var orderItem in shoppingCart.Items)
         {
             var item = _itemRepository.GetByItemIdAndType(orderItem.ItemId, orderItem.Type);
-            purchasedItems.Add(item);
+            purchasedItems.Add(new Item(item));
         }
 
         return purchasedItems;
@@ -180,7 +193,7 @@ public class ShoppingCartService : BaseService<ShoppingCartDto, ShoppingCart>, I
             var updatedItem = _itemRepository.GetByItemIdAndType(orderItem.ItemId, orderItem.Type);
 
             if (isCheckout && orderItem.Price != updatedItem.Price)
-                throw new InvalidOperationException(
+                throw new ArgumentException(
                     $"Pricing mismatch for item {orderItem.Name}: Cart price: {orderItem.Price}, Current price: {updatedItem.Price}");
 
             shoppingCart.UpdateItem(orderItem, updatedItem);
@@ -226,6 +239,19 @@ public class ShoppingCartService : BaseService<ShoppingCartDto, ShoppingCart>, I
         }
 
         return purchasedTourIds;
+    }
+
+    private void SendNotification(long userId, List<Item> purchasedItems)
+    {
+        var description = "Congratulations on your successful purchase! Here are the details of your purchase:\n";
+        foreach (var item in purchasedItems)
+        {
+            description += $"\t- {item.Name}: {item.Price} AC\n";
+        }
+        description += $"\nTotal Amount Spent: {purchasedItems.Sum(item => item.Price)} AC\n";
+        description += "You can view your newly purchased tours on your Purchased Tours page.\n";
+
+        _internalNotificationService.CreatePaymentNotification(description, userId);
     }
 }
 

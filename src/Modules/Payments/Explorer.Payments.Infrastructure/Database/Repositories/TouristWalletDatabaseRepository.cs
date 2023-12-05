@@ -18,7 +18,7 @@ namespace Explorer.Payments.Infrastructure.Database.Repositories
             _dbContext = dbContext;
         }
 
-        public TouristWallet GetAdventureCoins(long userId)
+        public TouristWallet GetByUser(long userId)
         {
             var wallet = _dbContext.TouristWallets.FirstOrDefault(w => w.UserId == userId);
             if (wallet == null) throw new KeyNotFoundException("Not found wallet with user ID: " + userId);

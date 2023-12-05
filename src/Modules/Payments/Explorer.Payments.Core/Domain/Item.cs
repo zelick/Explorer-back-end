@@ -20,6 +20,16 @@ public class Item : Entity
         Validate();
     }
 
+    public Item(Item item)
+    {
+        Id = item.Id;
+        SellerId = item.SellerId;
+        ItemId = item.ItemId;
+        Name = item.Name;
+        Price = item.Price;
+        Type = item.Type;
+    }
+
     public void UpdatePrice(int price)
     {
         Price = price;

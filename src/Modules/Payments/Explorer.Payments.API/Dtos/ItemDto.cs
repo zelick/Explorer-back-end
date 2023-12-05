@@ -7,5 +7,5 @@ public class ItemDto
     public string Name { get; set; }
     public double Price { get; set; }
     public string Type { get; set; }
-    public List<long> BundleItemIds { get; set; }
+    public List<long>? BundleItemIds { get; set; }
 }

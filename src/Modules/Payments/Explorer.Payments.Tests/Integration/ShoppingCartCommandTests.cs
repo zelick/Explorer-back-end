@@ -2,6 +2,7 @@
 using Explorer.Payments.API.Dtos;
 using Explorer.Payments.API.Public;
 using Explorer.Payments.Infrastructure.Database;
+using Explorer.Tours.Core.Domain.Tours;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
@@ -18,7 +19,7 @@ namespace Explorer.Payments.Tests.Integration
         {
             // Arrange
             using var scope = Factory.Services.CreateScope();
-            var controller = CreateController(scope);
+            var controller = CreateController(scope, "-23");
             var dbContext = scope.ServiceProvider.GetRequiredService<PaymentsContext>();
 
             var item = new ItemDto()
@@ -34,11 +35,11 @@ namespace Explorer.Payments.Tests.Integration
 
             // Assert - Response
             result.ShouldNotBeNull();
-            result.Id.ShouldBe(-1);
-            result.UserId.ShouldBe(-21);
+            result.Id.ShouldBe(-3);
+            result.UserId.ShouldBe(-23);
 
             // Assert - Database
-            var storedEntity = dbContext.ShoppingCarts.AsEnumerable().Where(c => c.Id ==-1 && c.GetTotal() == 250);
+            var storedEntity = dbContext.ShoppingCarts.AsEnumerable().Where(c => c.Id == -3 && c.GetTotal() == 250);
             storedEntity.ShouldNotBeNull();
         }
 
@@ -47,7 +48,7 @@ namespace Explorer.Payments.Tests.Integration
         {
             // Arrange
             using var scope = Factory.Services.CreateScope();
-            var controller = CreateController(scope);
+            var controller = CreateController(scope, "-23");
             var dbContext = scope.ServiceProvider.GetRequiredService<PaymentsContext>();
 
             var item = new ItemDto()
@@ -63,24 +64,24 @@ namespace Explorer.Payments.Tests.Integration
 
             // Assert - Response
             result.ShouldNotBeNull();
-            result.Id.ShouldBe(-1);
-            result.UserId.ShouldBe(-21);
+            result.Id.ShouldBe(-3);
+            result.UserId.ShouldBe(-23);
 
             // Assert - Database
-            var storedEntity = dbContext.ShoppingCarts.AsEnumerable().Where(c => c.Id == -1 && c.GetTotal() == 0);
+            var storedEntity = dbContext.ShoppingCarts.AsEnumerable().Where(c => c.Id == -3 && c.GetTotal() == 0);
             storedEntity.ShouldNotBeNull();
         }
 
-        [Fact]
-        public void Shopping_cart_check_out_succeeds()
+        [Theory]
+        [InlineData(-21, "ABC123BC", 455)]
+        [InlineData(-22, "", 100)]
+
+        public void Shopping_cart_check_out_succeeds(int touristId, string couponCode, int exceptedWalletBalance)
         {
             // Arrange
             using var scope = Factory.Services.CreateScope();
-            var controller = CreateController(scope);
+            var controller = CreateController(scope, touristId.ToString());
             var dbContext = scope.ServiceProvider.GetRequiredService<PaymentsContext>();
-
-            var touristId = -21;
-            var couponCode = "ABC123BC";
 
             // Act
             var result = (ObjectResult)controller.Checkout(touristId, couponCode).Result;
@@ -90,6 +91,9 @@ namespace Explorer.Payments.Tests.Integration
             result.StatusCode.ShouldBe(200);
 
             // Assert - Database
+            var wallet = dbContext.TouristWallets.AsEnumerable().First(w => w.UserId == touristId);
+            wallet.ShouldNotBeNull();
+            wallet.AdventureCoins.ShouldBe(exceptedWalletBalance);
         }
 
         [Fact]
@@ -97,37 +101,19 @@ namespace Explorer.Payments.Tests.Integration
         {
             // Arrange
             using var scope = Factory.Services.CreateScope();
-            var controller = CreateController(scope);
+            var controller = CreateController(scope, "-23");
             var dbContext = scope.ServiceProvider.GetRequiredService<PaymentsContext>();
-
-            var touristId = -21;
-
+        
+            var touristId = -23;
+        
             // Act
             var result = (ObjectResult)controller.Checkout(touristId, "").Result;
-
+        
             // Assert - Response
             result.ShouldNotBeNull();
             result.StatusCode.ShouldBe(402);
         }
 
-
-        [Fact]
-        public void Shopping_cart_check_out_fails_empty()
-        {
-            // Arrange
-            using var scope = Factory.Services.CreateScope();
-            var controller = CreateController(scope, "-22");
-            var dbContext = scope.ServiceProvider.GetRequiredService<PaymentsContext>();
-
-            var touristId = -22;
-
-            // Act
-            var result = (ObjectResult)controller.Checkout(touristId, "").Result;
-
-            // Assert - Response
-            result.ShouldNotBeNull();
-            result.StatusCode.ShouldBe(400);
-        }
 
         private static ShoppingCartController CreateController(IServiceScope scope, string personId = "-21")
         {

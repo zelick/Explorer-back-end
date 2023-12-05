@@ -28,6 +28,11 @@ public class ShoppingCart : Entity
         Items.Remove(item);
     }
 
+    public bool IsEmpty()
+    {
+        return Items.Count == 0;
+    }
+
     public void CheckOut()
     {
         if (Items.Count == 0) throw new InvalidOperationException("Can't check out because Shopping Cart is empty!");
