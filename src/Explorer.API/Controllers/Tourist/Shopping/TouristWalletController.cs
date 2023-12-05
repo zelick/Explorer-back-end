@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Explorer.API.Controllers.Tourist.Shopping
 {
-    [Authorize(Policy = "touristPolicy")]
+    [Authorize(Policy = "administratorAndTouristPolicy")]
     [Route("api/tourist/wallet")]
     public class TouristWalletController : BaseApiController
     {
