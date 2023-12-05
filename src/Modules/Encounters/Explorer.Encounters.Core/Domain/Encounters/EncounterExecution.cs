@@ -15,8 +15,8 @@ namespace Explorer.Encounters.Core.Domain.Encounters
         public double TouristLatitude { get; init; }
         public double TouristLongitute { get; init; }
         public EncounterExecutionStatus Status { get; private set; }
-        public DateTime StartTime { get; init; }
-        public DateTime EndTime { get; init; }
+        public DateTime StartTime { get; private set; }
+        public DateTime EndTime { get; private set; }
         public EncounterExecution() { }
         public EncounterExecution(long encounterId, Encounter encounter, long touristId, double touristLatitude, double touristLongitute, EncounterExecutionStatus status, DateTime startTime, DateTime endTime)
         {
@@ -31,12 +31,21 @@ namespace Explorer.Encounters.Core.Domain.Encounters
             Validate();
         }
 
+        public EncounterExecution(long encounterId, Encounter encounter, long touristId, double touristLatitude, double touristLongitute)
+        {
+            EncounterId = encounterId;
+            Encounter = encounter;
+            TouristId = touristId;
+            TouristLatitude = touristLatitude;
+            TouristLongitute = touristLongitute;
+            Status = EncounterExecutionStatus.Pending;
+            StartTime = DateTime.UtcNow;
+            Validate();
+        }
         public void Validate()
         {
             if (EncounterId == 0)
                 throw new ArgumentException("Invalid encounter Id.");
-            //if (Encounter == null) 
-            //    throw new ArgumentException("Invalid encounter.");
             if (TouristId == 0)
                 throw new ArgumentException("Invalid tourist.");
             if (TouristLongitute < -180 || TouristLatitude > 180)
@@ -47,12 +56,14 @@ namespace Explorer.Encounters.Core.Domain.Encounters
                 throw new ArgumentException("Invalid execution status.");
             if (StartTime.Date > DateTime.Now.Date)
                 throw new ArgumentException("Invalid StartTime.");
-
+            if (EndTime.Date > DateTime.Now.Date)
+                throw new ArgumentException("Invalid EndTime.");
         }
 
         public void Activate()
         {
             Status = EncounterExecutionStatus.Active;
+            this.StartTime = DateTime.UtcNow;
         }
         public void Abandone()
         {
@@ -61,6 +72,7 @@ namespace Explorer.Encounters.Core.Domain.Encounters
         public void Completed()
         {
             Status = EncounterExecutionStatus.Completed;
+            this.EndTime = DateTime.UtcNow;
         }
         
         public bool IsInRange(double touristLatitude, double touristLongitude)
@@ -68,6 +80,11 @@ namespace Explorer.Encounters.Core.Domain.Encounters
             double a = Math.Abs(Math.Round(TouristLongitute, 4) - Math.Round(touristLongitude, 4));
             double b = Math.Abs(Math.Round(TouristLatitude, 4) - Math.Round(touristLatitude, 4));
             return a < 0.01 && b < 0.01;
+        }
+        //obrisi
+        public void FinishEncounter()
+        {
+            this.Status = EncounterExecutionStatus.Completed;
         }
     }
 

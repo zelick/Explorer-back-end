@@ -17,5 +17,11 @@ namespace Explorer.Stakeholders.Core.Domain
             this.Xp = 0;
             this.Level = 1;
         }
+
+        public void UpdateXpAndLevel(int xp)
+        {
+            this.Xp += xp;
+            this.Level = (this.Xp / 30) + 1; //na svakih 30 xp novi level, izmeni po zelji 
+        }
     }
 }

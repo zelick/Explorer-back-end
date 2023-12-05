@@ -5,10 +5,13 @@ using Explorer.Encounters.API.Public;
 using Explorer.Encounters.Core.Domain.Encounters;
 using Explorer.Encounters.Core.Domain.RepositoryInterfaces;
 using Explorer.Encounters.Core.Mappers;
+using Explorer.Stakeholders.API.Internal;
+using Explorer.Stakeholders.API.Internal;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Internal;
 using Explorer.Tours.Core.Domain.Tours;
 using FluentResults;
+using System.Diagnostics.Metrics;
 
 namespace Explorer.Encounters.Core.UseCases
 {
@@ -21,11 +24,15 @@ namespace Explorer.Encounters.Core.UseCases
         private readonly IHiddenLocationEncounterRepository _hiddenLocationEncounterRepository;
         private readonly IEncounterRequestService _encounterRequestService;
         private readonly EncounterRequestMapper encounterRequestMapper;
-        public EncounterService(IEncounterRepository encounterRepository,IInternalCheckpointService internalCheckpointService, IMapper mapper, ISocialEncounterRepository socialEncounterRepository, IEncounterRequestService encounterRequestService, IHiddenLocationEncounterRepository hiddenLocationEncounterRepository) : base(encounterRepository, mapper)
+        private readonly IEncounterExecutionRepository _encounterExecutionRepository;
+        private readonly IInternalTouristService _internalTouristService;
+        public EncounterService(IEncounterRepository encounterRepository,IInternalCheckpointService internalCheckpointService, IMapper mapper, ISocialEncounterRepository socialEncounterRepository, IEncounterRequestService encounterRequestService, IHiddenLocationEncounterRepository hiddenLocationEncounterRepository, IEncounterExecutionRepository encounterExecutionRepository, IInternalTouristService internalTouristService) : base(encounterRepository, mapper)
         {
             _encounterRepository = encounterRepository;
             _internalCheckpointService = internalCheckpointService;
             _mapper = mapper;
+            _encounterExecutionRepository = encounterExecutionRepository;
+            _internalTouristService = internalTouristService;
             _socialEncounterRepository = socialEncounterRepository;
             _encounterRequestService = encounterRequestService;
             encounterRequestMapper = new EncounterRequestMapper();
@@ -172,8 +179,8 @@ namespace Explorer.Encounters.Core.UseCases
             {
                 return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
             }
-
         }
+
 
         public EncounterExecutionDto AddEncounter(EncounterExecutionDto execution)
         {
@@ -285,5 +292,6 @@ namespace Explorer.Encounters.Core.UseCases
 
             return encounter;
         }
+
     }
 }

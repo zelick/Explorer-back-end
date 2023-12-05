@@ -34,10 +34,9 @@ namespace Explorer.Tours.Core.Domain.TourExecutions
                 if (a < 0.01 && b < 0.01)
                 {
                     CheckpointCompletition checkpointCompletition = new CheckpointCompletition(checkpoint.Id);
-                    if (!CompletedCheckpoints.Contains(checkpointCompletition))
+                    if (CompletedCheckpoints.Find(c => c.TourExecutionId == Id && c.CheckpointId == checkpoint.Id) == null)
                         CompletedCheckpoints.Add(checkpointCompletition);
                 }
-
 
                 LastActivity = DateTime.UtcNow;
                 CheckTourCompletition();

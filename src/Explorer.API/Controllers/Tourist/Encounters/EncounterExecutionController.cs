@@ -60,14 +60,10 @@ namespace Explorer.API.Controllers.Tourist.Encounters
             return CreateResponse(result);
         }
 
-        [HttpGet("get-all-completed/{id:int}")]
-        public ActionResult<PagedResult<EncounterExecutionDto>> GetAllCompletedByTourist(int id, [FromQuery] int page, [FromQuery] int pageSize)
+        [HttpGet("get-all-completed")]
+        public ActionResult<PagedResult<EncounterExecutionDto>> GetAllCompletedByTourist([FromQuery] int page, [FromQuery] int pageSize)
         {
-            if (id != User.PersonId())
-            {
-                return Unauthorized();
-            }
-            var result = _encounterExecutionService.GetAllCompletedByTourist(id, page, pageSize);
+            var result = _encounterExecutionService.GetAllCompletedByTourist(User.PersonId(), page, pageSize);
             return CreateResponse(result);
         }
         [HttpPut("activate/{id:int}")]
@@ -86,10 +82,10 @@ namespace Explorer.API.Controllers.Tourist.Encounters
             return CreateResponse(result);
         }
 
-        [HttpGet("social/checkRange/{id:int}")]
-        public ActionResult<List<EncounterExecutionDto>> CheckPosition([FromRoute] int id, [FromQuery] double touristLatitude, [FromQuery] double touristLongitude)
+        [HttpGet("social/checkRange/{id:int}/{tourId:int}")]
+        public ActionResult<EncounterExecutionDto> CheckPosition([FromRoute] int tourId, [FromRoute] int id, [FromQuery] double touristLatitude, [FromQuery] double touristLongitude)
         {
-            var result = _encounterExecutionService.GetWithUpdatedLocation(id, touristLongitude, touristLatitude, User.PersonId());
+            var result = _encounterExecutionService.GetWithUpdatedLocation(tourId, id, touristLongitude, touristLatitude, User.PersonId());
             if (result.IsSuccess)
                 result = _encounterService.AddEncounter(result.Value);
             return CreateResponse(result);

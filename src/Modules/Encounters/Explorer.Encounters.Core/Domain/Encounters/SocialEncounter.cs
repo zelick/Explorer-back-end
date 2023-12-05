@@ -15,14 +15,13 @@ namespace Explorer.Encounters.Core.Domain.Encounters
         }
         public int CheckIfInRange(double touristLongitude, double touristLatitude, int touristId)
         {
-            double distance = Math.Acos(Math.Sin(Latitude) * Math.Sin(touristLatitude) + Math.Cos(Latitude) * Math.Cos(touristLatitude) * Math.Cos(touristLongitude - Longitude)) * 6371000;
+            double distance = Math.Acos(Math.Sin(Math.PI/180*(Latitude)) * Math.Sin(Math.PI / 180 * touristLatitude) + Math.Cos(Math.PI / 180 * Latitude) * Math.Cos(Math.PI / 180 * touristLatitude) * Math.Cos(Math.PI / 180 * Longitude - Math.PI / 180 * touristLongitude)) * 6371000;
             if (distance > Range)
             {
                 RemoveTourist(touristId);
                 return 0;
             }
             else AddTourist(touristId);
-            CompleteSocialEncounter();
             return ActiveTouristsIds.Count();
         }
 
@@ -37,24 +36,16 @@ namespace Explorer.Encounters.Core.Domain.Encounters
             if (ActiveTouristsIds != null && ActiveTouristsIds.Contains(touristId))
                 ActiveTouristsIds.Remove(touristId);
         }
-        private bool IsRequiredPeopleNumber()
+        public bool IsRequiredPeopleNumber()
         {
-            return ActiveTouristsIds.Count() >= RequiredPeople;
+            int numberOfTourists = ActiveTouristsIds.Count();
+            if(numberOfTourists >= RequiredPeople) { ClearActiveTourists(); }
+            return numberOfTourists >= RequiredPeople;
         }
 
-        public void CompleteSocialEncounter()
+        private void ClearActiveTourists()
         {
-            if (IsRequiredPeopleNumber())
-            {
-                foreach (var touristId in ActiveTouristsIds)
-                {
-                    CompletedEncounter completedEncounter = new CompletedEncounter(touristId, DateTime.UtcNow);
-                    CompletedEncounter.Add(completedEncounter);
-                }
-                ActiveTouristsIds.Clear();
-            }
+            ActiveTouristsIds.Clear();
         }
-
-
     }
 }

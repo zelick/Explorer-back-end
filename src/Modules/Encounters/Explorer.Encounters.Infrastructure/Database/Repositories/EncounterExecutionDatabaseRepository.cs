@@ -77,6 +77,15 @@ namespace Explorer.Encounters.Infrastructure.Database.Repositories
                 .ToList();
         }
 
+        public EncounterExecution FindByEncounterId(long encounterId)
+        {
+            var encounterExecution = _dbContext.EncounterExecution
+            .Include(e => e.Encounter)
+            .FirstOrDefault(e => e.Encounter.Id == encounterId);
+
+            return encounterExecution;
+        }
+
         public EncounterExecution GetByEncounterAndTourist(long touristId, long encounterId)
         {
             return _dbContext.EncounterExecution
@@ -89,6 +98,28 @@ namespace Explorer.Encounters.Infrastructure.Database.Repositories
             return _dbContext.EncounterExecution
                 .Include(e => e.Encounter)
                 .Where(e => (e.TouristId == touristId) && e.Status.Equals(EncounterExecutionStatus.Active))
+                .ToList();
+        }
+
+        public List<EncounterExecution> UpdateRange(List<EncounterExecution> encounters)
+        {
+            try
+            {
+                _dbContext.EncounterExecution.UpdateRange(encounters);
+                _dbContext.SaveChanges();
+            }
+            catch (DbUpdateException e)
+            {
+                throw new KeyNotFoundException(e.Message);
+            }
+            return encounters;
+        }
+
+        public List<EncounterExecution> GetBySocialEncounter(long socialEncounterId)
+        {
+            return _dbContext.EncounterExecution
+                .Include(e => e.Encounter)
+                .Where(e => (e.EncounterId == socialEncounterId) && e.Encounter.Type == EncounterType.Social)
                 .ToList();
         }
     }

@@ -48,6 +48,7 @@ public static class StakeholdersStartup
         services.AddScoped<IInternalUserService, UserService>();
         services.AddScoped<IEmailService, EmailService>();
         services.AddScoped<IVerificationService, VerificationService>();
+        services.AddScoped<IInternalTouristService, InternalTouristService>();
     }
 
 
@@ -73,6 +74,7 @@ public static class StakeholdersStartup
         services.AddScoped(typeof(IMessageRepository), typeof(MessageDatabaseRepository));
         services.AddScoped(typeof(ISocialProfileRepository), typeof(SocialProfileDatabaseRepository));
         services.AddScoped(typeof(IVerificationTokenRepository), typeof(VerificationTokenDatabaseRepository));
+        services.AddScoped(typeof(ITouristRepository), typeof(TouristDatabaseRepository));
 
         services.AddDbContext<StakeholdersContext>(opt =>
             opt.UseNpgsql(DbConnectionStringBuilder.Build("stakeholders"),
