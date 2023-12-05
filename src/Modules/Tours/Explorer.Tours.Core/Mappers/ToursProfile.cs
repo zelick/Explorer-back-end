@@ -39,6 +39,11 @@ public class ToursProfile : Profile
         CreateMap<CompositeTourCreationDto, CompositeTour>().ReverseMap();
 
 
+        CreateMap<PrivateTourExecutionDto, PrivateTourExecution>().ReverseMap();
+        CreateMap<PrivateTourDto, PrivateTour>()
+                .ForMember(dest => dest.Checkpoints, opt => opt.MapFrom(src => src.Checkpoints))
+                .ForMember(dest => dest.Execution, opt => opt.MapFrom(src => src.Execution))
+                .ReverseMap();
     }
 
     private MapObjectType MapObjectTypeFromString(string category)

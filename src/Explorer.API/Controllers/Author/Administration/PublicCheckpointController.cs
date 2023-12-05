@@ -25,6 +25,12 @@ namespace Explorer.API.Controllers.Author.Administration
             var result = _publicCheckpointService.Create(checkpointRequestId, notificationComment);
             return CreateResponse(result);
         }
+        [HttpGet("atPlace/{longitude:double}/{latitude:double}")]
+        public ActionResult<PublicCheckpointDto> GetAllAtPlace(double longitude, double latitude)
+        {
+            var result = _publicCheckpointService.GetAllAtPlace(longitude, latitude);
+            return CreateResponse(result);
+        }
 
         [HttpPut]
         public ActionResult<PublicCheckpointDto> Update(PublicCheckpointDto publicCheckpointDto)
