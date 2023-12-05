@@ -38,22 +38,14 @@ namespace Explorer.Encounters.Core.Domain.Encounters
         }
         public bool IsRequiredPeopleNumber()
         {
-            return ActiveTouristsIds.Count() >= RequiredPeople;
+            int numberOfTourists = ActiveTouristsIds.Count();
+            if(numberOfTourists >= RequiredPeople) { ClearActiveTourists(); }
+            return numberOfTourists >= RequiredPeople;
         }
 
-        public void CompleteSocialEncounter()
+        private void ClearActiveTourists()
         {
-            if (IsRequiredPeopleNumber())
-            {
-                foreach (var touristId in ActiveTouristsIds)
-                {
-                    CompletedEncounter completedEncounter = new CompletedEncounter(touristId, DateTime.UtcNow);
-                    CompletedEncounter.Add(completedEncounter);
-                }
-                ActiveTouristsIds.Clear();
-            }
+            ActiveTouristsIds.Clear();
         }
-
-
     }
 }

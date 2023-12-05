@@ -185,7 +185,7 @@ namespace Explorer.Encounters.Core.UseCases
                     var encounterDto = new EncounterExecutionDto();
                     if (_encounterExecutionRepository.GetByEncounterAndTourist(touristId, closestEncounter.Id) == null)
                     {
-                        CreateNewEcounterExecution(touristLongitude, touristLatitude, touristId, closestEncounter, encounterDto);
+                        encounterDto = CreateNewEcounterExecution(touristLongitude, touristLatitude, touristId, closestEncounter);
                     }
                     else
                     {
@@ -205,17 +205,10 @@ namespace Explorer.Encounters.Core.UseCases
             }
         }
 
-        private void CreateNewEcounterExecution(double touristLongitude, double touristLatitude, int touristId, Encounter encounter, EncounterExecutionDto encounterDto)
+        private EncounterExecutionDto CreateNewEcounterExecution(double touristLongitude, double touristLatitude, int touristId, Encounter encounter)
         {
-            encounterDto.EncounterId = encounter.Id;
-            encounterDto.TouristId = touristId;
-            encounterDto.Status = "Pending";
-            encounterDto.TouristLongitute = touristLongitude;
-            encounterDto.TouristLatitude = touristLatitude;
-            encounterDto.StartTime = DateTime.UtcNow;
-            var encounterExecution = MapToDomain(encounterDto);
-            encounterExecution.Validate();
-            _encounterExecutionRepository.Create(encounterExecution);
+            var encounterExecution = new EncounterExecution(encounter.Id, encounter, touristId, touristLatitude, touristLongitude);
+            return MapToDto(_encounterExecutionRepository.Create(encounterExecution));
         }
 
         public Result<EncounterExecutionDto> CheckIfInRange(int id, double touristLongitude, double touristLatitude, int touristId)
@@ -223,6 +216,8 @@ namespace Explorer.Encounters.Core.UseCases
             try
             {
                 var oldExecution = _encounterExecutionRepository.Get(id);
+                if(oldExecution.Status != EncounterExecutionStatus.Active)
+                    return Result.Fail(FailureCode.InvalidArgument).WithError("Encounter not activated");
                 SocialEncounter result = _socialEncounterRepository.Get(oldExecution.EncounterId);
                 var numberOfTourists = result.CheckIfInRange(touristLongitude, touristLatitude, touristId);
                 _socialEncounterRepository.Update(result);

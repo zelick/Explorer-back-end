@@ -100,7 +100,7 @@ public class TourExecutionCommandTests : BaseToursIntegrationTest
     public void Complete_succeeds()
     {
         // Arrange - Input data
-        var touristId = 1;
+        var touristId =1;
         var tourExecutionId = -1;
         var expectedResponseCode = 200;
         var expectedStatus = ExecutionStatus.Completed;
@@ -124,7 +124,7 @@ public class TourExecutionCommandTests : BaseToursIntegrationTest
         var storedEntity = dbContext.TourExecution.FirstOrDefault(t => t.Id == tourExecutionId);
         storedEntity.ShouldNotBeNull();
         storedEntity.ExecutionStatus.ShouldBe(expectedStatus);
-        storedEntity.CompletedCheckpoints.Count.ShouldBe(2);
+        storedEntity.CompletedCheckpoints.Count.ShouldBe(3);
     }
 
     private static TourExecutionController CreateController(IServiceScope scope, string personId)

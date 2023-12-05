@@ -31,12 +31,21 @@ namespace Explorer.Encounters.Core.Domain.Encounters
             Validate();
         }
 
+        public EncounterExecution(long encounterId, Encounter encounter, long touristId, double touristLatitude, double touristLongitute)
+        {
+            EncounterId = encounterId;
+            Encounter = encounter;
+            TouristId = touristId;
+            TouristLatitude = touristLatitude;
+            TouristLongitute = touristLongitute;
+            Status = EncounterExecutionStatus.Pending;
+            StartTime = DateTime.UtcNow;
+            Validate();
+        }
         public void Validate()
         {
             if (EncounterId == 0)
                 throw new ArgumentException("Invalid encounter Id.");
-            //if (Encounter == null) 
-            //    throw new ArgumentException("Invalid encounter.");
             if (TouristId == 0)
                 throw new ArgumentException("Invalid tourist.");
             if (TouristLongitute < -180 || TouristLatitude > 180)

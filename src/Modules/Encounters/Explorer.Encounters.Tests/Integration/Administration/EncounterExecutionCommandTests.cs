@@ -1,4 +1,5 @@
 ﻿using Explorer.API.Controllers.Tourist.Encounters;
+using Explorer.Encounters.API.Dtos;
 using Explorer.Encounters.API.Public;
 using Explorer.Encounters.Infrastructure.Database;
 using Microsoft.AspNetCore.Mvc;
@@ -19,15 +20,16 @@ namespace Explorer.Encounters.Tests.Integration.Administration
             var controller = CreateController(scope);
             var dbContext = scope.ServiceProvider.GetRequiredService<EncountersContext>();
             var expectedResponseCode = 200;
-            var id = -1;
-            var longitude = 20;
+            var encounterId = -5;
+            var longitude = 45;
             var latitude = 45;
 
             // Act
-            var result = (ObjectResult)controller.Activate(id, longitude, latitude).Result;
+            var result = (ObjectResult)controller.Activate(encounterId, longitude, latitude).Result;
 
             //Assert
             result.ShouldNotBeNull();
+            (result.Value as EncounterExecutionDto).Status.ShouldBe("Active");
             result.StatusCode.ShouldBe(expectedResponseCode);
         }
 
@@ -40,11 +42,12 @@ namespace Explorer.Encounters.Tests.Integration.Administration
             var dbContext = scope.ServiceProvider.GetRequiredService<EncountersContext>();
             var expectedResponseCode = 200;
             var id = -1;
-            var longitude = 20;
-            var latitude = 45;
+            var longitude = 45.001;
+            var tourId = -7;
+            var latitude = 45.002;
 
             // Act
-            var result = (ObjectResult)controller.CheckPosition(-1, id, longitude, latitude).Result;
+            var result = (ObjectResult)controller.CheckPosition(tourId, id, longitude, latitude).Result;
 
             //Assert
             result.ShouldNotBeNull();
@@ -59,16 +62,16 @@ namespace Explorer.Encounters.Tests.Integration.Administration
             var controller = CreateController(scope);
             var dbContext = scope.ServiceProvider.GetRequiredService<EncountersContext>();
             var expectedResponseCode = 400;
-            var id = -1;
-            var longitude = 10;
-            var latitude = 40;
+            var tourId = -7;
+            var encounterExecutionId = -1;
+            var longitude = 20;
+            var latitude = 45.3;
 
             // Act
-            var result = (ObjectResult)controller.CheckPosition(-1, id, longitude, latitude).Result;
+            var result = (ObjectResult)controller.CheckPosition(tourId, encounterExecutionId, longitude, latitude).Result;
 
             //Assert
             result.ShouldNotBeNull();
-            result.Value.ShouldBe(0);
             result.StatusCode.ShouldBe(expectedResponseCode);
         }
 
@@ -76,7 +79,7 @@ namespace Explorer.Encounters.Tests.Integration.Administration
         {
             return new EncounterExecutionController(scope.ServiceProvider.GetRequiredService<IEncounterExecutionService>(), scope.ServiceProvider.GetRequiredService<IEncounterService>())
             {
-                ControllerContext = BuildContext("-21")
+                ControllerContext = BuildContext("-23")
             };
         }
     }
