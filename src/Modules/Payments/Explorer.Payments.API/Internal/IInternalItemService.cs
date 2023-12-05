@@ -9,4 +9,3 @@ public interface IInternalItemService
     Result Update(ItemDto itemDto);
     Result Delete(long id, string type);
 }
-

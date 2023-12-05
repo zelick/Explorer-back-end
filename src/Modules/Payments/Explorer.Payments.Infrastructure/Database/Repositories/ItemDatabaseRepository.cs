@@ -22,5 +22,4 @@ public class ItemDatabaseRepository : CrudDatabaseRepository<Item, PaymentsConte
         DbContext.Items.Remove(item);
         DbContext.SaveChanges();
     }
-
 }

@@ -11,6 +11,7 @@ public class PaymentsContext : DbContext
     public DbSet<Coupon> Coupons { get; set; }
     public DbSet<Item> Items { get; set; }
     public DbSet<TouristWallet> TouristWallets { get; set; }
+    public DbSet<PaymentRecord> PaymentRecords { get; set; }
 
     public PaymentsContext(DbContextOptions<PaymentsContext> options) : base(options) { }
 

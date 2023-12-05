@@ -48,6 +48,7 @@ namespace Explorer.Tours.Core.UseCases.Administration
                if (result.Status != TourStatus.Published) return MapToDto(result);
                var tourItemDto = new ItemDto()
                {
+                   SellerId = result.AuthorId,
                    ItemId = result.Id,
                    Name = result.Name,
                    Price = result.Price,
@@ -196,6 +197,7 @@ namespace Explorer.Tours.Core.UseCases.Administration
                 if (result.Status != TourStatus.Published) return MapToDto(result);
                 var tourItemDto = new ItemDto()
                 {
+                    SellerId = result.AuthorId,
                     ItemId = result.Id,
                     Name = result.Name,
                     Price = result.Price,

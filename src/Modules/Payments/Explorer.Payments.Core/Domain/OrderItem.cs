@@ -19,6 +19,14 @@ public class OrderItem : ValueObject
         Name = name;
         Price = price;
         Type = type;
+        Validate();
+    }
+
+    private void Validate()
+    {
+        if (ItemId == 0) throw new ArgumentException("Invalid ItemId");
+        if (string.IsNullOrWhiteSpace(Name)) throw new ArgumentException("Invalid Name.");
+        if (Price < 0) throw new ArgumentException("Invalid Price.");
     }
 
     protected override IEnumerable<object> GetEqualityComponents()
