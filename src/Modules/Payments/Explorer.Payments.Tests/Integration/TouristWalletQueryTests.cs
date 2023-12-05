@@ -28,11 +28,11 @@ namespace Explorer.Payments.Tests.Integration
             var dbContext = scope.ServiceProvider.GetRequiredService<PaymentsContext>();
 
             // Act
-            var result = ((ObjectResult)controller.GetAdventureCoins(-1).Result)?.Value as TouristWalletDto;
+            var result = ((ObjectResult)controller.GetAdventureCoins(-21).Result)?.Value as TouristWalletDto;
 
             // Assert - Response
             result.ShouldNotBeNull();
-            result.AdventureCoins.ShouldBe(2);
+            result.AdventureCoins.ShouldBe(500);
 
         }
 

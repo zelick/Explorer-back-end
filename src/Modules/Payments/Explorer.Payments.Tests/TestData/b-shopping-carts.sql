@@ -14,5 +14,6 @@ INSERT INTO payments."ShoppingCarts"(
 INSERT INTO payments."ShoppingCarts"(
 	"Id", "UserId", "Items")
 	VALUES (-3, -23, '[
-		{{ "ItemId": -2, "Name": "Obilazak beoradskih muzeja", "Price": 50, "Type": 0 }}
+	{{ "ItemId": -1, "Name": "Paket tura 1", "Price": 250, "Type": 1 }},
+	{{ "ItemId": -2, "Name": "Obilazak beoradskih muzeja", "Price": 50, "Type": 0 }}
 	]');
