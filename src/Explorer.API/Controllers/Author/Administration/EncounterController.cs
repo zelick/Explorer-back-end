@@ -69,13 +69,5 @@ namespace Explorer.API.Controllers.Author.Administration
             var result = _encounterService.Get(id);
             return CreateResponse(result);
         }
-
-        //obrisi ovo 
-        [HttpPut("{encounterId:int}/{touristId:int}")]
-        public ActionResult<EncounterDto> FinishEncounter(int encounterId, int touristId)
-        {
-            var result = _encounterService.FinishEncounter(encounterId, touristId);
-            return CreateResponse(result);
-        }
     }
 }

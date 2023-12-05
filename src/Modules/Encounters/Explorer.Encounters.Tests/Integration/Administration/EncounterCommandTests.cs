@@ -376,7 +376,7 @@ public class EncounterCommandTests : BaseEncountersIntegrationTest
         result.ShouldNotBeNull();
         result.StatusCode.ShouldBe(404);
     }
-
+    /*
     [Fact]
     public void FinishEncounterSuccessfully()
     {
@@ -396,7 +396,7 @@ public class EncounterCommandTests : BaseEncountersIntegrationTest
         result.StatusCode.ShouldBe(expectedResponseCode);
     }
 
-
+    */
 
 
     private static EncounterController CreateController(IServiceScope scope)
