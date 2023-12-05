@@ -50,11 +50,11 @@ namespace Explorer.Payments.Tests.Integration
             using var scope = Factory.Services.CreateScope();
             var controller = CreateController(scope);
             var dbContext = scope.ServiceProvider.GetRequiredService<PaymentsContext>();
-
+           
             var newEntity = new SaleDto()
             {
                 Id = -4,
-                ToursIds = new List<long>(),
+                ToursIds = new List<long> { -1, -2, -3 },
                 Discount = 50
             };
 
@@ -80,10 +80,13 @@ namespace Explorer.Payments.Tests.Integration
             using var scope = Factory.Services.CreateScope();
             var controller = CreateController(scope);
             var dbContext = scope.ServiceProvider.GetRequiredService<PaymentsContext>();
+
             var updatedEntity = new SaleDto
             {
                 Id = -1,
-                Discount = 10
+                ToursIds = new List<long> { -1, -2, -3 },
+                Discount = 90,
+                AuthorId = -11            
             };
 
             // Act
@@ -94,7 +97,7 @@ namespace Explorer.Payments.Tests.Integration
             result.Id.ShouldBe(-1);
 
             // Assert - Database
-            var storedEntity = dbContext.Sales.FirstOrDefault(i => i.Discount == 10);
+            var storedEntity = dbContext.Sales.FirstOrDefault(i => i.Discount == 90);
             storedEntity.ShouldNotBeNull();
         }
 
@@ -143,7 +146,7 @@ namespace Explorer.Payments.Tests.Integration
             return new SaleController(scope.ServiceProvider.GetRequiredService<ISaleService>(),
                 scope.ServiceProvider.GetRequiredService<ITourService>())
             {
-                ControllerContext = BuildContext("-21")
+                ControllerContext = BuildContext("-11")
             };
         }
 
