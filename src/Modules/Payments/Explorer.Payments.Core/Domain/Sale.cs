@@ -25,5 +25,10 @@ namespace Explorer.Payments.Core.Domain
             Discount = discount;
             AuthorId = authorId;    
         }
+
+        public bool IsCreatedByUser(int userId)
+        {
+            return AuthorId == userId;
+        }
     }
 }

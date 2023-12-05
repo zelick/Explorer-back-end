@@ -14,7 +14,7 @@ namespace Explorer.Payments.API.Public
         Result<PagedResult<SaleDto>> GetPaged(int page, int pageSize);
         Result<SaleDto> Create(SaleDto sale);
         Result<SaleDto> Update(SaleDto saleDto);
-        Result Delete(int id);
+        Result Delete(int id, int authorId);
         Result<SaleDto> Get(int id);
     }
 }

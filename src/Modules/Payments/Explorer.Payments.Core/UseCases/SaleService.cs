@@ -16,10 +16,33 @@ namespace Explorer.Payments.Core.UseCases
     public class SaleService : CrudService<SaleDto, Sale>, ISaleService
     {
         private readonly ISaleRepository _saleRepository;
-        public SaleService(ICrudRepository<Sale> crudRepository, IMapper mapper) : base(crudRepository, mapper)
+        public SaleService(ISaleRepository saleRepository, ICrudRepository<Sale> crudRepository, IMapper mapper) : base(crudRepository, mapper)
         {
-
+            _saleRepository = saleRepository;
         }
 
+        public Result Delete(int id, int authorId)
+        {
+            Sale sale;
+            try
+            {
+                sale = _saleRepository.Get(id);
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+            if (!sale.IsCreatedByUser(authorId))
+                return Result.Fail(FailureCode.Forbidden);
+            try
+            {
+                CrudRepository.Delete(id);
+                return Result.Ok();
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+        }
     }
 }

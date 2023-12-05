@@ -1,4 +1,5 @@
-﻿using Explorer.BuildingBlocks.Core.UseCases;
+﻿using Explorer.Blog.Core.Domain.BlogPosts;
+using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Payments.API.Dtos;
 using Explorer.Payments.API.Public;
 using Explorer.Payments.Core.UseCases;
@@ -57,6 +58,8 @@ namespace Explorer.API.Controllers.Administrator.Administration
         [HttpPut]
         public ActionResult<SaleDto> Update([FromBody] SaleDto saleDto)
         {
+            if (User.PersonId() != saleDto.AuthorId) return CreateResponse(Result.Fail(FailureCode.Forbidden));
+
             if (saleDto.End < saleDto.Start)
             {
                 return BadRequest("The sale end date cannot be before start date.");
@@ -79,7 +82,7 @@ namespace Explorer.API.Controllers.Administrator.Administration
         [HttpDelete("{id:int}")]
         public ActionResult Delete(int id)
         {
-            var result = _saleService.Delete(id);
+            var result = _saleService.Delete(id, User.PersonId());
             return CreateResponse(result);
         }
 
@@ -88,7 +91,6 @@ namespace Explorer.API.Controllers.Administrator.Administration
         {
             var result = _saleService.Get(id);
             return CreateResponse(result);
-            throw new NotImplementedException();
         }
 
         [HttpGet("tours-on-sale/{saleId:int}")]
