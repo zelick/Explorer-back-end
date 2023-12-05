@@ -1,5 +1,6 @@
 ﻿using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.BuildingBlocks.Infrastructure.Database;
+using Explorer.Tours.Core.Domain;
 using Explorer.Tours.Core.Domain.RepositoryInterfaces;
 using Explorer.Tours.Core.Domain.Tours;
 using FluentResults;
@@ -19,6 +20,15 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
             _dbContext = dbContext;
         }
 
+        public PrivateTour CreateBlog(PrivateTour privateTour)
+        {
+            var entity = Get(privateTour.Id);
+            entity.CreateBlog(privateTour.Blog);
+            _dbContext.PrivateTours.Update(entity);
+            _dbContext.SaveChanges();
+            return entity;
+        }
+
         public PrivateTour Finish(PrivateTour privateTour)
         {
             var entity = Get(privateTour.Id);
@@ -26,6 +36,11 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
             _dbContext.PrivateTours.Update(entity);
             _dbContext.SaveChanges();
             return entity;
+        }
+
+        public Result<List<PrivateTour>> GetAll()
+        {
+            return _dbContext.PrivateTours.ToList();
         }
 
         public Result<List<PrivateTour>> GetAllByTourist(long touristId)
