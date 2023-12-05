@@ -13,5 +13,6 @@ namespace Explorer.Tours.API.Dtos
         public int TouristId { get; set; }
         public List<PublicCheckpointDto> Checkpoints { get; set; }
         public PrivateTourExecutionDto? Execution { get; set; }
+        public PrivateTourBlogDto? Blog { get; set; }
     }
 }

@@ -13,10 +13,11 @@ namespace Explorer.Tours.Core.Domain.Tours
         public int TouristId { get; init; }
         public string Name { get; init; }
         public List<PublicCheckpoint> Checkpoints { get; init; }
-        public PrivateTourExecution? Execution { get; set; }
+        public PrivateTourExecution? Execution { get; private set; }
+        public PrivateTourBlog? Blog { get; private set; }
         public PrivateTour(int touristId, string name, List<PublicCheckpoint> checkpoints)
         {
-            if (name.IsNullOrEmpty() || touristId == 0 || checkpoints==null || checkpoints.Count<2)
+            if (name.IsNullOrEmpty() || touristId == 0 || checkpoints == null || checkpoints.Count < 2)
             {
                 throw new ArgumentException("Invalid arguments for private tour");
             }
@@ -24,8 +25,18 @@ namespace Explorer.Tours.Core.Domain.Tours
             TouristId = touristId;
             Checkpoints = checkpoints;
             Execution = null;
+            Blog = null;
         }
         public PrivateTour() { }
+
+        public void CreateBlog(PrivateTourBlog privateTourBlog)
+        {
+            if (Blog != null || privateTourBlog.Title.IsNullOrEmpty() || privateTourBlog.Description.IsNullOrEmpty() || Execution==null || !Execution.Finished)
+            {
+                throw new Exception("Creating blog forbidden.");
+            }
+            Blog = new PrivateTourBlog(privateTourBlog.Title, privateTourBlog.Description, privateTourBlog.Equipment);
+        }
         public void Start()
         {
             if (Execution != null)

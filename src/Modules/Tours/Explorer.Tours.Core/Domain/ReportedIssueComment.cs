@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Explorer.Tours.Core.Domain
 {
-    public sealed class ReportedIssueComment:ValueObject
+    public sealed class ReportedIssueComment: ValueObject
     {
         public string Text { get; init; }
         public DateTime CreationTime { get; init; }

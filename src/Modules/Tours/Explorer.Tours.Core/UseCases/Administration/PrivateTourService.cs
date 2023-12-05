@@ -27,6 +27,11 @@ namespace Explorer.Tours.Core.UseCases.Administration
             return MapToDto(_repository.Create(MapToDomain(dto)));
         }
 
+        public Result<PrivateTourDto> CreateBlog(PrivateTourDto privateTourDto)
+        {
+            return MapToDto(_repository.CreateBlog(MapToDomain(privateTourDto)));
+        }
+
         public Result<PrivateTourDto> Finish(PrivateTourDto dto)
         {
             return MapToDto(_repository.Finish(MapToDomain(dto)));
@@ -46,6 +51,11 @@ namespace Explorer.Tours.Core.UseCases.Administration
         public Result<PrivateTourDto> GetOne(long id)
         {
             return MapToDto(_repository.GetOne(id));
+        }
+
+        public Result<List<PrivateTourDto>> GetAll()
+        {
+            return MapToDto(_repository.GetAll());
         }
 
         public Result<PrivateTourDto> Next(PrivateTourDto dto)
