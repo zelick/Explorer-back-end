@@ -2,6 +2,7 @@
 {
     public class EncounterExecutionDto
     {
+        public long Id { get; set; }
         public long EncounterId { get; set; }
         public EncounterDto EncounterDto { get; set; }
         public long TouristId { get; set; }

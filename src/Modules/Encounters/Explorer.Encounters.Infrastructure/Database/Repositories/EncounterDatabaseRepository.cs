@@ -1,4 +1,5 @@
-﻿using Explorer.BuildingBlocks.Core.UseCases;
+﻿using System.Diagnostics.Metrics;
+using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Encounters.Core.Domain.Encounters;
 using Explorer.Encounters.Core.Domain.RepositoryInterfaces;
 using Microsoft.EntityFrameworkCore;
@@ -61,6 +62,18 @@ namespace Explorer.Encounters.Infrastructure.Database.Repositories
                 throw new KeyNotFoundException(e.Message);
             }
             return encounter;
+        }
+
+        public List<Encounter> GetByIds(List<long> ids)
+        {
+            try
+            {
+                return _dbContext.Encounter.Where( e => ids.Contains(e.Id)).ToList();
+            }
+            catch (DbUpdateException e)
+            {
+                throw new KeyNotFoundException(e.Message);
+            }
         }
     }
 }

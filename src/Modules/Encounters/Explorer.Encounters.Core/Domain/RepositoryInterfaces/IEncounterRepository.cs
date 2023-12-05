@@ -5,5 +5,6 @@ namespace Explorer.Encounters.Core.Domain.RepositoryInterfaces
 {
     public interface IEncounterRepository:ICrudRepository<Encounter>
     {
+        List<Encounter> GetByIds(List<long> ids);
     }
 }

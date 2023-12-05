@@ -116,11 +116,14 @@ namespace Explorer.Encounters.Core.Domain.Encounters
             return !isInvalid;
         }
 
-        public bool IsVisibleForTourist(double longitude, double latitude)
+        public double GetDistanceFromEncounter(double longitude, double latitude)
         {
-            double a = Math.Abs(Math.Round(Longitude, 4) - Math.Round(longitude, 4));
-            double b = Math.Abs(Math.Round(Latitude, 4) - Math.Round(latitude, 4));
-            return a < 0.01 && b < 0.01;
+            return Math.Acos(Math.Sin(Math.PI / 180 * (Latitude)) * Math.Sin(Math.PI / 180 * latitude) + Math.Cos(Math.PI / 180 * Latitude) * Math.Cos(Math.PI / 180 * latitude) * Math.Cos(Math.PI / 180 * Longitude - Math.PI / 180 * longitude)) * 6371000;
+        }
+
+        public bool IsCloseEnough(double longitude, double latitude)
+        {
+            return GetDistanceFromEncounter(longitude, latitude) <= 1000;
         }
     }
 
