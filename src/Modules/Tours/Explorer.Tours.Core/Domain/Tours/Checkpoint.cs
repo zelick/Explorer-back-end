@@ -20,6 +20,10 @@ namespace Explorer.Tours.Core.Domain.Tours
         public List<string> Pictures { get; init; }
         public double RequiredTimeInSeconds { get; init; }
         public CheckpointSecret? CheckpointSecret { get; private set; }
+        public long EncounterId { get; set; }
+        public bool IsSecretPrerequisite { get; set; }
+
+
 
         public Checkpoint(long tourId, int authorId, double longitude, double latitude, string name, string description, List<string> pictures, double requiredTimeInSeconds)
         {
@@ -35,6 +39,8 @@ namespace Explorer.Tours.Core.Domain.Tours
                 Pictures = pictures ?? throw new ArgumentNullException(nameof(pictures));
             else throw new ArgumentException("Invalid Picture");
             RequiredTimeInSeconds = requiredTimeInSeconds;
+            EncounterId = 0;
+            IsSecretPrerequisite = false;
         }
 
         public Checkpoint CreateCheckpointSecret(string description, List<string> pictures)
@@ -65,5 +71,6 @@ namespace Explorer.Tours.Core.Domain.Tours
         {
             return AuthorId == userId;
         }
+
     }
 }

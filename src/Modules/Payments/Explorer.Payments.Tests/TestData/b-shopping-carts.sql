@@ -9,3 +9,7 @@ INSERT INTO payments."ShoppingCarts"(
 INSERT INTO payments."ShoppingCarts"(
 	"Id", "UserId", "Items", "Price")
 	VALUES (-3, -21, '[{{ }}]', 0.0);
+
+INSERT INTO payments."ShoppingCarts"(
+	"Id", "UserId", "Items", "Price")
+	VALUES (-4, -23, '[{{"Price": 200.0  }}]', 200.0);
