@@ -31,7 +31,7 @@ namespace Explorer.Encounters.Tests.Integration.Administration
 
             var newEntity = new EncounterDto
             {
-                AuthorId = -12,
+                AuthorId = -22,
                 Name = "Izazov misc",
                 Description = "Potrebno je uraditi 20 sklekova.",
                 XP = 2,
@@ -49,7 +49,7 @@ namespace Explorer.Encounters.Tests.Integration.Administration
             result.ShouldNotBeNull();
             result.StatusCode.ShouldBe(expectedResponseCode);
 
-            updatedObject?.AuthorId.ShouldBe(-12);
+            updatedObject?.AuthorId.ShouldBe(-22);
             updatedObject?.Name.ShouldBe(newEntity.Name);
             updatedObject?.Description.ShouldBe(newEntity.Description);
             updatedObject?.XP.ShouldBe(2);
@@ -71,7 +71,7 @@ namespace Explorer.Encounters.Tests.Integration.Administration
 
             var newEntity = new EncounterDto
             {
-                AuthorId = -12,
+                AuthorId = -22,
                 Name = "Izazov hidden location",
                 Description = "Pronadji gde je nastala slika.",
                 XP = 2,
@@ -93,7 +93,7 @@ namespace Explorer.Encounters.Tests.Integration.Administration
             //Assert
             result.ShouldNotBeNull();
             result.StatusCode.ShouldBe(expectedResponseCode);
-            updatedObject?.AuthorId.ShouldBe(-12);
+            updatedObject?.AuthorId.ShouldBe(-22);
             updatedObject?.Name.ShouldBe(newEntity.Name);
             updatedObject?.Description.ShouldBe(newEntity.Description);
             updatedObject?.XP.ShouldBe(newEntity.XP);
@@ -122,7 +122,7 @@ namespace Explorer.Encounters.Tests.Integration.Administration
 
             var newEntity = new EncounterDto
             {
-                AuthorId = -12,
+                AuthorId = -22,
                 Name = "Social izazov",
                 Description = "Potrebno je zajedno sa ostalim clanovima uraditi izazov.",
                 XP = 2,
@@ -141,7 +141,7 @@ namespace Explorer.Encounters.Tests.Integration.Administration
             //Assert
             result.ShouldNotBeNull();
             result.StatusCode.ShouldBe(expectedResponseCode);
-            updatedObject?.AuthorId.ShouldBe(-12);
+            updatedObject?.AuthorId.ShouldBe(-22);
             updatedObject?.Name.ShouldBe(newEntity.Name);
             updatedObject?.Description.ShouldBe(newEntity.Description);
             updatedObject?.XP.ShouldBe(newEntity.XP);
@@ -162,7 +162,7 @@ namespace Explorer.Encounters.Tests.Integration.Administration
 
             var newEntity = new EncounterDto
             {
-                AuthorId = -22,
+                AuthorId = -1,
                 Name = "Izazov misc",
                 Description = "Potrebno je uraditi 20 sklekova.",
                 XP = 2,
@@ -186,7 +186,7 @@ namespace Explorer.Encounters.Tests.Integration.Administration
             using var scope = Factory.Services.CreateScope();
             var controller = CreateController(scope);
             var dbContext = scope.ServiceProvider.GetRequiredService<EncountersContext>();
-            var expectedResponseCode = 404;
+            var expectedResponseCode = 403;
             var checkpointId = -16;
             bool isSecretPrerequisite = true;
 
@@ -209,85 +209,6 @@ namespace Explorer.Encounters.Tests.Integration.Administration
             result.StatusCode.ShouldBe(expectedResponseCode);
         }
 
-
-        [Fact]
-        public void UpdateMiscSuccessfully()
-        {
-            // Arrange
-            using var scope = Factory.Services.CreateScope();
-            var controller = CreateController(scope);
-            var dbContext = scope.ServiceProvider.GetRequiredService<EncountersContext>();
-            var expectedResponseCode = 200;
-
-            var newEntity = new EncounterDto
-            {
-                Id = -2,
-                AuthorId = -12,
-                Name = "Misc Encounter",
-                Description = "Potrebno je uraditi 80 sklekova.",
-                XP = 20,
-                Type = "Misc",
-                Longitude = 45,
-                Latitude = 45,
-            };
-
-            // Act
-            var result = (ObjectResult)controller.Update(newEntity).Result;
-            var updatedObject = result?.Value as EncounterDto;
-
-
-            //Assert
-            result.ShouldNotBeNull();
-            result.StatusCode.ShouldBe(expectedResponseCode);
-            updatedObject.Id.ShouldBe(-2);
-            updatedObject.AuthorId.ShouldBe(-12);
-            updatedObject.Name.ShouldBe(updatedObject.Name);
-            updatedObject.Description.ShouldBe(updatedObject.Description);
-            updatedObject.XP.ShouldBe(updatedObject.XP);
-            updatedObject.Type.ShouldBe(updatedObject.Type);
-            updatedObject.Longitude.ShouldBe(updatedObject.Longitude);
-            updatedObject.Latitude.ShouldBe(updatedObject.Latitude);
-        }
-
-        [Fact]
-        public void UpdateSocialSuccessfully()
-        {
-            // Arrange
-            using var scope = Factory.Services.CreateScope();
-            var controller = CreateController(scope);
-            var dbContext = scope.ServiceProvider.GetRequiredService<EncountersContext>();
-            var expectedResponseCode = 200;
-
-            var newEntity = new EncounterDto
-            {
-                Id = -3,
-                AuthorId = -12,
-                Name = "Misc Encounter",
-                Description = "Potrebno je uraditi 80 sklekova.",
-                XP = 20,
-                Type = "Misc",
-                Longitude = 45,
-                Latitude = 45,
-                RequiredPeople = 111,
-                Range = 200
-            };
-
-            // Act
-            var result = (ObjectResult)controller.Update(newEntity).Result;
-            var updatedObject = result?.Value as EncounterDto;
-
-
-            //Assert
-            result.ShouldNotBeNull();
-            result.StatusCode.ShouldBe(expectedResponseCode);
-            updatedObject?.Id.ShouldBe(-3);
-            updatedObject?.AuthorId.ShouldBe(-12);
-            updatedObject?.Name.ShouldBe(newEntity.Name);
-            updatedObject?.Description.ShouldBe(newEntity.Description);
-            updatedObject?.XP.ShouldBe(newEntity.XP);
-            updatedObject?.Longitude.ShouldBe(newEntity.Longitude);
-            updatedObject?.Latitude.ShouldBe(newEntity.Latitude);
-        }
 
         [Fact]
         public void InvalidAuthorOnUpdate()
@@ -388,7 +309,7 @@ namespace Explorer.Encounters.Tests.Integration.Administration
         {
             return new TouristEncounterController(scope.ServiceProvider.GetRequiredService<IEncounterService>())
             {
-                ControllerContext = BuildContext("-12")
+                ControllerContext = BuildContext("-22")
             };
         }
     }

@@ -7,6 +7,7 @@ using Explorer.Stakeholders.Infrastructure.Authentication;
 using Explorer.Tours.API.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Globalization;
 
 namespace Explorer.API.Controllers.Tourist.Encounters
 {
@@ -29,6 +30,7 @@ namespace Explorer.API.Controllers.Tourist.Encounters
         public ActionResult<EncounterDto> Create([FromForm] EncounterDto encounter, [FromQuery] long checkpointId, [FromQuery] bool isSecretPrerequisite, [FromForm] List<IFormFile>? imageF = null)
         {
 
+
             if (imageF != null && imageF.Any())
             {
                 var imageNames = _imageService.UploadImages(imageF);
@@ -36,6 +38,13 @@ namespace Explorer.API.Controllers.Tourist.Encounters
                     encounter.Image = imageNames[0];
             }
 
+            // Transformacija koordinata za longitude
+            encounter.Longitude = TransformisiKoordinatu(encounter.Longitude);
+
+            // Transformacija koordinata za latitude
+            encounter.Latitude = TransformisiKoordinatu(encounter.Latitude);
+
+            encounter.Status = "Draft";
             var result = _encounterService.CreateForTourist(encounter, checkpointId, isSecretPrerequisite, User.PersonId());
             return CreateResponse(result);
         }
@@ -88,5 +97,33 @@ namespace Explorer.API.Controllers.Tourist.Encounters
             return CreateResponse(result);
         }
 
+        // Funkcija za transformaciju koordinata
+        private double TransformisiKoordinatu(double koordinata)
+        {
+            // Pretvori broj u string kako bi se mogao indeksirati
+            string koordinataString = koordinata.ToString();
+
+            // Ako je koordinata dovoljno dugačka
+            if (koordinataString.Length > 2)
+            {
+                // Uzmi prva dva znaka
+                string prviDeo = koordinataString.Substring(0, 2);
+
+                // Uzmi ostatak broja posle prva dva znaka
+                string drugiDeo = koordinataString.Substring(2);
+
+                // Sastavi transformisanu vrednost
+                string transformisanaKoordinataString = prviDeo + '.' + drugiDeo;
+
+                // Parsiraj rezultat nazad kao double
+                if (double.TryParse(transformisanaKoordinataString, NumberStyles.Any, CultureInfo.InvariantCulture, out double transformisanaKoordinata))
+                {
+                    return transformisanaKoordinata;
+                }
+            }
+
+            // Ako je koordinata prekratka ili neuspešno parsiranje, vrati nepromenjenu vrednost
+            return koordinata;
+        }
     }
 }
