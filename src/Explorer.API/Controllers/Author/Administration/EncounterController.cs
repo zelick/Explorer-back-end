@@ -1,4 +1,5 @@
 ﻿using Explorer.API.Services;
+using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Encounters.API.Dtos;
 using Explorer.Encounters.API.Public;
 using Explorer.Stakeholders.Infrastructure.Authentication;
@@ -69,5 +70,6 @@ namespace Explorer.API.Controllers.Author.Administration
             var result = _encounterService.Get(id);
             return CreateResponse(result);
         }
+
     }
 }

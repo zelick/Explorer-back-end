@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.Metrics;
 using Explorer.BuildingBlocks.Core.UseCases;
+using Explorer.BuildingBlocks.Infrastructure.Database;
 using Explorer.Encounters.Core.Domain.Encounters;
 using Explorer.Encounters.Core.Domain.RepositoryInterfaces;
 using Microsoft.EntityFrameworkCore;
@@ -47,7 +48,18 @@ namespace Explorer.Encounters.Infrastructure.Database.Repositories
 
         public PagedResult<Encounter> GetPaged(int page, int pageSize)
         {
-            throw new NotImplementedException();
+            var task = _dbContext.Encounter.GetPagedById(page, pageSize);
+            task.Wait();
+            return task.Result;
+        }
+
+        public Encounter MakeEncounterPublished(long id)
+        {
+            Encounter encounterToUpdate = _dbContext.Encounter.FirstOrDefault(o => o.Id == id);
+            if (encounterToUpdate == null) throw new KeyNotFoundException("Not found " + id);
+            encounterToUpdate.MakeEncounterPublished();
+            _dbContext.SaveChanges();
+            return encounterToUpdate;
         }
 
         public Encounter Update(Encounter encounter)

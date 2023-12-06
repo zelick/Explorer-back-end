@@ -83,6 +83,11 @@ namespace Explorer.Encounters.Core.Domain.Encounters
             return AuthorId == userId;
         }
 
+        public void MakeEncounterPublished()
+        {
+            Status = EncounterStatus.Published;
+        }
+
         private bool IsLongitudeValid(double longitude) 
         {
             bool isInvalid = longitude < -180 || longitude > 180;

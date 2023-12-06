@@ -8,6 +8,7 @@ namespace Explorer.Encounters.Infrastructure.Database
     public class EncountersContext : DbContext
     {
         public DbSet<Encounter> Encounter { get; set; }
+        public DbSet<EncounterRequest> EncounterRequests { get; set; }
         public DbSet<HiddenLocationEncounter> HiddenLocationEncounter { get; set; }
         public DbSet<SocialEncounter> SocialEncounter { get; set; }
         public DbSet<EncounterExecution> EncounterExecution { get; set; }
