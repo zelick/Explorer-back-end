@@ -2,6 +2,7 @@
 using Explorer.Blog.Core.Domain.BlogPosts;
 using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Stakeholders.API.Dtos;
+using Explorer.Stakeholders.Core.Domain;
 using Explorer.Stakeholders.Infrastructure.Authentication;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
@@ -25,16 +26,16 @@ namespace Explorer.API.Controllers.Author.Administration
 		}
 
 		[HttpGet]
-		public ActionResult<PagedResult<CheckpointDto>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
+		public ActionResult<PagedResult<TourBundleDto>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
 		{
 			var result = _tourBundleService.GetPaged(page, pageSize);
 			return CreateResponse(result);
 		}
 
-		[HttpGet("by-author/{id:int}")]
-		public ActionResult<List<TourBundleDto>> GetAllByAuthor([FromQuery] int page, [FromQuery] int pageSize, int id)
+		[HttpGet("bundles-by-author")]
+		public ActionResult<List<TourBundleDto>> GetAllByAuthor([FromQuery] int page, [FromQuery] int pageSize)
 		{
-			var result = _tourBundleService.GetAllByAuthor(page, pageSize, id);
+			var result = _tourBundleService.GetAllByAuthor(page, pageSize, User.PersonId());
 			return CreateResponse(result);
 		}
 

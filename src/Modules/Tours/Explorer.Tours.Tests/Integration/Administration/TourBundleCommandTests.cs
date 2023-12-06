@@ -31,7 +31,7 @@ namespace Explorer.Tours.Tests.Integration.Administration
 			{
 				Name = "Paket tura 1",
 				Price = 250.0,
-				AuthorId = 2,
+				AuthorId = -11,
 				Status = "Draft"
 			};
 
@@ -63,7 +63,7 @@ namespace Explorer.Tours.Tests.Integration.Administration
 				Id = -2,
 				Name = "Paketi tura 3",
 				Price = 252.0, 
-				AuthorId = 2,
+				AuthorId = -11,
 				Status = "Draft"
 			};
 
@@ -97,11 +97,12 @@ namespace Explorer.Tours.Tests.Integration.Administration
 			result.StatusCode.ShouldBe(200);
 		}
 
+
 		private static TourBundleController CreateController(IServiceScope scope)
 		{
 			return new TourBundleController(scope.ServiceProvider.GetRequiredService<ITourBundleService>())
 			{
-				ControllerContext = BuildContext("-12")
+				ControllerContext = BuildContext("-11")
 			};
 		}
 	}

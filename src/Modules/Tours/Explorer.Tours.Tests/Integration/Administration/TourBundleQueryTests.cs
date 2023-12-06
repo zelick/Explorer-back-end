@@ -30,14 +30,46 @@ namespace Explorer.Tours.Tests.Integration.Administration
 
 			// Assert
 			result.ShouldNotBeNull();
-			result.Results.Count.ShouldBe(2);
+			result.Results.Count.ShouldBe(3);
+			result.TotalCount.ShouldBe(3);
 		}
+
+		[Fact]
+		public void Retrieves_all_by_author()
+		{
+			// Arrange
+			using var scope = Factory.Services.CreateScope();
+			var controller = CreateController(scope);
+
+			// Act
+			var result = ((ObjectResult)controller.GetAllByAuthor(0, 0).Result)?.Value as List<TourBundleDto>;
+
+			// Assert
+			result.ShouldNotBeNull();
+			result.Count.ShouldBe(3);
+		}
+		[Fact]
+		public void Retrieves_one()
+		{
+			// Arrange
+			using var scope = Factory.Services.CreateScope();
+			var controller = CreateController(scope);
+
+			// Act
+			var result = ((ObjectResult)controller.GetById(-2).Result)?.Value as TourBundleDto;
+
+			// Assert
+			result.ShouldNotBeNull();
+			result.Name.ShouldBe("Paket tura 2");
+			result.AuthorId.ShouldBe(-11);
+		}
+
 
 		private static TourBundleController CreateController(IServiceScope scope)
 		{
 			return new TourBundleController(scope.ServiceProvider.GetRequiredService<ITourBundleService>())
 			{
-				ControllerContext = BuildContext("-12")
+				ControllerContext = BuildContext("-11")
 			};
 		}
 	}
