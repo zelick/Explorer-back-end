@@ -275,6 +275,18 @@ namespace Explorer.Encounters.Core.UseCases
                 return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
             }
         }
+        public Result<EncounterExecutionDto> GetHiddenLocationEncounterWithUpdatedLocation(int tourId, int id, double touristLongitude, double touristLatitude, int touristId)
+        {
+            try
+            {
+                CheckIfInRangeLocation(id, touristLongitude, touristLatitude, touristId);
+                return GetVisibleByTour(tourId, touristLongitude, touristLatitude, touristId);
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+        }
 
         public Result<List<EncounterExecutionDto>> GetActiveByTour(int touristId, int tourId)
         {
