@@ -24,5 +24,6 @@ namespace Explorer.Tours.API.Public.Administration
         Result<List<PublicTourDto>> GetPublicTours();
         double GetAverageRating(long tourId);
         Result<List<TourPreviewDto>> GetTopRatedTours(int count);
+        Result<List<PublicTourDto>> GetToursByPublicCheckpoints(List<PublicCheckpointDto> checkpoints);
     }
 }

@@ -95,5 +95,6 @@ namespace Explorer.API.Controllers.Author.Administration
             var result = _tourService.AddTime(tourTimesDto, id, User.PersonId());
             return CreateResponse(result);
         }
+
     }
 }

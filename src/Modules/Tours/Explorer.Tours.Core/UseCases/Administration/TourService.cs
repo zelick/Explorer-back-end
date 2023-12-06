@@ -297,5 +297,27 @@ namespace Explorer.Tours.Core.UseCases.Administration
             return _tourPreviewMapper.createDtoList(publishedToursPreviews);
         }
 
+        public Result<List<PublicTourDto>> GetToursByPublicCheckpoints(List<PublicCheckpointDto> checkpoints)
+        {
+            var tours = GetPublicTours();
+            List<PublicTourDto> result= new List<PublicTourDto>();
+            bool containsEveryCheckpoint;
+            foreach(var tour in tours.Value)
+            {
+                containsEveryCheckpoint= true;
+                foreach (var checkpoint in checkpoints)
+                {
+                    if (!tour.PreviewCheckpoints.Any(ch => ch.Longitude == checkpoint.Longitude && ch.Latitude == checkpoint.Latitude))
+                    {
+                        containsEveryCheckpoint = false;
+                    }
+                }
+                if (containsEveryCheckpoint)
+                {
+                    result.Add(tour);
+                }
+            }
+            return result;
+        }
     }
 }
