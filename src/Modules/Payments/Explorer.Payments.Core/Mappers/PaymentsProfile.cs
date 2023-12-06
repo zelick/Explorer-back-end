@@ -13,6 +13,7 @@ public class PaymentsProfile : Profile
             .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.GetTotal()));
         CreateMap<ItemDto, OrderItem>().ReverseMap();
         CreateMap<ItemDto, Item>().ReverseMap();
+        CreateMap<ItemDto, BundleItem>().ReverseMap();
         CreateMap<CouponDto, Coupon>().ReverseMap();
         CreateMap<CreateCouponDto, Coupon>().ReverseMap();
         CreateMap<ShoppingCartDto, ShoppingCart>().ReverseMap();

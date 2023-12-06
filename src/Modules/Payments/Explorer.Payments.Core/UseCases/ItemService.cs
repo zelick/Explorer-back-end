@@ -11,10 +11,12 @@ namespace Explorer.Payments.Core.UseCases;
 
 public class ItemService : BaseService<ItemDto, Item>, IInternalItemService
 {
+    private readonly IMapper _mapper;
     private readonly IItemRepository _itemRepository;
 
     public ItemService(IItemRepository itemRepository, IMapper mapper) : base(mapper)
     {
+        _mapper = mapper;
         _itemRepository = itemRepository;
     }
 
@@ -22,7 +24,16 @@ public class ItemService : BaseService<ItemDto, Item>, IInternalItemService
     {
         try
         {
-            _itemRepository.Create(MapToDomain(itemDto));
+            if (GetItemType(itemDto.Type) == ItemType.Tour)
+            {
+                var item = MapToDomain(itemDto);
+                _itemRepository.Create(item);
+            }
+            else if (GetItemType(itemDto.Type) == ItemType.Bundle)
+            {
+                var item = _mapper.Map<ItemDto, BundleItem>(itemDto);
+                _itemRepository.Create(item);
+            }
 
             return Result.Ok();
         }
@@ -66,5 +77,20 @@ public class ItemService : BaseService<ItemDto, Item>, IInternalItemService
 
             return Result.Fail(FailureCode.InvalidArgument).WithError(errorMessage);
         }
+    }
+
+    private ItemType GetItemType(string itemType)
+    {
+        if (string.Equals(itemType, ItemType.Tour.ToString(), StringComparison.OrdinalIgnoreCase))
+        {
+            return ItemType.Tour;
+        }
+        if (string.Equals(itemType, ItemType.Bundle.ToString(), StringComparison.OrdinalIgnoreCase))
+        {
+            return ItemType.Bundle;
+        }
+
+        var availableTypes = string.Join(", ", Enum.GetNames(typeof(ItemType)));
+        throw new InvalidEnumArgumentException($"Invalid item type. Available types are: {availableTypes}");
     }
 }
