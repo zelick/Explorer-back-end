@@ -329,6 +329,7 @@ namespace Explorer.Encounters.Core.UseCases
             try
             {
                 encounterExecution = _encounterExecutionRepository.Get(id);
+                encounterExecution.Encounter = _encounterRepository.Get(encounterExecution.EncounterId);
             }
             catch (KeyNotFoundException e)
             {
