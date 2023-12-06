@@ -91,6 +91,15 @@ namespace Explorer.API.Controllers.Tourist.Encounters
             return CreateResponse(result);
         }
 
+        [HttpGet("location/checkRange/{id:int}/{tourId:int}")]
+        public ActionResult<EncounterExecutionDto> CheckPositionLocationEncounter([FromRoute] int tourId, [FromRoute] int id, [FromQuery] double touristLatitude, [FromQuery] double touristLongitude)
+        {
+            var result = _encounterExecutionService.GetHiddenLocationEncounterWithUpdatedLocation(tourId, id, touristLongitude, touristLatitude, User.PersonId());
+            if (result.IsSuccess)
+                result = _encounterService.AddEncounter(result.Value);
+            return CreateResponse(result);
+        }
+
         [HttpGet("active/by-tour/{id:int}")]
         public ActionResult<List<EncounterExecutionDto>> GetActiveByTour([FromRoute] int id)
         {

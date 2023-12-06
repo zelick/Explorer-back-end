@@ -29,13 +29,8 @@ namespace Explorer.Encounters.Infrastructure.Database
                 .HasForeignKey(e => e.EncounterId)
                 .IsRequired();
 
-
             // modelBuilder.Entity<Encounter>().Property(item => item.HiddenLocationEncounter).HasColumnType("jsonb");
-            modelBuilder.Entity<Encounter>().Property(item => item.CompletedEncounter).HasColumnType("jsonb");
             //modelBuilder.Entity<Encounter>().Property(item => item.SocialEncounter).HasColumnType("jsonb");
-
-
-
         }
     }
 }

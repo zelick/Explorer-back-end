@@ -81,11 +81,6 @@ namespace Explorer.Encounters.Core.Domain.Encounters
             double b = Math.Abs(Math.Round(TouristLatitude, 4) - Math.Round(touristLatitude, 4));
             return a < 0.01 && b < 0.01;
         }
-        //obrisi
-        public void FinishEncounter()
-        {
-            this.Status = EncounterExecutionStatus.Completed;
-        }
     }
 
     public enum EncounterExecutionStatus
