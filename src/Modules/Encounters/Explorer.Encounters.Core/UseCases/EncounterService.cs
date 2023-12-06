@@ -212,62 +212,66 @@ namespace Explorer.Encounters.Core.UseCases
 
         public Result<EncounterDto> CreateForTourist(EncounterDto encounterDto, long checkpointId, bool isSecretPrerequisite, long userId)
         {
-            Encounter result;
-            Encounter encounter = new Encounter();
-            if (encounterDto.Type == "Location")
+            if(_internalTouristService.Get(userId).Value.Level >= 10)
+            {
+                Encounter result;
+                Encounter encounter = new Encounter();
+                if (encounterDto.Type == "Location")
+                    try
+                    {
+                        encounter = _mapper.Map<EncounterDto, HiddenLocationEncounter>(encounterDto);
+                    }
+                    catch (ArgumentException e)
+                    {
+                        return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+                    }
+                else if (encounterDto.Type == "Social")
+                    try
+                    {
+                        encounter = _mapper.Map<EncounterDto, SocialEncounter>(encounterDto);
+                    }
+                    catch (ArgumentException e)
+                    {
+                        return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+                    }
+                else
+                    try
+                    {
+                        encounter = _mapper.Map<EncounterDto, Encounter>(encounterDto);
+                    }
+                    catch (ArgumentException e)
+                    {
+                        return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+                    }
+
+
+                if (!encounter.IsAuthor(userId))
+                    return Result.Fail(FailureCode.Forbidden);
+
                 try
                 {
-                    encounter = _mapper.Map<EncounterDto, HiddenLocationEncounter>(encounterDto);
+                    encounter.IsValid(encounter.Name, encounter.Description, encounter.AuthorId, encounter.XP, encounter.Longitude, encounter.Latitude, encounter.Status);
+                    result = _encounterRepository.Create(encounter);
+                    _encounterRequestService.Create(encounterRequestMapper.CreateDto(userId, result.Id, "OnHold"));
                 }
                 catch (ArgumentException e)
                 {
                     return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
                 }
-            else if (encounterDto.Type == "Social")
+
                 try
                 {
-                    encounter = _mapper.Map<EncounterDto, SocialEncounter>(encounterDto);
+                    Result<CheckpointDto> updateCheckpointResult = _internalCheckpointService.SetEncounter((int)checkpointId, result.Id, isSecretPrerequisite, (int)result.AuthorId);
+                    if (!updateCheckpointResult.IsSuccess && updateCheckpointResult.Reasons[0].Metadata.ContainsValue(404))
+                        return Result.Fail(FailureCode.NotFound);
                 }
                 catch (ArgumentException e)
                 {
                     return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
                 }
-            else
-                try
-                {
-                    encounter = _mapper.Map<EncounterDto, Encounter>(encounterDto);
-                }
-                catch (ArgumentException e)
-                {
-                    return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
-                }
-
-
-            if (!encounter.IsAuthor(userId))
-                return Result.Fail(FailureCode.Forbidden);
-
-            try
-            {
-                encounter.IsValid(encounter.Name, encounter.Description, encounter.AuthorId, encounter.XP, encounter.Longitude, encounter.Latitude, encounter.Status);
-                result = _encounterRepository.Create(encounter);
-                _encounterRequestService.Create(encounterRequestMapper.CreateDto(userId, result.Id, "OnHold"));
+                return MapToDto(result);
             }
-            catch (ArgumentException e)
-            {
-                return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
-            }
-
-            try
-            {
-                Result<CheckpointDto> updateCheckpointResult = _internalCheckpointService.SetEncounter((int)checkpointId, result.Id, isSecretPrerequisite, (int)result.AuthorId);
-                if (!updateCheckpointResult.IsSuccess && updateCheckpointResult.Reasons[0].Metadata.ContainsValue(404))
-                    return Result.Fail(FailureCode.NotFound);
-            }
-            catch (ArgumentException e)
-            {
-                return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
-            }
-            return MapToDto(result);
+            return Result.Fail("The tourist is not at level 10 or higher");
         }
 
         public Result<EncounterDto> GetRequestInfo(long encounterId)

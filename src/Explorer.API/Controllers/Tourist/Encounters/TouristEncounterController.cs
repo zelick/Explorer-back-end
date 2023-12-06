@@ -1,4 +1,5 @@
 ﻿using Explorer.API.Services;
+using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Encounters.API.Dtos;
 using Explorer.Encounters.API.Public;
 using Explorer.Encounters.Core.UseCases;
@@ -63,6 +64,14 @@ namespace Explorer.API.Controllers.Tourist.Encounters
             return CreateResponse(result);
         }
 
+        [HttpGet]
+        [Authorize(Policy = "administratorPolicy")]
+        public ActionResult<PagedResult<EncounterDto>> GetAll()
+        {
+            var result = _encounterService.GetPaged(0, 0);
+            return CreateResponse(result);
+        }
+
         [HttpGet("{id:int}")]
         [Authorize(Policy = "touristPolicy")]
         public ActionResult<EncounterDto> GetById(int id)
@@ -78,5 +87,6 @@ namespace Explorer.API.Controllers.Tourist.Encounters
             var result = _encounterService.GetRequestInfo(encounterId);
             return CreateResponse(result);
         }
+
     }
 }

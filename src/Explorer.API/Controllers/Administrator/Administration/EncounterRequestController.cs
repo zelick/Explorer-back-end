@@ -1,4 +1,5 @@
-﻿using Explorer.Encounters.API.Dtos;
+﻿using Explorer.BuildingBlocks.Core.UseCases;
+using Explorer.Encounters.API.Dtos;
 using Explorer.Encounters.API.Public;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -24,7 +25,7 @@ namespace Explorer.API.Controllers.Administrator.Administration
         }
 
         [HttpGet]
-        public ActionResult<List<EncounterRequestDto>> GetAll()
+        public ActionResult<PagedResult<EncounterRequestDto>> GetAll()
         {
             var result = _encounterRequestService.GetPaged(0,0);
             return CreateResponse(result);
