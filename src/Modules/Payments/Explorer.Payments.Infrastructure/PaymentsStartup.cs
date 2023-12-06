@@ -10,6 +10,8 @@ using Explorer.Payments.Core.Domain;
 using Explorer.Payments.Core.UseCases;
 using Explorer.Payments.Core.Domain.RepositoryInterfaces;
 using Explorer.Payments.Infrastructure.Database.Repositories;
+using Explorer.BuildingBlocks.Core.UseCases;
+using Explorer.Payments.Core.Domain;
 
 namespace Explorer.Payments.Infrastructure;
 
@@ -25,18 +27,27 @@ public static class PaymentsStartup
 
     private static void SetupCore(IServiceCollection services)
     {
-        services.AddScoped<ICustomerService, CustomerService>();
-        services.AddScoped<IInternalShoppingService, CustomerService>();
+        services.AddScoped<IItemOwnershipService, ItemOwnershipService>();
+        services.AddScoped<IInternalTourOwnershipService, ItemOwnershipService>();
+        services.AddScoped<IInternalItemService, ItemService>();
+        services.AddScoped<IInternalShoppingSetupService, ShoppingSetupService>();
         services.AddScoped<IShoppingCartService, ShoppingCartService>();
+        services.AddScoped<ISaleService, SaleService>();
         services.AddScoped<ICouponService, CouponService>();
+        services.AddScoped<ITouristWalletService, TouristWalletService>();
     }
 
     private static void SetupInfrastructure(IServiceCollection services)
     {
-        services.AddScoped<ICustomerRepository, CustomerDatabaseRepository>();
+        services.AddScoped<ITourPurchaseTokenRepository, TourPurchaseTokenDatabaseRepository>();
         services.AddScoped<IShoppingCartRepository, ShoppingCartDatabaseRepository>();
+        services.AddScoped<IItemRepository, ItemDatabaseRepository>();
         services.AddScoped(typeof(ICrudRepository<Coupon>), typeof(CrudDatabaseRepository<Coupon, PaymentsContext>));
         services.AddScoped<ICouponRepository, CouponDatabaseRepository>();
+        services.AddScoped(typeof(ICrudRepository<Sale>), typeof(CrudDatabaseRepository<Sale, PaymentsContext>));
+        services.AddScoped<ISaleRepository, SaleDatabaseRepository>();
+        services.AddScoped<ITouristWalletRepository, TouristWalletDatabaseRepository>();
+        services.AddScoped(typeof(ICrudRepository<PaymentRecord>), typeof(CrudDatabaseRepository<PaymentRecord, PaymentsContext>));
 
         services.AddDbContext<PaymentsContext>(opt =>
             opt.UseNpgsql(DbConnectionStringBuilder.Build("payments"),

@@ -12,5 +12,5 @@ DELETE FROM tours."PublicMapObjects";
 DELETE FROM tours."PublicCheckpoint";
 DELETE FROM tours."CheckpointCompletition";
 DELETE FROM tours."TourExecution";
+DELETE FROM tours."TourBundles";
 DELETE FROM tours."Tours";
-

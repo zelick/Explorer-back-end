@@ -5,40 +5,47 @@ namespace Explorer.Payments.Core.Domain;
 public class ShoppingCart : Entity
 {
     public long UserId { get; init; }
-    public List<OrderItem>? Items { get; private set; }
-    public double Price { get; private set; }
+    public List<OrderItem> Items;
 
-    public ShoppingCart(long userId, List<OrderItem>? items = null)
+    public ShoppingCart(long userId)
     {
         UserId = userId;
-        Items = items;
-        CalculateTotalPrice();
+        Items = new List<OrderItem>();
     }
 
-    public void CalculateTotalPrice()
+    public int GetTotal()
     {
-        Price = Items?.Sum(item => item.Price) ?? 0;
+        return Items.Sum(item => item.Price);
     }
 
-    public void Update(ShoppingCart updatedCart)
+    public void AddItem(OrderItem item)
     {
-        Items = updatedCart.Items;
-        CalculateTotalPrice();
+        Items.Add(item);
     }
 
-    public List<long> CheckOut()
+    public void RemoveItem(OrderItem item)
     {
-        if(Items is null) throw new InvalidOperationException("Can't check out because Shopping Cart is empty!");
+        Items.Remove(item);
+    }
 
-        var purchasedItemsId = Items.Select(i => i.ItemId).ToList();
+    public bool IsEmpty()
+    {
+        return Items.Count == 0;
+    }
 
+    public void CheckOut()
+    {
+        if (Items.Count == 0) throw new InvalidOperationException("Can't check out because Shopping Cart is empty!");
         Items.Clear();
-        Price = 0;
-
-        return purchasedItemsId;
     }
-    public bool IsOwnedByUser(int userId)
+
+    public void UpdateItem(OrderItem orderItem, Item item)
     {
-        return UserId == userId;
+        var index = Items.FindIndex(i => i.ItemId == orderItem.ItemId);
+
+        if (index == -1) throw new ArgumentException("Order item not found in cart.");
+
+        var updatedItem = new OrderItem(item.ItemId, item.Name, item.Price, item.Type);
+        Items[index] = updatedItem;
     }
 }

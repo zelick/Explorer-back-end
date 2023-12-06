@@ -39,5 +39,12 @@ namespace Explorer.Stakeholders.Core.UseCases
                 return null;
             }
         }
+
+        public NotificationDto CreatePaymentNotification(string description, long userId)
+        {
+            var notification = new Notification(description, userId, null, NotificationType.PAYMENT);
+            var result = _notificationRepository.CreatePaymentNotification(notification);
+            return MapToDto(result);
+        }
     }
 }

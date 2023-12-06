@@ -1,6 +1,8 @@
-﻿using AutoMapper;
+﻿using System.Reflection.Metadata.Ecma335;
+using AutoMapper;
 using Explorer.BuildingBlocks.Core.Domain;
 using Explorer.BuildingBlocks.Core.UseCases;
+using Explorer.Payments.API.Dtos;
 using Explorer.Payments.API.Internal;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
@@ -19,16 +21,18 @@ namespace Explorer.Tours.Core.UseCases.Administration
         private TourPreviewMapper _tourPreviewMapper;
         private PurchasedTourPreviewMapper _purchasedTourPreviewMapper;
         private PublicTourMapper _publicTourMapper;
-        private readonly IInternalShoppingService _shoppingService;
+        private readonly IInternalTourOwnershipService _tourOwnershipService;
+        private readonly IInternalItemService _tourItemService;
 
-        public TourService(ITourRepository tourRepository, IMapper mapper, IEquipmentRepository equipmentRepository, IInternalShoppingService shoppingService) : base(tourRepository, mapper)
+        public TourService(ITourRepository tourRepository, IMapper mapper, IEquipmentRepository equipmentRepository, IInternalTourOwnershipService tourOwnershipService, IInternalItemService tourItemService) : base(tourRepository, mapper)
         {
             _tourRepository = tourRepository;
             _equipmentRepository = equipmentRepository;
             _tourPreviewMapper = new TourPreviewMapper();
             _purchasedTourPreviewMapper = new PurchasedTourPreviewMapper();
             _publicTourMapper =  new PublicTourMapper();
-            _shoppingService = shoppingService;
+            _tourOwnershipService = tourOwnershipService;
+            _tourItemService = tourItemService;
         }
 
         public Result<TourDto> Update(TourDto tour, int authorId)
@@ -39,7 +43,17 @@ namespace Explorer.Tours.Core.UseCases.Administration
             try
             {
                var result = CrudRepository.Update(t);
-               return MapToDto(result);
+               if (result.Status != TourStatus.Published) return MapToDto(result);
+               var tourItemDto = new ItemDto()
+               {
+                   SellerId = result.AuthorId,
+                   ItemId = result.Id,
+                   Name = result.Name,
+                   Price = result.Price,
+                   Type = "Tour"
+               };
+               _tourItemService.Update(tourItemDto);
+                return MapToDto(result);
             }
             catch (KeyNotFoundException e)
             {
@@ -55,7 +69,7 @@ namespace Explorer.Tours.Core.UseCases.Administration
             Tour t;
             try
             {
-            t = _tourRepository.Get(id);
+                t = _tourRepository.Get(id);
             }
             catch (KeyNotFoundException e)
             {
@@ -66,6 +80,7 @@ namespace Explorer.Tours.Core.UseCases.Administration
             try
             {
                 CrudRepository.Delete(id);
+                _tourItemService.Delete(id, "Tour");
                 return Result.Ok();
             }
             catch (KeyNotFoundException e)
@@ -177,6 +192,16 @@ namespace Explorer.Tours.Core.UseCases.Administration
                     return Result.Fail(FailureCode.InvalidArgument).WithError("Not tour author");
                 tour.Publish();
                 var result = _tourRepository.Update(tour);
+                if (result.Status != TourStatus.Published) return MapToDto(result);
+                var tourItemDto = new ItemDto()
+                {
+                    SellerId = result.AuthorId,
+                    ItemId = result.Id,
+                    Name = result.Name,
+                    Price = result.Price,
+                    Type = "Tour"
+                };
+                _tourItemService.Create(tourItemDto);
                 return MapToDto(result);
             }
             catch (KeyNotFoundException e)
@@ -198,6 +223,10 @@ namespace Explorer.Tours.Core.UseCases.Administration
                     return Result.Fail(FailureCode.InvalidArgument).WithError("Not tour author");
                 tour.Archive();
                 var result = _tourRepository.Update(tour);
+                if (result.Status != TourStatus.Published)
+                {
+                    _tourItemService.Delete(result.Id, "Tour");
+                }
                 return MapToDto(result);
             }
             catch (KeyNotFoundException e)
@@ -250,16 +279,38 @@ namespace Explorer.Tours.Core.UseCases.Administration
             return _purchasedTourPreviewMapper.createDtoList(foundTours);
         }
 
+        public Result<List<TourDto>> GetToursFromSaleByIds(List<long> tourIds)
+        {
+            var foundTours = new List<Tour>();
+
+            foreach (var id in tourIds)
+            {
+                var tour = _tourRepository.Get(id);
+
+                foundTours.Add(tour);
+            }
+
+            return MapToDto(foundTours);
+        }
+
         public Result<PurchasedTourPreviewDto> GetPurchasedTourById(long purchasedTourId, int userId)
         {
-            if (!_shoppingService.IsTourPurchasedByUser(userId, purchasedTourId).Value)
-                throw new InvalidOperationException("This tour is only accessible to customers who have purchased it.");
+            try
+            {
+                if (!_tourOwnershipService.IsTourPurchasedByUser(userId, purchasedTourId).Value)
+                    throw new InvalidOperationException("This tour is only accessible to customers who have purchased it.");
 
-            var foundTour = _tourRepository.Get(purchasedTourId);
+                var foundTour = _tourRepository.Get(purchasedTourId);
 
-            var foundPurchasedTour = foundTour.FilterPurchasedTour(foundTour);
+                var foundPurchasedTour = foundTour.FilterPurchasedTour(foundTour);
 
-            return _purchasedTourPreviewMapper.createDto(foundPurchasedTour);
+                return _purchasedTourPreviewMapper.createDto(foundPurchasedTour);
+            }
+            catch (InvalidOperationException e)
+            {
+                return Result.Fail(FailureCode.Forbidden).WithError(e.Message);
+            }
+
         }
 
         public Result<List<PublicTourDto>> GetPublicTours()

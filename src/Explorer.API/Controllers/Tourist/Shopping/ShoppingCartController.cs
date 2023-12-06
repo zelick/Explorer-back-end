@@ -28,20 +28,26 @@ public class ShoppingCartController : BaseApiController
         return CreateResponse(result);
     }
 
-    [HttpPut("{id:int}")]
-    public ActionResult<ShoppingCartDto> Update(int id, [FromBody] ShoppingCartDto shoppingCart)
+    [HttpPut("add")]
+    public ActionResult<ShoppingCartDto> AddItem([FromBody] ItemDto orderItem)
     {
-        shoppingCart.Id = id;
-        var result = _shoppingCartService.Update(shoppingCart, User.PersonId());
+        var result = _shoppingCartService.AddItem(orderItem, User.PersonId());
+        return CreateResponse(result);
+    }
+
+    [HttpPut("remove")]
+    public ActionResult<ShoppingCartDto> RemoveItem([FromBody] ItemDto orderItem)
+    {
+        var result = _shoppingCartService.RemoveItem(orderItem, User.PersonId());
         return CreateResponse(result);
     }
 
     [HttpPut("checkout")]
-    public ActionResult<ShoppingCartDto> Checkout([FromQuery] int touristId)
+    public ActionResult<ShoppingCartDto> Checkout([FromQuery] int touristId, [FromQuery] string? coupon)
     {
         if (User.PersonId() != touristId) return CreateResponse(Result.Fail(FailureCode.Forbidden));
 
-        var result = _shoppingCartService.CheckOut(touristId);
+        var result = _shoppingCartService.CheckOut(touristId, coupon);
         return CreateResponse(result);
     }
 }

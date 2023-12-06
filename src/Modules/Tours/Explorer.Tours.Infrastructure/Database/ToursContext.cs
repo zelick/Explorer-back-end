@@ -1,3 +1,4 @@
+using Explorer.Stakeholders.Core.Domain;
 using Explorer.Tours.Core.Domain;
 using Explorer.Tours.Core.Domain.TourExecutions;
 using Explorer.Tours.Core.Domain.Tours;
@@ -23,6 +24,8 @@ public class ToursContext : DbContext
     public DbSet<CompositeTour> CompositeTours { get; set; }
     public DbSet<PrivateTour> PrivateTours { get; set; }
 
+    public DbSet<TourBundle> TourBundles { get; set; }
+    public DbSet<TourTourBundle> TourTourBundles { get; set; }
 
     public ToursContext(DbContextOptions<ToursContext> options) : base(options) { }
 
@@ -57,10 +60,16 @@ public class ToursContext : DbContext
         ConfigureTourRatings(modelBuilder);
 
         modelBuilder.Entity<ReportedIssue>().Property(item => item.Comments).HasColumnType("jsonb");
+        
         modelBuilder.Entity<PrivateTour>().Property(item => item.Checkpoints).HasColumnType("jsonb");
         modelBuilder.Entity<PrivateTour>().Property(item => item.Execution).HasColumnType("jsonb");
         modelBuilder.Entity<PrivateTour>().Property(item => item.Blog).HasColumnType("jsonb");
 
+        modelBuilder.Entity<TourBundle>()
+            .HasMany(tb => tb.Tours)
+            .WithMany(t => t.TourBundles)
+            .UsingEntity<TourTourBundle>();
+            
         modelBuilder.Entity<Tour>()
            .Property(item => item.PublishedTours).HasColumnType("jsonb");
         modelBuilder.Entity<Tour>()

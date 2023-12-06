@@ -1,11 +1,11 @@
-﻿using System.Runtime.InteropServices.JavaScript;
-using Explorer.BuildingBlocks.Core.Domain;
+﻿using Explorer.BuildingBlocks.Core.Domain;
 using System.Text;
 
 namespace Explorer.Payments.Core.Domain
 {
     public class Coupon : Entity
     {
+        public long SellerId { get; init; }
         public string Code { get; init; }
         public int DiscountPercentage { get; init; }
         public DateTime? ExpirationDate { get; init; }
@@ -14,8 +14,9 @@ namespace Explorer.Payments.Core.Domain
 
         public Coupon() { }
 
-        public Coupon(int discountPercentage, DateTime? expirationDate, long? tourId, bool isGlobal)
+        public Coupon(long sellerId, int discountPercentage, DateTime? expirationDate, long? tourId, bool isGlobal)
         {
+            SellerId = sellerId;
             Code = GenerateCode();
             DiscountPercentage = discountPercentage;
             ExpirationDate = expirationDate;
@@ -28,7 +29,7 @@ namespace Explorer.Payments.Core.Domain
         private void Validate()
         {
             if (DiscountPercentage < 0) throw new ArgumentException("Discount cannot be a negative number");
-            if (ExpirationDate <= DateTime.Now) throw new ArgumentException("The expiration date must not be in the past.");
+            if (ExpirationDate <= DateTime.UtcNow) throw new ArgumentException("The expiration date must not be in the past.");
             if (TourId == 0) throw new ArgumentException("Invalid TourId.");
             if (!IsGlobalVoucherWithNullTourId()) throw new ArgumentException("If the voucher is global, the TourId must be null.");
         }
@@ -53,6 +54,36 @@ namespace Explorer.Payments.Core.Domain
             }
 
             return codeBuilder.ToString();
+        }
+
+        public void Apply(List<Item> tours)
+        {
+            if (!IsValid()) throw new InvalidOperationException($"Coupon can't be applied, expired on {ExpirationDate}.");
+
+            Item discountedTour;
+            if (IsGlobal)
+            {
+                discountedTour = tours.Where(tour => tour.SellerId == SellerId).MaxBy(tour => tour.Price)
+                                 ?? throw new InvalidOperationException($"Coupon can only be applied on tours made by author {SellerId}.");
+            }
+            else
+            {
+                discountedTour = tours.FirstOrDefault(tour => tour.ItemId == TourId)
+                                 ?? throw new InvalidOperationException($"Coupon can only be applied on tour {TourId}.");
+            }
+
+            ApplyDiscount(discountedTour);
+        }
+
+        private void ApplyDiscount(Item item)
+        {
+            var discountedPrice = item.Price - (item.Price * DiscountPercentage / 100);
+            item.UpdatePrice(discountedPrice);
+        }
+        
+        public bool IsValid()
+        {
+            return !ExpirationDate.HasValue || ExpirationDate.Value >= DateTime.UtcNow;
         }
     }
 }

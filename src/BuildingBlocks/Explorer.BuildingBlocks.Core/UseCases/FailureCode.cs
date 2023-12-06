@@ -10,6 +10,8 @@ public static class FailureCode
 
     public static readonly IError InvalidArgument = new Error("Invalid data supplied.")
         .WithMetadata("code", 400);
+    public static readonly IError PaymentRequired = new Error("Payment is required.")
+        .WithMetadata("code", 402);
     public static readonly IError Forbidden = new Error("Access to resource is restricted.")
         .WithMetadata("code", 403);
     public static readonly IError NotFound = new Error("Accessed resource not found.")

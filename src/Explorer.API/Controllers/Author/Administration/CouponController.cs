@@ -3,6 +3,8 @@ using Explorer.Payments.API.Dtos;
 using Explorer.Payments.API.Public;
 using Explorer.Payments.Core.Domain;
 using Explorer.Payments.Core.UseCases;
+using Explorer.Stakeholders.Core.Domain;
+using Explorer.Stakeholders.Infrastructure.Authentication;
 using FluentResults;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -31,6 +33,7 @@ namespace Explorer.API.Controllers.Author.Administration
         [HttpPost("create")]
         public ActionResult<CouponDto> Create([FromBody] CreateCouponDto coupon)
         {
+            coupon.SellerId = User.PersonId();
             var result = _couponService.Create(coupon);
 
             return CreateResponse(result);

@@ -113,5 +113,12 @@ namespace Explorer.Stakeholders.Infrastructure.Database.Repositories
             _dbContext.Notifications.Remove(entity);
             _dbContext.SaveChanges();
         }
+
+        public Notification CreatePaymentNotification(Notification notification)
+        {
+            _dbContext.Notifications.Add(notification);
+            _dbContext.SaveChanges();
+            return notification;
+        }
     }
 }

@@ -23,13 +23,13 @@ namespace Explorer.Tours.Core.UseCases.Administration
         private readonly ITourExecutionRepository _tourExecutionRepository;
         private TourExecutionMapper _tourExecutionMapper;
         private readonly ITourRepository _tourRepository;
-        private readonly IInternalShoppingService _shoppingService;
-        public TourExecutionService(ITourExecutionRepository repository, IMapper mapper, ITourRepository tourRepository, IInternalShoppingService shoppingService) : base(repository, mapper)
+        private readonly IInternalTourOwnershipService _tourOwnershipService;
+        public TourExecutionService(ITourExecutionRepository repository, IMapper mapper, ITourRepository tourRepository, IInternalTourOwnershipService tourOwnershipService) : base(repository, mapper)
         {
             _tourExecutionRepository = repository;
             _tourRepository = tourRepository;
             _tourExecutionMapper = new TourExecutionMapper();
-            _shoppingService = shoppingService;
+            _tourOwnershipService = tourOwnershipService;
         }
 
         public Result<TourExecutionDto> CheckPosition(TouristPositionDto position, long id)
@@ -43,7 +43,7 @@ namespace Explorer.Tours.Core.UseCases.Administration
         {
             try
             {
-                if(!_shoppingService.IsTourPurchasedByUser(touristId, tourId).Value)
+                if(!_tourOwnershipService.IsTourPurchasedByUser(touristId, tourId).Value)
                     return Result.Fail(FailureCode.InvalidArgument).WithError("Tour not purchased");
                 var result = _tourExecutionRepository.Create(new TourExecution(touristId, tourId));
                 result.setTour(_tourRepository.Get(tourId));
@@ -67,7 +67,7 @@ namespace Explorer.Tours.Core.UseCases.Administration
         {
             try
             {
-                if (!_shoppingService.IsTourPurchasedByUser(touristId, id).Value)
+                if (!_tourOwnershipService.IsTourPurchasedByUser(touristId, id).Value)
                     return Result.Fail(FailureCode.InvalidArgument).WithError("Tour not purchased");
 
                 TourExecution tourExecution = CrudRepository.Get(id);

@@ -14,95 +14,111 @@ namespace Explorer.Payments.Tests.Integration
         public ShoppingCartCommandTests(PaymentsTestFactory factory) : base(factory) { }
 
         [Fact]
-        public void Updates()
+        public void Adds_item()
         {
             // Arrange
             using var scope = Factory.Services.CreateScope();
-            var controller = CreateController(scope);
+            var controller = CreateController(scope, "-23");
             var dbContext = scope.ServiceProvider.GetRequiredService<PaymentsContext>();
 
-            var updatedEntity = new ShoppingCartDto
+            var item = new ItemDto()
             {
-                Id = -1,
-                UserId = -21,
-                Items = new List<OrderItemDto>() { new() { ItemId = 1, Price = 250.0} },
-                Price = 250.0
+                ItemId = -3,
+                Name = "Zimovanje na Tari",
+                Price = 200,
+                Type = "Tour"
             };
 
             // Act
-            var result = ((ObjectResult)controller.Update(-1, updatedEntity).Result)?.Value as ShoppingCartDto;
+            var result = ((ObjectResult)controller.AddItem(item).Result)?.Value as ShoppingCartDto;
 
             // Assert - Response
             result.ShouldNotBeNull();
-            result.Id.ShouldBe(-1);
-            result.UserId.ShouldBe(updatedEntity.UserId);
+            result.Id.ShouldBe(-3);
+            result.UserId.ShouldBe(-23);
 
             // Assert - Database
-            var storedEntity = dbContext.ShoppingCarts.FirstOrDefault(i => i.Price == 250.0);
+            var storedEntity = dbContext.ShoppingCarts.AsEnumerable().Where(c => c.Id == -3 && c.GetTotal() == 250);
             storedEntity.ShouldNotBeNull();
         }
 
         [Fact]
-        public void Update_fails_invalid_id()
+        public void Removes_item()
         {
             // Arrange
             using var scope = Factory.Services.CreateScope();
-            var controller = CreateController(scope);
-            var updatedEntity = new ShoppingCartDto
+            var controller = CreateController(scope, "-23");
+            var dbContext = scope.ServiceProvider.GetRequiredService<PaymentsContext>();
+
+            var item = new ItemDto()
             {
-                Id = -1000,
-                UserId = -21,
-                Items = null,
-                Price = 250.0
+                ItemId = -2,
+                Name = "Obilazak beoradskih muzeja",
+                Price = 50,
+                Type = "Tour"
             };
 
             // Act
-            var result = (ObjectResult)controller.Update(-1000, updatedEntity).Result;
+            var result = ((ObjectResult)controller.RemoveItem(item).Result)?.Value as ShoppingCartDto;
 
-            // Assert
+            // Assert - Response
             result.ShouldNotBeNull();
-            result.StatusCode.ShouldBe(404);
+            result.Id.ShouldBe(-3);
+            result.UserId.ShouldBe(-23);
+
+            // Assert - Database
+            var storedEntity = dbContext.ShoppingCarts.AsEnumerable().Where(c => c.Id == -3 && c.GetTotal() == 0);
+            storedEntity.ShouldNotBeNull();
         }
 
+        [Theory]
+        [InlineData(-21, "ABC123BC", 455)]
+        [InlineData(-22, "", 100)]
 
-        [Fact]
-        public void Get_shopping_cart()
+        public void Shopping_cart_check_out_succeeds(int touristId, string couponCode, int exceptedWalletBalance)
         {
             // Arrange
             using var scope = Factory.Services.CreateScope();
-            var controller = CreateController(scope);
+            var controller = CreateController(scope, touristId.ToString());
             var dbContext = scope.ServiceProvider.GetRequiredService<PaymentsContext>();
 
             // Act
-            var result = ((ObjectResult)controller.GetByUser(-21).Result)?.Value as ShoppingCartDto;
+            var result = (ObjectResult)controller.Checkout(touristId, couponCode).Result;
 
-            result.ShouldNotBeNull();
-            result.Id.ShouldNotBe(0);
-            result.UserId.ShouldBe(-21);
-
-        }
-
-        [Fact]
-        public void ShoppingCartCheckOut_Succeed()
-        {
-            // Arrange
-            using var scope = Factory.Services.CreateScope();
-            var controller = CreateController(scope);
-            var dbContext = scope.ServiceProvider.GetRequiredService<PaymentsContext>();
-
-            var customerId = -21;
-
-            // Act
-            var result = (ObjectResult)controller.Checkout(customerId).Result;
+            // Assert - Response
             result.ShouldNotBeNull();
             result.StatusCode.ShouldBe(200);
+
+            // Assert - Database
+            var wallet = dbContext.TouristWallets.AsEnumerable().First(w => w.UserId == touristId);
+            wallet.ShouldNotBeNull();
+            wallet.AdventureCoins.ShouldBe(exceptedWalletBalance);
         }
 
-        private static ShoppingCartController CreateController(IServiceScope scope)
+        [Fact]
+        public void Shopping_cart_check_out_fails_insufficient_funds()
+        {
+            // Arrange
+            using var scope = Factory.Services.CreateScope();
+            var controller = CreateController(scope, "-23");
+            var dbContext = scope.ServiceProvider.GetRequiredService<PaymentsContext>();
+        
+            var touristId = -23;
+        
+            // Act
+            var result = (ObjectResult)controller.Checkout(touristId, "").Result;
+        
+            // Assert - Response
+            result.ShouldNotBeNull();
+            result.StatusCode.ShouldBe(402);
+        }
+
+
+        private static ShoppingCartController CreateController(IServiceScope scope, string personId = "-21")
         {
             return new ShoppingCartController(scope.ServiceProvider.GetRequiredService<IShoppingCartService>())
             {
-                ControllerContext = BuildContext("-21")
+                ControllerContext = BuildContext(personId)
             };
         }
     }

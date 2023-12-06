@@ -8,6 +8,7 @@ namespace Explorer.Payments.API.Dtos
 {
     public class CouponDto
     {
+        public long SellerId { get; set; }
         public int Id { get; set; }
         public string Code { get; set; }
         public int DiscountPercentage { get; set; }
