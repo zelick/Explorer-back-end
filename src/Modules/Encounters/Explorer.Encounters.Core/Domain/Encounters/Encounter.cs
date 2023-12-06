@@ -12,7 +12,6 @@ namespace Explorer.Encounters.Core.Domain.Encounters
         public EncounterType Type { get; init; }
         public double Latitude { get; init; }
         public double Longitude { get; init; }
-        public List<CompletedEncounter>? CompletedEncounter { get; private set; } = new List<CompletedEncounter>();
 
         public Encounter() { }
 
@@ -45,7 +44,6 @@ namespace Explorer.Encounters.Core.Domain.Encounters
                 Type = encounter.Type;
                 Latitude = encounter.Latitude;
                 Longitude = encounter.Longitude;
-                CompletedEncounter = new List<CompletedEncounter>();
             }
         }
         public bool IsValid(string name,string description,long authorId,int xp,double longitude,double latitude,EncounterStatus status)
@@ -94,21 +92,11 @@ namespace Explorer.Encounters.Core.Domain.Encounters
 
         private bool IsStatusValid(EncounterStatus status)
         {
-            bool isInvalid = (status==EncounterStatus.Active || status==EncounterStatus.Archived);
+            bool isInvalid = (status==EncounterStatus.Archived);
             if (isInvalid) throw new ArgumentException("Invalid status");
             return !isInvalid;
         }
 
-        public void FinishEncounter(long toruistId)
-        {
-           this.Status = EncounterStatus.Archived;
-           if (this.CompletedEncounter == null)
-           { 
-                this.CompletedEncounter = new List<CompletedEncounter>();
-           }
-           CompletedEncounter ce = new CompletedEncounter(toruistId, DateTime.Now);
-           this.CompletedEncounter.Add(ce);
-        }
         public bool IsLatitudeValid(double latitude)
         {
             bool isInvalid = latitude < -90 || latitude > 90;
@@ -130,7 +118,6 @@ namespace Explorer.Encounters.Core.Domain.Encounters
     public enum EncounterStatus
     {
         Draft,
-        Active,
         Archived,
         Published
     }

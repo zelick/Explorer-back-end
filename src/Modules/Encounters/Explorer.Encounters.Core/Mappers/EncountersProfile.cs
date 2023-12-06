@@ -15,7 +15,6 @@ namespace Explorer.Encounters.Core.Mappers
                 .ReverseMap();
             CreateMap<EncounterDto, SocialEncounter>()
                 .ReverseMap();
-            CreateMap<CompletedEncounterDto, CompletedEncounter>().ReverseMap();
             CreateMap<EncounterExecutionDto, EncounterExecution>().ReverseMap();
         }
         private EncounterStatus EncounterStatusFromString(string status)
