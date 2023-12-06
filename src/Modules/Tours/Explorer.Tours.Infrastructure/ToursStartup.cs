@@ -60,9 +60,9 @@ public static class ToursStartup
         services.AddScoped(typeof(ICrudRepository<ReportedIssue>), typeof(CrudDatabaseRepository<ReportedIssue, ToursContext>));
         services.AddScoped(typeof(ICrudRepository<PublicMapObject>), typeof(CrudDatabaseRepository<PublicMapObject, ToursContext>));
         services.AddScoped(typeof(ICrudRepository<PublicCheckpoint>), typeof(CrudDatabaseRepository<PublicCheckpoint, ToursContext>));
+		services.AddScoped(typeof(ITourTourBundleRepository), typeof(TourTourBundleDatabaseRepository));
 
-
-        services.AddScoped(typeof(ITourExecutionRepository),typeof(TourExecutionDatabaseRepository));
+		services.AddScoped(typeof(ITourExecutionRepository),typeof(TourExecutionDatabaseRepository));
 		services.AddScoped<ITourRatingRepository, TourRatingDatabaseRepository>();
 		services.AddScoped(typeof(ICrudRepository<TourExecution>),typeof(CrudDatabaseRepository<TourExecution, ToursContext>));
         services.AddScoped(typeof(ICrudRepository<TourRating>), typeof(CrudDatabaseRepository<TourRating, ToursContext>));

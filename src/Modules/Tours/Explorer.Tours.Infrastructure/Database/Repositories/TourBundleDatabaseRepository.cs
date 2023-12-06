@@ -1,37 +1,83 @@
 ﻿using Explorer.BuildingBlocks.Infrastructure.Database;
+using Explorer.Stakeholders.Core.Domain;
 using Explorer.Tours.Core.Domain;
 using Explorer.Tours.Core.Domain.RepositoryInterfaces;
-using Explorer.BuildingBlocks.Core.UseCases;
+using Explorer.Tours.Core.Domain.Tours;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Explorer.Tours.Infrastructure.Database.Repositories;
 
 public class TourBundleDatabaseRepository : CrudDatabaseRepository<TourBundle, ToursContext>, ITourBundleRepository
 {
-    public TourBundleDatabaseRepository(ToursContext toursContext) : base(toursContext)
-    {
-    }
+	public class TourBundleDatabaseRepository : CrudDatabaseRepository<TourBundle, ToursContext>, ITourBundleRepository
+	{
+		private readonly ToursContext _dbContext;
+		public TourBundleDatabaseRepository(ToursContext dbContext) : base(dbContext)
+		{
+			_dbContext = dbContext;
+		}
 
-    public PagedResult<TourBundle> GetAllPublished(int page, int pageSize)
-    {
-        var query = DbContext.TourBundles
-            .Include(tb => tb.Tours)
-            .Where(bp => bp.Status == TourBundleStatus.Published);
+		public List<TourBundle> GetAllByAuthor(long id)
+		{
+			var authorBundles = _dbContext.TourBundles
+				.Include(t => t.Tours)
+				.Where(t => t.AuthorId == id)
+				.ToList();
+			foreach(TourBundle tb in authorBundles)
+			{
+				GetBundleWithTours(tb.Id);
+			}
+			return authorBundles;
+		}
 
-        var count = query.Count();
-        var items = PageResults(page, pageSize, query);
+		public TourBundle GetBundleWithTours(long id)
+		{
+			var tourBundle = DbContext.TourBundles
+			.Where(tb => tb.Id == id)
+			.FirstOrDefault();
 
-        return new PagedResult<TourBundle>(items, count);
-    }
+			if (tourBundle != null)
+			{
+				var ttbIds = DbContext.TourTourBundles
+					.Where(ttb => ttb.TourBundleId == tourBundle.Id)
+					.Select(ttb => ttb.TourId)
+					.ToList();
 
-    private static List<TourBundle> PageResults(int page, int pageSize, IQueryable<TourBundle> query)
-    {
-        if (pageSize != 0 && page != 0)
-            return query.OrderByDescending(bp => bp.Id)
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
-                .ToList();
+				var tours = DbContext.Tours
+					.Where(t => ttbIds.Contains(t.Id))
+					.ToList();
 
-        return query.ToList();
-    }
+				tourBundle.Tours = tours;
+			}
+
+			return tourBundle;
+		}
+
+		public TourBundle Update(TourBundle updatedBundle)
+		{
+			try
+			{
+				_dbContext.Attach(updatedBundle);
+				_dbContext.Entry(updatedBundle).Collection(b => b.Tours).Load();
+				foreach (var tour in updatedBundle.Tours.ToList())
+				{
+					_dbContext.Entry(tour).State = EntityState.Detached;
+				}
+
+				_dbContext.Attach(updatedBundle);
+				_dbContext.Entry(updatedBundle).State = EntityState.Modified;
+				_dbContext.SaveChanges();
+			}
+			catch (DbUpdateException e)
+			{
+				throw new KeyNotFoundException(e.Message);
+			}
+			return updatedBundle;
+		}
+	}
 }

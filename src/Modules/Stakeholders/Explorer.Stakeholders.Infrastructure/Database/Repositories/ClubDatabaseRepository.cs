@@ -20,10 +20,6 @@ namespace Explorer.Stakeholders.Infrastructure.Database.Repositories
 
         public Club GetClubWithUsers(int clubId)
         {
-            /*return DbContext.Clubs
-                .Include(c => c.Users)
-                .Where(c => c.Id == clubId)
-                .FirstOrDefault();*/
             var club = DbContext.Clubs
             .Where(c => c.Id == clubId)
             .FirstOrDefault();
