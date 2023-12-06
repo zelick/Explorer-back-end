@@ -26,8 +26,8 @@ namespace Explorer.Tours.Tests.Integration.Tourism
 
             // Assert
             result.ShouldNotBeNull();
-            result.Results.Count.ShouldBe(3);
-            result.TotalCount.ShouldBe(3);
+            result.Results.Count.ShouldBe(4);
+            result.TotalCount.ShouldBe(4);
         }
 
         private static TouristPositionController CreateController(IServiceScope scope)

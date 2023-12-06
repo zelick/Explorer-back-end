@@ -19,17 +19,15 @@ namespace Explorer.Encounters.Core.UseCases
     {
         private readonly IEncounterExecutionRepository _encounterExecutionRepository;
         private readonly IMapper _mapper;
-        private readonly IInternalShoppingService _shoppingService;
         private readonly IInternalCheckpointService _internalCheckpointService;
         private readonly IEncounterRepository _encounterRepository;
         private readonly IInternalTouristService _internalTouristService;
         private readonly ICrudRepository<SocialEncounter> _socialEncounterRepository;
         private readonly ICrudRepository<HiddenLocationEncounter> _hiddenLocationEncounterRepository;
-        public EncounterExecutionService(IEncounterExecutionRepository encounterExecutionRepository, IMapper mapper, IInternalShoppingService shoppingService, IInternalCheckpointService internalCheckpointService, IEncounterRepository encounterRepository, ICrudRepository<SocialEncounter> socialEncounterRepository, ICrudRepository<HiddenLocationEncounter> hiddenLocationEncounterRepository,IInternalTouristService internalTouristService) : base(encounterExecutionRepository, mapper)
+        public EncounterExecutionService(IEncounterExecutionRepository encounterExecutionRepository, IMapper mapper, IInternalCheckpointService internalCheckpointService, IEncounterRepository encounterRepository, ICrudRepository<SocialEncounter> socialEncounterRepository, ICrudRepository<HiddenLocationEncounter> hiddenLocationEncounterRepository,IInternalTouristService internalTouristService) : base(encounterExecutionRepository, mapper)
         {
             _encounterExecutionRepository = encounterExecutionRepository;
             _mapper = mapper;
-            _shoppingService = shoppingService;
             _internalCheckpointService = internalCheckpointService;
             _encounterRepository = encounterRepository;
             _socialEncounterRepository = socialEncounterRepository;
