@@ -1,17 +1,14 @@
-﻿using Explorer.Blog.Core.Domain.BlogPosts;
-using Explorer.BuildingBlocks.Core.UseCases;
+﻿using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Payments.API.Dtos;
 using Explorer.Payments.API.Public;
-using Explorer.Payments.Core.UseCases;
 using Explorer.Stakeholders.Infrastructure.Authentication;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
-using Explorer.Tours.Core.UseCases.Administration;
 using FluentResults;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Explorer.API.Controllers.Administrator.Administration
+namespace Explorer.API.Controllers.Author
 {
     [Authorize(Policy = "authorPolicy")]
     [Route("api/author/sale")]
@@ -20,7 +17,7 @@ namespace Explorer.API.Controllers.Administrator.Administration
         private readonly ISaleService _saleService;
         private readonly ITourService _tourService;
 
-        public SaleController(ISaleService saleService, ITourService tourService) 
+        public SaleController(ISaleService saleService, ITourService tourService)
         {
             _saleService = saleService;
             _tourService = tourService;
@@ -30,6 +27,13 @@ namespace Explorer.API.Controllers.Administrator.Administration
         public ActionResult<PagedResult<SaleDto>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
         {
             var result = _saleService.GetPaged(page, pageSize);
+            return CreateResponse(result);
+        }
+
+        [HttpGet("active")]
+        public ActionResult<List<SaleDto>> GetActiveSales()
+        {
+            var result = _saleService.GetActiveSales();
             return CreateResponse(result);
         }
 
@@ -110,4 +114,3 @@ namespace Explorer.API.Controllers.Administrator.Administration
     }
 }
 
-       

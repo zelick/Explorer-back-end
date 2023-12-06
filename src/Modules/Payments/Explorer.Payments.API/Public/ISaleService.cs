@@ -1,11 +1,6 @@
 ﻿using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Payments.API.Dtos;
 using FluentResults;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Explorer.Payments.API.Public
 {
@@ -16,5 +11,6 @@ namespace Explorer.Payments.API.Public
         Result<SaleDto> Update(SaleDto saleDto);
         Result Delete(int id, int authorId);
         Result<SaleDto> Get(int id);
+        Result<List<SaleDto>> GetActiveSales();
     }
 }

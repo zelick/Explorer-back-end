@@ -61,8 +61,7 @@ public class ShoppingCartService : BaseService<ShoppingCartDto, ShoppingCart>, I
 
             var orderItem = _mapper.Map<ItemDto, OrderItem>(orderItemDto);
 
-            var item = _itemRepository.GetByItemIdAndType(orderItem.ItemId, orderItem.Type);
-            if (item.Price != orderItem.Price) throw new ArgumentException("Item price is invalid.");
+            _itemRepository.GetByItemIdAndType(orderItem.ItemId, orderItem.Type);
 
             cart.AddItem(orderItem);
 
@@ -103,7 +102,7 @@ public class ShoppingCartService : BaseService<ShoppingCartDto, ShoppingCart>, I
         }
     }
 
-    public Result<ShoppingCartDto> CheckOut(long userId, string couponCode)
+    public Result<ShoppingCartDto> CheckOut(long userId, string? couponCode)
     {
         try
         {
@@ -163,9 +162,9 @@ public class ShoppingCartService : BaseService<ShoppingCartDto, ShoppingCart>, I
         }
     }
 
-    private void ApplyCoupon(List<Item> purchasedItems, string couponCode)
+    private void ApplyCoupon(List<Item> purchasedItems, string? couponCode)
     {
-        if (string.IsNullOrWhiteSpace(couponCode)) return;
+        if (couponCode == null || string.IsNullOrWhiteSpace(couponCode)) return;
 
         var coupon = _couponRepository.GetByCode(couponCode);
         var tourItems = purchasedItems.Where(i => i.Type == ItemType.Tour).ToList();
@@ -190,7 +189,8 @@ public class ShoppingCartService : BaseService<ShoppingCartDto, ShoppingCart>, I
         var items = shoppingCart.Items.ToList();
         foreach (var orderItem in items)
         {
-            var updatedItem = _itemRepository.GetByItemIdAndType(orderItem.ItemId, orderItem.Type);
+            var item = _itemRepository.GetByItemIdAndType(orderItem.ItemId, orderItem.Type);
+            var updatedItem = CheckSale(item);
 
             if (isCheckout && orderItem.Price != updatedItem.Price)
                 throw new ArgumentException(
@@ -202,6 +202,17 @@ public class ShoppingCartService : BaseService<ShoppingCartDto, ShoppingCart>, I
         _shoppingCartRepository.Update(shoppingCart);
     }
 
+    private Item CheckSale(Item item)
+    {
+        var itemOnSale = new Item(item);
+        if (item.Type != ItemType.Tour) return itemOnSale;
+
+        var sales = _saleRepository.GetActiveSalesForTour(item.ItemId);
+        var salePrice = sales.Aggregate(itemOnSale.Price, (currentPrice, sale) => sale.ApplyDiscount(currentPrice));
+        itemOnSale.UpdatePrice(salePrice);
+
+        return itemOnSale;
+    }
 
     private void CreatePaymentRecords(long userId, List<Item> purchasedItems)
     {

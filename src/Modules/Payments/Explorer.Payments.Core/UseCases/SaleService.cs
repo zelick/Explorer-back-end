@@ -44,5 +44,17 @@ namespace Explorer.Payments.Core.UseCases
                 return Result.Fail(FailureCode.NotFound).WithError(e.Message);
             }
         }
+
+        public Result<List<SaleDto>> GetActiveSales()
+        {
+            try
+            {
+                return MapToDto(_saleRepository.GetActiveSales());
+            }
+            catch (Exception e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+        }
     }
 }

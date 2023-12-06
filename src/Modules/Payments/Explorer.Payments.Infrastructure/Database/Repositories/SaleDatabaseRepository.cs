@@ -8,6 +8,15 @@ public class SaleDatabaseRepository : CrudDatabaseRepository<Sale, PaymentsConte
 {
     public SaleDatabaseRepository(PaymentsContext dbContext) : base(dbContext) { }
 
+    public List<Sale> GetActiveSales()
+    {
+        var currentDateTime = DateTime.Now.ToUniversalTime();
+
+        return DbContext.Sales
+            .Where(s => s.Start <= currentDateTime && s.End >= currentDateTime)
+            .ToList();
+    }
+
     public List<Sale> GetActiveSalesForTour(long tourId)
     {
         var currentDateTime = DateTime.Now.ToUniversalTime();
