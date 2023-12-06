@@ -1,4 +1,4 @@
-﻿using Explorer.API.Controllers.Administrator.Administration;
+﻿using Explorer.API.Controllers.Author;
 using Explorer.API.Controllers.Author.Administration;
 using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Payments.API.Dtos;
@@ -34,8 +34,23 @@ namespace Explorer.Payments.Tests.Integration
 
             // Assert
             result.ShouldNotBeNull();
-            result.Results.Count.ShouldBe(3);
-            result.TotalCount.ShouldBe(3);
+            result.Results.Count.ShouldBe(4);
+            result.TotalCount.ShouldBe(4);
+        }
+
+        [Fact]
+        public void Retrieves_all_active()
+        {
+            // Arrange
+            using var scope = Factory.Services.CreateScope();
+            var controller = CreateController(scope);
+
+            // Act
+            var result = ((ObjectResult)controller.GetActiveSales().Result)?.Value as List<SaleDto>;
+
+            // Assert
+            result.ShouldNotBeNull();
+            result.Count.ShouldBe(1);
         }
 
         private static SaleController CreateController(IServiceScope scope)

@@ -1,4 +1,4 @@
-﻿using Explorer.API.Controllers.Administrator.Administration;
+﻿using Explorer.API.Controllers.Author;
 using Explorer.API.Controllers.Author.Administration;
 using Explorer.API.Controllers.Tourist.Shopping;
 using Explorer.Payments.API.Dtos;
@@ -53,7 +53,7 @@ namespace Explorer.Payments.Tests.Integration
            
             var newEntity = new SaleDto()
             {
-                Id = -4,
+                Id = -5,
                 ToursIds = new List<long> { -1, -2, -3 },
                 Discount = 50,
                 Start = DateTime.UtcNow,
@@ -66,7 +66,7 @@ namespace Explorer.Payments.Tests.Integration
 
             // Assert - Response
             result.ShouldNotBeNull();
-            result.Id.ShouldBe(-4);
+            result.Id.ShouldBe(-5);
             result.Discount.ShouldBe(50);
 
             // Assert - Database
