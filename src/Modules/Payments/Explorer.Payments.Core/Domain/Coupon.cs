@@ -11,6 +11,7 @@ namespace Explorer.Payments.Core.Domain
         public DateTime? ExpirationDate { get; init; }
         public bool IsGlobal { get; init; }
         public long? TourId { get; init; }
+        public bool IsUsed { get; private set; }
 
         public Coupon() { }
 
@@ -22,6 +23,7 @@ namespace Explorer.Payments.Core.Domain
             ExpirationDate = expirationDate;
             TourId = tourId;
             IsGlobal = isGlobal;
+            IsUsed = false;
 
             Validate();
         }
@@ -31,12 +33,12 @@ namespace Explorer.Payments.Core.Domain
             if (DiscountPercentage < 0) throw new ArgumentException("Discount cannot be a negative number");
             if (ExpirationDate <= DateTime.UtcNow) throw new ArgumentException("The expiration date must not be in the past.");
             if (TourId == 0) throw new ArgumentException("Invalid TourId.");
-            if (!IsGlobalVoucherWithNullTourId()) throw new ArgumentException("If the voucher is global, the TourId must be null.");
+            if (IsGlobalVoucherWithNullTourId()) throw new ArgumentException("If the voucher is global, the TourId must be null.");
         }
 
         private bool IsGlobalVoucherWithNullTourId()
         {
-            return IsGlobal && TourId == null;
+            return !IsGlobal && TourId == null;
         }
 
         private string GenerateCode()
@@ -58,7 +60,7 @@ namespace Explorer.Payments.Core.Domain
 
         public void Apply(List<Item> tours)
         {
-            if (!IsValid()) throw new InvalidOperationException($"Coupon can't be applied, expired on {ExpirationDate}.");
+            if (!IsValid()) throw new InvalidOperationException($"Coupon can't be applied, expired on {ExpirationDate} or used.");
 
             Item discountedTour;
             if (IsGlobal)
@@ -73,6 +75,7 @@ namespace Explorer.Payments.Core.Domain
             }
 
             ApplyDiscount(discountedTour);
+            IsUsed = true;
         }
 
         private void ApplyDiscount(Item item)
@@ -83,7 +86,7 @@ namespace Explorer.Payments.Core.Domain
         
         public bool IsValid()
         {
-            return !ExpirationDate.HasValue || ExpirationDate.Value >= DateTime.UtcNow;
+            return (!ExpirationDate.HasValue || ExpirationDate.Value >= DateTime.UtcNow) && !IsUsed;
         }
     }
 }

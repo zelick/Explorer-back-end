@@ -84,7 +84,7 @@ namespace Explorer.Payments.Tests.Integration
                 DiscountPercentage = 50,
                 ExpirationDate = DateTime.UtcNow.AddYears(2),
                 IsGlobal = true,
-                TourId = null
+                TourId = null,
             };
 
             // Act
