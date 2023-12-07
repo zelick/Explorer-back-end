@@ -11,6 +11,7 @@ namespace Explorer.Payments.Core.Domain
         public DateTime? ExpirationDate { get; init; }
         public bool IsGlobal { get; init; }
         public long? TourId { get; init; }
+        public bool IsUsed { get; private set; }
 
         public Coupon() { }
 
@@ -22,6 +23,7 @@ namespace Explorer.Payments.Core.Domain
             ExpirationDate = expirationDate;
             TourId = tourId;
             IsGlobal = isGlobal;
+            IsUsed = false;
 
             Validate();
         }
@@ -58,7 +60,7 @@ namespace Explorer.Payments.Core.Domain
 
         public void Apply(List<Item> tours)
         {
-            if (!IsValid()) throw new InvalidOperationException($"Coupon can't be applied, expired on {ExpirationDate}.");
+            if (!IsValid()) throw new InvalidOperationException($"Coupon can't be applied, expired on {ExpirationDate} or used.");
 
             Item discountedTour;
             if (IsGlobal)
@@ -73,6 +75,7 @@ namespace Explorer.Payments.Core.Domain
             }
 
             ApplyDiscount(discountedTour);
+            IsUsed = true;
         }
 
         private void ApplyDiscount(Item item)
@@ -83,7 +86,7 @@ namespace Explorer.Payments.Core.Domain
         
         public bool IsValid()
         {
-            return !ExpirationDate.HasValue || ExpirationDate.Value >= DateTime.UtcNow;
+            return (!ExpirationDate.HasValue || ExpirationDate.Value >= DateTime.UtcNow) && IsUsed;
         }
     }
 }
