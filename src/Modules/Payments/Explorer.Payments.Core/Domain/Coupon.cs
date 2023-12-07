@@ -86,7 +86,7 @@ namespace Explorer.Payments.Core.Domain
         
         public bool IsValid()
         {
-            return (!ExpirationDate.HasValue || ExpirationDate.Value >= DateTime.UtcNow) && IsUsed;
+            return (!ExpirationDate.HasValue || ExpirationDate.Value >= DateTime.UtcNow) && !IsUsed;
         }
     }
 }
