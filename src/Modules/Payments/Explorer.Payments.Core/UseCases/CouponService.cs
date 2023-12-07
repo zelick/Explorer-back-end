@@ -32,5 +32,12 @@ namespace Explorer.Payments.Core.UseCases
                 return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
             }
         }
+
+        public Result<List<CouponDto>> GetByUser(long Id)
+        {
+            return MapToDto(_couponRepository.GetByUser(Id));
+        }
+
+        
     }
 }

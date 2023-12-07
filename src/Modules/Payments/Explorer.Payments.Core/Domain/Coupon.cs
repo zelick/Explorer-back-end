@@ -31,12 +31,12 @@ namespace Explorer.Payments.Core.Domain
             if (DiscountPercentage < 0) throw new ArgumentException("Discount cannot be a negative number");
             if (ExpirationDate <= DateTime.UtcNow) throw new ArgumentException("The expiration date must not be in the past.");
             if (TourId == 0) throw new ArgumentException("Invalid TourId.");
-            if (!IsGlobalVoucherWithNullTourId()) throw new ArgumentException("If the voucher is global, the TourId must be null.");
+            if (IsGlobalVoucherWithNullTourId()) throw new ArgumentException("If the voucher is global, the TourId must be null.");
         }
 
         private bool IsGlobalVoucherWithNullTourId()
         {
-            return IsGlobal && TourId == null;
+            return !IsGlobal && TourId == null;
         }
 
         private string GenerateCode()

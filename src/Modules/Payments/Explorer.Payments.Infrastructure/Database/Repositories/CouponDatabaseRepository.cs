@@ -14,4 +14,10 @@ public class CouponDatabaseRepository : CrudDatabaseRepository<Coupon, PaymentsC
         if (coupon == null) throw new KeyNotFoundException("Not found: " + couponCode);
         return coupon;
     }
+
+    public List<Coupon> GetByUser(long Id)
+    {
+        var coupons = DbContext.Coupons.Where(c => c.SellerId == Id).ToList();
+        return coupons;
+    }
 }
