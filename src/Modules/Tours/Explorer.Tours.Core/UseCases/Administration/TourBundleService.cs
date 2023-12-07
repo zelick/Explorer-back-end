@@ -61,7 +61,7 @@ namespace Explorer.Tours.Core.UseCases.Administration
                     Name = result.Name,
                     Price = result.Price,
                     Type = "Bundle",
-                    BundleItemIds = result.Tours.Select(t => t.Id).ToList()
+                    BundleItemIds = bundleTours.Select(t => t.Id).ToList()
                 };
                 _bundleItemService.Create(bundleItemDto);
 				return MapToDto(result);

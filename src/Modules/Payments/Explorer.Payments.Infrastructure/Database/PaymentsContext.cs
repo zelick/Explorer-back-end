@@ -22,8 +22,15 @@ public class PaymentsContext : DbContext
         modelBuilder.Entity<ShoppingCart>()
             .Property(item => item.Items).HasColumnType("jsonb");
 
+        modelBuilder.Entity<Item>()
+            .ToTable("Items")
+            .HasDiscriminator(i => i.Type)
+            .HasValue<Item>(ItemType.Tour)
+            .HasValue<BundleItem>(ItemType.Bundle);
+        
         ConfigurePayments(modelBuilder);
     }
+
     private static void ConfigurePayments(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Coupon>().HasIndex(c => c.Code).IsUnique();

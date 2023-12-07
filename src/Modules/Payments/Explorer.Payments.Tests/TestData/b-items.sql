@@ -15,13 +15,13 @@ INSERT INTO payments."Items"(
 	VALUES (-4, -11, -5, 'Zimovanje na Kopu', 300, 0);
 
 INSERT INTO payments."Items"(
-	"Id", "SellerId", "ItemId", "Name", "Price", "Type")
-	VALUES (-5, -11, -6, 'Letovanje na Drini', 0, 0);
+	"Id", "SellerId", "ItemId", "Name", "Price", "Type", "BundleItemIds")
+	VALUES (-5, -11, -6, 'Letovanje na Drini', 0, 0, null);
 
 INSERT INTO payments."Items"(
-	"Id", "SellerId", "ItemId", "Name", "Price", "Type")
-	VALUES (-6, -12, -1, 'Paket tura 1', 250, 1);
+	"Id", "SellerId", "ItemId", "Name", "Price", "Type", "BundleItemIds")
+	VALUES (-6, -12, -1, 'Paket tura 1', 250, 1, ARRAY[-1, -2]);
 
 INSERT INTO payments."Items"(
-	"Id", "SellerId", "ItemId", "Name", "Price", "Type")
-	VALUES (-7, -12, -2, 'Paket tura 2', 250, 1);
+	"Id", "SellerId", "ItemId", "Name", "Price", "Type", "BundleItemIds")
+	VALUES (-7, -12, -2, 'Paket tura 2', 250, 1, ARRAY[-2, -3]);

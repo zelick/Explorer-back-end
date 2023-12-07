@@ -8,4 +8,4 @@ INSERT INTO tours."TourBundles"(
 
 INSERT INTO tours."TourBundles"(
 	"Id", "Name", "Price", "AuthorId", "Status")
-	VALUES (-3, 'Paket tura 3', 180.0, -11, 0);
+	VALUES (-3, 'Paket tura 3', 180.0, -11, 1);

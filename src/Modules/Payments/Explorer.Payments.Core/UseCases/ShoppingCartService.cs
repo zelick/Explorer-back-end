@@ -178,7 +178,10 @@ public class ShoppingCartService : BaseService<ShoppingCartDto, ShoppingCart>, I
         foreach (var orderItem in shoppingCart.Items)
         {
             var item = _itemRepository.GetByItemIdAndType(orderItem.ItemId, orderItem.Type);
-            purchasedItems.Add(new Item(item));
+            if (item is BundleItem bundleItem)
+                purchasedItems.Add(new BundleItem(bundleItem));
+            else
+                purchasedItems.Add(new Item(item));
         }
 
         return purchasedItems;
