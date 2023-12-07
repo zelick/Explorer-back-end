@@ -84,13 +84,13 @@ public class TourCommandTests: BaseToursIntegrationTest
             DemandignessLevel = "Easy",
             Price = 100,
             Tags = new List<string> { "priroda", "vojvodina" },
-            AuthorId = 2,
+            AuthorId = -12,
             Status = "Draft",
             Equipment = new List<EquipmentDto>()
         };
 
         // Act
-        var result = ((ObjectResult)controller.Update(updatedEntity, 2).Result)?.Value as TourDto;
+        var result = ((ObjectResult)controller.Update(updatedEntity).Result)?.Value as TourDto;
 
         // Assert - Response
         result.ShouldNotBeNull();
@@ -122,13 +122,13 @@ public class TourCommandTests: BaseToursIntegrationTest
             DemandignessLevel = "Easy",
             Price = 100,
             Tags = new List<string> { "planina", "priroda" },
-            AuthorId = 2,
+            AuthorId = -12,
             Status = "Draft",
             Equipment = new List<EquipmentDto>()
         };
 
         // Act
-        var result = (ObjectResult)controller.Update(updatedEntity, 2).Result;
+        var result = (ObjectResult)controller.Update(updatedEntity).Result;
 
         // Assert
         result.ShouldNotBeNull();
@@ -144,14 +144,14 @@ public class TourCommandTests: BaseToursIntegrationTest
         var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
 
         // Act
-        var result = (OkResult)controller.Delete(-3, -11);
+        var result = (OkResult)controller.Delete(-2);
 
         // Assert - Response
         result.ShouldNotBeNull();
         result.StatusCode.ShouldBe(200);
 
         // Assert - Database
-        var storedCourse = dbContext.Tours.FirstOrDefault(i => i.Id == -3);
+        var storedCourse = dbContext.Tours.FirstOrDefault(i => i.Id == -2);
         storedCourse.ShouldBeNull();
     }
 
@@ -163,7 +163,7 @@ public class TourCommandTests: BaseToursIntegrationTest
         var controller = CreateController(scope);
 
         // Act
-        var result = (ObjectResult)controller.Delete(-1000, 2);
+        var result = (ObjectResult)controller.Delete(-1000);
 
         // Assert
         result.ShouldNotBeNull();
@@ -174,7 +174,7 @@ public class TourCommandTests: BaseToursIntegrationTest
     {
         return new TourController(scope.ServiceProvider.GetRequiredService<ITourService>())
         {
-            ControllerContext = BuildContext("-1")
+            ControllerContext = BuildContext("-12")
         };
     }
 }

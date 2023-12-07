@@ -1,6 +1,5 @@
 ﻿using Explorer.BuildingBlocks.Core.Domain;
-using System.ComponentModel.DataAnnotations;
-using System.Threading.Channels;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Explorer.Tours.Core.Domain.Tours
 {
@@ -21,6 +20,7 @@ namespace Explorer.Tours.Core.Domain.Tours
         public List<PublicCheckpoint> PublicCheckpoints { get; init; }
         public List<TourRating>? TourRatings { get; init; }
         public bool Closed { get; private set; }
+		public List<TourBundle> TourBundles { get; init; }
 
         public Tour AddEquipment(Equipment equipment)
         {
@@ -180,8 +180,6 @@ namespace Explorer.Tours.Core.Domain.Tours
             return authorId == AuthorId;
         }
     }
-}
-
 public enum TourStatus
 {
     Draft,
@@ -195,3 +193,5 @@ public enum Demandigness
     Medium,
     Hard
 }
+}
+

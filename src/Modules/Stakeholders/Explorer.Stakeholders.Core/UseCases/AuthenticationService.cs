@@ -1,11 +1,12 @@
-﻿using Explorer.BuildingBlocks.Core.UseCases;
+using AutoMapper;
+using Explorer.BuildingBlocks.Core.UseCases;
+using Explorer.Payments.API.Internal;
 using Explorer.Stakeholders.API.Dtos;
 using Explorer.Stakeholders.API.Public;
 using Explorer.Stakeholders.Core.Domain;
 using Explorer.Stakeholders.Core.Domain.RepositoryInterfaces;
-using Explorer.Stakeholders.Core.Domain.Shopping;
 using FluentResults;
-using System.IdentityModel.Tokens.Jwt;
+using System.Diagnostics.Metrics;
 using System.Net.Mail;
 
 namespace Explorer.Stakeholders.Core.UseCases;
@@ -15,15 +16,20 @@ public class AuthenticationService : IAuthenticationService
     private readonly ITokenGenerator _tokenGenerator;
     private readonly IUserRepository _userRepository;
     private readonly ICrudRepository<Person> _personRepository;
-    //customer rep 
-    private readonly ICustomerRepository _customerRepository;
+    private readonly IEmailService _emailService;
+    private readonly IVerificationTokenRepository _verificationTokenRepository;
+    private readonly IMapper _mapper;
+    private readonly IInternalShoppingSetupService _shoppingSetupService;
 
-    public AuthenticationService(IUserRepository userRepository, ICrudRepository<Person> personRepository, ITokenGenerator tokenGenerator, ICustomerRepository customerRepository)
+    public AuthenticationService(IUserRepository userRepository, ICrudRepository<Person> personRepository, ITokenGenerator tokenGenerator, IEmailService emailService, IVerificationTokenRepository verificationTokenRepository, IMapper mapper, IInternalShoppingSetupService shoppingSetupService)
     {
         _tokenGenerator = tokenGenerator;
         _userRepository = userRepository;
         _personRepository = personRepository;
-        _customerRepository = customerRepository;
+        _emailService = emailService;
+        _verificationTokenRepository = verificationTokenRepository;
+        _mapper = mapper;
+        _shoppingSetupService = shoppingSetupService;
     }
 
     public Result<AuthenticationTokensDto> Login(CredentialsDto credentials)
@@ -43,7 +49,7 @@ public class AuthenticationService : IAuthenticationService
         return _tokenGenerator.GenerateAccessToken(user, personId);
     }
 
-    public Result<AuthenticationTokensDto> RegisterTourist(AccountRegistrationDto account)
+    public Result<AccountRegistrationDto> RegisterTourist(AccountRegistrationDto account)
     {
         if(_userRepository.Exists(account.Username)) return Result.Fail(FailureCode.NonUniqueUsername);
 
@@ -65,16 +71,28 @@ public class AuthenticationService : IAuthenticationService
             {
                 userRole = Domain.UserRole.Author;
             }
-            else userRole = Domain.UserRole.Tourist;
+            else {userRole = Domain.UserRole.Tourist;}
 
-            var user = _userRepository.Create(new User(account.Username, account.Password, userRole , true));
-            var person = _personRepository.Create(new Person(user.Id, account.Name, account.Surname, account.Email, account.ProfilePictureUrl, account.Biography, account.Motto));
-            /*if(userRole.Equals(UserRole.Tourist))
+            var newUser = new User(account.Username, account.Password, userRole, true, false);
+
+            if (newUser.Role == Domain.UserRole.Tourist)
             {
-                var customer = new Customer(user.Id);
-                _customerRepository.Create(customer);
-            }*/
-            return _tokenGenerator.GenerateAccessToken(user, person.Id);
+                newUser = _mapper.Map<User, Tourist>(newUser);
+            }
+
+            var user = _userRepository.Create(newUser);
+            var person = _personRepository.Create(new Person(user.Id, account.Name, account.Surname, account.Email, account.ProfilePictureUrl, account.Biography, account.Motto));
+
+            if (user.Role == Domain.UserRole.Tourist)
+            {
+                _shoppingSetupService.InitializeShopperFeatures(user.Id);
+            }
+
+            _verificationTokenRepository.CreateVerificationToken(user.Id);
+            var token = _verificationTokenRepository.GetByUserId(user.Id); 
+            _emailService.SendEmail(account, token.TokenData);
+           
+            return account;
         }
         catch (ArgumentException e)
         {

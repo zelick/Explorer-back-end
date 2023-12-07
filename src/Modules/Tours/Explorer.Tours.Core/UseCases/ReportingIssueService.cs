@@ -12,16 +12,16 @@ namespace Explorer.Tours.Core.UseCases
     public class ReportingIssueService : CrudService<ReportedIssueDto, ReportedIssue>, IReportingIssueService
     {
         private readonly IReportedIssueRepository _reportedIssuesRepository;
-        private readonly IReportedIssueNotificationRepository _reportedIssueNotificationRepository;
+        private readonly IInternalNotificationService _internalNotificationService;
         private readonly ITourRepository _tourRepository;
         private readonly IInternalPersonService _personService;
         public ReportingIssueService(ICrudRepository<ReportedIssue> repository, IMapper mapper,
                                      IReportedIssueRepository issuerepo, 
-                                     IReportedIssueNotificationRepository reportedIssueNotificationRepository,
+                                     IInternalNotificationService internalnotificationservice,
                                      ITourRepository tourRepository, IInternalPersonService personService) : base(repository, mapper)
         {
             _reportedIssuesRepository = issuerepo;
-            _reportedIssueNotificationRepository = reportedIssueNotificationRepository;
+            _internalNotificationService = internalnotificationservice;
             _tourRepository = tourRepository;
             _personService = personService;
         }
@@ -60,12 +60,12 @@ namespace Explorer.Tours.Core.UseCases
             if (commentCreatorId == reportedIssue.TouristId)
             {
                 var description = "" + "You have new comment for your issue: " + reportedIssue.Description + " in tour " + reportedIssue.Tour.Name + "!";
-                var notifTourist = _reportedIssueNotificationRepository.Create(description, reportedIssue.Tour.AuthorId, reportedIssue.Id);
+                var notifTourist = _internalNotificationService.CreateReportedIssueNotification(description, reportedIssue.Tour.AuthorId, reportedIssue.Id);
             }
             else
             {
                 var description = "You have new comment for your issue: " + reportedIssue.Description + " in tour " + reportedIssue.Tour.Name + "!";
-                var notifAuthor = _reportedIssueNotificationRepository.Create(description, reportedIssue.TouristId, reportedIssue.Id);
+                var notifAuthor = _internalNotificationService.CreateReportedIssueNotification(description, reportedIssue.TouristId, reportedIssue.Id);
             }
         }
 
@@ -78,7 +78,7 @@ namespace Explorer.Tours.Core.UseCases
                 var dto = MapToDto(result);
                 LoadPerson(dto);
                 var description = "New deadline added on your issue: " + dto.Description + ". Please deal with this problem before " + deadline.ToString("dd.MM.yyyy") + "!";
-                _reportedIssueNotificationRepository.Create(description, issue.Tour.AuthorId, id);
+                _internalNotificationService.CreateReportedIssueNotification(description, issue.Tour.AuthorId, id);
                 return dto;
             }
             catch (KeyNotFoundException e)

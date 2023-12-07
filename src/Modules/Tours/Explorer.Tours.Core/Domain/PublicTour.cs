@@ -1,10 +1,4 @@
-﻿using Explorer.Stakeholders.Core.Domain.Shopping;
-using Explorer.Tours.Core.Domain.Tours;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Explorer.Tours.Core.Domain.Tours;
 
 namespace Explorer.Tours.Core.Domain
 {

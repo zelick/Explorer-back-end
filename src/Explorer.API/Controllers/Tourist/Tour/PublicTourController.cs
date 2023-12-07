@@ -24,5 +24,12 @@ namespace Explorer.API.Controllers.Tourist.Tour
         {
             return CreateResponse(_tourService.GetPublicTours());
         }
+
+        [HttpPost("byChekpoints")]
+        public ActionResult<List<PublicTourDto>> GetToursByPublicCheckpoints([FromBody] List<PublicCheckpointDto> checkpoints)
+        {
+            var result = _tourService.GetToursByPublicCheckpoints(checkpoints);
+            return CreateResponse(result);
+        }
     }
 }

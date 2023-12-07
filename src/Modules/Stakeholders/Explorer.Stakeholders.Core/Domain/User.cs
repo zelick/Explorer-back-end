@@ -1,7 +1,4 @@
 using Explorer.BuildingBlocks.Core.Domain;
-using Explorer.Stakeholders.Core.Domain.RepositoryInterfaces;
-using Explorer.Stakeholders.Core.Domain.Shopping;
-using System.Security.Cryptography.X509Certificates;
 
 namespace Explorer.Stakeholders.Core.Domain;
 
@@ -12,14 +9,16 @@ public class User : Entity
     public UserRole Role { get; private set; }
     public bool IsActive { get; set; }
     public List<Club> Clubs { get; set; }
+    public bool IsVerified { get;  set; }
 
 
-    public User(string username, string password, UserRole role, bool isActive)
+    public User(string username, string password, UserRole role, bool isActive, bool isVerified)
 	{
 		Username = username;
 		Password = password;
 		Role = role;
 		IsActive = isActive;
+        IsVerified = isVerified;
         Validate();
     }
 

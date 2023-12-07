@@ -36,15 +36,13 @@ public class RegistrationTests : BaseStakeholdersIntegrationTest
         };
 
         // Act
-        var authenticationResponse = ((ObjectResult)controller.RegisterTourist(account).Result).Value as AuthenticationTokensDto;
+        var authenticationResponse = ((ObjectResult)controller.RegisterTourist(account).Result).Value as AccountRegistrationDto;
 
         // Assert - Response
         authenticationResponse.ShouldNotBeNull();
-        authenticationResponse.Id.ShouldNotBe(0);
-        var decodedAccessToken = new JwtSecurityTokenHandler().ReadJwtToken(authenticationResponse.AccessToken);
-        var personId = decodedAccessToken.Claims.FirstOrDefault(c => c.Type == "personId");
-        personId.ShouldNotBeNull();
-        personId.Value.ShouldNotBe("0");
+        authenticationResponse.Username.ShouldBe("turistaA@gmail.com");
+        authenticationResponse.Name.ShouldBe("Žika");
+        authenticationResponse.Role.ShouldNotBe("turistaA@gmail.com");
 
         // Assert - Database
         dbContext.ChangeTracker.Clear();
@@ -58,6 +56,6 @@ public class RegistrationTests : BaseStakeholdersIntegrationTest
 
     private static AuthenticationController CreateController(IServiceScope scope)
     {
-        return new AuthenticationController(scope.ServiceProvider.GetRequiredService<IAuthenticationService>());
+        return new AuthenticationController(scope.ServiceProvider.GetRequiredService<IAuthenticationService>(), scope.ServiceProvider.GetRequiredService<IVerificationService>());
     }
 }

@@ -18,8 +18,8 @@ namespace Explorer.Tours.API.Public.Administration
         Result<PagedResult<CheckpointDto>> GetPagedByTour(int page, int pageSize, int id);
         Result<CheckpointDto> Create(CheckpointDto checkpoint, int userId, string status);
         Result<CheckpointDto> Get(int id);
-        Result<CheckpointDto> CreateChechpointSecreat(CheckpointSecretDto secret, int id);
-        Result<CheckpointDto> UpdateChechpointSecreat(CheckpointSecretDto secret, int id);
-        Result<CheckpointDto> DeleteChechpointSecreat(int id);
+        Result<CheckpointDto> CreateChechpointSecreat(CheckpointSecretDto secret, int id, int userId);
+        Result<CheckpointDto> UpdateChechpointSecreat(CheckpointSecretDto secret, int id, int userId);
+
     }
 }

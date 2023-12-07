@@ -20,8 +20,8 @@ public class TourExecutionCommandTests : BaseToursIntegrationTest
     public void Abandon_succeeds()
     {
         // Arrange - Input data
-        var authorId = "1";
-        var tourId = -1;
+        var authorId = "-21";
+        var tourId = -4;
         var expectedResponseCode = 200;
         var expectedStatus = ExecutionStatus.Abandoned;
         // Arrange - Controller and dbContext
@@ -55,7 +55,7 @@ public class TourExecutionCommandTests : BaseToursIntegrationTest
         var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
 
         // Act
-        var result = (ObjectResult)controller.Create(tourId, touristId).Result;
+        var result = (ObjectResult)controller.Create(tourId).Result;
 
         // Assert - Response
         result.ShouldNotBeNull();
@@ -70,15 +70,15 @@ public class TourExecutionCommandTests : BaseToursIntegrationTest
     public void RegisterActivity_succeeds()
     {
         // Arrange - Input data
-        var touristId = 1;
-        var tourExecutionId = -4;
+        var touristId = -21;
+        var tourExecutionId = -2;
         var expectedResponseCode = 200;
-        var expectedStatus = ExecutionStatus.InProgress;
+        var expectedStatus = ExecutionStatus.Completed;
         TouristPositionDto positionDto = new TouristPositionDto();
         positionDto.Longitude = 45;
         positionDto.Latitude = 45;
         positionDto.Id = -1;
-        positionDto.CreatorId = 1;
+        positionDto.CreatorId = -21;
         // Arrange - Controller and dbContext
         using var scope = Factory.Services.CreateScope();
         var controller = CreateController(scope, touristId.ToString());
@@ -100,7 +100,7 @@ public class TourExecutionCommandTests : BaseToursIntegrationTest
     public void Complete_succeeds()
     {
         // Arrange - Input data
-        var touristId = 1;
+        var touristId =1;
         var tourExecutionId = -1;
         var expectedResponseCode = 200;
         var expectedStatus = ExecutionStatus.Completed;
@@ -124,7 +124,7 @@ public class TourExecutionCommandTests : BaseToursIntegrationTest
         var storedEntity = dbContext.TourExecution.FirstOrDefault(t => t.Id == tourExecutionId);
         storedEntity.ShouldNotBeNull();
         storedEntity.ExecutionStatus.ShouldBe(expectedStatus);
-        storedEntity.CompletedCheckpoints.Count.ShouldBe(2);
+        storedEntity.CompletedCheckpoints.Count.ShouldBe(3);
     }
 
     private static TourExecutionController CreateController(IServiceScope scope, string personId)

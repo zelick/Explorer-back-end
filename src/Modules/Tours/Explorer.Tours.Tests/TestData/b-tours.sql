@@ -19,3 +19,7 @@ VALUES (-5, -12, 'Letovanje na Tari','Organizovan smestaj',0,0,0,ARRAY ['tara'],
 INSERT INTO tours."Tours"(
     "Id", "AuthorId", "Name","Description","DemandignessLevel","Status","Price","Tags","PublishedTours","ArchivedTours","TourTimes","Closed")
 VALUES (-6, -12, 'Letovanje na Tari','Organizovan smestaj',0,1,0,ARRAY ['tara'], null, null, '[{{ "Distance": 1000, "TimeInSeconds": 74500, "Transportation": 0 }}]',false);
+
+INSERT INTO tours."Tours"(
+    "Id", "AuthorId", "Name","Description","DemandignessLevel","Status","Price","Tags","PublishedTours","ArchivedTours","TourTimes","Closed")
+VALUES (-7, -12, 'Obilazak Rume', 'Organizovana setnja',0,1, 1000,ARRAY ['tara'], null, null, '[{{ "Distance": 1000, "TimeInSeconds": 74500, "Transportation": 0 }}]',false);

@@ -1,8 +1,7 @@
-﻿using System.Security.Claims;
-using Explorer.BuildingBlocks.Core.UseCases;
+﻿using Explorer.BuildingBlocks.Core.UseCases;
+using Explorer.Stakeholders.Infrastructure.Authentication;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
-using Explorer.Tours.Core.Domain;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -27,24 +26,24 @@ namespace Explorer.API.Controllers.Author.Administration
         }
 
         [HttpPut("{id:int}")]
-        public ActionResult<TourDto> Update([FromBody] TourDto tour, [FromQuery] int userId)
+        public ActionResult<TourDto> Update([FromBody] TourDto tour)
         {
             tour.Equipment = new List<EquipmentDto>();
-            var result = _tourService.Update(tour, userId);
+            var result = _tourService.Update(tour, User.PersonId());
             return CreateResponse(result);
         }
 
         [HttpDelete("{id:int}")]
-        public ActionResult Delete(int id,[FromQuery] int userId)
+        public ActionResult Delete(int id)
         {
-            var result = _tourService.Delete(id, userId);
+            var result = _tourService.Delete(id, User.PersonId());
             return CreateResponse(result);
         }
 
-        [HttpGet("by-author/{authorId:int}")]
-        public ActionResult<List<TourDto>> GetToursByAuthor([FromQuery] int page, [FromQuery] int pageSize, int authorId)
+        [HttpGet("by-author")]
+        public ActionResult<List<TourDto>> GetToursByAuthor([FromQuery] int page, [FromQuery] int pageSize)
         {
-            var result = _tourService.GetToursByAuthor(page, pageSize, authorId);
+            var result = _tourService.GetToursByAuthor(page, pageSize, User.PersonId());
             return CreateResponse(result);
         }
 
@@ -56,16 +55,16 @@ namespace Explorer.API.Controllers.Author.Administration
         }
 
         [HttpPut("add/{tourId:int}/{equipmentId:int}")]
-        public ActionResult<TourDto> AddEquipment(int tourId, int equipmentId, [FromQuery] int userId)
+        public ActionResult<TourDto> AddEquipment(int tourId, int equipmentId)
         {
-            var result = _tourService.AddEquipment(tourId, equipmentId, userId);
+            var result = _tourService.AddEquipment(tourId, equipmentId, User.PersonId());
             return CreateResponse(result);
         }
 
         [HttpPut("remove/{tourId:int}/{equipmentId:int}")]
-        public ActionResult<TourDto> RemoveEquipment(int tourId, int equipmentId, [FromQuery] int userId)
+        public ActionResult<TourDto> RemoveEquipment(int tourId, int equipmentId)
         {
-            var result = _tourService.RemoveEquipment(tourId, equipmentId, userId);
+            var result = _tourService.RemoveEquipment(tourId, equipmentId, User.PersonId());
             return CreateResponse(result);
         }
 
@@ -77,24 +76,25 @@ namespace Explorer.API.Controllers.Author.Administration
         }
 
         [HttpPut("publishedTours/{id:int}")]
-        public ActionResult<TourDto> Publish(int id, [FromQuery] int userId)
+        public ActionResult<TourDto> Publish(int id)
         {
-            var result = _tourService.Publish(id, userId);
+            var result = _tourService.Publish(id, User.PersonId());
             return CreateResponse(result);
         }
 
         [HttpPut("archivedTours/{id:int}")]
-        public ActionResult<TourDto> Archive(int id, [FromQuery] int userId)
+        public ActionResult<TourDto> Archive(int id)
         {
-            var result = _tourService.Archive(id, userId);
+            var result = _tourService.Archive(id, User.PersonId());
             return CreateResponse(result);
         }
 
         [HttpPut("tourTime/{id:int}")]
-        public ActionResult<TourDto> AddTime(TourTimesDto tourTimesDto, int id, [FromQuery] int userId)
+        public ActionResult<TourDto> AddTime(TourTimesDto tourTimesDto, int id)
         {
-            var result = _tourService.AddTime(tourTimesDto, id, userId);
+            var result = _tourService.AddTime(tourTimesDto, id, User.PersonId());
             return CreateResponse(result);
         }
+
     }
 }

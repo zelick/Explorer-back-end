@@ -1,5 +1,5 @@
 ﻿using Explorer.API.Controllers.Tourist;
-using Explorer.Stakeholders.API.Public;
+using Explorer.Payments.API.Public;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
 using Explorer.Tours.Core.Domain.RepositoryInterfaces;
@@ -26,8 +26,8 @@ public class TourRatingTouristCommandTests : BaseToursIntegrationTest
         {
             Rating = 4,
             Comment = "neki komentar",
-            TouristId = -21,
-            TourId = -4,
+            TouristId = 1,
+            TourId = -1,
             TourDate = new DateTime(),
             CreationDate = new DateTime(),
             ImageNames = new List<string> { "image1.jpg", "image2.jpg" }
@@ -74,7 +74,7 @@ public class TourRatingTouristCommandTests : BaseToursIntegrationTest
     private static TourRatingTouristController CreateController(IServiceScope scope)
     {
         return new TourRatingTouristController(scope.ServiceProvider.GetRequiredService<ITourRatingService>(),
-            scope.ServiceProvider.GetRequiredService<ICustomerService>(),
+            scope.ServiceProvider.GetRequiredService<IItemOwnershipService>(),
             scope.ServiceProvider.GetRequiredService<ITourExecutionRepository>())
         {
             ControllerContext = BuildContext("-1")
