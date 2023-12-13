@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Explorer.API.Controllers.User.ProfileAdministration
 {
-    [Authorize(Policy = "userPolicy")]
+
     [Route("api/profile-administration/edit")]
     public class ProfileEditingController : BaseApiController
     {

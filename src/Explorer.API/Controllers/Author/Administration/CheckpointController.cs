@@ -87,7 +87,6 @@ namespace Explorer.API.Controllers.Author.Administration
         }
 
         [HttpGet]
-        [Authorize(Policy = "userPolicy")]
         public ActionResult<PagedResult<CheckpointDto>> GetAll([FromQuery] int page, [FromQuery] int pageSize)
         {
             var result = _checkpointService.GetPaged(page, pageSize);
