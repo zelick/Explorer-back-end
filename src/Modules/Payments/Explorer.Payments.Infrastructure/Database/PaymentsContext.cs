@@ -38,5 +38,9 @@ public class PaymentsContext : DbContext
         modelBuilder.Entity<Item>()
             .HasIndex(i => new { i.ItemId, i.Type })
             .IsUnique();
+
+        modelBuilder.Entity<TourPurchaseToken>()
+            .HasIndex(tpt => new { tpt.UserId, tpt.TourId })
+            .IsUnique();
     }
 }
