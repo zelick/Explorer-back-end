@@ -14,4 +14,9 @@ public class ShoppingCartDatabaseRepository : CrudDatabaseRepository<ShoppingCar
         if (shoppingCart == null) throw new KeyNotFoundException("Not found: " + userId);
         return shoppingCart;
     }
+
+    public Coupon GetByCouponText(string couponText)
+    {
+        return DbContext.Coupons.FirstOrDefault(c => c.Code.Equals(couponText)); //Code=Text
+    }
 }
