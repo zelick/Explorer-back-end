@@ -61,6 +61,9 @@ public class ShoppingCartService : BaseService<ShoppingCartDto, ShoppingCart>, I
 
             var orderItem = _mapper.Map<ItemDto, OrderItem>(orderItemDto);
 
+            var hasPurchased = _purchaseTokenRepository.HasPurchasedTour(orderItem.ItemId, userId);
+            if (hasPurchased) throw new ArgumentException("Tour has already been purchased.");
+
             _itemRepository.GetByItemIdAndType(orderItem.ItemId, orderItem.Type);
 
             cart.AddItem(orderItem);
