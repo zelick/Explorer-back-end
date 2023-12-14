@@ -327,7 +327,7 @@ namespace Explorer.Encounters.Core.UseCases
             try
             {
                 encounterExecution = _encounterExecutionRepository.Get(id);
-                encounterExecution.Encounter = _encounterRepository.Get(encounterExecution.EncounterId);
+                //encounterExecution.Encounter = _encounterRepository.Get(encounterExecution.EncounterId);
             }
             catch (KeyNotFoundException e)
             {
@@ -344,9 +344,9 @@ namespace Explorer.Encounters.Core.UseCases
                 encounterExecution.Completed();
                 //da se turista update xp i level
                 _internalTouristService.UpdateTouristXpAndLevel(touristId, encounterExecution.Encounter.XP);
-                if (_encounterRepository.Get(encounterExecution.EncounterId).Type == EncounterType.Social)
+                if (encounterExecution.Encounter.Type == EncounterType.Social)
                     UpdateAllCompletedSocial(encounterExecution.EncounterId);
-                if (_encounterRepository.Get(encounterExecution.EncounterId).Type == EncounterType.Location)
+                if (encounterExecution.Encounter.Type == EncounterType.Location)
                     UpdateAllCompletedLocation(encounterExecution.EncounterId);
                 var result = CrudRepository.Update(encounterExecution);
                 return MapToDto(result);
