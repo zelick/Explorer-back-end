@@ -53,6 +53,27 @@ public class ShoppingCartService : BaseService<ShoppingCartDto, ShoppingCart>, I
         }
     }
 
+    public Result<CouponDto> GetByCouponText(string couponText)
+    {
+        try
+        {
+            var result = _shoppingCartRepository.GetByCouponText(couponText);
+            CouponDto dto = new CouponDto();
+            dto.Code = couponText;
+            dto.SellerId = result.SellerId;
+            dto.Id = (int)result.Id;
+            dto.DiscountPercentage = result.DiscountPercentage;
+            dto.ExpirationDate = result.ExpirationDate;
+            dto.IsGlobal = result.IsGlobal;
+            dto.TourId = result.TourId;
+            return dto;
+        }
+        catch (KeyNotFoundException e)
+        {
+            return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+        }
+    }
+
     public Result<ShoppingCartDto> AddItem(ItemDto orderItemDto, int userId)
     {
         try
