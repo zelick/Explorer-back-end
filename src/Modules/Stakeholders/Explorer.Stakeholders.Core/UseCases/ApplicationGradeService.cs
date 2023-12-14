@@ -23,6 +23,7 @@ namespace Explorer.Stakeholders.Core.UseCases
         public Result<ApplicationGradeDto> EvaluateApplication(ApplicationGradeDto applicationGrade)
         {
             applicationGrade.Created = DateTime.Now.ToUniversalTime();
+            if (Exists((int)applicationGrade.UserId)) return Result.Fail("User already graded application");
             ApplicationGrade newGrade = new ApplicationGrade(applicationGrade.Rating, applicationGrade.Comment, applicationGrade.Created, applicationGrade.UserId);
             CrudRepository.Create(newGrade);
             return MapToDto(newGrade);
@@ -32,6 +33,12 @@ namespace Explorer.Stakeholders.Core.UseCases
         {
             var grades = CrudRepository.GetPaged(page, pageSize).Results.ToList();
             return MapToDto(grades);
+        }
+
+        public bool Exists(int userId) 
+        {
+            var grades = CrudRepository.GetPaged(0,0).Results.ToList();
+            return grades.Any(g => g.UserId == userId);
         }
     }
 }

@@ -26,5 +26,6 @@ namespace Explorer.API.Controllers.Administrator.Administration
             var result = _applicationGradeService.ReviewGrades(page, pageSize);
             return CreateResponse(result);
         }
+
     }
 }
