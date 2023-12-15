@@ -14,11 +14,13 @@ namespace Explorer.API.Controllers.User.ProfileAdministration
     {
         private readonly IPersonEditingService _personEditingService;
         private readonly ImageService _imageService;
+        private readonly ITouristService _touristService;
 
-        public ProfileEditingController(IPersonEditingService personEditingService)
+        public ProfileEditingController(IPersonEditingService personEditingService, ITouristService touristService)
         {
             _personEditingService = personEditingService;
             _imageService = new ImageService();
+            _touristService = touristService;
         }
 
         [HttpPut]
@@ -39,6 +41,13 @@ namespace Explorer.API.Controllers.User.ProfileAdministration
         public ActionResult<PersonDto> GetUserInfo(int id)
         {
             var result = _personEditingService.Get(id);
+            return CreateResponse(result);
+        }
+
+        [HttpGet("getTourist/{userId:long}")]
+        public ActionResult<TouristDto> GetTourist(long userId)
+        {
+            var result = _touristService.GetTouristById(userId);
             return CreateResponse(result);
         }
     }

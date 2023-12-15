@@ -49,6 +49,7 @@ public static class StakeholdersStartup
         services.AddScoped<IEmailService, EmailService>();
         services.AddScoped<IVerificationService, VerificationService>();
         services.AddScoped<IInternalTouristService, InternalTouristService>();
+        services.AddScoped<ITouristService, TouristService>(); 
     }
 
 
