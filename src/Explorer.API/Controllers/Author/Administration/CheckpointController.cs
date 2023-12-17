@@ -4,8 +4,10 @@ using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Stakeholders.Infrastructure.Authentication;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
+using Explorer.Tours.Core.Domain.Tours;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Explorer.API.Controllers.Author.Administration
 {
@@ -37,19 +39,18 @@ namespace Explorer.API.Controllers.Author.Administration
             return CreateResponse(result);
         }
 
-        /*
-        [HttpPost]
-        public ActionResult<CheckpointDto> Create([FromBody] CheckpointDto checkpoint, [FromQuery] int userId)
-        {
-            var result = _checkpointService.Create(checkpoint, userId);
-            return CreateResponse(result);
-        }
-        */
 
         [HttpPut("{id:int}")]
         [Authorize(Policy = "authorPolicy")]
-        public ActionResult<CheckpointDto> Update([FromBody] CheckpointDto checkpoint)
+        public ActionResult<CheckpointDto> Update([FromForm] CheckpointDto checkpoint, int id, [FromForm] List<IFormFile>? pictures = null)
         {
+            if (pictures != null && pictures.Any())
+            {
+                var imageNames = _imageService.UploadImages(pictures);
+                checkpoint.Pictures = imageNames;
+            }
+
+            checkpoint.Id = id;
             var result = _checkpointService.Update(checkpoint, User.PersonId());
             return CreateResponse(result);
         }
@@ -64,24 +65,42 @@ namespace Explorer.API.Controllers.Author.Administration
 
         [HttpPut("createSecret/{id:int}")]
         [Authorize(Policy = "authorPolicy")]
-        public ActionResult<CheckpointDto> CreateCheckpointSecret([FromBody] CheckpointSecretDto secretDto,int id)
+        public ActionResult<CheckpointDto> CreateCheckpointSecret([FromForm] CheckpointSecretDto secretDto, int id, [FromForm] List<IFormFile>? pictures = null)
         {
+            if (pictures != null && pictures.Any())
+            {
+                var imageNames = _imageService.UploadImages(pictures);
+                secretDto.Pictures = imageNames;
+            }
+
             var result = _checkpointService.CreateChechpointSecreat(secretDto,id, User.PersonId());
             return CreateResponse(result);
         }
 
         [HttpPut("updateSecret/{id:int}")]
         [Authorize(Policy = "authorPolicy")]
-        public ActionResult<CheckpointDto> UpdateCheckpointSecret([FromBody] CheckpointSecretDto secretDto, int id)
+        public ActionResult<CheckpointDto> UpdateCheckpointSecret([FromForm] CheckpointSecretDto secretDto, int id, [FromForm] List<IFormFile>? pictures = null)
         {
+            if (pictures != null && pictures.Any())
+            {
+                var imageNames = _imageService.UploadImages(pictures);
+                secretDto.Pictures = imageNames;
+            }
+
             var result = _checkpointService.UpdateChechpointSecreat(secretDto, id, User.PersonId());
             return CreateResponse(result);
         }
 
         [HttpPost("create/{status}")]
         [Authorize(Policy = "authorPolicy")]
-        public ActionResult<CheckpointDto> Create([FromBody] CheckpointDto checkpoint, [FromRoute] string status)
+        public ActionResult<CheckpointDto> Create([FromForm] CheckpointDto checkpoint, [FromRoute] string status, [FromForm] List<IFormFile>? pictures = null)
         {
+            if (pictures != null && pictures.Any())
+            {
+                var imageNames = _imageService.UploadImages(pictures);
+                checkpoint.Pictures = imageNames;
+            }
+
             var result = _checkpointService.Create(checkpoint, User.PersonId(), status);
             return CreateResponse(result);
         }
