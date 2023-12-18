@@ -1,21 +1,19 @@
 ﻿using Explorer.API.Services;
-using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Stakeholders.API.Dtos;
 using Explorer.Stakeholders.API.Public;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Explorer.API.Controllers.User.ProfileAdministration
 {
-    [Authorize(Policy = "userPolicy")]
-    [Route("api/profile-administration/edit")]
-    public class ProfileEditingController : BaseApiController
+    [Authorize(Policy = "administratorPolicy")]
+    [Route("api/profile-administration/admin-edit")]
+    public class AdminProfileEditingController : BaseApiController
     {
         private readonly IPersonEditingService _personEditingService;
         private readonly ImageService _imageService;
 
-        public ProfileEditingController(IPersonEditingService personEditingService)
+        public AdminProfileEditingController(IPersonEditingService personEditingService)
         {
             _personEditingService = personEditingService;
             _imageService = new ImageService();
@@ -29,7 +27,7 @@ namespace Explorer.API.Controllers.User.ProfileAdministration
                 var pictureUrl = _imageService.UploadImages(new List<IFormFile> { profilePicture });
                 person.ProfilePictureUrl = pictureUrl[0];
             }
-            
+
             var result = _personEditingService.Update(person);
             return CreateResponse(result);
         }
