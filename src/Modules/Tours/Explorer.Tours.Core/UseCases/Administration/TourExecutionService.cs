@@ -80,5 +80,19 @@ namespace Explorer.Tours.Core.UseCases.Administration
             }
             
         }
+
+        public Result<List<TourExecutionDto>> GetActiveTourExecutions()
+        {
+            try
+            {
+                var result = _tourExecutionRepository.GetActiveTourExecutions();
+                return MapToDto(result);
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+        }
+
     }
 }

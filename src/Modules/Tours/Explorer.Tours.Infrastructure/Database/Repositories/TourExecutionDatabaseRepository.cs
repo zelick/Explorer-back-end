@@ -1,5 +1,6 @@
 ﻿using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.BuildingBlocks.Infrastructure.Database;
+using Explorer.Stakeholders.Core.Domain;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.Core.Domain.RepositoryInterfaces;
 using Explorer.Tours.Core.Domain.TourExecutions;
@@ -42,6 +43,18 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
 
 
             return task.Result;
+        }
+
+        public List<TourExecution> GetActiveTourExecutions()
+        {
+            return _dbContext.TourExecution
+               .Include(t => t.CompletedCheckpoints)
+               .Include(t => t.Tour).ThenInclude(c => c.Checkpoints)
+               .Include(t => t.Tour).ThenInclude(c => c.Equipment)
+               .Include(t => t.Tour).ThenInclude(c => c.TourRatings)
+               .Where(t => t.ExecutionStatus == ExecutionStatus.InProgress).ToList();
+
+
         }
         /*.
         public TourExecution GetExactExecution(long tourId, long touristId)
