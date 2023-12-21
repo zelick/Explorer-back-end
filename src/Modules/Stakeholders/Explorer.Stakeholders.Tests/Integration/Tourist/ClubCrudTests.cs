@@ -103,7 +103,7 @@ namespace Explorer.Tours.Tests.Integration.Tourist
             };
 
             // Act
-            var result = ((ObjectResult)controller.Update(updatedEntity).Result)?.Value as ClubDto;
+            var result = ((ObjectResult)controller.Update(updatedEntity, -1).Result)?.Value as ClubDto;
 
             // Assert - Response
             result.ShouldNotBeNull();
@@ -135,7 +135,7 @@ namespace Explorer.Tours.Tests.Integration.Tourist
             };
 
             // Act
-            var result = (ObjectResult)controller.Update(updatedEntity).Result;
+            var result = (ObjectResult)controller.Update(updatedEntity, -1000).Result;
 
             // Assert
             result.ShouldNotBeNull();

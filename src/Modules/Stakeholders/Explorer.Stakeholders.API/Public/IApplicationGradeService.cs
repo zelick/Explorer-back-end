@@ -14,5 +14,6 @@ namespace Explorer.Stakeholders.API.Public
     {
         Result<ApplicationGradeDto> EvaluateApplication(ApplicationGradeDto applicationGrade);
         Result<List<ApplicationGradeDto>> ReviewGrades(int page, int pageSize);
+        public bool Exists(int userId);
     }
 }

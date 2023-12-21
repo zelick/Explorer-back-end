@@ -100,7 +100,7 @@ namespace Explorer.Tours.Tests.Integration.Administration
             };
 
             // Act
-            var result = ((ObjectResult)controller.Update(updatedEntity).Result)?.Value as CheckpointDto;
+            var result = ((ObjectResult)controller.Update(updatedEntity, -2).Result)?.Value as CheckpointDto;
 
             // Assert - Response
 
@@ -144,7 +144,7 @@ namespace Explorer.Tours.Tests.Integration.Administration
             };
 
             // Act
-            var result = (ObjectResult)controller.Update(updatedEntity).Result;
+            var result = (ObjectResult)controller.Update(updatedEntity, -1000).Result;
 
             // Assert
             result.ShouldNotBeNull();

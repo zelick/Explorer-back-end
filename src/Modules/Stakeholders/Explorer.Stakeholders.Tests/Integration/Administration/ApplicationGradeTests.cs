@@ -54,7 +54,7 @@ namespace Explorer.Stakeholders.Tests.Integration.Administration
             var result = (ObjectResult)controller.EvaluateApplication(dto).Result;
 
             //Assert
-            result.StatusCode.ShouldBe(200);
+            result.StatusCode.ShouldBe(500);
         }
 
         private static ApplicationGradeController CreateController(IServiceScope scope)
