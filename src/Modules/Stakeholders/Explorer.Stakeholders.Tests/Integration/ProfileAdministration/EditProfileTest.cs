@@ -57,7 +57,9 @@ namespace Explorer.Stakeholders.Tests.Integration.ProfileAdministration
 
         private static ProfileEditingController CreateController(IServiceScope scope)
         {
-            return new ProfileEditingController(scope.ServiceProvider.GetRequiredService<IPersonEditingService>());
+            var personEditingService = scope.ServiceProvider.GetRequiredService<IPersonEditingService>();
+            var touristService = scope.ServiceProvider.GetRequiredService<ITouristService>();
+            return new ProfileEditingController(personEditingService, touristService);
         }
     }
 }

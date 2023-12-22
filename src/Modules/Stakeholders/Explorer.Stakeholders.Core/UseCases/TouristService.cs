@@ -17,9 +17,11 @@ namespace Explorer.Stakeholders.Core.UseCases
     public class TouristService : BaseService<TouristDto, Tourist>, ITouristService
     {
         private readonly ITouristRepository _touristRepository;
+        private readonly IMapper _mapper;
         public TouristService(ITouristRepository touristRepository, IMapper mapper) : base(mapper)
         {
             _touristRepository = touristRepository;
+            _mapper = mapper;
         }
 
         public Result<TouristDto> GetTouristById(long touristId)
