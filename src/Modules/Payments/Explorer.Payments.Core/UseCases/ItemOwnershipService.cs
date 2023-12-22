@@ -48,4 +48,6 @@ public class ItemOwnershipService : IItemOwnershipService, IInternalTourOwnershi
             return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
         }
     }
+    
+    //ovde dodajemo metode dobavi kupljenih tura
 }

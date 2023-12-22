@@ -47,6 +47,7 @@ public static class ToursStartup
         services.AddScoped<ICompositeTourService, CompositeTourService>();
         services.AddScoped<IPrivateTourService, PrivateTourService>();
         services.AddScoped<ITourBundleService, TourBundleService>();
+        services.AddScoped<ITourStatisticsService, TourStatisticsService>();
     }
     private static void SetupInfrastructure(IServiceCollection services)
     {
