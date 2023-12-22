@@ -1,4 +1,6 @@
-﻿using Explorer.Payments.API.Public;
+﻿using Explorer.Blog.Core.Domain.BlogPosts;
+using Explorer.BuildingBlocks.Core.UseCases;
+using Explorer.Payments.API.Public;
 using Explorer.Payments.Core.UseCases;
 using Explorer.Stakeholders.Infrastructure.Authentication;
 using Explorer.Tours.API.Dtos;
@@ -22,6 +24,8 @@ namespace Explorer.API.Controllers.Author.Administration
         [HttpGet("soldToursNumber/{authorId:int}")]
         public ActionResult<int> GetAuthorsSoldToursNumber(long authorId)
         {
+            if (User.PersonId() != authorId) return CreateResponse(Result.Fail(FailureCode.Forbidden));
+
             var result = _tourStatisticsService.GetAuthorsSoldToursNumber(authorId);
             return CreateResponse(result);
         }
@@ -29,6 +33,8 @@ namespace Explorer.API.Controllers.Author.Administration
         [HttpGet("startedToursNumber/{authorId:int}")]
         public ActionResult<int> GetAuthorsStartedToursNumber(long authorId)
         {
+            if (User.PersonId() != authorId) return CreateResponse(Result.Fail(FailureCode.Forbidden));
+
             var result = _tourStatisticsService.GetAuthorsStartedToursNumber(authorId);
             return CreateResponse(result);
         }
@@ -36,6 +42,8 @@ namespace Explorer.API.Controllers.Author.Administration
         [HttpGet("finishedToursNumber/{authorId:int}")]
         public ActionResult<int> GetAuthorsFinishedToursNumber(long authorId)
         {
+            if (User.PersonId() != authorId) return CreateResponse(Result.Fail(FailureCode.Forbidden));
+
             var result = _tourStatisticsService.GetAuthorsFinishedToursNumber(authorId);
             return CreateResponse(result);
         }
@@ -43,6 +51,8 @@ namespace Explorer.API.Controllers.Author.Administration
         [HttpGet("tourCompletitionPercentage/{authorId:int}")]
         public ActionResult<double> GetAuthorsTourCompletionPercentage(long authorId)
         {
+            if (User.PersonId() != authorId) return CreateResponse(Result.Fail(FailureCode.Forbidden));
+
             var result = _tourStatisticsService.GetAuthorsTourCompletionPercentage(authorId);
             return CreateResponse(result);
         }
