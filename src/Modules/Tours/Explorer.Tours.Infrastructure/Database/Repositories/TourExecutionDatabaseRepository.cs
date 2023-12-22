@@ -3,6 +3,7 @@ using Explorer.BuildingBlocks.Infrastructure.Database;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.Core.Domain.RepositoryInterfaces;
 using Explorer.Tours.Core.Domain.TourExecutions;
+using Explorer.Tours.Core.Domain.Tours;
 using FluentResults;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -43,6 +44,27 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
 
             return task.Result;
         }
+
+        public Result<List<long>> GetStartedToursIds()
+        {
+           var tourIds = _dbContext.TourExecution
+                .Where(te => te.ExecutionStatus == ExecutionStatus.InProgress)
+                .Select(te => te.TourId)
+                .ToList();
+
+           return (Result<List<long>>)tourIds;
+        }
+
+        public Result<List<long>> GetFinishedToursIds()
+        {
+            var tourIds = _dbContext.TourExecution
+                 .Where(te => te.ExecutionStatus == ExecutionStatus.Completed)
+                 .Select(te => te.TourId)
+                 .ToList();
+
+            return (Result<List<long>>)tourIds;
+        }
+
         /*.
         public TourExecution GetExactExecution(long tourId, long touristId)
         {

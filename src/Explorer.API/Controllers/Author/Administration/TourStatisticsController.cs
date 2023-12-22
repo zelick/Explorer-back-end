@@ -1,6 +1,9 @@
 ﻿using Explorer.Payments.API.Public;
 using Explorer.Payments.Core.UseCases;
+using Explorer.Stakeholders.Infrastructure.Authentication;
+using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
+using FluentResults;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,13 +13,38 @@ namespace Explorer.API.Controllers.Author.Administration
     [Route("api/administration/tourStatistics")]
     public class TourStatisticsController : BaseApiController
     {
-        private readonly ITourService _tourService; //ovo mozda obrisati
-        public TourStatisticsController(ITourService tourService)
+        private readonly ITourStatisticsService _tourStatisticsService;
+        public TourStatisticsController(ITourStatisticsService tourStatisticsService)
         {
-            _tourService = tourService;
+            _tourStatisticsService = tourStatisticsService;
         }
 
-       
+        [HttpGet("soldToursNumber/{authorId:int}")]
+        public ActionResult<int> GetAuthorsSoldToursNumber(long authorId)
+        {
+            var result = _tourStatisticsService.GetAuthorsSoldToursNumber(authorId);
+            return CreateResponse(result);
+        }
 
+        [HttpGet("startedToursNumber/{authorId:int}")]
+        public ActionResult<int> GetAuthorsStartedToursNumber(long authorId)
+        {
+            var result = _tourStatisticsService.GetAuthorsStartedToursNumber(authorId);
+            return CreateResponse(result);
+        }
+
+        [HttpGet("finishedToursNumber/{authorId:int}")]
+        public ActionResult<int> GetAuthorsFinishedToursNumber(long authorId)
+        {
+            var result = _tourStatisticsService.GetAuthorsFinishedToursNumber(authorId);
+            return CreateResponse(result);
+        }
+
+        [HttpGet("tourCompletitionPercentage/{authorId:int}")]
+        public ActionResult<double> GetAuthorsTourCompletionPercentage(long authorId)
+        {
+            var result = _tourStatisticsService.GetAuthorsTourCompletionPercentage(authorId);
+            return CreateResponse(result);
+        }
     }
 }
