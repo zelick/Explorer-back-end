@@ -21,7 +21,7 @@ namespace Explorer.API.Controllers.Tourist.Encounters
         }
 
         [HttpGet("{id:int}")]
-        public ActionResult<EncounterDto> GetById(int id)
+        public ActionResult<EncounterDto> GetById([FromRoute] int id)
         {
             var result = _encounterExecutionService.Get(id);
             return CreateResponse(result);
@@ -34,14 +34,21 @@ namespace Explorer.API.Controllers.Tourist.Encounters
             return CreateResponse(result);
         }
 
-        [HttpPut("completed/{id:int}")]
-        public ActionResult<EncounterExecutionDto> CompleteExecusion(int id)
+        [HttpPut("activate/{id:int}")]
+        public ActionResult<EncounterExecutionDto> Activate([FromRoute] int id, [FromForm] double touristLatitude, [FromForm] double touristLongitude)
         {
-            var result = _encounterExecutionService.CompleteExecusion(id, User.PersonId());
+            var result = _encounterExecutionService.Activate(User.PersonId(), touristLatitude, touristLongitude, id);
             return CreateResponse(result);
         }
 
+        [HttpPut("completed/{id:int}")]
+        public ActionResult<EncounterExecutionDto> CompleteExecution([FromRoute] int id, [FromForm] double touristLatitude, [FromForm] double touristLongitude)
+        {
+            var result = _encounterExecutionService.CompleteExecution(id, User.PersonId(), touristLatitude, touristLongitude);
+            return CreateResponse(result);
+        }
 
+        
         [HttpDelete("{id:int}")]
         public ActionResult Delete(int id)
         {
@@ -66,13 +73,7 @@ namespace Explorer.API.Controllers.Tourist.Encounters
             var result = _encounterExecutionService.GetAllCompletedByTourist(User.PersonId(), page, pageSize);
             return CreateResponse(result);
         }
-        [HttpPut("activate/{id:int}")]
-        public ActionResult<EncounterExecutionDto> Activate([FromRoute] int id, [FromForm] double touristLatitude, [FromForm] double touristLongitude)
-        {
-            var result = _encounterExecutionService.Activate(User.PersonId(), touristLatitude, touristLongitude, id);
-            return CreateResponse(result);
-        }
-
+        
         [HttpGet("get-by-tour/{id:int}")]
         public ActionResult<EncounterExecutionDto> GetByTour([FromRoute] int id, [FromQuery] double touristLatitude, [FromQuery] double touristLongitude)
         {

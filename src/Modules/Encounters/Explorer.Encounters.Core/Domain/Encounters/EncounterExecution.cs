@@ -64,8 +64,8 @@ namespace Explorer.Encounters.Core.Domain.Encounters
 
         public double CheckRangeDistance(double touristLongitude, double touristLatitude)
         {
-            double distance = Encounter.GetDistanceFromEncounter(touristLongitude, touristLatitude);
-            //double distance = Math.Acos(Math.Sin(Math.PI / 180 * (Encounter.Latitude)) * Math.Sin(Math.PI / 180 * touristLatitude) + Math.Cos(Math.PI / 180 * Encounter.Latitude) * Math.Cos(Math.PI / 180 * touristLatitude) * Math.Cos(Math.PI / 180 * Encounter.Longitude - Math.PI / 180 * touristLongitude)) * 6371000;
+            //double distance = Encounter.GetDistanceFromEncounter(touristLongitude, touristLatitude);
+            double distance = Math.Acos(Math.Sin(Math.PI / 180 * (Encounter.Latitude)) * Math.Sin(Math.PI / 180 * touristLatitude) + Math.Cos(Math.PI / 180 * Encounter.Latitude) * Math.Cos(Math.PI / 180 * touristLatitude) * Math.Cos(Math.PI / 180 * Encounter.Longitude - Math.PI / 180 * touristLongitude)) * 6371000;
             return distance;
         }
     }

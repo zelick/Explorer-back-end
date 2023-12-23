@@ -244,7 +244,7 @@ namespace Explorer.Encounters.Core.UseCases
                 _socialEncounterRepository.Update(result);
                 if (result.IsRequiredPeopleNumber())
                 {
-                    var execution = CompleteExecusion(id, touristId);
+                    var execution = CompleteExecution(id, touristId, touristLatitude, touristLongitude);
                     if (execution.IsSuccess)
                         return execution;
                 }
@@ -273,7 +273,7 @@ namespace Explorer.Encounters.Core.UseCases
                     _hiddenLocationEncounterRepository.Update(result);
                     if (result.CheckIfLocationFound(touristLongitude, touristLatitude))
                     {
-                        var execution = CompleteExecusion(id, touristId);
+                        var execution = CompleteExecution(id, touristId, touristLatitude, touristLongitude);
                         if (execution.IsSuccess)
                             return execution;
                     }
@@ -338,7 +338,7 @@ namespace Explorer.Encounters.Core.UseCases
             }
         }
 
-        public Result<EncounterExecutionDto> CompleteExecusion(long id, long touristId)
+        public Result<EncounterExecutionDto> CompleteExecution(long id, long touristId, double touristLatitude, double touristLongitude)
         {
             EncounterExecution encounterExecution;
             try
@@ -358,20 +358,21 @@ namespace Explorer.Encounters.Core.UseCases
                 return Result.Fail(FailureCode.InvalidArgument).WithError("Not valid status!");
             try
             {
-                //if (IsTouristInRange(encounterExecution, touristLatitude, touristLongitude)) {
-                encounterExecution.Completed();
-                var result = CrudRepository.Update(encounterExecution);
-                // Update Tourist XP and level
-                _internalTouristService.UpdateTouristXpAndLevel(touristId, encounterExecution.Encounter.XP);
+                if (IsTouristInRange(encounterExecution, touristLatitude, touristLongitude))
+                {
+                    encounterExecution.Completed();
+                    var result = CrudRepository.Update(encounterExecution);
+                    // Update Tourist XP and level
+                    _internalTouristService.UpdateTouristXpAndLevel(touristId, encounterExecution.Encounter.XP);
 
-                if (_encounterRepository.Get(encounterExecution.EncounterId).Type == EncounterType.Social)
-                    UpdateAllCompletedSocial(encounterExecution.EncounterId);
-                if (_encounterRepository.Get(encounterExecution.EncounterId).Type == EncounterType.Location)
-                    UpdateAllCompletedLocation(encounterExecution.EncounterId);
+                    if (_encounterRepository.Get(encounterExecution.EncounterId).Type == EncounterType.Social)
+                        UpdateAllCompletedSocial(encounterExecution.EncounterId);
+                    if (_encounterRepository.Get(encounterExecution.EncounterId).Type == EncounterType.Location)
+                        UpdateAllCompletedLocation(encounterExecution.EncounterId);
 
-                return MapToDto(result);
-                //}
-                //return Result.Fail(FailureCode.InvalidArgument).WithError("Tourist not in range");
+                    return MapToDto(result);
+                }
+                return Result.Fail(FailureCode.InvalidArgument).WithError("Tourist not in range");
             }
             catch (KeyNotFoundException e)
             {
