@@ -133,6 +133,111 @@ namespace Explorer.Tours.Core.UseCases.Administration
             }
         }
 
+        //za svaku turu dobijem koliko je ona zavrsena puta
+        public Result<Dictionary<long, int>> GetTourCompletionNumberForEachTour(long authorId)
+        {
+            try
+            {
+                List<long> soldTourIds = GetAuthorsFinishedToursIds(authorId).Value;
+                Dictionary<long, int> tourCompletitionNumberForEachTour = new Dictionary<long, int>();
+
+                foreach (long tourId in soldTourIds)
+                {
+                    if (tourCompletitionNumberForEachTour.ContainsKey(tourId))
+                    {
+                        tourCompletitionNumberForEachTour[tourId]++;
+                    }
+                    else
+                    {
+                        tourCompletitionNumberForEachTour[tourId] = 1;
+                    }
+                }
+
+                return (Result<Dictionary<long, int>>)tourCompletitionNumberForEachTour;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        //za svaku turu dobijem koliko je ona puta pokrenuta
+        public Result<Dictionary<long, int>> GetTourStartedNumberForEachTour(long authorId)
+        {
+            try
+            {
+                List<long> soldTourIds = GetAuthorsStartedToursIds(authorId).Value;
+                Dictionary<long, int> touStartedNumberForEachTour = new Dictionary<long, int>();
+
+                foreach (long tourId in soldTourIds)
+                {
+                    if (touStartedNumberForEachTour.ContainsKey(tourId))
+                    {
+                        touStartedNumberForEachTour[tourId]++;
+                    }
+                    else
+                    {
+                        touStartedNumberForEachTour[tourId] = 1;
+                    }
+                }
+
+                return (Result<Dictionary<long, int>>)touStartedNumberForEachTour;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public Result<Dictionary<long, double>> GetTourCompletionPercentageForEachTour(long authorId)
+        {
+            try
+            {
+                Result<Dictionary<long, int>> startedNumberResult = GetTourStartedNumberForEachTour(authorId);
+                Result<Dictionary<long, int>> completionNumberResult = GetTourCompletionNumberForEachTour(authorId);
+
+                Dictionary<long, int> startedNumberForEachTour = startedNumberResult.Value;
+                Dictionary<long, int> completionNumberForEachTour = completionNumberResult.Value;
+
+                Dictionary<long, double> completionPercentageForEachTour = new Dictionary<long, double>();
+
+                foreach (long tourId in startedNumberForEachTour.Keys)
+                {
+                    int startedNumber = startedNumberForEachTour.ContainsKey(tourId) ? startedNumberForEachTour[tourId] : 0;
+                    int completionNumber = completionNumberForEachTour.ContainsKey(tourId) ? completionNumberForEachTour[tourId] : 0;
+
+                    double completionPercentage = (startedNumber == 0) ? 0 : ((double)completionNumber /(startedNumber + completionNumber)) * 100;
+
+                    completionPercentageForEachTour.Add(tourId, completionPercentage);
+                }
+
+                return (Result<Dictionary<long, double>>)completionPercentageForEachTour;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public Result<int> GetToursInCompletionRangeCount(long authorId, double minPercentage, double maxPercentage)
+        {
+            try
+            {
+                Result<Dictionary<long, double>> completionPercentageResult = GetTourCompletionPercentageForEachTour(authorId);
+    
+                Dictionary<long, double> completionPercentageForEachTour = completionPercentageResult.Value;
+
+                int toursInRangeCount = completionPercentageForEachTour.Values
+                    .Count(percentage => percentage >= minPercentage && percentage <= maxPercentage);
+
+                return (Result<int>)toursInRangeCount;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         public Result<int> GetAuthorsSoldToursNumber(long authorId)
         {
             return GetAuthorsPublishedSoldToursIds(authorId).Value.Count();

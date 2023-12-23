@@ -13,5 +13,6 @@ namespace Explorer.Tours.API.Public.Administration
         Result<int> GetAuthorsStartedToursNumber(long authorId);
         Result<int> GetAuthorsFinishedToursNumber(long authorId);
         Result<double> GetAuthorsTourCompletionPercentage(long authorId);
+        Result<int> GetToursInCompletionRangeCount(long authorId, double minPercentage, double maxPercentage);
     }
 }

@@ -56,5 +56,14 @@ namespace Explorer.API.Controllers.Author.Administration
             var result = _tourStatisticsService.GetAuthorsTourCompletionPercentage(authorId);
             return CreateResponse(result);
         }
+
+        [HttpGet("tourCompletitionRangeCount/{authorId:int}/{minPercentage:double}/{maxPercentage:double}")]
+        public ActionResult<int> GetToursInCompletionRangeCount(long authorId, double minPercentage, double maxPercentage)
+        {
+            if (User.PersonId() != authorId) return CreateResponse(Result.Fail(FailureCode.Forbidden));
+
+            var result = _tourStatisticsService.GetToursInCompletionRangeCount(authorId, minPercentage, maxPercentage);
+            return CreateResponse(result);
+        }
     }
 }
