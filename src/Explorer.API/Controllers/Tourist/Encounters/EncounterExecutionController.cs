@@ -38,6 +38,8 @@ namespace Explorer.API.Controllers.Tourist.Encounters
         public ActionResult<EncounterExecutionDto> CompleteExecusion(int id)
         {
             var result = _encounterExecutionService.CompleteExecusion(id, User.PersonId());
+            if (result.IsSuccess)
+                result = _encounterService.AddEncounter(result.Value);
             return CreateResponse(result);
         }
 
@@ -70,6 +72,8 @@ namespace Explorer.API.Controllers.Tourist.Encounters
         public ActionResult<EncounterExecutionDto> Activate([FromRoute] int id, [FromForm] double touristLatitude, [FromForm] double touristLongitude)
         {
             var result = _encounterExecutionService.Activate(User.PersonId(), touristLatitude, touristLongitude, id);
+            if (result.IsSuccess)
+                result = _encounterService.AddEncounter(result.Value);
             return CreateResponse(result);
         }
 
