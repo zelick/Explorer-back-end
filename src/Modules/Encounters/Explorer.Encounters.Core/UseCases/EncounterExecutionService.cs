@@ -242,8 +242,20 @@ namespace Explorer.Encounters.Core.UseCases
                 SocialEncounter result = _socialEncounterRepository.Get(oldExecution.EncounterId);
                 var numberOfTourists = result.CheckIfInRange(touristLongitude, touristLatitude, touristId);
                 _socialEncounterRepository.Update(result);
+                
                 if (result.IsRequiredPeopleNumber())
                 {
+                    // update all other active EncounterExecutions for this SocialEncounter
+                    var allActiveSocial = _encounterExecutionRepository.GetBySocialEncounter(result.Id)
+                                        .Where(activeSocial => activeSocial.Status == EncounterExecutionStatus.Active 
+                                                && activeSocial.Id != id).ToList();
+                    foreach(var activeSocial in allActiveSocial)
+                    {
+                        // TODO - send correct touristPosition for updating other people's social encounter execution when the correct number of people are in range
+                        // TODO - check if other people are still in right range
+                        var othersSocialExecution = CompleteExecution(activeSocial.Id, activeSocial.TouristId, touristLatitude, touristLongitude);
+                    }
+                    
                     var execution = CompleteExecution(id, touristId, touristLatitude, touristLongitude);
                     if (execution.IsSuccess)
                         return execution;
