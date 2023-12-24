@@ -86,7 +86,12 @@ namespace Explorer.Tours.Core.UseCases.Administration
             try
             {
                 var result = _tourExecutionRepository.GetActiveTourExecutions();
-                return MapToDto(result);
+                List<TourExecutionDto> list = new List<TourExecutionDto>();
+                foreach (var tourExecution in result) 
+                {
+                    list.Add(_tourExecutionMapper.createDto(tourExecution));
+                }
+                return list;
             }
             catch (KeyNotFoundException e)
             {

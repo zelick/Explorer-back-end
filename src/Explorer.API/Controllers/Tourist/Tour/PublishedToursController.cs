@@ -46,5 +46,12 @@ namespace Explorer.API.Controllers.Tourist.Tour
             var result = _tourRecommendationService.GetAppropriateTours(id);
             return CreateResponse(result);
         }
+
+        [HttpGet("active-recommendations/{id:int}")]
+        public ActionResult<List<PurchasedTourPreviewDto>> GetActiveTourRecommendations(int id)
+        {
+            var result = _tourRecommendationService.GetAppropriateActiveTours(id);
+            return CreateResponse(result);
+        }
     }
 }

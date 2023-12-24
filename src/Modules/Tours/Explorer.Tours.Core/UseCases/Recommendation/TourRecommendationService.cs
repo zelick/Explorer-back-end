@@ -20,9 +20,8 @@ namespace Explorer.Tours.Core.UseCases.Recommendation
         }
         public List<PurchasedTourPreviewDto> GetActiveToursInRange(double touristLongitude, double touristLatitude)
         {
-            List<TourExecutionDto> tours = new List<TourExecutionDto>();
             List<PurchasedTourPreviewDto> filteredTours = new List<PurchasedTourPreviewDto>();
-            foreach (TourExecutionDto execution in tours)
+            foreach (TourExecutionDto execution in _tourExecutionService.GetActiveTourExecutions().Value)
             {
                 if (execution.Tour.Checkpoints != null)
                 {
@@ -141,13 +140,13 @@ namespace Explorer.Tours.Core.UseCases.Recommendation
             return frontendObjects;
         }
 
-        public List<PurchasedTourPreviewDto> GetAppropriateActiveTours(int touristId)
+
+        Result<List<PurchasedTourPreviewDto>> ITourRecommendationService.GetAppropriateActiveTours(int touristId)
         {
             TouristPositionDto touristPositionDto = _touristPositionService.GetPositionByCreator(0, 0, touristId).Value;
             List<PurchasedTourPreviewDto> allActiveTours = GetActiveToursInRange(touristPositionDto.Longitude, touristPositionDto.Latitude);
             //DRUGI ALGORITAM
-            return null;
-
+            return allActiveTours;
         }
     }
 }
