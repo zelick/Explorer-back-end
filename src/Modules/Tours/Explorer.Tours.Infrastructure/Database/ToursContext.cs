@@ -1,3 +1,4 @@
+using Explorer.BuildingBlocks.Core.Domain;
 using Explorer.Stakeholders.Core.Domain;
 using Explorer.Tours.Core.Domain;
 using Explorer.Tours.Core.Domain.TourExecutions;
@@ -31,6 +32,7 @@ public class ToursContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<DomainEvent>().HasNoKey();
         modelBuilder.HasDefaultSchema("tours");
 
         modelBuilder.Entity<Tour>()
