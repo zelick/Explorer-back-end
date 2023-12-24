@@ -77,6 +77,21 @@ namespace Explorer.Tours.Tests.Integration.Administration
             result.ShouldNotBeNull();
         }
 
+        [Fact]
+        public void GetToursInCompletionRangeCount()
+        {
+            // Arrange
+            using var scope = Factory.Services.CreateScope();
+            var controller = CreateController(scope);
+            var dbContext = scope.ServiceProvider.GetRequiredService<ToursContext>();
+
+            // Act
+            var result = ((ObjectResult)controller.GetToursInCompletionRangeCount(-11, 25, 50).Result)?.Value;
+
+            // Assert - Response
+            result.ShouldNotBeNull();
+        }
+
         private static TourStatisticsController CreateController(IServiceScope scope)
         {
             return new TourStatisticsController(scope.ServiceProvider.GetRequiredService<ITourStatisticsService>())
