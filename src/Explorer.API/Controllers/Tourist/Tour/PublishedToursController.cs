@@ -1,5 +1,6 @@
 ﻿using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
+using Explorer.Tours.API.Public.Recommendation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,10 +11,12 @@ namespace Explorer.API.Controllers.Tourist.Tour
     public class PublishedToursController : BaseApiController
     {
         private readonly ITourService _tourService;
+        private readonly ITourRecommendationService _tourRecommendationService;
 
-        public PublishedToursController(ITourService tourService)
+        public PublishedToursController(ITourService tourService, ITourRecommendationService tourRecommendationService)
         {
             _tourService = tourService;
+            _tourRecommendationService = tourRecommendationService;
         }
 
         [HttpGet]
@@ -35,6 +38,13 @@ namespace Explorer.API.Controllers.Tourist.Tour
         {
             var result = _tourService.GetAverageRating(tourId);
             return result;
+        }
+
+        [HttpGet("recommendations/{id:int}")]
+        public ActionResult<List<TourPreviewDto>> GetToursByAuthor(int id)
+        {
+            var result = _tourRecommendationService.GetAppropriateTours(id);
+            return CreateResponse(result);
         }
     }
 }
