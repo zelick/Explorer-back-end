@@ -13,9 +13,11 @@ namespace Explorer.API.Controllers.Author.Administration
     {
         private readonly ITourService _tourService;
 
+
         public TourController(ITourService tourService)
         {
             _tourService = tourService;
+
         }
 
         [HttpPost]
