@@ -6,7 +6,7 @@ using Explorer.Tours.Core.Domain.Tours;
 
 namespace Explorer.Encounters.Core.Domain.Encounters
 {
-    public class EncounterExecution : Entity
+    public class EncounterExecution : EventSourcedAggregate
     {
         public long EncounterId { get; init; }
         [ForeignKey("EncounterId")]
@@ -80,6 +80,11 @@ namespace Explorer.Encounters.Core.Domain.Encounters
             double a = Math.Abs(Math.Round(TouristLongitute, 4) - Math.Round(touristLongitude, 4));
             double b = Math.Abs(Math.Round(TouristLatitude, 4) - Math.Round(touristLatitude, 4));
             return a < 0.01 && b < 0.01;
+        }
+
+        public override void Apply(DomainEvent changes)
+        {
+            throw new NotImplementedException();
         }
     }
 

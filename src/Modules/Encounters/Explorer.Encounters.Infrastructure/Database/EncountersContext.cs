@@ -1,4 +1,5 @@
-﻿using Explorer.Encounters.Core.Domain.Encounters;
+﻿using Explorer.BuildingBlocks.Core.Domain;
+using Explorer.Encounters.Core.Domain.Encounters;
 using Explorer.Stakeholders.Core.Domain;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection.Metadata;
@@ -19,6 +20,7 @@ namespace Explorer.Encounters.Infrastructure.Database
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasDefaultSchema("encounters");
+            modelBuilder.Ignore<DomainEvent>();
 
             modelBuilder.Entity<Encounter>().ToTable("Encounter");
             modelBuilder.Entity<HiddenLocationEncounter>().ToTable("HiddenLocationEncounter");

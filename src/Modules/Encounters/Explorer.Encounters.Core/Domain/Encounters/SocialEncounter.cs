@@ -1,4 +1,5 @@
 ﻿using Explorer.BuildingBlocks.Core.Domain;
+using Explorer.Tours.Core.Domain.TourExecutions;
 using System.Text.Json.Serialization;
 
 namespace Explorer.Encounters.Core.Domain.Encounters
@@ -12,6 +13,7 @@ namespace Explorer.Encounters.Core.Domain.Encounters
 
         public SocialEncounter(SocialEncounter socialEncounter)
         {
+            //Causes(new SocialEncounterCreated(socialEncounter.Id, DateTime.UtcNow, RequiredPeople, Range));
         }
         public int CheckIfInRange(double touristLongitude, double touristLatitude, int touristId)
         {
