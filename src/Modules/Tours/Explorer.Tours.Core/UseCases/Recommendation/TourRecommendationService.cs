@@ -20,25 +20,25 @@ namespace Explorer.Tours.Core.UseCases.Recommendation
         }
         public List<PurchasedTourPreviewDto> GetActiveToursInRange(double touristLongitude, double touristLatitude)
         {
-            List<PurchasedTourPreviewDto> tours = new List<PurchasedTourPreviewDto>();
-            foreach (TourExecutionDto execution in _tourExecutionService.GetActiveTourExecutions().Value)
+            List<TourExecutionDto> tours = new List<TourExecutionDto>();
+            List<PurchasedTourPreviewDto> filteredTours = new List<PurchasedTourPreviewDto>();
+            foreach (TourExecutionDto execution in tours)
             {
-                for (int i = 0; i < execution.Tour.Checkpoints.Count; i++)
+                if (execution.Tour.Checkpoints != null)
                 {
-                    if (IsCloseEnough(touristLongitude, touristLatitude, execution.Tour.Checkpoints[i].Longitude, execution.Tour.Checkpoints[i].Latitude))
+                    bool foundCloseEnough = false;
+                    for (int i = 0; i < execution.Tour.Checkpoints.Count; i++)
                     {
-                        bool contains = false;
-                        for (int j = 0; j < tours.Count; j++)
+                        if (!foundCloseEnough && IsCloseEnough(touristLongitude, touristLatitude, execution.Tour.Checkpoints[i].Longitude, execution.Tour.Checkpoints[i].Latitude))
                         {
-                            if (tours[j].Id == execution.Tour.Id)
-                                contains = true;
+                            filteredTours.Add(execution.Tour);
+                            foundCloseEnough = true;
+                            break;
                         }
-                        if (!contains)
-                            tours.Add(execution.Tour);
                     }
                 }
             }
-            return tours;
+            return filteredTours;
         }
 
         public double GetTourDistanceFromTouristPosition(double touristLongitude, double touristLatitude, double tourLongitude, double tourLatitude)
@@ -132,6 +132,10 @@ namespace Explorer.Tours.Core.UseCases.Recommendation
             foreach (var obj in sortedObjects)
             {
                 frontendObjects.Add(_tourService.GetPublishedTour(obj.Id).Value);
+            }
+            if (frontendObjects.Count > 10)
+            {
+                frontendObjects = frontendObjects.Take(10).ToList();
             }
             //PRVI ALGORITAM
             return frontendObjects;
