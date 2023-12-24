@@ -32,9 +32,9 @@ public class ToursContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<DomainEvent>().HasNoKey();
+        
         modelBuilder.HasDefaultSchema("tours");
-
+        modelBuilder.Ignore<DomainEvent>();
         modelBuilder.Entity<Tour>()
            .HasMany(t => t.Checkpoints)
            .WithOne(t => t.Tour)
@@ -62,7 +62,7 @@ public class ToursContext : DbContext
         ConfigureTourRatings(modelBuilder);
 
         modelBuilder.Entity<ReportedIssue>().Property(item => item.Comments).HasColumnType("jsonb");
-        
+        modelBuilder.Entity<TourExecution>().Property(t => t.Changes).HasColumnType("jsonb");
         modelBuilder.Entity<PrivateTour>().Property(item => item.Checkpoints).HasColumnType("jsonb");
         modelBuilder.Entity<PrivateTour>().Property(item => item.Execution).HasColumnType("jsonb");
         modelBuilder.Entity<PrivateTour>().Property(item => item.Blog).HasColumnType("jsonb");
