@@ -1,6 +1,8 @@
-﻿using Explorer.Tours.API.Dtos;
+﻿using Explorer.Stakeholders.Core.Domain;
+using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
 using Explorer.Tours.API.Public.Recommendation;
+using Explorer.Tours.Core.Domain.Tours;
 using FluentResults;
 
 namespace Explorer.Tours.Core.UseCases.Recommendation
@@ -145,8 +147,26 @@ namespace Explorer.Tours.Core.UseCases.Recommendation
         {
             TouristPositionDto touristPositionDto = _touristPositionService.GetPositionByCreator(0, 0, touristId).Value;
             List<PurchasedTourPreviewDto> allActiveTours = GetActiveToursInRange(touristPositionDto.Longitude, touristPositionDto.Latitude);
+
             //DRUGI ALGORITAM
-            return allActiveTours;
+            var top10Tours = allActiveTours.OrderByDescending(t => GetActiveTourScore(t)).Take(10).ToList();
+            return top10Tours;
+        }
+
+        private double GetActiveTourScore(PurchasedTourPreviewDto purchasedTourPreviewDto) 
+        {
+            double weightNumberOfRatings = 0.4;
+            double weightAverageRating = 0.4;
+            double weightNumberOfPurchases = 0.2;
+
+            double averageRating = purchasedTourPreviewDto.TourRatings.Any() ? purchasedTourPreviewDto.TourRatings.Average(tour => tour.Rating) : 0.0;
+            double numberRating = purchasedTourPreviewDto.TourRatings.Any() ? purchasedTourPreviewDto.TourRatings.Count() : 0.0;
+
+            double score = (weightNumberOfRatings * numberRating) +
+                            (weightAverageRating * averageRating) +
+                            (weightNumberOfPurchases * 0);
+
+            return score;
         }
     }
 }
