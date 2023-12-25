@@ -48,4 +48,10 @@ public class AuthenticationController : BaseApiController
         return CreateResponse(result);
     }
 
+    [HttpGet("verificationStatus/{username}")]
+    public ActionResult<bool> IsUserVerified(string username)
+    {
+        var result = _verificationService.IsUserVerified(username);
+        return CreateResponse(result);
+    }
 }
