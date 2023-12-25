@@ -3,9 +3,12 @@ using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Payments.API.Dtos;
 using Explorer.Payments.API.Internal;
 using Explorer.Payments.API.Public;
+using Explorer.Stakeholders.Core.Domain;
+using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
 using Explorer.Tours.Core.Domain;
 using Explorer.Tours.Core.Domain.RepositoryInterfaces;
+using Explorer.Tours.Core.Domain.TourExecutions;
 using Explorer.Tours.Core.Domain.Tours;
 using Explorer.Tours.Core.Mappers;
 using FluentResults;
@@ -50,29 +53,6 @@ namespace Explorer.Tours.Core.UseCases.Administration
             return _tourRepository.GetPublishedToursByAuthor(authorId);
         }
 
-        /*
-        public Result<List<Tour>> GetPublishedAndSoldToursByAuthor(long authorId)
-        {
-            try
-            {
-                List<long> soldTourIds = GetSoldToursIds().Value;
-
-                List<Tour> publishedTours = GetPublishedToursByAuthor(authorId).Value;
-
-                List<Tour> publishedAndSoldTours = publishedTours
-                    .Where(t => soldTourIds.Contains(t.Id))
-                    .ToList();
-
-                return (Result<List<Tour>>)publishedAndSoldTours;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-        */
-
-        //kasnije ovo prebaciti u celu listu tura ako bude trebalo - PREBACIS U CELE TURE
         public Result<List<long>> GetAuthorsPublishedSoldToursIds(long authorId)
         {
             try
@@ -274,6 +254,7 @@ namespace Explorer.Tours.Core.UseCases.Administration
             }
         }
 
+
         //da za svaki tourId iz autorovih tura
         //da nadjem koliko se puta on nasao u tour execution sa statusom inProgress - to je onda numOfStaredTours
         //da nadjem koliko se puta nasao u tour exection sa statusom Completed - to je onda numOfCompleted
@@ -286,6 +267,88 @@ namespace Explorer.Tours.Core.UseCases.Administration
         //ALTERNATIVA
         //da iz fronta dobavljam za svaki opseg koliko imam broj tih 
         //posaljem iz fronta opseg 0, 24, pa opseg 25, 49 itd.. i onda brojim koliko tih upada
+
+        public Result<int> GetTourSalesCount(long authorId, long tourId)
+        {
+            try
+            {
+                List<long> authorsPublishedSoldToursIds = GetAuthorsPublishedSoldToursIds(authorId).Value;
+                int tourSalesCount = authorsPublishedSoldToursIds.Count(id => id == tourId);
+                return (Result<int>)tourSalesCount;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public Result<int> GetTourStartingsCount(long authorId, long tourId)
+        {
+            try
+            {
+                List<long> authorsStartedToursIds = GetAuthorsStartedToursIds(authorId).Value;
+                int tourStartingsCount = authorsStartedToursIds.Count(id => id == tourId);
+                return (Result<int>)tourStartingsCount;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public Result<int> GetTourFinishingCount(long authorId, long tourId)
+        {
+            try
+            {
+                List<long> authorsFinishedToursIds = GetAuthorsFinishedToursIds(authorId).Value;
+                int tourFinishingCount = authorsFinishedToursIds.Count(id => id == tourId);
+                return (Result<int>)tourFinishingCount;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        //mozda drugi servis? 
+        public double CalculatePercentages(int touristsReachedCheckpoint, int totalTourists)
+        {
+            double percentageReached = 0;
+            if (totalTourists > 0 && touristsReachedCheckpoint > 0)
+            {
+                percentageReached = (double)touristsReachedCheckpoint / totalTourists * 100;
+            }
+            return percentageReached;
+        }
+        public Result<List<CheckpointStatisticsDto>> CalculateCheckpointArrivalPercentages(long tourId)
+        {
+            Tour tour = _tourRepository.Get(tourId);
+            List<TourExecution> tourExecutions = _tourExecutionRepository.GetByTourId(tourId);
+            List<CheckpointStatisticsDto> checkpointStatisticsDtos = new List<CheckpointStatisticsDto>();
+
+            HashSet<Tuple<long, long>> visitedCheckpoints = new HashSet<Tuple<long, long>>();
+
+            foreach (var checkpoint in tour.Checkpoints)
+            {
+                int count = 0;
+                foreach (var tourExecution in tourExecutions)
+                {
+                    foreach(var completedCheckpoint in tourExecution.CompletedCheckpoints)
+                    {
+                        var checkpointTuple = Tuple.Create(tourExecution.Id, completedCheckpoint.CheckpointId);
+                        if (!visitedCheckpoints.Contains(checkpointTuple) && completedCheckpoint.CheckpointId == checkpoint.Id)
+                        {
+                            visitedCheckpoints.Add(checkpointTuple);
+                            count++;
+                        }
+                    }
+                }
+                var percentageReached = CalculatePercentages(count, tourExecutions.Count);
+                var checkpointStatisticsDto = new CheckpointStatisticsDto(checkpoint.Id, checkpoint.Name, percentageReached);
+                checkpointStatisticsDtos.Add(checkpointStatisticsDto);
+            }
+            return (Result<List<CheckpointStatisticsDto>>)checkpointStatisticsDtos;
+        }
 
     }
 }

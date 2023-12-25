@@ -16,5 +16,6 @@ namespace Explorer.Tours.Core.Domain.RepositoryInterfaces
         TourExecution GetInProgressByTourAndTourist(long tourId, long touristId);
         Result<List<long>> GetStartedToursIds();
         Result<List<long>> GetFinishedToursIds();
+        List<TourExecution> GetByTourId(long tourId);
     }
 }

@@ -65,5 +65,33 @@ namespace Explorer.API.Controllers.Author.Administration
             var result = _tourStatisticsService.GetToursInCompletionRangeCount(authorId, minPercentage, maxPercentage);
             return CreateResponse(result);
         }
+        
+        [HttpGet("tourSalesCount/{authorId:long}/{tourId:long}")]
+        public ActionResult<int> GetTourSalesCount(long authorId, long tourId)
+        {
+            var result = _tourStatisticsService.GetTourSalesCount(authorId, tourId);
+            return CreateResponse(result);
+        }
+
+        [HttpGet("tourStartingsCount/{authorId:long}/{tourId:long}")]
+        public ActionResult<int> GetTourStartingsCount(long authorId, long tourId)
+        {
+            var result = _tourStatisticsService.GetTourStartingsCount(authorId, tourId);
+            return CreateResponse(result);
+        }
+
+        [HttpGet("tourFinishingCount/{authorId:long}/{tourId:long}")]
+        public ActionResult<int> GetTourFinishingCount(long authorId, long tourId)
+        {
+            var result = _tourStatisticsService.GetTourFinishingCount(authorId, tourId);
+            return CreateResponse(result);
+        }
+
+        [HttpGet("tourCheckpointsStatistics/{tourId:long}")]
+        public ActionResult<List<CheckpointStatisticsDto>> CalculateCheckpointArrivalPercentages(long tourId)
+        {
+            var result = _tourStatisticsService.CalculateCheckpointArrivalPercentages(tourId);
+            return CreateResponse(result);
+        }
     }
 }

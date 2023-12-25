@@ -100,5 +100,19 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
 
             return tour;
         }
+
+        public List<TourExecution> GetByTourId(long tourId)
+        {
+            var tourExecutions = _dbContext.TourExecution
+                .Include(t => t.CompletedCheckpoints)
+                .Include(t => t.Tour).ThenInclude(c => c.Checkpoints)
+                .Include(t => t.Tour).ThenInclude(c => c.Equipment)
+                .Include(t => t.Tour).ThenInclude(c => c.TourRatings)
+                .Where(t => t.TourId == tourId)
+                .ToList();
+
+            return tourExecutions;
+        }
+
     }
 }
