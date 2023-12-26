@@ -1,4 +1,5 @@
 ﻿using Explorer.Stakeholders.API.Dtos;
+using FluentResults;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace Explorer.Stakeholders.API.Public
 {
-    public interface IEmailService
+    public interface ISecureTokenService
     {
-        void SendEmail(AccountRegistrationDto account, string tokenData);
-        void SendPasswordResetEmail(string userName, string userEmail, string secureTokenData);
+        Result<SecureTokenDto> CreateSecureToken(long userId);
+        Result<SecureTokenDto> GetByUserId(long userId);
     }
 }
