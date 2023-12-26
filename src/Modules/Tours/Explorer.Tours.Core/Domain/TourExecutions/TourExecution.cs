@@ -2,6 +2,7 @@
 using Explorer.Tours.API.Public.Administration;
 using Explorer.Tours.Core.Domain.RepositoryInterfaces;
 using Explorer.Tours.Core.Domain.Tours;
+using System.Text.Json.Serialization;
 
 namespace Explorer.Tours.Core.Domain.TourExecutions
 {
@@ -14,6 +15,9 @@ namespace Explorer.Tours.Core.Domain.TourExecutions
         public DateTime LastActivity { get; private set; }
         public ExecutionStatus ExecutionStatus { get; private set; }
         public List<CheckpointCompletition> CompletedCheckpoints { get; private set; }
+
+        [JsonConverter(typeof(TourExecutionEventsConverter))]
+        public override List<DomainEvent> Changes { get; set; }
 
         public TourExecution(long touristId, long tourId)
         {
