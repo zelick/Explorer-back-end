@@ -2,8 +2,11 @@
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
 using Explorer.Tours.API.Public.Recommendation;
+using Explorer.Payments.API.Internal;
 using Explorer.Tours.Core.Domain.Tours;
 using FluentResults;
+using Explorer.Stakeholders.API.Internal;
+using Explorer.Tours.API.Internal;
 
 namespace Explorer.Tours.Core.UseCases.Recommendation
 {
@@ -13,12 +16,14 @@ namespace Explorer.Tours.Core.UseCases.Recommendation
         private readonly ITourExecutionService _tourExecutionService;
         private readonly ITouristPositionService _touristPositionService;
         private readonly ITourPreferenceService _tourPreferenceService;
-        public TourRecommendationService(ITourExecutionService tourExecutionService, ITourService tourService, ITouristPositionService touristPositionService, ITourPreferenceService tourPreferenceService)
+        private readonly IInternalTourOwnershipService _internalTourOwnershipService;
+        public TourRecommendationService(ITourExecutionService tourExecutionService, ITourService tourService, ITouristPositionService touristPositionService, ITourPreferenceService tourPreferenceService, IInternalTourOwnershipService internalTourOwnershipService)
         {
             _tourExecutionService = tourExecutionService;
             _tourService = tourService;
             _touristPositionService = touristPositionService;
             _tourPreferenceService = tourPreferenceService;
+            _internalTourOwnershipService = internalTourOwnershipService;
         }
         public List<PurchasedTourPreviewDto> GetActiveToursInRange(double touristLongitude, double touristLatitude)
         {
@@ -160,11 +165,12 @@ namespace Explorer.Tours.Core.UseCases.Recommendation
             double weightNumberOfPurchases = 0.2;
 
             double averageRating = purchasedTourPreviewDto.TourRatings.Any() ? purchasedTourPreviewDto.TourRatings.Average(tour => tour.Rating) : 0.0;
-            double numberRating = purchasedTourPreviewDto.TourRatings.Any() ? purchasedTourPreviewDto.TourRatings.Count() : 0.0;
+            double numberRating = purchasedTourPreviewDto.TourRatings.Any() ? Math.Log10(purchasedTourPreviewDto.TourRatings.Count()) : 0.0;
+            double purchaseNumber = Math.Log10(_internalTourOwnershipService.GetPurchasesNumber(purchasedTourPreviewDto.Id));
 
             double score = (weightNumberOfRatings * numberRating) +
                             (weightAverageRating * averageRating) +
-                            (weightNumberOfPurchases * 0);
+                            (weightNumberOfPurchases * purchaseNumber);
 
             return score;
         }
