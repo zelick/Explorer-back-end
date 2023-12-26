@@ -1,6 +1,7 @@
 ﻿using Explorer.BuildingBlocks.Infrastructure.Database;
 using Explorer.Payments.Core.Domain;
 using Explorer.Payments.Core.Domain.RepositoryInterfaces;
+using Explorer.Payments.Core.Domain.ShoppingSession;
 
 namespace Explorer.Payments.Infrastructure.Database.Repositories;
 
