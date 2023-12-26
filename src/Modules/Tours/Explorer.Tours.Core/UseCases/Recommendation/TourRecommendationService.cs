@@ -65,7 +65,10 @@ namespace Explorer.Tours.Core.UseCases.Recommendation
                     {
                         if (!foundCloseEnough && IsCloseEnough(touristLongitude, touristLatitude, tour.Checkpoints[i].Longitude, tour.Checkpoints[i].Latitude))
                         {
-                            filteredTours.Add(tour);
+                            if(tour.Status.Equals(TourStatus.Published.ToString()))
+                            {
+                                filteredTours.Add(tour);
+                            }
                             foundCloseEnough = true;
                             break;
                         }
@@ -92,7 +95,10 @@ namespace Explorer.Tours.Core.UseCases.Recommendation
                 TourPreviewDto dummyTour = _tourService.GetPublishedTour(tour.Id).Value;
                 if (preference != null)
                 {
-                    algorithmPoints[algorithmCounter] += (tour.Tags.Intersect(preference.Tags).Count() * 3);
+                    if (tour.Tags != null && preference.Tags != null)
+                    {
+                        algorithmPoints[algorithmCounter] += (tour.Tags.Intersect(preference.Tags).Count() * 3);
+                    }
                     if (tour.DemandignessLevel != null && tour.DemandignessLevel.Equals(preference.Difficulty)) { algorithmPoints[algorithmCounter] += 2; }
 
                     if (dummyTour != null)
@@ -121,10 +127,13 @@ namespace Explorer.Tours.Core.UseCases.Recommendation
 
                     if (preference != null)
                     {
-                        TourPreviewDto completedTour = _tourService.GetPublishedTour(tour.TourRatings[0].TourId).Value;
-                        if (completedTour != null)
+                        if (tour.TourRatings.Count >0)
                         {
-                            algorithmPoints[algorithmCounter] += (completedTour.Tags.Intersect(preference.Tags).Count() * 4);
+                            TourPreviewDto completedTour = _tourService.GetPublishedTour(tour.TourRatings[0].TourId).Value;
+                            if (completedTour != null)
+                            {
+                                algorithmPoints[algorithmCounter] += (completedTour.Tags.Intersect(preference.Tags).Count() * 4);
+                            }
                         }
                     }
                 }
