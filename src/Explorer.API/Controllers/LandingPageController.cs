@@ -2,6 +2,7 @@
 using Explorer.Blog.API.Public;
 using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Stakeholders.API.Public;
+using Explorer.Stakeholders.Core.UseCases;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.API.Public.Administration;
 using Microsoft.AspNetCore.Mvc;
@@ -13,12 +14,14 @@ namespace Explorer.API.Controllers
     {
         private readonly IBlogPostService _blogPostService;
         private readonly ITourService _tourService;
+        private readonly IApplicationGradeService _applicationGradeService;
 
-        
-        public LandingPageController(IBlogPostService blogPostService, ITourService tourService)
+
+        public LandingPageController(IBlogPostService blogPostService, ITourService tourService, IApplicationGradeService applicationGradeService)
         {
             _blogPostService = blogPostService;
             _tourService = tourService;
+            _applicationGradeService = applicationGradeService;
         }
 
         [HttpGet("top-rated-blogs/{count}")]
@@ -41,6 +44,12 @@ namespace Explorer.API.Controllers
         {
             var result = _tourService.GetFilteredPublishedTours(page, pageSize);
             return CreateResponse(result);
+        }
+
+        [HttpGet("app-rating-exists/{id}")]
+        public bool Exists(int id)
+        {
+            return _applicationGradeService.Exists(id);
         }
     }
 }
