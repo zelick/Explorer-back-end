@@ -7,6 +7,7 @@ using Explorer.Tours.Core.Domain.Tours;
 using FluentResults;
 using Explorer.Stakeholders.API.Internal;
 using Explorer.Tours.API.Internal;
+using System.Collections.Generic;
 
 namespace Explorer.Tours.Core.UseCases.Recommendation
 {
@@ -157,14 +158,19 @@ namespace Explorer.Tours.Core.UseCases.Recommendation
         }
 
 
-        Result<List<PurchasedTourPreviewDto>> ITourRecommendationService.GetAppropriateActiveTours(int touristId)
+        Result<List<TourPreviewDto>> ITourRecommendationService.GetAppropriateActiveTours(int touristId)
         {
             TouristPositionDto touristPositionDto = _touristPositionService.GetPositionByCreator(0, 0, touristId).Value;
             List<PurchasedTourPreviewDto> allActiveTours = GetActiveToursInRange(touristPositionDto.Longitude, touristPositionDto.Latitude);
 
             //DRUGI ALGORITAM
             var top10Tours = allActiveTours.OrderByDescending(t => GetActiveTourScore(t)).Take(10).ToList();
-            return top10Tours;
+
+            List<TourPreviewDto> returnList = new List<TourPreviewDto>();
+
+            foreach(var obj in top10Tours) { returnList.Add(MapFromPurchasedTour(obj)); }
+
+            return returnList;
         }
 
         private double GetActiveTourScore(PurchasedTourPreviewDto purchasedTourPreviewDto) 
@@ -182,6 +188,37 @@ namespace Explorer.Tours.Core.UseCases.Recommendation
                             (weightNumberOfPurchases * purchaseNumber);
 
             return score;
+        }
+
+        private TourPreviewDto MapFromPurchasedTour(PurchasedTourPreviewDto purchasedTour)
+        {
+            return new TourPreviewDto
+            {
+                Id = purchasedTour.Id,
+                Name = purchasedTour.Name,
+                Description = purchasedTour.Description,
+                DemandignessLevel = purchasedTour.DemandignessLevel,
+                Price = purchasedTour.Price,
+                Tags = purchasedTour.Tags,
+                Equipment = purchasedTour.Equipment,
+                Checkpoint = MapFromCheckpoint(purchasedTour.Checkpoints[0]),
+                TourRating = purchasedTour.TourRatings,
+                TourTime = purchasedTour.TourTimes
+            };
+        }
+
+        private CheckpointPreviewDto MapFromCheckpoint(CheckpointDto checkpoint)
+        {
+            return new CheckpointPreviewDto
+            {
+                Id = checkpoint.Id,
+                Longitude = checkpoint.Longitude,
+                Latitude = checkpoint.Latitude,
+                Name = checkpoint.Name,
+                Description = checkpoint.Description,
+                Pictures = checkpoint.Pictures ?? new List<string>(),
+                RequiredTimeInSeconds = checkpoint.RequiredTimeInSeconds
+            };
         }
     }
 }

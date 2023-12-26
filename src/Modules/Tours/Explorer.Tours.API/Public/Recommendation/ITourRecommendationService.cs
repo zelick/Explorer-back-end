@@ -13,7 +13,7 @@ namespace Explorer.Tours.API.Public.Recommendation
         public List<PurchasedTourPreviewDto> GetActiveToursInRange(double touristLongitude, double touristLatitude);
         Result<List<TourPreviewDto>> GetAppropriateTours(int touristId);
 
-        public Result<List<PurchasedTourPreviewDto>> GetAppropriateActiveTours(int touristId);
+        public Result<List<TourPreviewDto>> GetAppropriateActiveTours(int touristId);
 
     }
 }

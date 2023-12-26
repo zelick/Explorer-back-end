@@ -48,7 +48,7 @@ namespace Explorer.API.Controllers.Tourist.Tour
         }
 
         [HttpGet("active-recommendations/{id:int}")]
-        public ActionResult<List<PurchasedTourPreviewDto>> GetActiveTourRecommendations(int id)
+        public ActionResult<List<TourPreviewDto>> GetActiveTourRecommendations(int id)
         {
             var result = _tourRecommendationService.GetAppropriateActiveTours(id);
             return CreateResponse(result);
