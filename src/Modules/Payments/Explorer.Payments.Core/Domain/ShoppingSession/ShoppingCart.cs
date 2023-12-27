@@ -8,7 +8,7 @@ public class ShoppingCart : EventSourcedAggregate
 {
     public long UserId { get; init; }
     public List<OrderItem> Items;
-    public DateTime LastActivityTime { get; private set; }
+    public DateTime LastActivity { get; private set; }
 
     [JsonConverter(typeof(ShoppingCartEventsConverter))]
     public override List<DomainEvent> Changes { get; set; }
@@ -51,7 +51,7 @@ public class ShoppingCart : EventSourcedAggregate
 
     public void LeavePreviousSession()
     {
-        Causes(new ShoppingSessionAbandoned(this.Id, LastActivityTime));
+        Causes(new ShoppingSessionAbandoned(this.Id, LastActivity));
     }
 
     public void UseCoupon(long couponId, long tourId)
@@ -109,10 +109,10 @@ public class ShoppingCart : EventSourcedAggregate
     private void CheckSessionActivity()
     {
         var maxInactivityDuration = TimeSpan.FromMinutes(MaxSessionMinutes);
-        var elapsedInactivityTime = DateTime.UtcNow - LastActivityTime;
+        var elapsedInactivityTime = DateTime.UtcNow - LastActivity;
 
         if (elapsedInactivityTime > maxInactivityDuration)
-            Causes(new ShoppingSessionAbandoned(Id, LastActivityTime));
+            Causes(new ShoppingSessionAbandoned(Id, LastActivity));
     }
 
     private void Causes(DomainEvent @event)
@@ -129,30 +129,30 @@ public class ShoppingCart : EventSourcedAggregate
 
     private void When(ShoppingSessionStarted sessionStarted)
     {
-        LastActivityTime = DateTime.UtcNow;
+        LastActivity = DateTime.UtcNow;
     }
 
     private void When(ShoppingSessionAbandoned sessionAbandoned)
     {
-        LastActivityTime = DateTime.UtcNow;
+        LastActivity = DateTime.UtcNow;
     }
 
     private void When(ShoppingSessionEnded sessionEnded)
     {
-        LastActivityTime = DateTime.UtcNow;
+        LastActivity = DateTime.UtcNow;
 
         Items.Clear();
     }
 
     private void When(ShoppingCouponUsed couponUsed)
     {
-        LastActivityTime = DateTime.UtcNow;
+        LastActivity = DateTime.UtcNow;
         CheckSessionActivity();
     }
 
     private void When(TourAddedToCart tourAdded)
     {
-        LastActivityTime = DateTime.UtcNow;
+        LastActivity = DateTime.UtcNow;
         CheckSessionActivity();
 
         Items.Add(new OrderItem(tourAdded.TourId, tourAdded.TourName, tourAdded.TourPrice, ItemType.Tour));
@@ -160,7 +160,7 @@ public class ShoppingCart : EventSourcedAggregate
 
     private void When(TourRemovedFromCart tourRemoved)
     {
-        LastActivityTime = DateTime.UtcNow;
+        LastActivity = DateTime.UtcNow;
         CheckSessionActivity();
 
         var tourToRemove = Items.FirstOrDefault(item => item.ItemId == tourRemoved.TourId && item.Type == ItemType.Tour);
@@ -173,7 +173,7 @@ public class ShoppingCart : EventSourcedAggregate
 
     private void When(BundleAddedToCart bundleAdded)
     {
-        LastActivityTime = DateTime.UtcNow;
+        LastActivity = DateTime.UtcNow;
         CheckSessionActivity();
 
         Items.Add(new OrderItem(bundleAdded.BundleId, bundleAdded.BundleName, bundleAdded.BundlePrice, ItemType.Bundle));
@@ -181,7 +181,7 @@ public class ShoppingCart : EventSourcedAggregate
 
     private void When(BundleRemovedFromCart bundleRemoved)
     {
-        LastActivityTime = DateTime.UtcNow;
+        LastActivity = DateTime.UtcNow;
         CheckSessionActivity();
 
         var bundleToRemove = Items.FirstOrDefault(item => item.ItemId == bundleRemoved.BundleId && item.Type == ItemType.Bundle);
