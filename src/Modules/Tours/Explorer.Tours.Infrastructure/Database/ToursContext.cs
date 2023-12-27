@@ -1,8 +1,10 @@
+using Explorer.BuildingBlocks.Core.Domain;
 using Explorer.Stakeholders.Core.Domain;
 using Explorer.Tours.Core.Domain;
 using Explorer.Tours.Core.Domain.TourExecutions;
 using Explorer.Tours.Core.Domain.Tours;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
 
 namespace Explorer.Tours.Infrastructure.Database;
 
@@ -31,8 +33,9 @@ public class ToursContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        
         modelBuilder.HasDefaultSchema("tours");
-
+        modelBuilder.Ignore<DomainEvent>();
         modelBuilder.Entity<Tour>()
            .HasMany(t => t.Checkpoints)
            .WithOne(t => t.Tour)
@@ -60,7 +63,13 @@ public class ToursContext : DbContext
         ConfigureTourRatings(modelBuilder);
 
         modelBuilder.Entity<ReportedIssue>().Property(item => item.Comments).HasColumnType("jsonb");
-        
+        modelBuilder.Entity<TourExecution>()
+        .Property(t => t.Changes)
+        .HasConversion(
+            v => TourExecutionEventsConverter.Write(v),
+            v => TourExecutionEventsConverter.Read(v)
+        )
+        .HasColumnType("jsonb");
         modelBuilder.Entity<PrivateTour>().Property(item => item.Checkpoints).HasColumnType("jsonb");
         modelBuilder.Entity<PrivateTour>().Property(item => item.Execution).HasColumnType("jsonb");
         modelBuilder.Entity<PrivateTour>().Property(item => item.Blog).HasColumnType("jsonb");
