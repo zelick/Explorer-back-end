@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace Explorer.Encounters.API.Internal
 {
+    public interface IInternalEncounterExecutionService
     {
         Result<List<EncounterExecutionDto>> GetByEncounter(long encounterId);
     }
