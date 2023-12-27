@@ -19,5 +19,6 @@ namespace Explorer.Tours.API.Public.Administration
         Result<TourExecutionDto> GetInProgressByTourAndTourist(long tourId, long touristId);
         Result<TourExecutionDto> Abandon(long id, long touristId);
         Result<List<TourPreviewDto>> GetSuggestedTours(long finishedTourId, long loggedUser);
+        Result<List<TourExecutionDto>> GetActiveTourExecutions();
     }
 }
