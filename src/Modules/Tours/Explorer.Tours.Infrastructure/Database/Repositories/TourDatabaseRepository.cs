@@ -31,6 +31,15 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
                 .ToList();
         }
 
+        public List<Tour> GetTours()
+        {
+            return _dbContext.Tours
+                .Include(t => t.Equipment)
+                .Include(t => t.Checkpoints)
+                .Include(t => t.TourRatings)
+                .ToList();
+        }
+
         public List<Tour> GetPublishedTours()
         {
             return _dbContext.Tours
