@@ -17,7 +17,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Explorer.Encounters.API.Internal;
+using Explorer.Encounters.API.Dtos;
 
 namespace Explorer.Tours.Core.UseCases.Administration
 {
@@ -26,11 +27,13 @@ namespace Explorer.Tours.Core.UseCases.Administration
         private readonly IInternalTourOwnershipService _internalTourOwnershipService;
         private readonly ITourRepository _tourRepository;
         private readonly ITourExecutionRepository _tourExecutionRepository;
-        public TourStatisticsService(IInternalTourOwnershipService internalTourOwnershipService, ITourRepository tourRepository, ITourExecutionRepository tourExecutionRepository)
+        private readonly IInternalEncounterExecutionService _internalEncounterExecutionService;
+        public TourStatisticsService(IInternalTourOwnershipService internalTourOwnershipService, ITourRepository tourRepository, ITourExecutionRepository tourExecutionRepository, IInternalEncounterExecutionService internalEncounterExecutionService)
         {
             _internalTourOwnershipService = internalTourOwnershipService;
             _tourRepository = tourRepository;
             _tourExecutionRepository = tourExecutionRepository;
+            _internalEncounterExecutionService = internalEncounterExecutionService;
         }
 
         public Result<List<long>> GetSoldToursIds()
@@ -310,7 +313,6 @@ namespace Explorer.Tours.Core.UseCases.Administration
             }
         }
 
-        //mozda drugi servis? 
         public double CalculatePercentages(int touristsReachedCheckpoint, int totalTourists)
         {
             double percentageReached = 0;
@@ -320,7 +322,7 @@ namespace Explorer.Tours.Core.UseCases.Administration
             }
             return percentageReached;
         }
-        public Result<List<CheckpointStatisticsDto>> CalculateCheckpointArrivalPercentages(long tourId)
+        public Result<List<CheckpointStatisticsDto>> CalculateCheckpointArrivalPercentages(long tourId) //izmeni ime
         {
             Tour tour = _tourRepository.Get(tourId);
             List<TourExecution> tourExecutions = _tourExecutionRepository.GetByTourId(tourId);
@@ -344,11 +346,46 @@ namespace Explorer.Tours.Core.UseCases.Administration
                     }
                 }
                 var percentageReached = CalculatePercentages(count, tourExecutions.Count);
-                var checkpointStatisticsDto = new CheckpointStatisticsDto(checkpoint.Id, checkpoint.Name, percentageReached);
+                var percetnageFinishedEncounter = GetPercentageOfTouristsFinishedEncounter(checkpoint);
+                var checkpointStatisticsDto = new CheckpointStatisticsDto(checkpoint.Id, checkpoint.Name, percentageReached, percetnageFinishedEncounter);
                 checkpointStatisticsDtos.Add(checkpointStatisticsDto);
             }
             return (Result<List<CheckpointStatisticsDto>>)checkpointStatisticsDtos;
         }
 
+        public double CalculateEncountersPercentages(int touristsFinishedEncounter, int totalTourists)
+        {
+            double percentageFinishedEncounter = 0;
+
+            if (totalTourists > 0)
+            {
+                percentageFinishedEncounter = (double)touristsFinishedEncounter / totalTourists * 100;
+            }
+
+            return percentageFinishedEncounter;
+        }
+
+
+        public double GetPercentageOfTouristsFinishedEncounter(Checkpoint checkpoint)
+        {
+            try
+            {
+
+                List<EncounterExecutionDto> encounterExecutionDtos = new List<EncounterExecutionDto>();
+                encounterExecutionDtos = _internalEncounterExecutionService.GetByEncounter(checkpoint.EncounterId).Value; 
+                var totalTourists = encounterExecutionDtos.Count();
+                if (totalTourists  == 0)
+                {
+                    return 0;
+                }
+                var touristsFinishedEncounter = encounterExecutionDtos.Count(e => e.Status.Equals("Completed"));
+                double percentageFinishedEncounter = CalculateEncountersPercentages(touristsFinishedEncounter, totalTourists);
+                return percentageFinishedEncounter;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

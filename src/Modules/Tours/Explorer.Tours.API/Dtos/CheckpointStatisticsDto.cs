@@ -10,12 +10,13 @@ namespace Explorer.Tours.API.Dtos
     {
         public long CheckpointId { get; set; }
         public String CheckpointName { get; set; }  
-        public double ArrivalPercentage { get; set; }
-
-        public CheckpointStatisticsDto(long checkpointId,string checkpointName, double arrivalPercentage) { 
+        public double ArrivalPercentage { get; set; } = 0;
+        public double FinishEcnounterPercentage { get; set; } = 0;
+        public CheckpointStatisticsDto(long checkpointId,string checkpointName, double arrivalPercentage, double finishEcnounterPercentage) { 
             this.CheckpointId = checkpointId; 
             this.CheckpointName = checkpointName;
             this.ArrivalPercentage = arrivalPercentage;
+            this.FinishEcnounterPercentage = finishEcnounterPercentage; 
         }
     }
 }
