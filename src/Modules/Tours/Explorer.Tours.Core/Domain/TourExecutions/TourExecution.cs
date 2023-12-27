@@ -91,7 +91,7 @@ namespace Explorer.Tours.Core.Domain.TourExecutions
         {
             LastActivity = DateTime.UtcNow;
             When((dynamic)@event);
-            Version = Version++;
+            Version++;
         }
 
         private void When(TourExecutionFinished finished)
