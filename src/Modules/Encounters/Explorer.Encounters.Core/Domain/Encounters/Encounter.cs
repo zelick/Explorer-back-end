@@ -1,4 +1,6 @@
-﻿using Explorer.BuildingBlocks.Core.Domain;
+﻿using System.Text.Json.Serialization;
+using Explorer.BuildingBlocks.Core.Domain;
+using Explorer.Encounters.Core.Domain.Converters;
 using Explorer.Tours.Core.Domain.TourExecutions;
 
 namespace Explorer.Encounters.Core.Domain.Encounters
@@ -13,6 +15,8 @@ namespace Explorer.Encounters.Core.Domain.Encounters
         public EncounterType Type { get; init; }
         public double Latitude { get; init; }
         public double Longitude { get; init; }
+        [JsonConverter(typeof(SocialEncounterEventConverter))]
+        public override List<DomainEvent> Changes { get; set; }
 
         public Encounter() { }
 
@@ -119,7 +123,6 @@ namespace Explorer.Encounters.Core.Domain.Encounters
         {
             return GetDistanceFromEncounter(longitude, latitude) <= 1000;
         }
-
         protected void Causes(DomainEvent @event)
         {
             Changes.Add(@event);
@@ -128,12 +131,7 @@ namespace Explorer.Encounters.Core.Domain.Encounters
 
         public override void Apply(DomainEvent @event)
         {
-            When((dynamic)@event);
-            Version = Version++;
-        }
-
-        protected void When(SocialEncounter socialEncounter)
-        {
+            Version++;
         }
     }
 

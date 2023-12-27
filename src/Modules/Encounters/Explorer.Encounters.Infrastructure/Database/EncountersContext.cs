@@ -1,6 +1,8 @@
 ﻿using Explorer.BuildingBlocks.Core.Domain;
+using Explorer.Encounters.Core.Domain.Converters;
 using Explorer.Encounters.Core.Domain.Encounters;
 using Explorer.Stakeholders.Core.Domain;
+using Explorer.Tours.Core.Domain.TourExecutions;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection.Metadata;
 
@@ -32,6 +34,21 @@ namespace Explorer.Encounters.Infrastructure.Database
                 .HasForeignKey(e => e.EncounterId)
                 .IsRequired();
 
+            modelBuilder.Entity<EncounterExecution>()
+                  .Property(t => t.Changes)
+                  .HasConversion(
+                      v => SocialEncounterEventConverter.Write(v),
+                      v => SocialEncounterEventConverter.Read(v)
+                  )
+                  .HasColumnType("jsonb");
+
+            modelBuilder.Entity<Encounter>()
+                  .Property(t => t.Changes)
+                  .HasConversion(
+                      v => SocialEncounterEventConverter.Write(v),
+                      v => SocialEncounterEventConverter.Read(v)
+                  )
+                  .HasColumnType("jsonb");
             // modelBuilder.Entity<Encounter>().Property(item => item.HiddenLocationEncounter).HasColumnType("jsonb");
             //modelBuilder.Entity<Encounter>().Property(item => item.SocialEncounter).HasColumnType("jsonb");
         }

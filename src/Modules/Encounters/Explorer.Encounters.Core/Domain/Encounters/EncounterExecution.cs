@@ -3,6 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Explorer.Tours.Core.Domain;
 using Explorer.Tours.Core.Domain.TourExecutions;
 using Explorer.Tours.Core.Domain.Tours;
+using System.Text.Json.Serialization;
+using Explorer.Encounters.Core.Domain.Converters;
 
 namespace Explorer.Encounters.Core.Domain.Encounters
 {
@@ -17,6 +19,8 @@ namespace Explorer.Encounters.Core.Domain.Encounters
         public EncounterExecutionStatus Status { get; private set; }
         public DateTime StartTime { get; private set; }
         public DateTime EndTime { get; private set; }
+        [JsonConverter(typeof(SocialEncounterEventConverter))]
+        public override List<DomainEvent> Changes { get; set; }
         public EncounterExecution() { }
         public EncounterExecution(long encounterId, Encounter encounter, long touristId, double touristLatitude, double touristLongitute, EncounterExecutionStatus status, DateTime startTime, DateTime endTime)
         {
@@ -64,6 +68,8 @@ namespace Explorer.Encounters.Core.Domain.Encounters
         {
             Status = EncounterExecutionStatus.Active;
             this.StartTime = DateTime.UtcNow;
+            if(Encounter.Type == EncounterType.Social)
+                Causes(new SocialEncounterActivated(this.Id, TouristId, DateTime.UtcNow));
         }
         public void Abandone()
         {
@@ -71,6 +77,8 @@ namespace Explorer.Encounters.Core.Domain.Encounters
         }
         public void Completed()
         {
+            if (Encounter.Type == EncounterType.Social && Status == EncounterExecutionStatus.Active)
+                Causes(new SocialEncounterCompleted(this.Id, DateTime.UtcNow, TouristId));
             Status = EncounterExecutionStatus.Completed;
             this.EndTime = DateTime.UtcNow;
         }
@@ -82,9 +90,15 @@ namespace Explorer.Encounters.Core.Domain.Encounters
             return a < 0.01 && b < 0.01;
         }
 
-        public override void Apply(DomainEvent changes)
+        protected void Causes(DomainEvent @event)
         {
-            throw new NotImplementedException();
+            Changes.Add(@event);
+            Apply(@event);
+        }
+
+        public override void Apply(DomainEvent @event)
+        {
+            Version++;
         }
     }
 
