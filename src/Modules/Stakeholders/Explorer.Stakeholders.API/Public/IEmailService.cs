@@ -10,5 +10,6 @@ namespace Explorer.Stakeholders.API.Public
     public interface IEmailService
     {
         void SendEmail(AccountRegistrationDto account, string tokenData);
+        void SendPasswordResetEmail(string userName, string userEmail, string secureTokenData);
     }
 }
