@@ -25,7 +25,11 @@ namespace Explorer.Tours.Core.Domain.TourExecutions
                         eventTypeProperty = "TourExecutionActivityRegistered";
                     else if (element.TryGetProperty("EndDate", out var j))
                         eventTypeProperty = "TourExecutionFinished";
-                    // Check if the "eventType" property exists in the JSON element
+                    else if (element.TryGetProperty(("CheckpointIndex"), out var t))
+                        eventTypeProperty = "TourExecutionCheckpointCompleted";
+                    else if (element.TryGetProperty(("DateTime"), out var s))
+                        eventTypeProperty = "SecretUnlocked";
+
                     if (eventTypeProperty != "")
                     {
                         string eventType = eventTypeProperty;
@@ -41,14 +45,19 @@ namespace Explorer.Tours.Core.Domain.TourExecutions
                             case "TourExecutionFinished":
                                 events.Add(JsonSerializer.Deserialize<TourExecutionFinished>(element.GetRawText()));
                                 break;
+                            case "TourExecutionCheckpointCompleted":
+                                events.Add(JsonSerializer.Deserialize<TourExecutionCheckpointCompleted>(element.GetRawText()));
+                                break;
+                            case "SecretUnlocked":
+                                events.Add(JsonSerializer.Deserialize<SecretUnlocked>(element.GetRawText()));
+                                break;
                             default:
                                 break;
                         }
                     }
                     else
                     {
-                        // Handle the case when the "eventType" property is missing
-                        // You can log a warning or take appropriate action based on your requirements.
+
                     }
                 }
 

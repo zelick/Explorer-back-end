@@ -99,17 +99,29 @@ namespace Explorer.Tours.Core.Domain.TourExecutions
             
         }
 
+        private void When(TourExecutionCheckpointCompleted completed)
+        {
+            var checkpoint = Tour.Checkpoints[completed.CheckpointIndex - 1];
+            CheckpointCompletition checkpointCompletition = new CheckpointCompletition(checkpoint.Id);
+            if (CompletedCheckpoints.Find(c => c.TourExecutionId == Id && c.CheckpointId == checkpoint.Id) == null)
+                CompletedCheckpoints.Add(checkpointCompletition);
+        }
+
         private void When(TourExecutionActivityRegistered activityRegistered)
         {
+            int indexNumber = 0;
             foreach (Checkpoint checkpoint in Tour.Checkpoints)
             {
+                indexNumber++;
                 double a = Math.Abs(Math.Round(checkpoint.Longitude, 4) - Math.Round(activityRegistered.Longitude, 4));
                 double b = Math.Abs(Math.Round(checkpoint.Latitude, 4) - Math.Round(activityRegistered.Latitude, 4));
                 if (a < 0.01 && b < 0.01)
                 {
-                    CheckpointCompletition checkpointCompletition = new CheckpointCompletition(checkpoint.Id);
-                    if (CompletedCheckpoints.Find(c => c.TourExecutionId == Id && c.CheckpointId == checkpoint.Id) == null)
-                        CompletedCheckpoints.Add(checkpointCompletition);
+                    Causes(new TourExecutionCheckpointCompleted(Id, checkpoint.Id, DateTime.UtcNow, indexNumber));
+                    if(checkpoint.CheckpointSecret != null)
+                    {
+                        Causes(new SecretUnlocked(Id, DateTime.UtcNow, checkpoint.Id));
+                    }
                 }
                 CheckTourCompletition();
             }
