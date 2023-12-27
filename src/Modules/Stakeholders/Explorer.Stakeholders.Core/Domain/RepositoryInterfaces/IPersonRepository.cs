@@ -11,5 +11,6 @@ namespace Explorer.Stakeholders.Core.Domain.RepositoryInterfaces
         ICollection<Person> GetAll();
         Person GetByUserId(int id);
         void Create(Person person);
+        string GetEmail(long userId);
     }
 }

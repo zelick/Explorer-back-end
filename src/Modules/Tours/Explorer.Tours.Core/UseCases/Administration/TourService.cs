@@ -370,5 +370,18 @@ namespace Explorer.Tours.Core.UseCases.Administration
             }
             return result;
         }
+
+        public Result<List<TourDto>> GetTours()
+        {
+            try
+            {
+                var result = _tourRepository.GetTours();
+                return MapToDto(result);
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+        }
     }
 }

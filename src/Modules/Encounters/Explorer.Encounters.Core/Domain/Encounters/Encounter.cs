@@ -116,6 +116,7 @@ namespace Explorer.Encounters.Core.Domain.Encounters
 
         public double GetDistanceFromEncounter(double longitude, double latitude)
         {
+            if (latitude == Latitude && longitude == Longitude) return 0;
             return Math.Acos(Math.Sin(Math.PI / 180 * (Latitude)) * Math.Sin(Math.PI / 180 * latitude) + Math.Cos(Math.PI / 180 * Latitude) * Math.Cos(Math.PI / 180 * latitude) * Math.Cos(Math.PI / 180 * Longitude - Math.PI / 180 * longitude)) * 6371000;
         }
 

@@ -19,7 +19,8 @@ public class StakeholdersContext : DbContext
     public DbSet<SocialProfile> SocialProfiles { get; set; }   
     public DbSet<VerificationToken> VerificationTokens { get; set; }
     public DbSet<Tourist> Tourists { get; set; }
-    
+    public DbSet<SecureToken> SecureTokens { get; set; }
+
     public StakeholdersContext(DbContextOptions<StakeholdersContext> options) : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

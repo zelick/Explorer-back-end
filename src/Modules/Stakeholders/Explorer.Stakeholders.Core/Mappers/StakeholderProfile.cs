@@ -23,5 +23,6 @@ public class StakeholderProfile : Profile
         CreateMap<CheckpointRequestDto, CheckpointRequest>().ReverseMap();
         CreateMap<User, Tourist>().ReverseMap();
         CreateMap<Tourist, TouristDto>();
+        CreateMap<SecureToken, SecureTokenDto>().ReverseMap();
     }
 }
