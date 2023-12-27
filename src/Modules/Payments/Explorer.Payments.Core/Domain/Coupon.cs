@@ -58,7 +58,7 @@ namespace Explorer.Payments.Core.Domain
             return codeBuilder.ToString();
         }
 
-        public void Apply(List<Item> tours)
+        public long Apply(List<Item> tours)
         {
             if (!IsValid()) throw new InvalidOperationException($"Coupon can't be applied, expired on {ExpirationDate} or used.");
 
@@ -76,6 +76,8 @@ namespace Explorer.Payments.Core.Domain
 
             ApplyDiscount(discountedTour);
             IsUsed = true;
+
+            return discountedTour.ItemId;
         }
 
         private void ApplyDiscount(Item item)
