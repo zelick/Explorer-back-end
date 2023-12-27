@@ -126,7 +126,10 @@ namespace Explorer.Tours.Core.Domain.TourExecutions
                 CheckTourCompletition();
             }
         }
+        private void When(SecretUnlocked secret)
+        {
 
+        }
         private void When(TourExecutionStarted started)
         {
             Start = started.StartDate;

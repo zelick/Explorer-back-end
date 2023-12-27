@@ -11,9 +11,9 @@ namespace Explorer.Tours.Core.Domain.TourExecutions
     public class TourExecutionFinished: DomainEvent
     {
         [JsonConstructor]
-        public TourExecutionFinished(long aggregateId, DateTime finishdate) : base(aggregateId)
+        public TourExecutionFinished(long aggregateId, DateTime finishDate) : base(aggregateId)
         {
-            FinishDate = finishdate;
+            FinishDate = finishDate;
         }
         public TourExecutionFinished() { }
         public DateTime FinishDate { get; private set; }
