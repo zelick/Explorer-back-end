@@ -8,4 +8,5 @@ public interface IAuthenticationService
    // Result EditProfile(AccountEditingDto account);
     Result<AuthenticationTokensDto> Login(CredentialsDto credentials);
     Result<AccountRegistrationDto> RegisterTourist(AccountRegistrationDto account);
+    void SendPasswordResetEmail(string username);
 }

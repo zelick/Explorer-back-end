@@ -33,6 +33,11 @@ public class User : Entity
     {
         return Role.ToString().ToLower();
     }
+
+    public void SetNewPassword(string newPassword)
+    {
+        Password = newPassword;
+    }
 }
 
 public enum UserRole

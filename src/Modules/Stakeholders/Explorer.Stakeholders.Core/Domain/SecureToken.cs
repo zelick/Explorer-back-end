@@ -13,11 +13,11 @@ namespace Explorer.Stakeholders.Core.Domain
         public string TokenData { get; private set; }
         public DateTime ExpiryTime { get; private set; }
 
-        public SecureToken(long userId, string tokenData, DateTime expiryData)
+        public SecureToken(long userId, string tokenData, DateTime expiryTime)
         {
             this.UserId = userId;
             TokenData = tokenData;
-            ExpiryTime = expiryData;
+            ExpiryTime = expiryTime;
         }
     }
 }

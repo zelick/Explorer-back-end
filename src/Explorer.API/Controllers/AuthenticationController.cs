@@ -54,4 +54,10 @@ public class AuthenticationController : BaseApiController
         var result = _verificationService.IsUserVerified(username);
         return CreateResponse(result);
     }
+
+    [HttpGet("send-password-reset-email/{username}")]
+    public void SendPasswordResetEmail(string username)
+    {
+        _authenticationService.SendPasswordResetEmail(username);
+    }
 }

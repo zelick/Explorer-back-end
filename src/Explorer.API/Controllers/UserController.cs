@@ -43,5 +43,12 @@ namespace Explorer.API.Controllers
 			var result = _userService.Delete(id);
 			return CreateResponse(result);
 		}
-	}
+
+        [HttpPut("update-password/{username}/{password}")]
+        public ActionResult<UserDto> Update(string username, string password)
+        {
+            var result = _userService.UpdatePassword(username, password);
+            return CreateResponse(result);
+        }
+    }
 }
