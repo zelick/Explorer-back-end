@@ -8,7 +8,7 @@ public class ShoppingCart : EventSourcedAggregate
 {
     public long UserId { get; init; }
     public List<OrderItem> Items;
-    public DateTime LastActivityTime;
+    public DateTime LastActivityTime { get; private set; }
 
     [JsonConverter(typeof(ShoppingCartEventsConverter))]
     public override List<DomainEvent> Changes { get; set; }
@@ -51,7 +51,7 @@ public class ShoppingCart : EventSourcedAggregate
 
     public void LeavePreviousSession()
     {
-        Causes(new ShoppingSessionAbandoned(this.Id, DateTime.UtcNow));
+        Causes(new ShoppingSessionAbandoned(this.Id, LastActivityTime));
     }
 
     public void UseCoupon(long couponId, long tourId)
@@ -62,8 +62,12 @@ public class ShoppingCart : EventSourcedAggregate
     public bool HasExpiredSession()
     {
         var sessionStartedEvent = Changes.OfType<ShoppingSessionStarted>().LastOrDefault();
+        var sessionEndedEvent = Changes.OfType<ShoppingSessionEnded>().LastOrDefault();
 
         if (sessionStartedEvent == null) return false;
+
+        var sessionEnded = sessionEndedEvent != null && sessionEndedEvent.SessionEnded > sessionStartedEvent.SessionStarted;
+        if (sessionEnded) return true;
 
         var sessionDuration = DateTime.UtcNow - sessionStartedEvent.SessionStarted;
         return sessionDuration > TimeSpan.FromMinutes(MaxSessionMinutes);
@@ -72,10 +76,12 @@ public class ShoppingCart : EventSourcedAggregate
     public bool HasActiveSession()
     {
         var sessionStartedEvent = Changes.OfType<ShoppingSessionStarted>().LastOrDefault();
+        var sessionEndedEvent = Changes.OfType<ShoppingSessionEnded>().LastOrDefault();
 
         if (sessionStartedEvent == null) return false;
 
-        return !HasExpiredSession();
+        var sessionEnded = sessionEndedEvent != null && sessionEndedEvent.SessionEnded > sessionStartedEvent.SessionStarted;
+        return !sessionEnded;
     }
 
     public bool IsEmpty()
