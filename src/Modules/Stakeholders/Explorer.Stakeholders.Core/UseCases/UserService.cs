@@ -6,6 +6,7 @@ using Explorer.Stakeholders.API.Public;
 using Explorer.Stakeholders.Core.Domain;
 using Explorer.Stakeholders.Core.Domain.RepositoryInterfaces;
 using FluentResults;
+using System.Security.Principal;
 
 namespace Explorer.Stakeholders.Core.UseCases
 {
@@ -13,11 +14,13 @@ namespace Explorer.Stakeholders.Core.UseCases
     {
         private readonly IUserRepository _userRepository;
         private readonly ISecureTokenRepository _secureTokenRepository;
+        private readonly PasswordHasher _passwordHasher;
 
         public UserService(ICrudRepository<User> repository, IUserRepository userRepository, ISecureTokenRepository secureTokenRepository, IMapper mapper) : base(repository, mapper) 
         {
             _userRepository = userRepository;
             _secureTokenRepository = secureTokenRepository;
+            _passwordHasher = new PasswordHasher();
         }
 
         public Result<UserDto> GetUserById(int id)
@@ -45,7 +48,8 @@ namespace Explorer.Stakeholders.Core.UseCases
             {
                 return Result.Fail("Secure token is already used.");
             }
-            var ret = _userRepository.UpdatePassword(user.Id, password);
+            string passwordHashed = _passwordHasher.HashPassword(password);
+            var ret = _userRepository.UpdatePassword(user.Id, passwordHashed);
             _secureTokenRepository.UseSecureToken(token.Id);
             return MapToDto(ret);
         }
