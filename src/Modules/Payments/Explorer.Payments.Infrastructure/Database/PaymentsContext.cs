@@ -35,10 +35,6 @@ public class PaymentsContext : DbContext
 
     private static void ConfigurePayments(ModelBuilder modelBuilder)
     {
-
-        modelBuilder.Entity<ShoppingCart>()
-            .Property(cart => cart.Changes).HasColumnType("jsonb");
-
         modelBuilder.Entity<ShoppingCart>()
             .Property(c => c.Changes)
             .HasConversion(
