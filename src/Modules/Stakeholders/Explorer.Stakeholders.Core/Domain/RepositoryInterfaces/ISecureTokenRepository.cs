@@ -11,5 +11,6 @@ namespace Explorer.Stakeholders.Core.Domain.RepositoryInterfaces
         SecureToken CreateSecureToken(long userId);
         SecureToken GetByUserId(long userId);
         SecureToken UseSecureToken(long tokenId);
+        long GetUserIdBySecureToken(string tokenData);
     }
 }

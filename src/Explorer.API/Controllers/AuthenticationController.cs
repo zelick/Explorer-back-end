@@ -56,8 +56,9 @@ public class AuthenticationController : BaseApiController
     }
 
     [HttpGet("send-password-reset-email/{username}")]
-    public void SendPasswordResetEmail(string username)
+    public ActionResult<bool> SendPasswordResetEmail(string username)
     {
-        _authenticationService.SendPasswordResetEmail(username);
+        var result = _authenticationService.SendPasswordResetEmail(username);
+        return CreateResponse(result);
     }
 }

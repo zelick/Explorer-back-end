@@ -57,5 +57,12 @@ namespace Explorer.API.Controllers
             var result = _userService.GetUserByUsername(username);
             return CreateResponse(result);
         }
+
+        [HttpGet("get-user-by-id/{id:int}")]
+        public ActionResult<UserDto> GetUser(int id)
+        {
+			var result = _userService.GetUserById(id);
+            return CreateResponse(result);
+        }
     }
 }

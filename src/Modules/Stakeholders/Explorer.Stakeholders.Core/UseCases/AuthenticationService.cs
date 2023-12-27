@@ -124,7 +124,7 @@ public class AuthenticationService : IAuthenticationService
         }
     }
 
-    public void SendPasswordResetEmail(string username)
+    public Result<bool> SendPasswordResetEmail(string username)
     {
         var user = _userRepository.GetUserByUsername(username);
         if (user == null) throw new KeyNotFoundException("Not found user with this username: " + username);
@@ -134,5 +134,7 @@ public class AuthenticationService : IAuthenticationService
         var token = _secureTokenRepository.GetByUserId(user.Id);
 
         _emailService.SendPasswordResetEmail(user.Username, userEmail, token.TokenData);
+
+        return true;
     }
 }

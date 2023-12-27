@@ -13,5 +13,6 @@ namespace Explorer.Stakeholders.API.Public
         Result<SecureTokenDto> CreateSecureToken(long userId);
         Result<SecureTokenDto> GetByUserUsername(string username);
         Result<SecureTokenDto> UseSecureToken(long tokenId);
+        Result<long> GetUserIdByTokenData(string tokenData); 
     }
 }

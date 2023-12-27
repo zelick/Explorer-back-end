@@ -40,6 +40,11 @@ namespace Explorer.Stakeholders.Core.UseCases
             return MapToDto(secureToken);
         }
 
+        public Result<long> GetUserIdByTokenData(string tokenData)
+        {
+            return _secureTokenRepository.GetUserIdBySecureToken(tokenData);
+        }
+
         public Result<SecureTokenDto> UseSecureToken(long tokenId)
         {
             var token = _secureTokenRepository.UseSecureToken(tokenId);

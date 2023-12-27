@@ -21,5 +21,12 @@ namespace Explorer.API.Controllers
             var result = _secureTokenService.GetByUserUsername(username);
             return CreateResponse(result);
         }
+
+        [HttpGet("get-user-id/{tokenData}")]
+        public ActionResult<long> GetUserIdByTokenData(string tokenData)
+        {
+            var result = _secureTokenService.GetUserIdByTokenData(tokenData);
+            return CreateResponse(result);
+        }
     }
 }

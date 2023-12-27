@@ -48,6 +48,13 @@ namespace Explorer.Stakeholders.Infrastructure.Database.Repositories
             }
         }
 
+        public long GetUserIdBySecureToken(string tokenData)
+        {
+            var token = _dbContext.SecureTokens.FirstOrDefault(t => t.TokenData.Equals(tokenData));
+            if (token == null) throw new KeyNotFoundException("Not found token with data: " + tokenData);
+            return token.UserId;
+        }
+
         public SecureToken UseSecureToken(long tokenId)
         {
             var token = _dbContext.SecureTokens.FirstOrDefault(t => t.Id == tokenId);

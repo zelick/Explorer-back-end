@@ -91,7 +91,7 @@ namespace Explorer.Stakeholders.Core.UseCases
             bodyBuilder.HtmlBody = $"<p>Dear {userName},</p>" +
                                    $"<p>Thank you for being a user of our application.</p>" +
                                    $"<p>Please click the following link to reset your password:</p>" +
-                                   $"<a href='https://localhost:44333/api/users/verify/{secureTokenData}'>Reset password</a>";
+                                   $"<a href='http://localhost:4200/reset-password/{secureTokenData}'>Reset password</a>";
 
             message.Body = bodyBuilder.ToMessageBody();
 
