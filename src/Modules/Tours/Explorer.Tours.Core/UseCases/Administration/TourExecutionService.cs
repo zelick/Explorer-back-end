@@ -14,7 +14,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Explorer.Tours.API.Public.Recommendation;
 using Explorer.Tours.Core.Domain;
+using Explorer.Tours.Core.UseCases.Recommendation;
 
 
 namespace Explorer.Tours.Core.UseCases.Administration
@@ -87,7 +89,7 @@ namespace Explorer.Tours.Core.UseCases.Administration
             
         }
 
-        public Result<List<TourPreviewDto>> GetSuggestedTours(long finishedTourId, long loggedUser)
+        public Result<List<TourPreviewDto>> GetSuggestedTours(long finishedTourId, long loggedUser, Result<List<TourPreviewDto>> foundedToursByAlgorithm)
         {
             var followerIds = _touristFollowersService.GetFollowerIds(loggedUser);
 
@@ -102,7 +104,7 @@ namespace Explorer.Tours.Core.UseCases.Administration
 
             foreach (var ace in allCompletedExecutions)
             {
-                foreach (var ce in completedExecutions)
+                foreach (var ce in completedExecutionsByFollowers)
                 {
                     if (ace.TouristId == ce.TouristId && ace.TourId != finishedTourId)
                     {
@@ -111,7 +113,21 @@ namespace Explorer.Tours.Core.UseCases.Administration
                 }
             }
 
-            return _tourPreviewMapper.createDtoList(suggestedTours);
+
+            var result = new List<TourPreview>();
+
+            foreach (var st in suggestedTours)
+            {
+                foreach (var ft in foundedToursByAlgorithm.Value)
+                {
+                    if (st.Id == ft.Id)
+                    {
+                        result.Add(st);
+                    }
+                }
+            }
+
+            return _tourPreviewMapper.createDtoList(result);
 
         }
 
