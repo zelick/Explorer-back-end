@@ -22,4 +22,9 @@ public class TourPurchaseTokenDatabaseRepository : CrudDatabaseRepository<TourPu
     {
         return DbContext.PurchaseTokens.Any(t => t.UserId == userId && t.TourId == tourId);
     }
+
+    public int GetPurchasesNumberForTour(long tourId)
+    {
+        return DbContext.PurchaseTokens.Count(t => t.TourId == tourId);
+    }
 }

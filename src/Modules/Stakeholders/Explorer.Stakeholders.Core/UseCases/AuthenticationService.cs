@@ -20,6 +20,8 @@ public class AuthenticationService : IAuthenticationService
     private readonly IVerificationTokenRepository _verificationTokenRepository;
     private readonly IMapper _mapper;
     private readonly IInternalShoppingSetupService _shoppingSetupService;
+    private readonly PasswordHasher _passwordHasher;
+    private readonly VerificationService _verificationService;
 
     public AuthenticationService(IUserRepository userRepository, ICrudRepository<Person> personRepository, ITokenGenerator tokenGenerator, IEmailService emailService, IVerificationTokenRepository verificationTokenRepository, IMapper mapper, IInternalShoppingSetupService shoppingSetupService)
     {
@@ -30,12 +32,14 @@ public class AuthenticationService : IAuthenticationService
         _verificationTokenRepository = verificationTokenRepository;
         _mapper = mapper;
         _shoppingSetupService = shoppingSetupService;
+        _passwordHasher = new PasswordHasher();
+        _verificationService = new VerificationService(userRepository,verificationTokenRepository);
     }
 
     public Result<AuthenticationTokensDto> Login(CredentialsDto credentials)
     {
         var user = _userRepository.GetActiveByName(credentials.Username);
-        if (user == null || credentials.Password != user.Password) return Result.Fail(FailureCode.NotFound);
+        if (user == null || !_passwordHasher.VerifyPassword(credentials.Password,user.Password) || !_verificationService.IsUserVerified(credentials.Username).Value) return Result.Fail(FailureCode.NotFound);
 
         long personId;
         try
@@ -73,6 +77,7 @@ public class AuthenticationService : IAuthenticationService
             }
             else {userRole = Domain.UserRole.Tourist;}
 
+            account.Password = _passwordHasher.HashPassword(account.Password);
             var newUser = new User(account.Username, account.Password, userRole, true, false);
 
             if (newUser.Role == Domain.UserRole.Tourist)

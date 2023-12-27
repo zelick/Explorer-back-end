@@ -18,5 +18,6 @@ namespace Explorer.Tours.API.Public.Administration
         Result<TourExecutionDto> CheckPosition(TouristPositionDto position, long id);
         Result<TourExecutionDto> GetInProgressByTourAndTourist(long tourId, long touristId);
         Result<TourExecutionDto> Abandon(long id, long touristId);
+        Result<List<TourExecutionDto>> GetActiveTourExecutions();
     }
 }
