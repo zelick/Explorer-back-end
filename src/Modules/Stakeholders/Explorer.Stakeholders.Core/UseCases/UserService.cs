@@ -20,6 +20,12 @@ namespace Explorer.Stakeholders.Core.UseCases
             _secureTokenRepository = secureTokenRepository;
         }
 
+        public Result<UserDto> GetUserById(int id)
+        {
+            var user = _userRepository.GetUserById(id);
+            return MapToDto(user);
+        }
+
         public Result<UserDto> GetUserByUsername(string username)
         {
             var user = _userRepository.GetUserByUsername(username);
@@ -35,7 +41,12 @@ namespace Explorer.Stakeholders.Core.UseCases
             {
                 return Result.Fail("Secure token is expired.");
             }
+            if(token.IsAlreadyUsed)
+            {
+                return Result.Fail("Secure token is already used.");
+            }
             var ret = _userRepository.UpdatePassword(user.Id, password);
+            _secureTokenRepository.UseSecureToken(token.Id);
             return MapToDto(ret);
         }
 

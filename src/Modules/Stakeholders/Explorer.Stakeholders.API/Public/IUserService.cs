@@ -17,5 +17,6 @@ namespace Explorer.Stakeholders.API.Public
 		Result Delete(int id);
         Result<UserDto> GetUserByUsername(string username);
 		Result<UserDto> UpdatePassword(string username, string password);
+		Result<UserDto> GetUserById(int id);
     }
 }

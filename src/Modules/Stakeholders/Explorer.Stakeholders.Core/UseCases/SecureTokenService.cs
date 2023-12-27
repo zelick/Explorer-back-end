@@ -26,16 +26,24 @@ namespace Explorer.Stakeholders.Core.UseCases
 
         public Result<SecureTokenDto> CreateSecureToken(long userId)
         {
-            var user = _userRepository.GetUserById(userId);
+            var user = _userRepository.GetUserById((int) userId);
             if(user == null) { return Result.Fail("User not found"); }
             var secureToken = _secureTokenRepository.CreateSecureToken(userId);
             return MapToDto(secureToken);
         }
 
-        public Result<SecureTokenDto> GetByUserId(long userId)
+        public Result<SecureTokenDto> GetByUserUsername(string username)
         {
-            var secureToken = _secureTokenRepository.GetByUserId(userId);
+            var user = _userRepository.GetUserByUsername(username);
+            if (user == null) return Result.Fail("Not found user with this username: " + username);
+            var secureToken = _secureTokenRepository.GetByUserId(user.Id);
             return MapToDto(secureToken);
+        }
+
+        public Result<SecureTokenDto> UseSecureToken(long tokenId)
+        {
+            var token = _secureTokenRepository.UseSecureToken(tokenId);
+            return MapToDto(token);
         }
     }
 }

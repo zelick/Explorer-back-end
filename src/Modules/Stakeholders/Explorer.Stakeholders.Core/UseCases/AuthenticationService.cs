@@ -57,7 +57,7 @@ public class AuthenticationService : IAuthenticationService
 
     public Result<AccountRegistrationDto> RegisterTourist(AccountRegistrationDto account)
     {
-        if(_userRepository.Exists(account.Username)) return Result.Fail(FailureCode.NonUniqueUsername);
+        if (_userRepository.Exists(account.Username)) return Result.Fail(FailureCode.NonUniqueUsername);
 
         try
         {
@@ -77,7 +77,7 @@ public class AuthenticationService : IAuthenticationService
             {
                 userRole = Domain.UserRole.Author;
             }
-            else {userRole = Domain.UserRole.Tourist;}
+            else { userRole = Domain.UserRole.Tourist; }
 
             var newUser = new User(account.Username, account.Password, userRole, true, false);
 
@@ -95,9 +95,9 @@ public class AuthenticationService : IAuthenticationService
             }
 
             _verificationTokenRepository.CreateVerificationToken(user.Id);
-            var token = _verificationTokenRepository.GetByUserId(user.Id); 
+            var token = _verificationTokenRepository.GetByUserId(user.Id);
             _emailService.SendEmail(account, token.TokenData);
-           
+
             return account;
         }
         catch (ArgumentException e)
@@ -129,7 +129,7 @@ public class AuthenticationService : IAuthenticationService
         var user = _userRepository.GetUserByUsername(username);
         if (user == null) throw new KeyNotFoundException("Not found user with this username: " + username);
         string userEmail = _ownPersonRepository.GetEmail(user.Id);
-        
+
         _secureTokenRepository.CreateSecureToken(user.Id);
         var token = _secureTokenRepository.GetByUserId(user.Id);
 

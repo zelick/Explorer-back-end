@@ -12,5 +12,6 @@ namespace Explorer.Stakeholders.API.Dtos
         public long UserId { get; set; }
         public string TokenData { get; set; }
         public DateTime ExpiryTime { get; set; }
+        public bool IsAlreadyUsed { get; set; }
     }
 }

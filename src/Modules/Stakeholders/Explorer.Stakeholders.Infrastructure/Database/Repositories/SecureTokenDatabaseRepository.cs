@@ -29,13 +29,32 @@ namespace Explorer.Stakeholders.Infrastructure.Database.Repositories
         {
             try
             {
-                var token = _dbContext.SecureTokens.FirstOrDefault(i => i.UserId == userId);
+                var tokens = _dbContext.SecureTokens.Where(i => i.UserId == userId).ToList();
+                var token = tokens.First();
+
+                foreach (var t in tokens)
+                {
+                    if(t.ExpiryTime > token.ExpiryTime)
+                    {
+                        token = t;
+                    }
+                }
+
                 return token;
             }
             catch (Exception e)
             {
                 throw new KeyNotFoundException(e.Message);
             }
+        }
+
+        public SecureToken UseSecureToken(long tokenId)
+        {
+            var token = _dbContext.SecureTokens.FirstOrDefault(t => t.Id == tokenId);
+            if (token == null) throw new KeyNotFoundException("Not found token with ID: " + tokenId);
+            token.UseSecureToken();
+            _dbContext.SaveChanges();
+            return token;
         }
     }
 }

@@ -11,6 +11,7 @@ namespace Explorer.Stakeholders.API.Public
     public interface ISecureTokenService
     {
         Result<SecureTokenDto> CreateSecureToken(long userId);
-        Result<SecureTokenDto> GetByUserId(long userId);
+        Result<SecureTokenDto> GetByUserUsername(string username);
+        Result<SecureTokenDto> UseSecureToken(long tokenId);
     }
 }

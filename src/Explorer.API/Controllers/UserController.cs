@@ -45,9 +45,16 @@ namespace Explorer.API.Controllers
 		}
 
         [HttpPut("update-password/{username}/{password}")]
-        public ActionResult<UserDto> Update(string username, string password)
+        public ActionResult<UserDto> UpdatePassword(string username, string password)
         {
             var result = _userService.UpdatePassword(username, password);
+            return CreateResponse(result);
+        }
+
+        [HttpGet("get-user/{username}")]
+        public ActionResult<UserDto> GetUser(string username)
+        {
+            var result = _userService.GetUserByUsername(username);
             return CreateResponse(result);
         }
     }
