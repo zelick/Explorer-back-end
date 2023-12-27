@@ -4,83 +4,86 @@ using System.Text.Json.Serialization;
 using System.Text.Json;
 using System.Text;
 
-public class TourExecutionEventsConverter : JsonConverter<List<DomainEvent>>
+namespace Explorer.Tours.Core.Domain.TourExecutions
 {
-    public static List<DomainEvent> Read(string json)
+    public class TourExecutionEventsConverter : JsonConverter<List<DomainEvent>>
     {
-        using (JsonDocument doc = JsonDocument.Parse(json))
+        public static List<DomainEvent> Read(string json)
         {
-            JsonElement root = doc.RootElement;
-
-            List<DomainEvent> events = new List<DomainEvent>();
-
-            foreach (JsonElement element in root.EnumerateArray())
+            using (JsonDocument doc = JsonDocument.Parse(json))
             {
-                string eventTypeProperty= "";
-                if (element.TryGetProperty("StartDate", out var g))
-                    eventTypeProperty = "TourExecutionStarted";
-                else if(element.TryGetProperty("Date", out var h))
-                    eventTypeProperty = "TourExecutionActivityRegistered";
-                else if (element.TryGetProperty("EndDate", out var j))
-                    eventTypeProperty = "TourExecutionFinished";
-                // Check if the "eventType" property exists in the JSON element
-                if (eventTypeProperty!="")
-                {
-                    string eventType = eventTypeProperty;
+                JsonElement root = doc.RootElement;
 
-                    switch (eventType)
+                List<DomainEvent> events = new List<DomainEvent>();
+
+                foreach (JsonElement element in root.EnumerateArray())
+                {
+                    string eventTypeProperty = "";
+                    if (element.TryGetProperty("StartDate", out var g))
+                        eventTypeProperty = "TourExecutionStarted";
+                    else if (element.TryGetProperty("Date", out var h))
+                        eventTypeProperty = "TourExecutionActivityRegistered";
+                    else if (element.TryGetProperty("EndDate", out var j))
+                        eventTypeProperty = "TourExecutionFinished";
+                    // Check if the "eventType" property exists in the JSON element
+                    if (eventTypeProperty != "")
                     {
-                        case "TourExecutionActivityRegistered":
-                            events.Add(JsonSerializer.Deserialize<TourExecutionActivityRegistered>(element.GetRawText()));
-                            break;
-                        case "TourExecutionStarted":
-                            events.Add(JsonSerializer.Deserialize<TourExecutionStarted>(element.GetRawText()));
-                            break;
-                        case "TourExecutionFinished":
-                            events.Add(JsonSerializer.Deserialize<TourExecutionFinished>(element.GetRawText()));
-                            break;
-                        default:
-                            break;
+                        string eventType = eventTypeProperty;
+
+                        switch (eventType)
+                        {
+                            case "TourExecutionActivityRegistered":
+                                events.Add(JsonSerializer.Deserialize<TourExecutionActivityRegistered>(element.GetRawText()));
+                                break;
+                            case "TourExecutionStarted":
+                                events.Add(JsonSerializer.Deserialize<TourExecutionStarted>(element.GetRawText()));
+                                break;
+                            case "TourExecutionFinished":
+                                events.Add(JsonSerializer.Deserialize<TourExecutionFinished>(element.GetRawText()));
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        // Handle the case when the "eventType" property is missing
+                        // You can log a warning or take appropriate action based on your requirements.
                     }
                 }
-                else
-                {
-                    // Handle the case when the "eventType" property is missing
-                    // You can log a warning or take appropriate action based on your requirements.
-                }
+
+                return events;
             }
-
-            return events;
         }
-    }
 
 
-    public static string Write(List<DomainEvent> value)
-    {
-        using (var stream = new MemoryStream())
+        public static string Write(List<DomainEvent> value)
         {
-            using (var writer = new Utf8JsonWriter(stream))
+            using (var stream = new MemoryStream())
             {
-                writer.WriteStartArray();
-
-                foreach (var domainEvent in value)
+                using (var writer = new Utf8JsonWriter(stream))
                 {
-                    JsonSerializer.Serialize(writer, domainEvent, domainEvent.GetType());
+                    writer.WriteStartArray();
+
+                    foreach (var domainEvent in value)
+                    {
+                        JsonSerializer.Serialize(writer, domainEvent, domainEvent.GetType());
+                    }
+
+                    writer.WriteEndArray();
                 }
 
-                writer.WriteEndArray();
+                return Encoding.UTF8.GetString(stream.ToArray());
             }
-
-            return Encoding.UTF8.GetString(stream.ToArray());
         }
-    }
-    public override List<DomainEvent> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-    {
-        throw new NotImplementedException();
-    }
+        public override List<DomainEvent> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            throw new NotImplementedException();
+        }
 
-    public override void Write(Utf8JsonWriter writer, List<DomainEvent> value, JsonSerializerOptions options)
-    {
-        throw new NotImplementedException();
+        public override void Write(Utf8JsonWriter writer, List<DomainEvent> value, JsonSerializerOptions options)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
