@@ -7,7 +7,9 @@ using Explorer.Stakeholders.Core.Domain;
 using Explorer.Stakeholders.Core.Domain.RepositoryInterfaces;
 using FluentResults;
 using System.Diagnostics.Metrics;
+using System.Net;
 using System.Net.Mail;
+using System.Security.Principal;
 
 namespace Explorer.Stakeholders.Core.UseCases;
 
@@ -22,8 +24,10 @@ public class AuthenticationService : IAuthenticationService
     private readonly IInternalShoppingSetupService _shoppingSetupService;
     private readonly PasswordHasher _passwordHasher;
     private readonly VerificationService _verificationService;
+    private readonly IPersonRepository _ownPersonRepository;
+    private readonly ISecureTokenRepository _secureTokenRepository;
 
-    public AuthenticationService(IUserRepository userRepository, ICrudRepository<Person> personRepository, ITokenGenerator tokenGenerator, IEmailService emailService, IVerificationTokenRepository verificationTokenRepository, IMapper mapper, IInternalShoppingSetupService shoppingSetupService)
+    public AuthenticationService(IUserRepository userRepository, ICrudRepository<Person> personRepository, ITokenGenerator tokenGenerator, IEmailService emailService, IVerificationTokenRepository verificationTokenRepository, IPersonRepository ownPersonRepository, ISecureTokenRepository secureTokenRepository, IMapper mapper, IInternalShoppingSetupService shoppingSetupService)
     {
         _tokenGenerator = tokenGenerator;
         _userRepository = userRepository;
@@ -34,6 +38,8 @@ public class AuthenticationService : IAuthenticationService
         _shoppingSetupService = shoppingSetupService;
         _passwordHasher = new PasswordHasher();
         _verificationService = new VerificationService(userRepository,verificationTokenRepository);
+        _ownPersonRepository = ownPersonRepository;
+        _secureTokenRepository = secureTokenRepository;
     }
 
     public Result<AuthenticationTokensDto> Login(CredentialsDto credentials)
@@ -55,7 +61,7 @@ public class AuthenticationService : IAuthenticationService
 
     public Result<AccountRegistrationDto> RegisterTourist(AccountRegistrationDto account)
     {
-        if(_userRepository.Exists(account.Username)) return Result.Fail(FailureCode.NonUniqueUsername);
+        if (_userRepository.Exists(account.Username)) return Result.Fail(FailureCode.NonUniqueUsername);
 
         try
         {
@@ -75,7 +81,7 @@ public class AuthenticationService : IAuthenticationService
             {
                 userRole = Domain.UserRole.Author;
             }
-            else {userRole = Domain.UserRole.Tourist;}
+            else { userRole = Domain.UserRole.Tourist; }
 
             account.Password = _passwordHasher.HashPassword(account.Password);
             var newUser = new User(account.Username, account.Password, userRole, true, false);
@@ -94,9 +100,9 @@ public class AuthenticationService : IAuthenticationService
             }
 
             _verificationTokenRepository.CreateVerificationToken(user.Id);
-            var token = _verificationTokenRepository.GetByUserId(user.Id); 
+            var token = _verificationTokenRepository.GetByUserId(user.Id);
             _emailService.SendEmail(account, token.TokenData);
-           
+
             return account;
         }
         catch (ArgumentException e)
@@ -121,5 +127,19 @@ public class AuthenticationService : IAuthenticationService
         {
             return false;
         }
+    }
+
+    public Result<bool> SendPasswordResetEmail(string username)
+    {
+        var user = _userRepository.GetUserByUsername(username);
+        if (user == null) throw new KeyNotFoundException("Not found user with this username: " + username);
+        string userEmail = _ownPersonRepository.GetEmail(user.Id);
+
+        _secureTokenRepository.CreateSecureToken(user.Id);
+        var token = _secureTokenRepository.GetByUserId(user.Id);
+
+        _emailService.SendPasswordResetEmail(user.Username, userEmail, token.TokenData);
+
+        return true;
     }
 }
