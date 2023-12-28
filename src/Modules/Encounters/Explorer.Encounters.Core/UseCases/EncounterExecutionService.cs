@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Explorer.BuildingBlocks.Core.UseCases;
 using Explorer.Encounters.API.Dtos;
+using Explorer.Encounters.API.Internal;
 using Explorer.Encounters.API.Public;
 using Explorer.Encounters.Core.Domain.Encounters;
 using Explorer.Encounters.Core.Domain.RepositoryInterfaces;
@@ -10,7 +11,7 @@ using FluentResults;
 
 namespace Explorer.Encounters.Core.UseCases
 {
-    public class EncounterExecutionService : CrudService<EncounterExecutionDto, EncounterExecution>, IEncounterExecutionService
+    public class EncounterExecutionService : CrudService<EncounterExecutionDto, EncounterExecution>, IEncounterExecutionService, IInternalEncounterExecutionService
     {
         private readonly IEncounterExecutionRepository _encounterExecutionRepository;
         private readonly IMapper _mapper;
@@ -413,6 +414,12 @@ namespace Explorer.Encounters.Core.UseCases
                 completed.Add(e);
             }
             _encounterExecutionRepository.UpdateRange(completed);
+        }
+
+        public Result<List<EncounterExecutionDto>> GetByEncounter(long encounterId)
+        {
+            var result = _encounterExecutionRepository.GetByEncounter(encounterId);
+            return MapToDto(result);
         }
     }
 }

@@ -14,5 +14,6 @@ namespace Explorer.Encounters.Core.Domain.RepositoryInterfaces
         List<EncounterExecution> UpdateRange(List<EncounterExecution> encounters);
         List<EncounterExecution> GetBySocialEncounter(long socialEncounterId);
         List<EncounterExecution> GetByLocationEncounter(long locationEncounterId);
+        List<EncounterExecution> GetByEncounter(long encounterId);  
     }
 }
