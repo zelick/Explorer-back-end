@@ -116,7 +116,6 @@ namespace Explorer.Tours.Core.UseCases.Administration
             }
         }
 
-        //za svaku turu dobijem koliko je ona zavrsena puta
         public Result<Dictionary<long, int>> GetTourCompletionNumberForEachTour(long authorId)
         {
             try
@@ -144,7 +143,7 @@ namespace Explorer.Tours.Core.UseCases.Administration
             }
         }
 
-        //za svaku turu dobijem koliko je ona puta pokrenuta
+
         public Result<Dictionary<long, int>> GetTourStartedNumberForEachTour(long authorId)
         {
             try
@@ -256,20 +255,6 @@ namespace Explorer.Tours.Core.UseCases.Administration
                 throw new Exception(ex.Message);
             }
         }
-
-
-        //da za svaki tourId iz autorovih tura
-        //da nadjem koliko se puta on nasao u tour execution sa statusom inProgress - to je onda numOfStaredTours
-        //da nadjem koliko se puta nasao u tour exection sa statusom Completed - to je onda numOfCompleted
-        //ukupno - zbir ta dva
-        //stavim za svaki tour id iracunam procenat toga i to stavim u listu
-        //imacu listu double 50, 45, 25, 80 ... itd - to da budu procenti Completed
-        //metoda koja izbroji koliko u toj listi imam ovih izmedju ovoga, ovih izmedju ovoga itd... i to da stavim isto u listu 
-        //ta lista ima 4 elementa - na 0 (0-25), 1 (25-50) ITD
-
-        //ALTERNATIVA
-        //da iz fronta dobavljam za svaki opseg koliko imam broj tih 
-        //posaljem iz fronta opseg 0, 24, pa opseg 25, 49 itd.. i onda brojim koliko tih upada
 
         public Result<int> GetTourSalesCount(long authorId, long tourId)
         {
