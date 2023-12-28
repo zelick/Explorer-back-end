@@ -21,7 +21,7 @@ namespace Explorer.Stakeholders.Core.UseCases
             var socialProfile = _socialProfileRepository.Get(loggedId);
             var followerIds = new List<long>();
 
-            foreach (var follower in socialProfile.Followers)
+            foreach (var follower in socialProfile.Followed)
             {
                 followerIds.Add(follower.Id);
             }

@@ -126,11 +126,12 @@ namespace Explorer.Tours.Core.UseCases.Administration
                 {
                     if (st.Id == ft.Id)
                     {
-                        result.Add(st);
+                        if (result.Find(n => n.Id == st.Id) == null)
+                            result.Add(st);
                     }
                 }
             }
-
+           
             return _tourPreviewMapper.createDtoList(result);
 
         }
