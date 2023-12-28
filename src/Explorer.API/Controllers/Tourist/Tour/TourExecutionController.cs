@@ -20,15 +20,13 @@ namespace Explorer.API.Controllers.Tourist.Tour
         private readonly ITourExecutionService _tourExecutionService;
         private readonly ITourRecommendationService _tourRecommendationService;
         private readonly IEmailService _emailService;
-        private readonly IInternalPersonService _internalPersonService;
 
         public TourExecutionController(ITourExecutionService tourExecutionService, ITourRecommendationService tourRecommendationService,
-            IEmailService emailService, IInternalPersonService internalPersonService)
+            IEmailService emailService)
         {
             _tourExecutionService = tourExecutionService;
             _tourRecommendationService = tourRecommendationService;
             _emailService = emailService;
-            _internalPersonService = internalPersonService;
         }
         [HttpPost("{tourId:int}")]
         public ActionResult<TourExecutionDto> Create(long tourId)
@@ -69,8 +67,16 @@ namespace Explorer.API.Controllers.Tourist.Tour
         public ActionResult<TourPreviewDto> SendRecommendedToursToMail(long id)
         {
 			var result = _tourExecutionService.GetSuggestedTours(id, User.PersonId(), _tourRecommendationService.GetAppropriateTours(User.PersonId()));
-			PersonDto person = _internalPersonService.GetByUserId(User.PersonId());
-			_emailService.SendRecommendedToursEmail(person, result.Value);
+            string email = _tourExecutionService.GetEmailByUserId(User.PersonId()).Value;
+            string name = _tourExecutionService.GetNameByUserId(User.PersonId()).Value;
+			List<long> recommendedToursIds = new List<long>();
+            List<string> tourNames = new List<string>();
+			foreach (var rt in result.Value)
+            {
+                recommendedToursIds.Add(rt.Id);
+                tourNames.Add(rt.Name);
+            }
+			_emailService.SendRecommendedToursEmail(email, name, recommendedToursIds, tourNames);
 			return CreateResponse(result);
 		}
     }

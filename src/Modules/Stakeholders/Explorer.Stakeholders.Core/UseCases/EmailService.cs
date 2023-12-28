@@ -59,36 +59,39 @@ namespace Explorer.Stakeholders.Core.UseCases
                 return message;
             }
 
-		private MimeMessage SendRecommendedToursToEmail(PersonDto person, List<TourPreviewDto> recommendedTours)
+		private MimeMessage SendRecommendedToursToEmail(string email, string name, List<long> recommendedToursIds, List<string> tourNames)
 		{
 			var message = new MimeMessage();
 			var senderName = "Explorer";
 
 			message.From.Add(new MailboxAddress(senderName, _configuration["SmtpSettings:SenderEmail"]));
-			message.To.Add(new MailboxAddress(person.Name, person.Email));
+			message.To.Add(new MailboxAddress(name, email));
 			message.Subject = "Your recommended tours";
 
 			var bodyBuilder = new BodyBuilder();
-            bodyBuilder.HtmlBody = $"<p>Dear {person.Name},</p>" +
+            bodyBuilder.HtmlBody = $"<p>Dear {name},</p>" +
                                   $"<p>Here are your recommended tours:</p>";
 
-			foreach (var tour in recommendedTours)
+			for (int i = 0; i < recommendedToursIds.Count; i++)
 			{
-				bodyBuilder.HtmlBody += $"<p><a href='https://localhost:44333/tour-overview-details/{tour.Id}'>Tour: {tour.Name}</a></p>";
+				long tourId = recommendedToursIds[i];
+				string tourName = tourNames[i];
+
+				bodyBuilder.HtmlBody += $"<p><a href='http://localhost:4200/tour-overview-details/{tourId}'>{tourName}</a></p>";
 			}
 			message.Body = bodyBuilder.ToMessageBody();
 
 			return message;
 		}
 
-		public void SendRecommendedToursEmail(PersonDto person, List<TourPreviewDto> recommendedTours)
+		public void SendRecommendedToursEmail(string email, string name, List<long> recommendedToursIds, List<string> tourNames)
 		{
 			var smtpServer = _configuration["SmtpSettings:Server"];
 			var smtpPort = int.Parse(_configuration["SmtpSettings:Port"]);
 			var smtpUsername = _configuration["SmtpSettings:Username"];
 			var smtpPassword = _configuration["SmtpSettings:Password"];
 
-			var recommendedToursMessage = SendRecommendedToursToEmail(person, recommendedTours);
+			var recommendedToursMessage = SendRecommendedToursToEmail(email, name, recommendedToursIds, tourNames);
 
 			using (var client = new SmtpClient())
 			{

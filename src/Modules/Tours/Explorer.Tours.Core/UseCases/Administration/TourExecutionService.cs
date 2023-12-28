@@ -155,15 +155,25 @@ namespace Explorer.Tours.Core.UseCases.Administration
             }
         }
 
-        public Result<List<TourPreviewDto>> SendRecommendedToursToMail(long tourId, int userId)
+        public Result<string> GetEmailByUserId(int userId)
         {
             try
             {
-				//var recommendedTours = GetSuggestedTours(tourId, userId, _tourRecommendationService.GetAppropriateTours(userId)).Value;
 				PersonDto person = _internalPersonService.GetByUserId(userId);
-                //_emailService.SendRecommendedToursEmail(person, recommendedTours);
-                var recommendedTours = new List<TourPreviewDto>();
-				return recommendedTours;
+				return person.Email;
+			}
+			catch (KeyNotFoundException e)
+			{
+				return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+			}
+		}
+
+		public Result<string> GetNameByUserId(int userId)
+		{
+			try
+			{
+				PersonDto person = _internalPersonService.GetByUserId(userId);
+				return person.Name;
 			}
 			catch (KeyNotFoundException e)
 			{

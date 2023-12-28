@@ -20,7 +20,7 @@ namespace Explorer.Tours.API.Public.Administration
         Result<TourExecutionDto> Abandon(long id, long touristId);
         Result<List<TourPreviewDto>> GetSuggestedTours(long finishedTourId, long loggedUser, Result<List<TourPreviewDto>> foundedToursByAlgorithm);
         Result<List<TourExecutionDto>> GetActiveTourExecutions();
-        Result<List<TourPreviewDto>> SendRecommendedToursToMail(long tourId, int userId);
-
+        Result<string> GetEmailByUserId(int userId);
+        Result<string> GetNameByUserId(int userId);
 	}
 }
