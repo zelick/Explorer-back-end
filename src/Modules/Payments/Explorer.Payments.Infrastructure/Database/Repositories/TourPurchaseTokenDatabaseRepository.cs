@@ -27,4 +27,8 @@ public class TourPurchaseTokenDatabaseRepository : CrudDatabaseRepository<TourPu
     {
         return DbContext.PurchaseTokens.Select(t => t.TourId).ToList();
     }
+    public int GetPurchasesNumberForTour(long tourId)
+    {
+        return DbContext.PurchaseTokens.Count(t => t.TourId == tourId);
+    }
 }

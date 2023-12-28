@@ -8,4 +8,5 @@ public interface ITourPurchaseTokenRepository : ICrudRepository<TourPurchaseToke
     public bool ExistsByTourAndUser(long tourId, long userId);
     public bool HasPurchasedTour(long tourId, long userId);
     public List<long> GetSoldToursIds();
+    public int GetPurchasesNumberForTour(long tourId);
 }

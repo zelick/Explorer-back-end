@@ -56,6 +56,8 @@ namespace Explorer.Encounters.Core.UseCases
                 try
                 {
                     encounter = _mapper.Map<EncounterDto, SocialEncounter>(encounterDto);
+                    SocialEncounter sc = (SocialEncounter)encounter;
+                    sc.CreateSocialEncounter(encounter);
                 }
                 catch (ArgumentException e)
                 {

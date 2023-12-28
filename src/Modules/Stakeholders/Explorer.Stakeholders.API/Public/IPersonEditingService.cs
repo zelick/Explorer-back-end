@@ -10,9 +10,10 @@ namespace Explorer.Stakeholders.API.Public;
 
 public interface IPersonEditingService
 {
-        Result<PersonDto> Create(PersonDto personDto);
-        Result<PersonDto> Update(PersonDto personDto);
-        Result<PersonDto> Get(int id);
-        Result Delete(int id);
+    Result<PersonDto> Create(PersonDto personDto);
+    Result<PersonDto> Update(PersonDto personDto);
+    Result<PersonDto> Get(int id);
+    Result Delete(int id);
+    Result<string> GetEmail(long userId);
 }
 

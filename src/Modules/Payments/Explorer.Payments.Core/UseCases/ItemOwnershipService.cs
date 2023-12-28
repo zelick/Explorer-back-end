@@ -33,6 +33,11 @@ public class ItemOwnershipService : IItemOwnershipService, IInternalTourOwnershi
         }
     }
 
+    public int GetPurchasesNumber(long tourId)
+    {
+        return _purchaseTokenRepository.GetPurchasesNumberForTour(tourId);
+    }
+
     public Result<bool> IsTourPurchasedByUser(long userId, long tourId)
     {
         try

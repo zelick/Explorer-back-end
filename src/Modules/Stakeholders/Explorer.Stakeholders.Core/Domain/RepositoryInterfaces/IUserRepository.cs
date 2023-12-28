@@ -10,4 +10,5 @@ public interface IUserRepository
     User Update(User user);
     User GetUserById(long id);
     User GetUserByUsername(string username);
+    User UpdatePassword(long userId, string password);
 }

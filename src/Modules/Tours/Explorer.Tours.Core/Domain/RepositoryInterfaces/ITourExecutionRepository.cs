@@ -17,5 +17,6 @@ namespace Explorer.Tours.Core.Domain.RepositoryInterfaces
         Result<List<long>> GetStartedToursIds();
         Result<List<long>> GetFinishedToursIds();
         List<TourExecution> GetByTourId(long tourId);
+        List<TourExecution> GetActiveTourExecutions();
     }
 }

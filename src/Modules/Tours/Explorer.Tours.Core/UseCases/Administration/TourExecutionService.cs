@@ -67,10 +67,9 @@ namespace Explorer.Tours.Core.UseCases.Administration
         {
             try
             {
-                if (!_tourOwnershipService.IsTourPurchasedByUser(touristId, id).Value)
-                    return Result.Fail(FailureCode.InvalidArgument).WithError("Tour not purchased");
-
                 TourExecution tourExecution = CrudRepository.Get(id);
+                if (!_tourOwnershipService.IsTourPurchasedByUser(touristId, tourExecution.TourId).Value)
+                    return Result.Fail(FailureCode.InvalidArgument).WithError("Tour not purchased");
                 tourExecution.Abandone(id);
                 return _tourExecutionMapper.createDto(CrudRepository.Update(tourExecution));
             }
@@ -80,5 +79,24 @@ namespace Explorer.Tours.Core.UseCases.Administration
             }
             
         }
+
+        public Result<List<TourExecutionDto>> GetActiveTourExecutions()
+        {
+            try
+            {
+                var result = _tourExecutionRepository.GetActiveTourExecutions();
+                List<TourExecutionDto> list = new List<TourExecutionDto>();
+                foreach (var tourExecution in result) 
+                {
+                    list.Add(_tourExecutionMapper.createDto(tourExecution));
+                }
+                return list;
+            }
+            catch (KeyNotFoundException e)
+            {
+                return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+            }
+        }
+
     }
 }

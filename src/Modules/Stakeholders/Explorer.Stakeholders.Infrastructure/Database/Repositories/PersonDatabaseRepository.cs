@@ -32,5 +32,12 @@ namespace Explorer.Stakeholders.Infrastructure.Database.Repositories
             _dbContext.People.Add(person);
             _dbContext.SaveChanges();
         }
+
+        public string GetEmail(long userId)
+        {
+            var person = _dbContext.People.SingleOrDefault(p => p.UserId == userId); 
+            if(person == null) throw new KeyNotFoundException("Not found person with UserID: " + userId);
+            return person.Email;
+        }
     }
 }
