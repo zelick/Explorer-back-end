@@ -140,7 +140,4 @@ namespace Explorer.Stakeholders.Core.UseCases
 		}
 
 	}
-
-            
-    }
 }
