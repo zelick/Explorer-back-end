@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Extensions.Configuration;
 using System.Threading.Tasks;
+using Explorer.Tours.API.Dtos;
 
 namespace Explorer.Stakeholders.Core.UseCases
 {
@@ -58,5 +59,45 @@ namespace Explorer.Stakeholders.Core.UseCases
                 return message;
             }
 
-        }
+		private MimeMessage SendRecommendedToursToEmail(PersonDto person, List<TourPreviewDto> recommendedTours)
+		{
+			var message = new MimeMessage();
+			var senderName = "Explorer";
+
+			message.From.Add(new MailboxAddress(senderName, _configuration["SmtpSettings:SenderEmail"]));
+			message.To.Add(new MailboxAddress(person.Name, person.Email));
+			message.Subject = "Your recommended tours";
+
+			var bodyBuilder = new BodyBuilder();
+            bodyBuilder.HtmlBody = $"<p>Dear {person.Name},</p>" +
+                                  $"<p>Here are your recommended tours:</p>";
+
+			foreach (var tour in recommendedTours)
+			{
+				bodyBuilder.HtmlBody += $"<p><a href='https://localhost:44333/tour-overview-details/{tour.Id}'>Tour: {tour.Name}</a></p>";
+			}
+			message.Body = bodyBuilder.ToMessageBody();
+
+			return message;
+		}
+
+		public void SendRecommendedToursEmail(PersonDto person, List<TourPreviewDto> recommendedTours)
+		{
+			var smtpServer = _configuration["SmtpSettings:Server"];
+			var smtpPort = int.Parse(_configuration["SmtpSettings:Port"]);
+			var smtpUsername = _configuration["SmtpSettings:Username"];
+			var smtpPassword = _configuration["SmtpSettings:Password"];
+
+			var recommendedToursMessage = SendRecommendedToursToEmail(person, recommendedTours);
+
+			using (var client = new SmtpClient())
+			{
+				client.Connect(smtpServer, smtpPort, useSsl: false);
+				client.Authenticate(smtpUsername, smtpPassword);
+				client.Send(recommendedToursMessage);
+				client.Disconnect(true);
+			}
+		}
+
+	}
 }

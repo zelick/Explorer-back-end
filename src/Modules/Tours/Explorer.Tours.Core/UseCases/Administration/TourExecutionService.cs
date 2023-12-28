@@ -17,7 +17,9 @@ using System.Threading.Tasks;
 using Explorer.Tours.API.Public.Recommendation;
 using Explorer.Tours.Core.Domain;
 using Explorer.Tours.Core.UseCases.Recommendation;
-
+using Explorer.Stakeholders.Core.Domain;
+using Explorer.Stakeholders.API.Dtos;
+using Explorer.Stakeholders.API.Public;
 
 namespace Explorer.Tours.Core.UseCases.Administration
 {
@@ -29,8 +31,10 @@ namespace Explorer.Tours.Core.UseCases.Administration
         private readonly IInternalTourOwnershipService _tourOwnershipService;
         private readonly IInternalFollowersService _touristFollowersService;
         private readonly TourPreviewMapper _tourPreviewMapper;
+        private readonly IInternalPersonService _internalPersonService;
         public TourExecutionService(ITourExecutionRepository repository, IMapper mapper, ITourRepository tourRepository,
-                                    IInternalTourOwnershipService tourOwnershipService, IInternalFollowersService touristFollowersService) : base(repository, mapper)
+                                    IInternalTourOwnershipService tourOwnershipService, IInternalFollowersService touristFollowersService,
+                                    IInternalPersonService internalPersonService) : base(repository, mapper)
         {
             _tourExecutionRepository = repository;
             _tourRepository = tourRepository;
@@ -38,6 +42,7 @@ namespace Explorer.Tours.Core.UseCases.Administration
             _tourOwnershipService = tourOwnershipService;
             _touristFollowersService = touristFollowersService;
             _tourPreviewMapper = new TourPreviewMapper();
+			_internalPersonService = internalPersonService;
         }
 
         public Result<TourExecutionDto> CheckPosition(TouristPositionDto position, long id)
@@ -150,6 +155,21 @@ namespace Explorer.Tours.Core.UseCases.Administration
             }
         }
 
+        public Result<List<TourPreviewDto>> SendRecommendedToursToMail(long tourId, int userId)
+        {
+            try
+            {
+				//var recommendedTours = GetSuggestedTours(tourId, userId, _tourRecommendationService.GetAppropriateTours(userId)).Value;
+				PersonDto person = _internalPersonService.GetByUserId(userId);
+                //_emailService.SendRecommendedToursEmail(person, recommendedTours);
+                var recommendedTours = new List<TourPreviewDto>();
+				return recommendedTours;
+			}
+			catch (KeyNotFoundException e)
+			{
+				return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+			}
+		}
 
-    }
+	}
 }

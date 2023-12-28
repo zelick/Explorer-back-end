@@ -4,11 +4,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Explorer.Tours.API.Dtos;
 
 namespace Explorer.Stakeholders.API.Public
 {
     public interface IEmailService
     {
         void SendEmail(AccountRegistrationDto account, string tokenData);
-    }
+        void SendRecommendedToursEmail(PersonDto person, List<TourPreviewDto> recommendedTours);
+
+	}
 }

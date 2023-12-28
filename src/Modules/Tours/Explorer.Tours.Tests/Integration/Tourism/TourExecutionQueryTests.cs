@@ -8,6 +8,7 @@ using Explorer.Tours.API.Public.Administration;
 using Explorer.Tours.Core.Domain;
 using Explorer.API.Controllers.Tourist.Tour;
 using Explorer.BuildingBlocks.Core.UseCases;
+using Explorer.Tours.API.Public.Recommendation;
 
 namespace Explorer.Tours.Tests.Integration.Tourism;
 
@@ -35,9 +36,12 @@ public class TourExecutionQueryTests : BaseToursIntegrationTest
 
     private static TourExecutionController CreateController(IServiceScope scope, string personId)
     {
-        return new TourExecutionController(scope.ServiceProvider.GetRequiredService<ITourExecutionService>())
-        {
-            ControllerContext = BuildContext(personId)
-        };
-    }
+		var tourExecutionService = scope.ServiceProvider.GetRequiredService<ITourExecutionService>();
+		var tourRecommendationService = scope.ServiceProvider.GetRequiredService<ITourRecommendationService>();
+
+		return new TourExecutionController(tourExecutionService, tourRecommendationService)
+		{
+			ControllerContext = BuildContext(personId)
+		};
+	}
 }
