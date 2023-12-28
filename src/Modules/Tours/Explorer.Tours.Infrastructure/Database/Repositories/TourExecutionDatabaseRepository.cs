@@ -4,6 +4,7 @@ using Explorer.Stakeholders.Core.Domain;
 using Explorer.Tours.API.Dtos;
 using Explorer.Tours.Core.Domain.RepositoryInterfaces;
 using Explorer.Tours.Core.Domain.TourExecutions;
+using Explorer.Tours.Core.Domain.Tours;
 using FluentResults;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -43,6 +44,26 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
 
 
             return task.Result;
+        }
+
+        public Result<List<long>> GetStartedToursIds()
+        {
+           var tourIds = _dbContext.TourExecution
+                .Where(te => te.ExecutionStatus == ExecutionStatus.InProgress)
+                .Select(te => te.TourId)
+                .ToList();
+
+           return (Result<List<long>>)tourIds;
+        }
+
+        public Result<List<long>> GetFinishedToursIds()
+        {
+            var tourIds = _dbContext.TourExecution
+                 .Where(te => te.ExecutionStatus == ExecutionStatus.Completed)
+                 .Select(te => te.TourId)
+                 .ToList();
+
+            return (Result<List<long>>)tourIds;
         }
 
         public List<TourExecution> GetActiveTourExecutions()
@@ -92,6 +113,7 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
             return tour;
         }
 
+
         public List<TourExecution> GetCompletedByTour(long tourId)
         {
             var executions = _dbContext.TourExecution
@@ -102,7 +124,18 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
                 .Where(t => t.TourId == tourId && t.ExecutionStatus == ExecutionStatus.Completed).ToList();
 
             return executions;
-
+        }
+        
+        public List<TourExecution> GetByTourId(long tourId)
+        {
+            var tourExecutions = _dbContext.TourExecution
+                .Include(t => t.CompletedCheckpoints)
+                .Include(t => t.Tour).ThenInclude(c => c.Checkpoints)
+                .Include(t => t.Tour).ThenInclude(c => c.Equipment)
+                .Include(t => t.Tour).ThenInclude(c => c.TourRatings)
+                .Where(t => t.TourId == tourId).ToList();
+                
+            return tourExecutions;
         }
 
         public List<TourExecution> GetAllCompleted()

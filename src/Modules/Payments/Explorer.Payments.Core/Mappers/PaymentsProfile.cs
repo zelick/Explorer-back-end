@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Explorer.Payments.API.Dtos;
 using Explorer.Payments.Core.Domain;
+using Explorer.Payments.Core.Domain.ShoppingSession;
 
 namespace Explorer.Payments.Core.Mappers;
 

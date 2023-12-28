@@ -130,5 +130,14 @@ namespace Explorer.Encounters.Infrastructure.Database.Repositories
                 .Where(e => (e.EncounterId == locationEncounterId) && e.Encounter.Type == EncounterType.Location)
                 .ToList();
         }
+
+        public List<EncounterExecution> GetByEncounter(long encounterId)
+        {
+            return _dbContext.EncounterExecution
+                .Include(e => e.Encounter)
+                .Where(e => e.EncounterId == encounterId)
+                .ToList();
+        }
+
     }
 }

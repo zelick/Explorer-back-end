@@ -11,7 +11,6 @@ namespace Explorer.Stakeholders.API.Public
     public interface IEmailService
     {
         void SendEmail(AccountRegistrationDto account, string tokenData);
-        void SendRecommendedToursEmail(PersonDto person, List<TourPreviewDto> recommendedTours);
-
-	}
+        void SendPasswordResetEmail(string userName, string userEmail, string secureTokenData);
+    }
 }

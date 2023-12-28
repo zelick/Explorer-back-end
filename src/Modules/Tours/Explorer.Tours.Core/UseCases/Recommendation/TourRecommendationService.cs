@@ -131,7 +131,7 @@ namespace Explorer.Tours.Core.UseCases.Recommendation
                         if (tour.TourRatings.Count >0)
                         {
                             TourPreviewDto completedTour = _tourService.GetPublishedTour(tour.TourRatings[0].TourId).Value;
-                            if (completedTour != null)
+                            if (completedTour != null && completedTour.Tags.Count > 0 && preference != null  && preference.Tags != null && preference.Tags.Count > 0)
                             {
                                 algorithmPoints[algorithmCounter] += (completedTour.Tags.Intersect(preference.Tags).Count() * 4);
                             }

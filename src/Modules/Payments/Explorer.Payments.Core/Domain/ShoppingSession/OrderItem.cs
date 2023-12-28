@@ -1,7 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 using Explorer.BuildingBlocks.Core.Domain;
 
-namespace Explorer.Payments.Core.Domain;
+namespace Explorer.Payments.Core.Domain.ShoppingSession;
 
 public class OrderItem : ValueObject
 {

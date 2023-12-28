@@ -2,6 +2,7 @@
 using Explorer.Payments.API.Internal;
 using Explorer.Payments.Core.Domain.RepositoryInterfaces;
 using Explorer.Payments.Core.Domain;
+using Explorer.Payments.Core.Domain.ShoppingSession;
 using FluentResults;
 
 namespace Explorer.Payments.Core.UseCases;
