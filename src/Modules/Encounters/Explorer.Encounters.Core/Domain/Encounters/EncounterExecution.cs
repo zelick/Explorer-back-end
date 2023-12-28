@@ -1,9 +1,14 @@
 ﻿using Explorer.BuildingBlocks.Core.Domain;
 using System.ComponentModel.DataAnnotations.Schema;
+using Explorer.Tours.Core.Domain;
+using Explorer.Tours.Core.Domain.TourExecutions;
+using Explorer.Tours.Core.Domain.Tours;
+using System.Text.Json.Serialization;
+using Explorer.Encounters.Core.Domain.Converters;
 
 namespace Explorer.Encounters.Core.Domain.Encounters
 {
-    public class EncounterExecution : Entity
+    public class EncounterExecution : EventSourcedAggregate
     {
         public long EncounterId { get; init; }
         [ForeignKey("EncounterId")]
@@ -12,6 +17,8 @@ namespace Explorer.Encounters.Core.Domain.Encounters
         public EncounterExecutionStatus Status { get; private set; }
         public DateTime StartTime { get; private set; }
         public DateTime EndTime { get; private set; }
+        [JsonConverter(typeof(SocialEncounterEventConverter))]
+        public override List<DomainEvent> Changes { get; set; }
         public EncounterExecution() { }
         public EncounterExecution(long encounterId, Encounter encounter, long touristId, EncounterExecutionStatus status, DateTime startTime, DateTime endTime)
         {
@@ -51,6 +58,8 @@ namespace Explorer.Encounters.Core.Domain.Encounters
         {
             Status = EncounterExecutionStatus.Active;
             this.StartTime = DateTime.UtcNow;
+            if(Encounter.Type == EncounterType.Social)
+                Causes(new SocialEncounterActivated(this.Id, TouristId, DateTime.UtcNow));
         }
         public void Abandone()
         {
@@ -58,6 +67,8 @@ namespace Explorer.Encounters.Core.Domain.Encounters
         }
         public void Completed()
         {
+            if (Encounter.Type == EncounterType.Social && Status == EncounterExecutionStatus.Active)
+                Causes(new SocialEncounterCompleted(this.Id, DateTime.UtcNow, TouristId));
             Status = EncounterExecutionStatus.Completed;
             this.EndTime = DateTime.UtcNow;
         }
@@ -67,6 +78,17 @@ namespace Explorer.Encounters.Core.Domain.Encounters
             if (touristLatitude == Encounter.Latitude && touristLongitude == Encounter.Longitude) return 0;
             double distance = Math.Acos(Math.Sin(Math.PI / 180 * (Encounter.Latitude)) * Math.Sin(Math.PI / 180 * touristLatitude) + Math.Cos(Math.PI / 180 * Encounter.Latitude) * Math.Cos(Math.PI / 180 * touristLatitude) * Math.Cos(Math.PI / 180 * Encounter.Longitude - Math.PI / 180 * touristLongitude)) * 6371000;
             return distance;
+        }
+
+        protected void Causes(DomainEvent @event)
+        {
+            Changes.Add(@event);
+            Apply(@event);
+        }
+
+        public override void Apply(DomainEvent @event)
+        {
+            Version++;
         }
     }
 
