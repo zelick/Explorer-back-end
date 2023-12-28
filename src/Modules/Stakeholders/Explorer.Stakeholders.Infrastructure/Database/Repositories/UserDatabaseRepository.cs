@@ -83,4 +83,13 @@ public class UserDatabaseRepository : IUserRepository
 
         return user;
     }
+
+    public User UpdatePassword(long userId, string password)
+    {
+        var user = _dbContext.Users.FirstOrDefault(user => user.Id == userId);
+        if (user == null) throw new KeyNotFoundException("Not found user with ID: " + userId);
+        user.SetNewPassword(password);
+        _dbContext.SaveChanges();
+        return user;
+    }
 }

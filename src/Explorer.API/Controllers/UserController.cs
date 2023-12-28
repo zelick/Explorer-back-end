@@ -43,5 +43,26 @@ namespace Explorer.API.Controllers
 			var result = _userService.Delete(id);
 			return CreateResponse(result);
 		}
-	}
+
+        [HttpPut("update-password/{username}/{password}")]
+        public ActionResult<UserDto> UpdatePassword(string username, string password)
+        {
+            var result = _userService.UpdatePassword(username, password);
+            return CreateResponse(result);
+        }
+
+        [HttpGet("get-user/{username}")]
+        public ActionResult<UserDto> GetUser(string username)
+        {
+            var result = _userService.GetUserByUsername(username);
+            return CreateResponse(result);
+        }
+
+        [HttpGet("get-user-by-id/{id:int}")]
+        public ActionResult<UserDto> GetUser(int id)
+        {
+			var result = _userService.GetUserById(id);
+            return CreateResponse(result);
+        }
+    }
 }

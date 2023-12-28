@@ -124,5 +124,15 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
 
             return result;
         }
+
+        public List<Tour> GetPublishedToursByAuthor(long authorId)
+        {
+            return _dbContext.Tours
+                .Include(t => t.Equipment)
+                .Include(t => t.Checkpoints)
+                .Include(t => t.TourRatings)
+                .Where(t => t.Status == TourStatus.Published && t.AuthorId == authorId)
+                .ToList();
+        }
     }
 }

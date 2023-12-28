@@ -51,6 +51,7 @@ public static class StakeholdersStartup
         services.AddScoped<IInternalTouristService, InternalTouristService>();
         services.AddScoped<ITouristService, TouristService>();
         services.AddScoped<IInternalFollowersService, InternalFollowersService>();
+        services.AddScoped<ISecureTokenService, SecureTokenService>();
     }
 
 
@@ -77,6 +78,8 @@ public static class StakeholdersStartup
         services.AddScoped(typeof(ISocialProfileRepository), typeof(SocialProfileDatabaseRepository));
         services.AddScoped(typeof(IVerificationTokenRepository), typeof(VerificationTokenDatabaseRepository));
         services.AddScoped(typeof(ITouristRepository), typeof(TouristDatabaseRepository));
+        services.AddScoped(typeof(ICrudRepository<SecureToken>), typeof(CrudDatabaseRepository<SecureToken, StakeholdersContext>));
+        services.AddScoped<ISecureTokenRepository, SecureTokenDatabaseRepository>();
 
         services.AddDbContext<StakeholdersContext>(opt =>
             opt.UseNpgsql(DbConnectionStringBuilder.Build("stakeholders"),

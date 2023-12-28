@@ -11,6 +11,7 @@ using Explorer.Tours.Core.UseCases.Administration;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
+
 namespace Explorer.API.Controllers.Tourist.Tour
 {
     [Authorize(Policy = "touristPolicy")]

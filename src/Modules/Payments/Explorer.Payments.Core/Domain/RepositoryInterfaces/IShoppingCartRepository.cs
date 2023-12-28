@@ -1,4 +1,6 @@
-﻿namespace Explorer.Payments.Core.Domain.RepositoryInterfaces;
+﻿using Explorer.Payments.Core.Domain.ShoppingSession;
+
+namespace Explorer.Payments.Core.Domain.RepositoryInterfaces;
 
 public interface IShoppingCartRepository
 {

@@ -53,4 +53,21 @@ public class ItemOwnershipService : IItemOwnershipService, IInternalTourOwnershi
             return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
         }
     }
+    
+    public Result<List<long>> GetSoldToursIds()
+    {
+        try
+        {
+            var purchaseTokens = _purchaseTokenRepository.GetSoldToursIds();
+            return purchaseTokens;
+        }
+        catch (KeyNotFoundException e)
+        {
+            return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+        }
+        catch (ArgumentException e)
+        {
+            return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+        }
+    }
 }

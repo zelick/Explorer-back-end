@@ -11,7 +11,7 @@
         // check if encounter can be activated - tourist is in allowed range
         public bool CheckIfInRangeLocation(double touristLongitude, double touristLatitude)
         {
-            double distance = Math.Acos(Math.Sin(Math.PI / 180 * (Latitude)) * Math.Sin(Math.PI / 180 * touristLatitude) + Math.Cos(Math.PI / 180 * Latitude) * Math.Cos(Math.PI / 180 * touristLatitude) * Math.Cos(Math.PI / 180 * Longitude - Math.PI / 180 * touristLongitude)) * 6371000;
+            double distance = Math.Acos(Math.Sin(Math.PI / 180 * (LocationLatitude)) * Math.Sin(Math.PI / 180 * touristLatitude) + Math.Cos(Math.PI / 180 * LocationLatitude) * Math.Cos(Math.PI / 180 * touristLatitude) * Math.Cos(Math.PI / 180 * LocationLongitude - Math.PI / 180 * touristLongitude)) * 6371000;
             if (distance <= Range)
                 return true;
 
