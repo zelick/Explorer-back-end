@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Extensions.Configuration;
 using System.Threading.Tasks;
+using Explorer.Tours.API.Dtos;
 using System.Security.Principal;
 
 namespace Explorer.Stakeholders.Core.UseCases
@@ -94,8 +95,52 @@ namespace Explorer.Stakeholders.Core.UseCases
                                    $"<a href='http://localhost:4200/reset-password/{secureTokenData}'>Reset password</a>";
 
             message.Body = bodyBuilder.ToMessageBody();
-
+            
             return message;
         }
-    }
+
+		private MimeMessage SendRecommendedToursToEmail(string email, string name, List<long> recommendedToursIds, List<string> tourNames)
+		{
+			var message = new MimeMessage();
+			var senderName = "Explorer";
+
+			message.From.Add(new MailboxAddress(senderName, _configuration["SmtpSettings:SenderEmail"]));
+			message.To.Add(new MailboxAddress(name, email));
+			message.Subject = "Your recommended tours";
+
+			var bodyBuilder = new BodyBuilder();
+            bodyBuilder.HtmlBody = $"<p>Dear {name},</p>" +
+                                  $"<p>Here are your recommended tours:</p>";
+
+			for (int i = 0; i < recommendedToursIds.Count; i++)
+			{
+				long tourId = recommendedToursIds[i];
+				string tourName = tourNames[i];
+
+				bodyBuilder.HtmlBody += $"<p><a href='http://localhost:4200/tour-overview-details/{tourId}'>{tourName}</a></p>";
+			}
+			message.Body = bodyBuilder.ToMessageBody();
+
+			return message;
+		}
+
+		public void SendRecommendedToursEmail(string email, string name, List<long> recommendedToursIds, List<string> tourNames)
+		{
+			var smtpServer = _configuration["SmtpSettings:Server"];
+			var smtpPort = int.Parse(_configuration["SmtpSettings:Port"]);
+			var smtpUsername = _configuration["SmtpSettings:Username"];
+			var smtpPassword = _configuration["SmtpSettings:Password"];
+
+			var recommendedToursMessage = SendRecommendedToursToEmail(email, name, recommendedToursIds, tourNames);
+
+			using (var client = new SmtpClient())
+			{
+				client.Connect(smtpServer, smtpPort, useSsl: false);
+				client.Authenticate(smtpUsername, smtpPassword);
+				client.Send(recommendedToursMessage);
+				client.Disconnect(true);
+			}
+		}
+
+	}
 }

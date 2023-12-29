@@ -6,7 +6,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Explorer.Tours.API.Public.Administration;
 using Explorer.API.Controllers.Tourist.Tour;
+using Explorer.Stakeholders.API.Internal;
+using Explorer.Stakeholders.API.Public;
 using Explorer.Tours.Core.Domain.TourExecutions;
+using Explorer.Tours.API.Public.Recommendation;
+using Explorer.Stakeholders.API.Public;
 
 namespace Explorer.Tours.Tests.Integration.Tourism;
 
@@ -129,9 +133,13 @@ public class TourExecutionCommandTests : BaseToursIntegrationTest
 
     private static TourExecutionController CreateController(IServiceScope scope, string personId)
     {
-        return new TourExecutionController(scope.ServiceProvider.GetRequiredService<ITourExecutionService>())
-        {
-            ControllerContext = BuildContext(personId)
-        };
-    }
+		var tourExecutionService = scope.ServiceProvider.GetRequiredService<ITourExecutionService>();
+		var tourRecommendationService = scope.ServiceProvider.GetRequiredService<ITourRecommendationService>();
+		var emailService = scope.ServiceProvider.GetRequiredService<IEmailService>();
+
+		return new TourExecutionController(tourExecutionService, tourRecommendationService, emailService)
+		{
+			ControllerContext = BuildContext(personId)
+		};
+	}
 }

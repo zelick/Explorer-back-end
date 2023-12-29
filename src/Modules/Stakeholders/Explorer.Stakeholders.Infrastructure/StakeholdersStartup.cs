@@ -50,6 +50,7 @@ public static class StakeholdersStartup
         services.AddScoped<IVerificationService, VerificationService>();
         services.AddScoped<IInternalTouristService, InternalTouristService>();
         services.AddScoped<ITouristService, TouristService>();
+        services.AddScoped<IInternalFollowersService, InternalFollowersService>();
         services.AddScoped<ISecureTokenService, SecureTokenService>();
     }
 

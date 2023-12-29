@@ -113,6 +113,19 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
             return tour;
         }
 
+
+        public List<TourExecution> GetCompletedByTour(long tourId)
+        {
+            var executions = _dbContext.TourExecution
+                .Include(t => t.CompletedCheckpoints)
+                .Include(t => t.Tour).ThenInclude(c => c.Checkpoints)
+                .Include(t => t.Tour).ThenInclude(c => c.Equipment)
+                .Include(t => t.Tour).ThenInclude(c => c.TourRatings)
+                .Where(t => t.TourId == tourId && t.ExecutionStatus == ExecutionStatus.Completed).ToList();
+
+            return executions;
+        }
+        
         public List<TourExecution> GetByTourId(long tourId)
         {
             var tourExecutions = _dbContext.TourExecution
@@ -120,11 +133,19 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
                 .Include(t => t.Tour).ThenInclude(c => c.Checkpoints)
                 .Include(t => t.Tour).ThenInclude(c => c.Equipment)
                 .Include(t => t.Tour).ThenInclude(c => c.TourRatings)
-                .Where(t => t.TourId == tourId)
-                .ToList();
-
+                .Where(t => t.TourId == tourId).ToList();
+                
             return tourExecutions;
         }
 
+        public List<TourExecution> GetAllCompleted()
+        {
+            return _dbContext.TourExecution
+                .Include(t => t.CompletedCheckpoints)
+                .Include(t => t.Tour).ThenInclude(c => c.Checkpoints)
+                .Include(t => t.Tour).ThenInclude(c => c.Equipment)
+                .Include(t => t.Tour).ThenInclude(c => c.TourRatings)
+                .Where(t => t.ExecutionStatus == ExecutionStatus.Completed).ToList();
+        }
     }
 }
