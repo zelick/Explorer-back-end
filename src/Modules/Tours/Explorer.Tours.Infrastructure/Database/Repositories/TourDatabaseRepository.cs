@@ -125,6 +125,18 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
             return result;
         }
 
+
+        public List<Tour> GetTours(List<long> tourIds)
+        {
+            var result = _dbContext.Tours
+                .Include(t => t.Equipment)
+                .Include(t => t.Checkpoints)
+                .Include(t => t.TourRatings)
+                .Where(t => tourIds.Contains(t.Id))
+                .ToList();
+
+            return result;
+        }
         public List<Tour> GetPublishedToursByAuthor(long authorId)
         {
             return _dbContext.Tours
