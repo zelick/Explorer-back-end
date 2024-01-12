@@ -21,13 +21,15 @@ namespace Explorer.Tours.Core.UseCases.Administration
 		private readonly ITourBundleRepository _tourBundleRepository;
         private readonly IInternalItemService _bundleItemService;
 		private readonly ITourTourBundleRepository _tourTourBundleRepository;
+		private readonly ITourRepository _tourRepository;
 
-        public TourBundleService(ITourBundleRepository repository, IInternalItemService bundleItemService, ITourTourBundleRepository tourTourBundleRepository, IMapper mapper) : base(repository, mapper)
+
+        public TourBundleService(ITourBundleRepository repository, ITourRepository tourRepo, IInternalItemService bundleItemService, ITourTourBundleRepository tourTourBundleRepository, IMapper mapper) : base(repository, mapper)
 		{
 			_tourBundleRepository = repository;
             _bundleItemService = bundleItemService;
 			_tourTourBundleRepository = tourTourBundleRepository;
-
+			_tourRepository = tourRepo;
 		}
 
         public Result<PagedResult<TourBundleDto>> GetAllPublished(int page, int pageSize)
@@ -35,6 +37,15 @@ namespace Explorer.Tours.Core.UseCases.Administration
             try
             { 
                 var tourBundles = _tourBundleRepository.GetAllPublished(page, pageSize);
+                List<long> ture = new List<long>();
+                foreach (var b in tourBundles.Results)
+                {
+					foreach(var t in b.Tours)
+					{
+						ture.Add(t.Id);
+                    }
+                    b.Tours = _tourRepository.GetTours(ture);
+                }
                 var tourBundleDtos = MapToDto(tourBundles);
 
                 return tourBundleDtos;
