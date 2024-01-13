@@ -28,8 +28,8 @@ public class TourBundleDatabaseRepository : CrudDatabaseRepository<TourBundle, T
     public List<TourBundle> GetAllByAuthor(long id)
 	{
 		var authorBundles = _dbContext.TourBundles
-			.Include(t => t.Tours)
-			.Where(t => t.AuthorId == id)
+			.Include(t => t.Tours).ThenInclude(c => c.Checkpoints)
+            .Where(t => t.AuthorId == id)
 			.ToList();
 		foreach(TourBundle tb in authorBundles)
 		{
