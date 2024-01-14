@@ -45,7 +45,7 @@ public class AuthenticationController : BaseApiController
     public ActionResult VerifyUser(string verificationTokenData)
     {
         var result = _verificationService.Verify(verificationTokenData);
-        return CreateResponse(result);
+        return Redirect("http://localhost:4200/verification-success");
     }
 
     [HttpGet("verificationStatus/{username}")]
