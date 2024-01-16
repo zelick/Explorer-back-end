@@ -14,5 +14,12 @@ namespace Explorer.Tours.Core.Domain.RepositoryInterfaces
     {
         public TourExecution GetExactExecution(long tourId, long touristId);
         TourExecution GetInProgressByTourAndTourist(long tourId, long touristId);
+
+        List<TourExecution> GetCompletedByTour(long tourId);
+        List<TourExecution> GetAllCompleted();
+        Result<List<long>> GetStartedToursIds();
+        Result<List<long>> GetFinishedToursIds();
+        List<TourExecution> GetByTourId(long tourId);
+        List<TourExecution> GetActiveTourExecutions();
     }
 }

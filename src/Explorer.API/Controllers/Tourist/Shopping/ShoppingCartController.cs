@@ -28,6 +28,15 @@ public class ShoppingCartController : BaseApiController
         return CreateResponse(result);
     }
 
+    [HttpGet("get-by-code/{couponText}")]
+    public ActionResult<ShoppingCartDto> GetByCouponText(string couponText)
+    {
+        if (couponText == null) return CreateResponse(Result.Fail(FailureCode.Forbidden));
+
+        var result = _shoppingCartService.GetByCouponText(couponText);
+        return CreateResponse(result);
+    }
+
     [HttpPut("add")]
     public ActionResult<ShoppingCartDto> AddItem([FromBody] ItemDto orderItem)
     {
@@ -48,6 +57,15 @@ public class ShoppingCartController : BaseApiController
         if (User.PersonId() != touristId) return CreateResponse(Result.Fail(FailureCode.Forbidden));
 
         var result = _shoppingCartService.CheckOut(touristId, coupon);
+        return CreateResponse(result);
+    }
+
+    [HttpPost("session")]
+    public ActionResult StartShoppingSession([FromQuery] int touristId)
+    {
+        if (User.PersonId() != touristId) return CreateResponse(Result.Fail(FailureCode.Forbidden));
+
+        var result = _shoppingCartService.StartSession(touristId);
         return CreateResponse(result);
     }
 }

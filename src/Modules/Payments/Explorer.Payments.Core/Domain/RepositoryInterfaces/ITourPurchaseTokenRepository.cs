@@ -6,5 +6,7 @@ public interface ITourPurchaseTokenRepository : ICrudRepository<TourPurchaseToke
 {
     public List<TourPurchaseToken> GetByUser(long userId);
     public bool ExistsByTourAndUser(long tourId, long userId);
-
+    public bool HasPurchasedTour(long tourId, long userId);
+    public List<long> GetSoldToursIds();
+    public int GetPurchasesNumberForTour(long tourId);
 }

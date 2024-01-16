@@ -4,9 +4,9 @@ using Explorer.Payments.API.Dtos;
 using Explorer.Payments.API.Public;
 using Explorer.Payments.Core.Domain;
 using Explorer.Payments.Core.Domain.RepositoryInterfaces;
+using Explorer.Payments.Core.Domain.ShoppingSession;
 using Explorer.Stakeholders.API.Internal;
 using FluentResults;
-using System.Drawing;
 
 namespace Explorer.Payments.Core.UseCases;
 
@@ -53,6 +53,53 @@ public class ShoppingCartService : BaseService<ShoppingCartDto, ShoppingCart>, I
         }
     }
 
+    public Result<CouponDto> GetByCouponText(string couponText)
+    {
+        try
+        {
+            var result = _shoppingCartRepository.GetByCouponText(couponText);
+            CouponDto dto = new CouponDto();
+            dto.Code = couponText;
+            dto.SellerId = result.SellerId;
+            dto.Id = (int)result.Id;
+            dto.DiscountPercentage = result.DiscountPercentage;
+            dto.ExpirationDate = result.ExpirationDate;
+            dto.IsGlobal = result.IsGlobal;
+            dto.TourId = result.TourId;
+            return dto;
+        }
+        catch (KeyNotFoundException e)
+        {
+            return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+        }
+    }
+
+    public Result StartSession(int userId)
+    {
+        try
+        {
+            var cart = _shoppingCartRepository.GetByUser(userId);
+
+            if (cart.HasExpiredSession())
+            {
+                cart.LeavePreviousSession();
+            }
+
+            if (!cart.HasActiveSession())
+            {
+                cart.StartShoppingSession();
+            }
+
+            _shoppingCartRepository.Update(cart);
+
+            return Result.Ok();
+        }
+        catch (KeyNotFoundException e)
+        {
+            return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+        }
+    }
+
     public Result<ShoppingCartDto> AddItem(ItemDto orderItemDto, int userId)
     {
         try
@@ -60,6 +107,9 @@ public class ShoppingCartService : BaseService<ShoppingCartDto, ShoppingCart>, I
             var cart = _shoppingCartRepository.GetByUser(userId);
 
             var orderItem = _mapper.Map<ItemDto, OrderItem>(orderItemDto);
+
+            var hasPurchased = _purchaseTokenRepository.HasPurchasedTour(orderItem.ItemId, userId);
+            if (hasPurchased) throw new ArgumentException("Tour has already been purchased.");
 
             _itemRepository.GetByItemIdAndType(orderItem.ItemId, orderItem.Type);
 
@@ -116,7 +166,7 @@ public class ShoppingCartService : BaseService<ShoppingCartDto, ShoppingCart>, I
             var purchasedItems = GetPurchasedItems(shoppingCart);
 
             ApplySale(purchasedItems);
-            ApplyCoupon(purchasedItems, couponCode);
+            ApplyCoupon(shoppingCart, purchasedItems, couponCode);
 
             Purchase(wallet, purchasedItems);
 
@@ -162,14 +212,15 @@ public class ShoppingCartService : BaseService<ShoppingCartDto, ShoppingCart>, I
         }
     }
 
-    private void ApplyCoupon(List<Item> purchasedItems, string? couponCode)
+    private void ApplyCoupon(ShoppingCart shoppingCart, List<Item> purchasedItems, string? couponCode)
     {
         if (couponCode == null || string.IsNullOrWhiteSpace(couponCode)) return;
 
         var coupon = _couponRepository.GetByCode(couponCode);
         var tourItems = purchasedItems.Where(i => i.Type == ItemType.Tour).ToList();
 
-        coupon.Apply(tourItems);
+        var discountedTourId = coupon.Apply(tourItems);
+        shoppingCart.UseCoupon(coupon.Id, discountedTourId);
     }
 
     private List<Item> GetPurchasedItems(ShoppingCart shoppingCart)

@@ -11,9 +11,12 @@ namespace Explorer.Tours.Core.Domain.RepositoryInterfaces
     public interface ITourRepository : ICrudRepository<Tour>
     {
         bool Exists(long id);
+        List<Tour> GetTours(List<long> tourIds);
         List<Tour> GetToursByAuthor(long id);
         List<Tour> GetToursByIds(List<long> tourIds);
         List<Tour> GetPublishedTours();
         Tour Close(long id);
+        List<Tour> GetPublishedToursByAuthor(long authorId);
+        List<Tour> GetTours();
     }
 }

@@ -45,13 +45,20 @@ public class AuthenticationController : BaseApiController
     public ActionResult VerifyUser(string verificationTokenData)
     {
         var result = _verificationService.Verify(verificationTokenData);
-        return CreateResponse(result);
+        return Redirect("http://localhost:4200/verification-success");
     }
 
     [HttpGet("verificationStatus/{username}")]
     public ActionResult<bool> IsUserVerified(string username)
     {
         var result = _verificationService.IsUserVerified(username);
+        return CreateResponse(result);
+    }
+
+    [HttpGet("send-password-reset-email/{username}")]
+    public ActionResult<bool> SendPasswordResetEmail(string username)
+    {
+        var result = _authenticationService.SendPasswordResetEmail(username);
         return CreateResponse(result);
     }
 }

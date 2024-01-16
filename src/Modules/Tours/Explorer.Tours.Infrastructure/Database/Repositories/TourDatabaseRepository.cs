@@ -31,6 +31,15 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
                 .ToList();
         }
 
+        public List<Tour> GetTours()
+        {
+            return _dbContext.Tours
+                .Include(t => t.Equipment)
+                .Include(t => t.Checkpoints)
+                .Include(t => t.TourRatings)
+                .ToList();
+        }
+
         public List<Tour> GetPublishedTours()
         {
             return _dbContext.Tours
@@ -114,6 +123,28 @@ namespace Explorer.Tours.Infrastructure.Database.Repositories
                 .ToList();
 
             return result;
+        }
+
+
+        public List<Tour> GetTours(List<long> tourIds)
+        {
+            var result = _dbContext.Tours
+                .Include(t => t.Equipment)
+                .Include(t => t.Checkpoints)
+                .Include(t => t.TourRatings)
+                .Where(t => tourIds.Contains(t.Id))
+                .ToList();
+
+            return result;
+        }
+        public List<Tour> GetPublishedToursByAuthor(long authorId)
+        {
+            return _dbContext.Tours
+                .Include(t => t.Equipment)
+                .Include(t => t.Checkpoints)
+                .Include(t => t.TourRatings)
+                .Where(t => t.Status == TourStatus.Published && t.AuthorId == authorId)
+                .ToList();
         }
     }
 }

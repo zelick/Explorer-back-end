@@ -33,11 +33,33 @@ public class ItemOwnershipService : IItemOwnershipService, IInternalTourOwnershi
         }
     }
 
+    public int GetPurchasesNumber(long tourId)
+    {
+        return _purchaseTokenRepository.GetPurchasesNumberForTour(tourId);
+    }
+
     public Result<bool> IsTourPurchasedByUser(long userId, long tourId)
     {
         try
         {
              return _purchaseTokenRepository.ExistsByTourAndUser(tourId, userId);
+        }
+        catch (KeyNotFoundException e)
+        {
+            return Result.Fail(FailureCode.NotFound).WithError(e.Message);
+        }
+        catch (ArgumentException e)
+        {
+            return Result.Fail(FailureCode.InvalidArgument).WithError(e.Message);
+        }
+    }
+    
+    public Result<List<long>> GetSoldToursIds()
+    {
+        try
+        {
+            var purchaseTokens = _purchaseTokenRepository.GetSoldToursIds();
+            return purchaseTokens;
         }
         catch (KeyNotFoundException e)
         {

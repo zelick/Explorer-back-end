@@ -1,4 +1,5 @@
 ﻿DELETE FROM stakeholders."ApplicationGrades";
+DELETE FROM stakeholders."SecureTokens";
 DELETE FROM stakeholders."Tourists";
 DELETE FROM stakeholders."People";
 DELETE FROM stakeholders."Users";
