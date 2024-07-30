@@ -1,6 +1,6 @@
 # Explorer Application
 
-# Overview
+### Overview
 Explorer is an application designed to help tourists easily select and purchase tours that match their interests and preferences. Users can actively participate in tours by commenting on their experiences on the blog and communicating with other participants. Additionally, users have access to secret destinations and challenges that the tours offer. For tour creators, the application provides statistical tracking and participant monitoring, along with many other features such as tour selection and purchase based on user preferences, user interaction through blogs, access to secret destinations, and statistical tracking.
 
 ### Technologies
