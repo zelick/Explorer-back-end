@@ -24,7 +24,7 @@ Functionality was considered complete once all tests passed successfully.
 
 ### Application Setup
 To set up the project locally, follow these steps:
-Clone the repository
-Set up the backend using .NET (ASP.NET) and C#
-Set up the frontend using Angular
-Configure the database using pgAdmin
+* Clone the repository
+* Set up the backend using .NET (ASP.NET) and C#
+* Set up the frontend using Angular
+* Configure the database using pgAdmin
